@@ -1,0 +1,82 @@
+#include "backgroundCPP.h"
+#include <sstream>
+
+
+double COMPT::x_compt_ = 0.0;
+
+/* px and py are beta_x and beta_y at input */
+void COMPT::compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BEAM& secondaries, int index_of_process, float epart,float ephot,float q2,float vx,float vy,float wgt, int dir, SWITCHES& switches, RNDM& hasard)
+{
+  double tmp,y,scal,theta_g,theta_e,x,e,pz,pt,phi_e,s,px,py;
+  int n,i;
+  double eps=1e-5;
+
+  if (q2>EMASS*EMASS) return;
+  if ( index_of_process > 1) 
+    {
+      cerr << " ERROR in COMPT::compt_do : only BW or BH processes are allowed, index_of_process = " << index_of_process << endl;
+      exit(0);
+    }
+  lsum_ += wgt; 
+  ncall_++;
+  s=4.0*ephot*epart;
+  if (q2>s) return;
+  if (s < switches.get_compt_x_min()*EMASS*EMASS*4.0) return;
+  tmp=compt_tot(s)*wgt*switches.get_compt_scale();
+  sum_ += tmp;
+  n=(int)floor(tmp)+1;
+  scal=tmp/n;
+  x=4.0*ephot*epart/(EMASS*EMASS);
+  for (i=0;i<n;i++) 
+    {
+      y=compt_select(s, hasard);
+      if (scal>eps)
+	{
+	  theta_g=EMASS/epart*sqrt((x-(x+1.0)*y)/y);
+	  theta_e=theta_g*y/(1.0-y);
+	  if (((1.0-y)*epart<switches.get_compt_emax())&&
+	      ((1.0-y)*epart>switches.get_pair_ecut())) 
+	    {
+	      sum2_ += scal;
+	      e=(1.0-y)*epart;
+	      px=vx*e;
+	      py=vy*e;
+	      pt=theta_e*e;
+	      phi_e=2.0*PI*hasard.rndm();
+	      px += pt*sin(phi_e);
+	      py += pt*cos(phi_e);
+	      pz=sqrt(e*e-px*px-py*py-EMASS*EMASS);
+	      if (dir!=1) 
+		{
+		  e = -e;
+		  pz = -pz;
+		}
+	      if(compt_results_.store_compt(index_of_process, e,px,py,pz,scal,hasard)) 
+		{
+// 		 secondaries.new_pair(mesh, cellx, celly,min_z,index_of_process, e,px,py,pz, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), hasard);
+		 secondaries.new_pair(mesh, cellx, celly,min_z,index_of_process, e,px,py,pz, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), hasard);
+		  if (theta_e>0.1) 
+		    {
+		      pt=0.0;
+		      cerr << " COMPT::compt_do, warning : theta_e= " << theta_e << endl;;
+		    }
+		  if(compton_phot_file_ != NULL)
+		    {
+		      compton_phot_file_->save_compton_photon(y*epart,vx*epart-px,vy*epart-py);
+		    }
+		}
+	    }
+	  if (theta_g>1e-3) 
+	    {
+	      sum3_ += scal;
+	      sume3_ += y*epart*scal;
+	    }
+	  if (theta_e>1e-3) 
+	    {
+	      sum4_ += scal;
+	      sume4_ += (1.0-y)*epart*scal;
+	    }
+	}
+    }
+}
+
