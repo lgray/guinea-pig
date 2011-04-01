@@ -40,6 +40,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   BEAM_PARAMETERS beam_parameters1_,beam_parameters2_;
 
   PAIR_BEAM secondaries_;
+  PAIR_BEAM muons_;
 
   BESSEL bessel;
   int time_counter_;
@@ -57,6 +58,8 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   string compton_phot_file_;
   string secondaries_file_;
   string secondaries0_file_;
+  string muons_file_;
+  string muons0_file_;
   string bhabha_prod_;
   string bhphoton_prod_; // photons de bhabhas initiaux
   string bhphotons_; // photons de bhabhas boostes
@@ -73,6 +76,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   string coh2_file_;
   string tri1_file_;
   string tri2_file_;
+  string tertphot_file_;
 
  
 
@@ -100,6 +104,8 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     {
       secondaries_file_ = string("pairs.dat");
       secondaries0_file_ = string("pairs0.dat");
+      muons_file_ = string("muons.dat");
+      muons0_file_ = string("muons0.dat");
       jet_file_ = string("minijet.dat");
       
       bhabha_prod_ = string("bhabha_prod.dat"); // bhabhas initiaux
@@ -116,6 +122,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       coh2_file_ = string("coh2.dat");
       tri1_file_ = string("tri1.dat");
       tri2_file_ = string("tri2.dat");
+      tertphot_file_ = string("tertphot.dat");
       if (switches.get_write_photons())
 	{
 	  photon_file_ = string("photon.dat");
@@ -450,6 +457,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   void iteration_on_overlaping_slices(int firstSliceOfBeam1, int lastSliceOfBeam2, PHI_FLOAT* sor_parameter);
   
   void iteration_on_overlaping_slices_with_trackpair(PAIR_BEAM& pair_beam_ref,int firstSliceOfBeam1, int lastSliceOfBeam2,PHI_FLOAT* sor_parameter);
+  void iteration_on_overlaping_slices_with_trackpair_muon(PAIR_BEAM& pair_beam_ref, PAIR_BEAM& muon_beam_ref, int firstSliceOfBeam1, int lastSliceOfBeam2,PHI_FLOAT* sor_parameter);
   
   inline void beam_interaction(PHI_FLOAT* sor_parameter )
     {
@@ -481,7 +489,24 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 	  iteration_on_overlaping_slices_with_trackpair(pair_beam_ref, k-n_slice+1,n_slice-1, sor_parameter);
 	}
     }
-  
+
+  inline  void beam_interaction_with_trackpair_muon(PAIR_BEAM& pair_beam_ref, PAIR_BEAM& muon_beam_ref, PHI_FLOAT* sor_parameter )
+    {
+      int k;
+      int n_slice=grid_.get_n_cell_z();
+      // du debut du croisement a la coincidence des faisceaux
+      for (k=0;k<n_slice;k++)
+	{
+	  iteration_on_overlaping_slices_with_trackpair_muon(pair_beam_ref, muon_beam_ref, 0, k,sor_parameter);
+	}
+      
+      // de la coincidence a la fin du croisement
+      for (k=n_slice;k<2*n_slice-1;k++)
+	{
+	  iteration_on_overlaping_slices_with_trackpair_muon(pair_beam_ref, muon_beam_ref, k-n_slice+1,n_slice-1, sor_parameter);
+	}
+    }
+
   inline void  make_time_step_on_slices(unsigned int firstSliceOfBeam1, unsigned int lastSliceOfBeam2, PHI_FLOAT* sor_parameter)
     {
       unsigned int slice_beam_1;

@@ -33,7 +33,10 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   float jet_pstar;
   float jet_ratio;
   //  int do_pairs,track_secondaries,do_muons,store_secondaries;
-  int do_pairs,track_pairs,do_muons,store_pairs;
+  int do_pairs,track_pairs,store_pairs;
+  int do_muons,track_muons,store_muons;
+  int do_tertphot;
+  float muon_ratio,muon_scale,muon_ecut;
   float pair_ratio;
   float bhabha_ratio;
   float pair_ecut,pair_step;
@@ -137,6 +140,8 @@ virtual  string output_flow() const;
   inline int get_time_order() const {return time_order;};
   //  inline int get_track_secondaries() const {return track_secondaries;};
   inline int get_track_pairs() const {return track_pairs;};
+  inline int get_track_muons() const {return track_muons;};
+  inline int get_do_tertphot() const {return do_tertphot;};
   inline int get_load_event() const {return load_event;};
   inline int get_electron_distribution_rho() const {return electron_distribution_rho;};
   inline int get_force_symmetric() const {return force_symmetric;};
@@ -159,6 +164,7 @@ virtual  string output_flow() const;
   inline int get_jet_store() const {return jet_store;};
   //  inline int get_store_secondaries() const {return store_secondaries;}
   inline int get_store_pairs() const {return store_pairs;}
+  inline int get_store_muons() const {return store_muons;}
   inline int get_do_lumi_gg_2() const {return do_lumi_gg_2;}
   inline int get_store_hadrons() const {return store_hadrons;}
   inline int get_pair_q2() const {return pair_q2;}
@@ -173,6 +179,7 @@ virtual  string output_flow() const;
   inline float get_charge_sign() const {return charge_sign;};
   inline float get_charge_sign_0() const {return charge_sign_0;}
   inline float get_pair_ecut() const {return pair_ecut;};
+  inline float get_muon_ecut() const {return muon_ecut;};
   inline float get_pair_step() const {return pair_step;};
   inline float get_electron_ratio() const {return electron_ratio;};
   inline float get_r_scal() const {return r_scal;};
@@ -185,6 +192,8 @@ virtual  string output_flow() const;
   inline float get_jet_pstar() const {return jet_pstar;};
   inline float get_jet_ratio() const {return jet_ratio;};
   inline float get_pair_ratio() const {return pair_ratio;}
+  inline float get_muon_ratio() const {return muon_ratio;}
+  inline float get_muon_scale() const {return muon_scale;}
   inline float get_bhabha_ratio() const {return bhabha_ratio;}
   inline float get_compt_scale() const {return compt_scale;}
   inline float get_compt_emax() const {return compt_emax;}

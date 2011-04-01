@@ -11,28 +11,33 @@ SWITCHES::SWITCHES()
   //    electron_distribution_scatter=1;
   electron_ratio=1.0;
   do_lumi=0;
-  num_lumi=10000;
+  num_lumi=100000;
   do_cross=0;
-  lumi_p=1e-23;
+  lumi_p=1e-29;
   do_photons_[0]=0;
   do_photons_[1]=0;
-  write_photons=0;
+  write_photons=0; //=store_photons
   photon_distribution=1;
   photon_ratio=1.0;
   do_hadrons=0;
   store_hadrons=0;
-  hadron_ratio=1e4;
+  hadron_ratio=1e5;
   do_jets=0;
-  jet_store=0;
-  jet_pstar=3.2;
+  jet_store=0; //=store_jets
+  jet_pstar=2.0; //=jet_ptmin
   jet_ratio=1e5;
   do_pairs=0;
   load_event=0;
   //track_secondaries=0;
   track_pairs=0;
+  track_muons=0;
+  do_tertphot=0;
   pair_ratio=1.0;
+  muon_ratio=1.0;
+  muon_scale=1.0;
   bhabha_ratio=1.0;
   pair_ecut=EMASS;
+  muon_ecut=MUMASS;
   integration_method=2;
   extra_grids=0;
   time_order=2;
@@ -41,7 +46,7 @@ SWITCHES::SWITCHES()
   geom=1;
   r_scal=1.0;
   jet_pythia=0;
-  jet_select=0;
+  jet_select=1;
   pair_q2=1;
   load_photon=0;
   load_beam=0;
@@ -55,7 +60,7 @@ SWITCHES::SWITCHES()
   store_beam=0;
   do_cross_gg=0;
   force_symmetric=0;
-  do_isr=1;
+  do_isr=0;
   do_espread=0;
   do_coherent=0;
   do_trident=0;
@@ -133,6 +138,8 @@ void SWITCHES::read(const PARAMETERS& param)
 
   do_muons = param.readIValue("do_muons");
 
+  store_muons = param.readIValue("store_muons");
+
   do_coherent = param.readIValue("do_coherent");
 
   do_trident = param.readIValue("do_trident");
@@ -142,7 +149,13 @@ void SWITCHES::read(const PARAMETERS& param)
   //track_secondaries = param.readIValue("track_secondaries");
   track_pairs = param.readIValue("track_pairs");
 
+  track_muons = param.readIValue("track_muons");
+
+  do_tertphot = param.readIValue("do_tertphot");
+
   pair_ecut = param.readFValue("pair_ecut");
+
+  muon_ecut = param.readFValue("muon_ecut");
 
   pair_step = param.readFValue("pair_step");
 
@@ -244,6 +257,10 @@ void SWITCHES::read(const PARAMETERS& param)
 
   pair_ratio=param.readFValue("pair_ratio");
 
+  muon_ratio=param.readFValue("muon_ratio");
+
+  muon_scale=param.readFValue("muon_scale");
+
   bhabha_ratio=param.readFValue("bhabha_ratio");
 
   jet_ratio=param.readFValue("jet_ratio");
@@ -316,27 +333,52 @@ void SWITCHES::check_consistency() const
 {
   if ( do_bhabhas && do_pairs)
     {
-      cerr << " do_pairs= " << do_pairs << " do_bhabhas = " << do_bhabhas << endl;
-      cerr << " ERROR : it is not allowed to have do_bhabhas= 1 together with do_pairs = 1 " << endl;
+      cout << " do_pairs= " << do_pairs << " do_bhabhas = " << do_bhabhas << endl;
+      cout << " ERROR : it is not allowed to have do_bhabhas= 1 together with do_pairs = 1 " << endl;
       exit(0);
     } 
   if ( do_bhabhas && do_compt)
     {
-      cerr << " do_pairs= " << do_pairs << " do_compt = " << do_compt << endl;
-      cerr << " ERROR : it is not allowed to have do_bhabhas= 1 together with do_compt = 1 " << endl;
+      cout << " do_pairs= " << do_pairs << " do_compt = " << do_compt << endl;
+      cout << " ERROR : it is not allowed to have do_bhabhas= 1 together with do_compt = 1 " << endl;
       exit(0);
     } 
   //  if (store_secondaries && !track_secondaries)
-  if (store_pairs && !track_pairs)
+  if (store_pairs==1 && !track_pairs)
     {
       //cerr << " store_secondaries = " << store_secondaries << " track_secondaries = " << track_secondaries << endl;
       //cerr << " WARNING : it is not very consistent to store secondaries without tracking them! " << endl;
-      cerr << " store_pairs = " << store_pairs << " track_pairs = " << track_pairs << endl;
-      cerr << " WARNING : it is not very consistent to store pairs without tracking them! " << endl;
+      cout << " store_pairs = " << store_pairs << " track_pairs = " << track_pairs << endl;
+      cout << " WARNING : it is not very consistent to store pairs without tracking them! " << endl;
+      exit(0);
     }
+  if (do_muons==0 && (track_muons || store_muons))
+    {
+      cout << " do_muons = " << do_muons << " store_muons = " << store_muons << " track_muons = " << track_muons << endl;
+      cout << " WARNING : it is not very consistent to track or store muons without generating them! " << endl;
+      exit(0);
+    }
+  if (store_muons==1 && !track_muons)
+    {
+      cout << " store_muons = " << store_muons << " track_muons = " << track_muons << endl;
+      cout << " WARNING : it is not very consistent to store muons without tracking them! " << endl;
+      exit(0);
+    }
+  if (track_muons==1 && muon_ecut<10*MUMASS)
+    {
+      cout << " track_muons = " << track_muons << " muon_ecut = "<< muon_ecut <<endl;
+      cout << " WARNING : Tracking for low energy muons not verified functional " << endl;
+
+    }
+
   if (cuts_from_loaded_beam > 0  && load_beam == 0) 
     {
-      cerr << " WARNING : the switch cuts_from_loaded_beam is without effect with load_beam = 0 " << endl;
+      cout << " WARNING : the switch cuts_from_loaded_beam is without effect with load_beam = 0 " << endl;
+    }
+  if(do_tertphot && !(track_pairs || track_muons))
+    {
+      cout << " do_tertphot = " << do_tertphot << " track_pairs = "<< track_pairs << " track_muons = " << track_muons << endl;
+      cout << " WARNING : Tertphots are produced by incoherent particles. They should be tracked." << endl;
     }
 }
 
@@ -376,12 +418,14 @@ string SWITCHES::output_flow() const
   sortie << "photon_ratio = " << photon_ratio << endl;
   sortie << "do_hadrons = " << do_hadrons << " store_hadrons = " << store_hadrons << " hadron_ratio = " << hadron_ratio << endl;
   sortie << "do_jets = " << do_jets << " store_jets = " << jet_store << endl;
-  sortie << "do_pairs = " << do_pairs << " do_muons = " << do_muons << " load_events = " << load_event << endl;
+  sortie << "do_pairs = " << do_pairs << " load_events = " << load_event << endl;
   //sortie << "track_secondaries = " << track_secondaries << " pair_step = " << pair_step << endl;
   //sortie << "store_secondaries = " << store_secondaries << endl;
   sortie << "track_pairs = " << track_pairs << " pair_step = " << pair_step << endl;
   sortie << "store_pairs = " << store_pairs << endl;
   sortie << "bhabha_scal = " << bhabha_scal << " bhabha_ecmload = " << bhabha_ecmload << " GeV " <<  endl;
+  sortie << "do_muons = " << do_muons << " track_muons = " << track_muons << " store_muons = " << store_muons << endl;
+  sortie << "muon_ratio = " << muon_ratio << " muon_scale = " << muon_scale << " muon_ecut = " << muon_ecut <<endl;
   sortie << "do_coherent = " << do_coherent << endl;
   sortie << "do_trident = " << do_trident << endl;
   sortie << "emin = " << emin << endl;

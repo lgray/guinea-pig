@@ -154,11 +154,11 @@ float PAIR_PARTICLE::apply_magnetic_field_on_pair(float fac_theta, float step_q,
   return theta;
 }
 
-float  PAIR_PARTICLE::scale_pair(float vold2)
+float  PAIR_PARTICLE::scale_pair(float vold2, double mass)
 {
 #ifdef SCALE_ENERGY
   float scal;
-  scal=sqrt( (vold2*energy_*energy_ + EMASS2)/(velocity_q()*energy_*energy_ + EMASS2)   );
+  scal=sqrt( (vold2*energy_*energy_ + mass*mass)/(velocity_q()*energy_*energy_ + mass*mass)   );
   vx_ *= scal;
   vy_ *= scal;
   velocityz_ *= scal;
@@ -168,7 +168,7 @@ float  PAIR_PARTICLE::scale_pair(float vold2)
 #endif
 }
 
-void PAIR_PARTICLE::synchrotron_radiation(float step, float step_fraction, float vx0, float vy0, float vz0, RNDM& hasard) 
+void PAIR_PARTICLE::synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, vector<float>* photon_e, RNDM& hasard) 
 {
 #ifdef PAIR_SYN
   unsigned int j;
@@ -179,7 +179,37 @@ void PAIR_PARTICLE::synchrotron_radiation(float step, float step_fraction, float
   float radius_i = dzOnRadiusFrac/dz;
 
   TRIDVECTOR vdummy;   
-      float upsilon=LAMBDA_BAR/(EMASS*EMASS)*energy_*energy_*radius_i;
+      float upsilon=LAMBDA_BAR*EMASS/(mass*mass*mass)*energy_*energy_*radius_i;
+      dzOnRadiusFrac*=EMASS/mass;
+      PHYSTOOLS::synrad_no_spin_flip(upsilon,energy_, dzOnRadiusFrac,ph, hasard);
+      if ((int)ph.size() > 0) 
+	{
+	  eng0 = energy_;
+	  for (j=0;j < ph.size() ;j++)
+	    {
+	      energy_ -= ph[j];
+	      photon_e->push_back(ph[j]);
+	    }
+	  scal=sqrt( ( (energy_*energy_-mass*mass)*eng0*eng0)/((eng0*eng0-mass*mass)*energy_*energy_) );
+	  vx_ *= scal;
+	  vy_ *= scal;
+	  velocityz_ *= scal;
+	}
+#endif
+}
+void PAIR_PARTICLE::synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, RNDM& hasard) 
+{
+#ifdef PAIR_SYN
+  unsigned int j;
+  float eng0, scal;
+  vector<float> ph;
+  float dz = step*1e-9;
+  float dzOnRadiusFrac = sqrt((vx_-vx0)*(vx_-vx0)+(vy_-vy0)*(vy_-vy0)+(velocityz_-vz0)*(velocityz_-vz0))/step_fraction;
+  float radius_i = dzOnRadiusFrac/dz;
+
+  TRIDVECTOR vdummy;   
+      float upsilon=LAMBDA_BAR*EMASS/(mass*mass*mass)*energy_*energy_*radius_i;
+      dzOnRadiusFrac*=EMASS/mass;
       PHYSTOOLS::synrad_no_spin_flip(upsilon,energy_, dzOnRadiusFrac,ph, hasard);
       if ((int)ph.size() > 0) 
 	{
@@ -188,7 +218,7 @@ void PAIR_PARTICLE::synchrotron_radiation(float step, float step_fraction, float
 	    {
 	      energy_ -= ph[j];
 	    }
-	  scal=sqrt( ( (energy_*energy_-EMASS2)*eng0*eng0)/((eng0*eng0-EMASS2)*energy_*energy_) );
+	  scal=sqrt( ( (energy_*energy_-mass*mass)*eng0*eng0)/((eng0*eng0-mass*mass)*energy_*energy_) );
 	  vx_ *= scal;
 	  vy_ *= scal;
 	  velocityz_ *= scal;
@@ -196,19 +226,19 @@ void PAIR_PARTICLE::synchrotron_radiation(float step, float step_fraction, float
 #endif
 }
 
-float PAIR_PARTICLE::apply_final_half_step_fields(float step, float ex,float ey, float bx, float by, float thetamx, RNDM& hasard)
+float PAIR_PARTICLE::apply_final_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, float thetamx, RNDM& hasard)
 {
   float vold2;
   float theta;
   vold2 = velocity_q();
   apply_electric_field_on_pair(0.5*step, ex, ey); 
-  scale_pair(vold2 );   
+  scale_pair(vold2, mass);   
   theta = apply_magnetic_field_on_pair(0.25, step*step, bx, by); 
-  update_energy();
+  update_energy(mass);
   return theta;
 }
 
-float PAIR_PARTICLE::apply_initial_half_step_fields(float step, float ex,float ey, float bx, float by, RNDM& hasard)
+float PAIR_PARTICLE::apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& hasard)
 {
   float vx0,vy0,vz0, vold2;
   float step_2, step_q, scal;
@@ -228,14 +258,39 @@ float PAIR_PARTICLE::apply_initial_half_step_fields(float step, float ex,float e
 
   vold2 = velocity_q();
   apply_electric_field_on_pair(step_2, ex, ey); 
-  scal = scale_pair(vold2);   
+  scal = scale_pair(vold2, mass);   
   scale_velocities_sync(scal, vx0, vy0, vz0); 
   
-  synchrotron_radiation(step, 0.5, vx0, vy0, vz0, hasard);
+  synchrotron_radiation(step, mass, 0.5, vx0, vy0, vz0, photon_e, hasard);
   return theta;
 }
+float PAIR_PARTICLE::apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& hasard)
+{
+  float vx0,vy0,vz0, vold2;
+  float step_2, step_q, scal;
+  float theta;
+  step_2=0.5*step;
+  step_q=step*step;
+#ifdef PAIR_SYN
+  // on conserve la vitesse dans v0
+  //  velocities(vx0, vy0, vz0);
 
-float PAIR_PARTICLE::apply_full_step_fields(float step, float ex,float ey, float bx, float by, RNDM& hasard) 
+  ABSTRACT_PARTICLE::velocities(vx0, vy0);
+  vz0 = velocityz_;
+#endif
+  theta = apply_magnetic_field_on_pair(0.25, step_q, bx, by); 
+  //  thetamax=2.0*theta;
+
+
+  vold2 = velocity_q();
+  apply_electric_field_on_pair(step_2, ex, ey); 
+  scal = scale_pair(vold2, mass);   
+  scale_velocities_sync(scal, vx0, vy0, vz0); 
+  
+  synchrotron_radiation(step, mass, 0.5, vx0, vy0, vz0, hasard);
+  return theta;
+}
+float PAIR_PARTICLE::apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& hasard) 
 {
   float vx0,vy0,vz0, vold2;
   float step_2, step_q, scal;
@@ -253,7 +308,7 @@ float PAIR_PARTICLE::apply_full_step_fields(float step, float ex,float ey, float
   // sauvegarde de la norme de la vitesse
   vold2 = velocity_q();
   apply_electric_field_on_pair(step_2, ex, ey); 
-  scal = scale_pair(vold2 );   
+  scal = scale_pair(vold2, mass);   
   scale_velocities_sync(scal, vx0, vy0, vz0);   
   
   theta = apply_magnetic_field_on_pair(1.0, step_q, bx, by); 
@@ -261,19 +316,53 @@ float PAIR_PARTICLE::apply_full_step_fields(float step, float ex,float ey, float
   /* scd new */
   vold2 = velocity_q();
   apply_electric_field_on_pair(step_2, ex, ey); 
-  scal = scale_pair(vold2);   
+  scal = scale_pair(vold2, mass);   
   scale_velocities_sync(scal, vx0, vy0, vz0);  
   
-  synchrotron_radiation(step, 1.0, vx0, vy0, vz0, hasard);
+  synchrotron_radiation(step, mass, 1.0, vx0, vy0, vz0, photon_e, hasard);
   return theta;
 }
 
-void PAIR_PARTICLE::update_energy()
+float PAIR_PARTICLE::apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& hasard) 
+{
+  float vx0,vy0,vz0, vold2;
+  float step_2, step_q, scal;
+  float theta;
+  step_2=0.5*step;
+  step_q=step*step;
+
+#ifdef PAIR_SYN
+      // on conserve la vitesse dans v0
+  //  velocities(vx0, vy0, vz0);
+  ABSTRACT_PARTICLE::velocities(vx0, vy0);
+  vz0 = velocityz_;
+#endif
+  /* scd new */
+  // sauvegarde de la norme de la vitesse
+  vold2 = velocity_q();
+  apply_electric_field_on_pair(step_2, ex, ey); 
+  scal = scale_pair(vold2, mass);   
+  scale_velocities_sync(scal, vx0, vy0, vz0);   
+  
+  theta = apply_magnetic_field_on_pair(1.0, step_q, bx, by); 
+  
+  /* scd new */
+  vold2 = velocity_q();
+  apply_electric_field_on_pair(step_2, ex, ey); 
+  scal = scale_pair(vold2, mass);   
+  scale_velocities_sync(scal, vx0, vy0, vz0);  
+  
+  synchrotron_radiation(step, mass, 1.0, vx0, vy0, vz0, hasard);
+  return theta;
+}
+
+
+void PAIR_PARTICLE::update_energy(double mass)
 {
   float scal;
   last_rescaling_ok_ = true;
 #ifdef SCALE_ENERGY
-  scal=sqrt( (energy_*energy_-EMASS2)/(  (energy_*energy_)* velocity_q()   ));
+  scal=sqrt( (energy_*energy_-mass*mass)/(  (energy_*energy_)* velocity_q()   ));
   if (fabs(scal-1.0)>0.01)
     {
       last_rescaling_ok_ = false;

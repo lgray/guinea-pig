@@ -44,14 +44,14 @@ class PAIR_TRACK
 
 class PAIR_PARAMETER
 {
-  double d_eps_1_,d_eps_2_;
+  double d_eps_1_,d_eps_2_,mass_;
   double s4,lns4,ecut;
   
  public:
   
   PAIR_PARAMETER() {;}
   
-  void  init(BEAM& beam1, BEAM& beam2, float pair_ecut, float pair_step, float step, int timestep);
+  void  init(BEAM& beam1, BEAM& beam2, int massflag, float pair_ecut, float pair_step, float step, int timestep);
   
   inline double get_s4() const {return s4;};
   inline double get_lns4() const {return lns4;};
@@ -63,6 +63,8 @@ class PAIR_PARAMETER
       d_2 = d_eps_2_;
     }
   
+  inline const double get_mass() const {return mass_;}
+
   inline float jet_requiv(float xmin,float e,int iflag) const
     {
       float help;
@@ -155,20 +157,21 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
     {
       count_pairs_= 0;
     }
-  
-  inline void add_pair_steps(long n_pair_steps) 
+
+
+    inline void add_pair_steps(long n_pair_steps) 
     {
       pair_track_.addStep(n_pair_steps);
     }
-  
-  inline void set_pair_parameters(BEAM& beam1, BEAM& beam2, float pair_ecut, float pair_step, float step, int timestep)
+    inline void set_name(string name){pairs_results_.set_name((string)name);}
+  inline void set_pair_parameters(BEAM& beam1, BEAM& beam2, int massflag,float pair_ecut, float pair_step, float step, int timestep)
     {
-      pair_parameter_.init(beam1, beam2, pair_ecut, pair_step, step, timestep);
+      /* massflag: 0 for electrons, 1 for muons */
+      pair_parameter_.init(beam1, beam2, massflag, pair_ecut, pair_step, step, timestep);
     }
   
-  
   inline const PAIR_PARAMETER& get_pair_parameters() const {return pair_parameter_;}
-  
+
   inline const PAIRS_RESULTS* get_results() const {return &pairs_results_;} 
   
   inline void set_load_file(string filename) 
@@ -252,6 +255,18 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
 	  new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), hasard);
 	}
     }
+
+  void book_keeping_muon(const MESH& mesh, int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& hasard )
+    {
+      bool lucky = true;
+      if (wgt<hasard.rndm()) lucky = false;
+      pairs_results_.store_full_pair(index_of_process,e1,px1,py1,pz1,e2,px2,py2,pz2,wgt/switches.get_muon_scale(),lucky );
+      if (lucky)
+	{
+	  new_pair(mesh, cellx, celly,min_z,index_of_process, (float)e1,(float)px1,(float)py1,(float)pz1, switches.get_muon_ratio(), switches.get_track_muons(), switches.get_store_muons(), hasard);
+	  new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_muon_ratio(), switches.get_track_muons(), switches.get_store_muons(), hasard);
+	}
+    }
   
   void book_keeping_p(const MESH& mesh,int index_of_process, double e,double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& hasard )
     {
@@ -270,10 +285,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   void  make_muon(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float eph1,float q2_1,float eph2,float q2_2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& hasard);
   
   void new_pair(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& hasard );
-  
-  
-  
-  
+ 
   inline void save_pairs_on_file(string nameOfOutputFile) const
     {
       FILE_IN_OUT filout;

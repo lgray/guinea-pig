@@ -271,6 +271,17 @@ void GRID::save_lumi_on_files(SWITCHES& switches, string lumi_ee_out, string lum
     }
 }
 
+void GRID::save_tertphot_on_file(string tertphotfile)
+{
+  FILE_IN_OUT filout;
+  filout.open_file(tertphotfile,"w");
+  for(int i =0; i<tertphot_.size();i++)
+    {
+      filout.save_object_on_persistent_file(&tertphot_[i]);
+    }
+  filout.close();
+}
+
 void GRID::read(const PARAMETERS& param, int automatic)
 {
   int n_n;
@@ -1407,6 +1418,7 @@ void GRID::move_pairs(const vector<GENERAL_GRID*>& grids, PAIR_BEAM& pairs, int 
 {
   float stepLocal,d;
   int n_pair_steps;
+  double mass=pairs.get_pair_parameters().get_mass();
 
   vector<PAIR_PARTICLE>& les_paires = pairs.get_pairs(i_slice);
   //  list<PAIR_PARTICLE>::iterator itr;
@@ -1419,11 +1431,30 @@ void GRID::move_pairs(const vector<GENERAL_GRID*>& grids, PAIR_BEAM& pairs, int 
       n_pair_steps=(int)d+1;
       pairs.add_pair_steps(n_pair_steps);
       stepLocal=step_/(float)n_pair_steps;
-      step_pair_1(grids,les_paires[k],stepLocal,n_pair_steps, extra_grids, charge_sign_0, hasard);
+      step_pair_1(grids,les_paires[k],mass,stepLocal,n_pair_steps, extra_grids, charge_sign_0, hasard);
     }
 }
 
+void GRID::move_pairs_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_BEAM& pairs, int i_slice, double d_eps_1, double d_eps_2, int extra_grids, float charge_sign_0, RNDM& hasard)
+{
+  float stepLocal,d;
+  int n_pair_steps;
+  double mass=pairs.get_pair_parameters().get_mass();
 
+  vector<PAIR_PARTICLE>& les_paires = pairs.get_pairs(i_slice);
+  //  list<PAIR_PARTICLE>::iterator itr;
+  unsigned int k;
+  //  for (itr = les_paires.begin(); itr !=  les_paires.end(); itr++)
+  for (k = 0; k <  les_paires.size(); k++)
+    {      
+      //      d=sqrt((rho_sum_1_*d_eps_1 + rho_sum_2_*d_eps_2)/fabs(itr->energy()));
+      d=sqrt( (rho_sum_1_*d_eps_1 + rho_sum_2_*d_eps_2)/les_paires[k].unsigned_energy() );
+      n_pair_steps=(int)d+1;
+      pairs.add_pair_steps(n_pair_steps);
+      stepLocal=step_/(float)n_pair_steps;
+      step_pair_1_tertphot(grids,les_paires[k],mass,stepLocal,n_pair_steps, extra_grids, charge_sign_0, hasard);
+    }
+}
 
 void GRID::deltaVelocityFromFieldCIC(float xpart,float ypart, float energy, PHI_FLOAT *phi, float pasDeTemps, float& deltavx, float& deltavy)
 {
@@ -1720,7 +1751,7 @@ void GRID::distributePhotonInBeam(   vector< list<BEAM_PHOTON_POINTER> >& grid_p
 /*! This routine calculates the electron-photon, positron-photon and
    photon-photon luminosities */
 
-void GRID::photon_lumi(float min_z, SWITCHES& switches, PAIR_BEAM& secondaries, RNDM& hasard)
+void GRID::photon_lumi(float min_z, SWITCHES& switches, PAIR_BEAM& secondaries, PAIR_BEAM& muons, RNDM& hasard)
 {
 
   int i1,i2,j,n_x,n_y;
@@ -1767,7 +1798,7 @@ void GRID::photon_lumi(float min_z, SWITCHES& switches, PAIR_BEAM& secondaries, 
 	    {
 	      for( photon_pointer2 = grid_photon2_[j].begin(); photon_pointer2 != grid_photon2_[j].end(); photon_pointer2++)
 		{
-		  collide_gg(i1, i2, min_z,*photon_pointer1, *photon_pointer2, secondaries, switches, hasard, returnCrossSectionToAdd);
+		  collide_gg(i1, i2, min_z,*photon_pointer1, *photon_pointer2, secondaries, muons, switches, hasard, returnCrossSectionToAdd);
 		  for (k=0; k<3;k++) tempor[k] += returnCrossSectionToAdd[k];
 		}
 	      
@@ -1830,7 +1861,7 @@ void GRID::collide_eg(int cellx, int celly,float min_z, const BEAM_PARTICLE_POIN
   collide_compton(0,cellx, celly, min_z, photon_pointer, particle_pointer, secondaries, switches, hasard, 2);		    
 }
 
-void GRID::collide_gg(int cellx, int celly, float min_z, const BEAM_PHOTON_POINTER& photon_pointer1, const BEAM_PHOTON_POINTER& photon_pointer2, PAIR_BEAM& secondaries, SWITCHES& switches, RNDM& hasard, double *returnCrossSectionToAdd)
+void GRID::collide_gg(int cellx, int celly, float min_z, const BEAM_PHOTON_POINTER& photon_pointer1, const BEAM_PHOTON_POINTER& photon_pointer2, PAIR_BEAM& secondaries ,PAIR_BEAM& muons, SWITCHES& switches, RNDM& hasard, double *returnCrossSectionToAdd)
 {
   JET_FLOAT ecm;
   //double beta_x,beta_y;
@@ -1858,11 +1889,11 @@ void GRID::collide_gg(int cellx, int celly, float min_z, const BEAM_PHOTON_POINT
   if (switches.get_do_jets())
     minijets_->mkjbw_(photonEnergy1,photonEnergy2,weight, switches, hasard );
 
-  collide_gg_XX(0,cellx, celly, min_z,photon_pointer1, photon_pointer2, switches, secondaries,hasard, returnCrossSectionToAdd);
+  collide_gg_XX(0,cellx, celly, min_z,photon_pointer1, photon_pointer2, switches, secondaries, muons, hasard, returnCrossSectionToAdd);
 }
 
 //void GRID::collide_gg_XX(int index_of_process, int cellx, int celly,float min_z, const PARTICLE_POINTER& photon1, const PARTICLE_POINTER& photon2, SWITCHES& switches, PAIR_BEAM& secondaries, RNDM& hasard, double returnCrossSectionToAdd[3])
-void GRID::collide_gg_XX(int index_of_process, int cellx, int celly,float min_z, const PHOTON_POINTER& photon1, const PHOTON_POINTER& photon2, SWITCHES& switches, PAIR_BEAM& secondaries, RNDM& hasard, double *returnCrossSectionToAdd)
+void GRID::collide_gg_XX(int index_of_process, int cellx, int celly,float min_z, const PHOTON_POINTER& photon1, const PHOTON_POINTER& photon2, SWITCHES& switches, PAIR_BEAM& secondaries, PAIR_BEAM& muons, RNDM& hasard, double *returnCrossSectionToAdd)
 {
   double beta_x,beta_y;
   float particle1Vx,particle1Vy,particle2Vx,particle2Vy ;
@@ -1891,7 +1922,7 @@ void GRID::collide_gg_XX(int index_of_process, int cellx, int celly,float min_z,
     }
   if (switches.get_do_muons())
     {
-      secondaries.make_muon(mesh_, cellx, celly,min_z, index_of_process, energy1,phot1_q2,energy2,phot2_q2,weight,beta_x,beta_y, switches, hasard);
+      muons.make_muon(mesh_, cellx, celly,min_z, index_of_process, energy1,phot1_q2,energy2,phot2_q2,weight,beta_x,beta_y, switches, hasard);
     }
   if (switches.get_do_hadrons()) make_hadrons_gg2(min_z, energy1,phot1_q2,energy2,phot2_q2,weight, switches, returnCrossSectionToAdd, hasard);
 }
@@ -1949,7 +1980,7 @@ void GRID::make_hadrons_gg2(float min_z, float energy1,float q2_1,float energy2,
 /*! This routine calculates the background using the virtual photons with the
    apropriate impact parameter. In the moment it just does pair creation. */
 
-void GRID::photon_lumi_2(float min_z,SWITCHES& switches, PAIR_BEAM& secondaries, RNDM& hasard)
+void GRID::photon_lumi_2(float min_z,SWITCHES& switches, PAIR_BEAM& secondaries, PAIR_BEAM& muons, RNDM& hasard)
 {
   int i1,i2,j,n_x,n_y;
   list<BEAM_PHOTON_POINTER>::iterator photon_pointer;
@@ -1980,7 +2011,7 @@ void GRID::photon_lumi_2(float min_z,SWITCHES& switches, PAIR_BEAM& secondaries,
 	      for (extr_phot = extr_phot_list.begin() ; extr_phot!=extr_phot_list.end(); extr_phot++)
 		{
 
-		  collide_gg_XX(1, i1,i2,min_z, *photon_pointer, *extr_phot,switches,secondaries, hasard, returnCrossSectionToAdd);
+		  collide_gg_XX(1, i1,i2,min_z, *photon_pointer, *extr_phot,switches, secondaries, muons, hasard, returnCrossSectionToAdd);
 		  for (k=0; k<3;k++) tempor[k] += returnCrossSectionToAdd[k];
 		}
 	    }
@@ -1995,7 +2026,7 @@ void GRID::photon_lumi_2(float min_z,SWITCHES& switches, PAIR_BEAM& secondaries,
 	      const list<EXTRA_PHOTON_POINTER>& extr_phot_list = extra_photon_pointer1_[j];
 	      for ( extr_phot = extr_phot_list.begin(); extr_phot != extr_phot_list.end(); extr_phot++)
 		{
-		  collide_gg_XX(1,i1, i2,min_z,  *extr_phot, *photon_pointer,switches,secondaries, hasard, returnCrossSectionToAdd);
+		  collide_gg_XX(1,i1, i2,min_z,  *extr_phot, *photon_pointer,switches,secondaries, muons, hasard, returnCrossSectionToAdd);
 		  for (k=0; k<3;k++) tempor[k] += returnCrossSectionToAdd[k];
 		}
 	    }
@@ -2016,7 +2047,7 @@ void GRID::photon_lumi_2(float min_z,SWITCHES& switches, PAIR_BEAM& secondaries,
 	      for ( extr_phot2 = extr_phot2_list.begin(); extr_phot2!=extr_phot2_list.end(); extr_phot2++)
 		{
 
-		  collide_gg_XX(2, i1, i2,min_z, *extr_phot1, *extr_phot2, switches,secondaries, hasard, returnCrossSectionToAdd);
+		  collide_gg_XX(2, i1, i2,min_z, *extr_phot1, *extr_phot2, switches,secondaries, muons, hasard, returnCrossSectionToAdd);
 		  for (k=0; k<3;k++) tempor[k] += returnCrossSectionToAdd[k];
 		}
 	    }
@@ -2473,17 +2504,16 @@ bool GRID::pick_coherent_energy(float ups,float& energy, RNDM& hasard)
 //   else energie =eng; 
 //   paire.set(x,y,z,vx*scal,vy*scal,vz*scal,energie);
 // }
-void GRID::step_pair_1(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& paire,float step,int nbSteps, int extra_grids, float charge_sign_0, RNDM& hasard)
+void GRID::step_pair_1(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& paire, double mass,float step,int nbSteps, int extra_grids, float charge_sign_0, RNDM& hasard)
 {
   float thetamax;
   float ex,ey,bx,by;
   int i;
-  
   // initial half step 
  
   // on recupere les champs E et B
   field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
-  thetamax = 2.0*paire.apply_initial_half_step_fields(step, ex,ey, bx, by, hasard);
+  thetamax = 2.0*paire.apply_initial_half_step_fields(step, mass, ex,ey, bx, by, hasard);
   /* loop over steps */
   for(i=1;i<nbSteps;i++)
     {
@@ -2491,15 +2521,49 @@ void GRID::step_pair_1(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& paire,
 
       // on recupere les champs E et B 
       field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);    
-      thetamax = max (thetamax, paire.apply_full_step_fields(step, ex,ey, bx, by,hasard)); 
+      thetamax = max (thetamax, paire.apply_full_step_fields(step, mass, ex,ey, bx, by, hasard)); 
     }
   /* last half step */
   paire.advancePosition(step);
   field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
-  thetamax = max( thetamax, (float)2.0*paire.apply_final_half_step_fields(step, ex,ey, bx, by, thetamax,hasard));
+  thetamax = max( thetamax, (float)2.0*paire.apply_final_half_step_fields(step, mass, ex,ey, bx, by, thetamax,hasard));
   if (	!paire.last_rescaling_ok() )
     {
       cerr << " GRID::step_pair_1() : " << " thetamax " << thetamax << endl;
+    }	  
+}
+
+void GRID::step_pair_1_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& paire, double mass,float step,int nbSteps, int extra_grids, float charge_sign_0, RNDM& hasard)
+{
+  float thetamax;
+  float ex,ey,bx,by;
+  int i;
+  vector<float> photon_e;
+  // initial half step 
+ 
+  // on recupere les champs E et B
+  field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
+  thetamax = 2.0*paire.apply_initial_half_step_fields(step, mass, ex,ey, bx, by, &photon_e, hasard);
+  /* loop over steps */
+  for(i=1;i<nbSteps;i++)
+    {
+      paire.advancePosition(step);
+
+      // on recupere les champs E et B 
+      field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);    
+      thetamax = max (thetamax, paire.apply_full_step_fields(step, mass, ex,ey, bx, by, &photon_e, hasard)); 
+    }
+  /* last half step */
+  paire.advancePosition(step);
+  field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
+  thetamax = max( thetamax, (float)2.0*paire.apply_final_half_step_fields(step, mass, ex,ey, bx, by, thetamax,hasard));
+  for(i=0;i<photon_e.size();i++)
+    {
+      tertphot_.push_back(TERTPHOTON(photon_e[i],paire));
+    }
+  if (	!paire.last_rescaling_ok() )
+    {
+      cerr << " GRID::step_pair_1_tertphot() : " << " thetamax " << thetamax << endl;
     }	  
 }
 

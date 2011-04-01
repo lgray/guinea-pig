@@ -271,6 +271,7 @@ void PAIRS_RESULTS::set()
   
   highptsum_ = 0.0;
   highpteng_ = 0.0;
+  name_="";
 }
 
 // 'composante' is old 'scdn1+scdn2'
@@ -314,24 +315,44 @@ void PAIRS_RESULTS::update_contribution(int composante, double ener,double px,do
 }
 
 
-
 string PAIRS_RESULTS::output_flow() const 
 {
   ostringstream sortie;
-  sortie << titre(string(" results for secondaries"));
-  sortie << "nb of pairs per bunch crossing : n_pairs = " << number_ << " total energy e_pairs = " << energy_ << " GeV " << endl;
-  sortie << endl;
-  sortie << " Breit-Wheeler process : n_BW = " << nproc_[0] <<  " e_BW = " << eproc_[0] << " GeV " << endl;
-  sortie << " Bethe-Heitler process : n_BH = " << nproc_[1] <<  " e_BH = " << eproc_[1] << " GeV " << endl;
-  sortie << " Landau-Lifschitz process : n_LL = " << nproc_[2] << " e_LL = " << eproc_[2] <<  " GeV " << endl;
-  sortie << endl;
-  sortie << " total numer (an total energy, in GeV) of the particles due to the 3 processes : " << endl;
-  sortie << "n.1 = " << n1_ << " b.1 = " << b1_ << endl;
-  sortie << "n.2 = " << n2_ << " b.2 = " << b2_ << endl;
-  sortie << endl;
-  sortie << " nb of particles (and energy in GeV) due to thr 3 previous processes with a transverse momentum of more than 20 MeV and an angle with respect to the beam axis of more than 150 mrad : " << endl;
-  sortie << "n_pt=" << highptsum_<< ";e_pt=" << highpteng_ <<";" << endl;
-  sortie << "n_pairs=" << number_<< ";e_pairs=" << energy_ << ";" << endl;
+  //PAIRS
+  string str1 ("pairs");
+
+  if(name_.compare("pairs")==0){
+    sortie << titre(string(" results for ")+(string)name_+string(" "));
+    sortie << "nb of pairs per bunch crossing : n_pairs = " << number_ << " total energy e_pairs = " << energy_ << " GeV " << endl;
+    sortie << endl;
+    sortie << " Breit-Wheeler process : n_BW = " << nproc_[0] <<  " e_BW = " << eproc_[0] << " GeV " << endl;
+    sortie << " Bethe-Heitler process : n_BH = " << nproc_[1] <<  " e_BH = " << eproc_[1] << " GeV " << endl;
+    sortie << " Landau-Lifschitz process : n_LL = " << nproc_[2] << " e_LL = " << eproc_[2] <<  " GeV " << endl;
+    sortie << endl;
+    sortie << " total numer (an total energy, in GeV) of the particles due to the 3 processes : " << endl;
+    sortie << "n.1 = " << n1_ << " b.1 = " << b1_ << endl;
+    sortie << "n.2 = " << n2_ << " b.2 = " << b2_ << endl;
+    sortie << endl;
+    sortie << " nb of particles (and energy in GeV) due to thr 3 previous processes with a transverse momentum of more than 20 MeV and an angle with respect to the beam axis of more than 150 mrad : " << endl;
+    sortie << "n_pt=" << highptsum_<< ";e_pt=" << highpteng_ <<";" << endl;
+    sortie << "n_pairs=" << number_<< ";e_pairs=" << energy_ << ";" << endl;
+  } else {
+    // MUONS
+    sortie << titre(string(" results for ")+(string)name_+string(" "));
+    sortie << "nb of pairs per bunch crossing : n_"<< name_ <<" = " << number_ << " total energy e_"<<name_<<" = " << energy_ << " GeV " << endl;
+    sortie << endl;
+    sortie << " Breit-Wheeler process : n_BW_"<<name_<<" = " << nproc_[0] <<  " e_BW_"<<name_<<" = " << eproc_[0] << " GeV " << endl;
+    sortie << " Bethe-Heitler process : n_BH_"<<name_<<" = " << nproc_[1] <<  " e_BH_"<<name_<<" = " << eproc_[1] << " GeV " << endl;
+    sortie << " Landau-Lifschitz process : n_LL_"<<name_<<" = " << nproc_[2] << " e_LL_"<<name_<<" = " << eproc_[2] <<  " GeV " << endl;
+    sortie << endl;
+    sortie << " total numer (an total energy, in GeV) of the particles due to the 3 processes : " << endl;
+    sortie << "n.1_"<<name_<<" = " << n1_ << " b.1_"<<name_<<" = " << b1_ << endl;
+    sortie << "n.2_"<<name_<<" = " << n2_ << " b.2_"<<name_<<" = " << b2_ << endl;
+    sortie << endl;
+    sortie << " nb of particles (and energy in GeV) due to thr 3 previous processes with a transverse momentum of more than 20 MeV and an angle with respect to the beam axis of more than 150 mrad : " << endl;
+    sortie << "n_pt_"<<name_<<"=" << highptsum_<< ";e_pt_"<<name_<<"=" << highpteng_ <<";" << endl;
+    sortie << "n_"<<name_<<"=" << number_<< ";e_"<<name_<<"=" << energy_ << ";" << endl;
+  }
   return sortie.str();
 }
 

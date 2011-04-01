@@ -68,7 +68,6 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
       // 2 X electric field
       
       advanceVelocities(-2.0*EBfield(0), -2.0*EBfield(1), pasDeTemps, deltaVx, deltaVy);
-      rotatetransversally(EBfield,pasDeTemps*scal_step_local);
       advancePosition(pasDeTemps*scal_step_local); 
       float dz = pasDeTemps*1e-9*scal_step_local;
       float dzOnRadius = sqrt(deltaVx*deltaVx+deltaVy*deltaVy);
@@ -76,19 +75,6 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
       float upsilon=LAMBDA_BAR/(EMASS*EMASS)*energy_*energy_*radius_i;
       ups_ = upsilon;
       return dzOnRadius;
-    }
-
-  inline void rotatetransversally(TRIVECTOR EBfield,float length)
-    {
-      float Bx,By,Bl,R,vxo;
-      Bx=-EBfield(1);
-      By=EBfield(0);
-      Bl=vx_*By-vy_*Bx;
-      R=Bl*length/(-energy_);
-      //      printf("R=%e, length=%e\n",R,length);
-      vxo=vx_;
-      vx_=vx_*cos(R)-vy_*sin(R);
-      vy_=vxo*sin(R)+vy_*cos(R);
     }
 
   inline void apply_position_offset(float dx, float dy)
@@ -369,8 +355,6 @@ class PHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   
 };
 
-
-
 inline bool operator < ( const PARTICLE& p1, const PARTICLE& p2)
 {
   return (p1.z() < p2.z());
@@ -482,7 +466,7 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
 
   void apply_electric_field_on_pair(float step_2, float ex, float ey); 
   
-  float  scale_pair(float vold2);
+  float  scale_pair(float vold2, double mass);
   
   inline void scale_velocities_sync(float scal, float& vx0, float& vy0, float& vz0) const
     {
@@ -496,17 +480,23 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
     }
 
 
-  void synchrotron_radiation(float step, float step_fraction, float vx0, float vy0, float vz0, RNDM& hasard);
+  void synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, vector<float>* photon_e, RNDM& hasard);
+
+  void synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, RNDM& hasard);
  
   float apply_magnetic_field_on_pair(float fac_theta, float step_q, float bx, float by);
 
-  float apply_final_half_step_fields(float step, float ex,float ey, float bx, float by, float thetamx, RNDM& hasard);
+  float apply_final_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, float thetamx, RNDM& hasard);
 
-  float apply_initial_half_step_fields(float step, float ex,float ey, float bx, float by, RNDM& hasard);
+  float apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& hasard);
+
+  float apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& hasard);
  
-  float apply_full_step_fields(float step, float ex,float ey, float bx, float by, RNDM& hasard); 
+  float apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& hasard); 
 
-  void update_energy();
+  float apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& hasard); 
+
+  void update_energy(double mass);
 
 
 };
@@ -576,6 +566,68 @@ class PHOTON_COUNTER
   inline int getNumber() const 
     {
       return number_;
+    }
+};
+
+// Photons from incoherent pairs
+class TERTPHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
+{
+  float vz_;
+ 
+ public:
+  
+  TERTPHOTON() 
+    {
+      vz_=0.;
+    }
+
+  TERTPHOTON(  float xi, float yi,  float zi, float vxi,float vyi, float vzi, float energyi) : ABSTRACT_PARTICLE (xi, yi, zi, vxi, vyi,energyi)
+    {
+      vz_=vzi;
+    }
+    
+  TERTPHOTON(float energy, const PAIR_PARTICLE& particle)
+    {
+      float x,y,vx,vy,norm;
+      particle.XYposition(x,y);
+      particle.velocities(vx,vy);
+      xpos_ = x;
+      ypos_ = y;
+      zpos_ = particle.z();
+      vx_ = vx;
+      vy_ = vy;
+      vz_=particle.Zvelocity();
+      norm=sqrt(vx_*vx_+vy_*vy_+vz_*vz_);
+      vx_/=norm;
+      vy_/=norm;
+      vz_/=norm;
+      energy_ = energy;
+    }
+  
+  virtual string name_of_class() const { return string("TERTPHOTON");}
+  
+  virtual string  output_flow() const
+    {
+      cerr << "  output_flow not programmed for class TERTPHOTON " << endl;
+      return string(" ");
+    }
+
+  virtual string persistent_flow() const
+    {
+      ostringstream sortie;
+      /*   sortie <<  energy_ << " " << xpos_*1e-3 << " " << ypos_*1e-3 << " " << zpos_*1e-3 << " " << vx_*1e6 << " " << vy_*1e6 << " " << helicity_ << " " << no_; */
+      // sortie d'origine, a modifier eventuellement
+      sortie <<  energy_ << " " <<  vx_ << " " << vy_<< " " << vz_ << " "<<  xpos_ << " " << ypos_<< " " << zpos_ << " ";
+      
+      return sortie.str();
+    }
+  
+  virtual inline const TRIDVECTOR& getSpin() const 
+    { 
+      const TRIDVECTOR tv(0.0,0.0,0.0);
+      cerr << " PHOTON::getSpin : not programmed " << endl;
+      exit(0);
+      return tv;
     }
 };
 

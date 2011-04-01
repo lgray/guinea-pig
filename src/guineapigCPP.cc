@@ -9,6 +9,8 @@ GUINEA::GUINEA(char *name)
   init_input_file_names();
   beam_parameters1_.setLabel('1');
   beam_parameters2_.setLabel('2');
+  secondaries_.set_name(string("pairs"));
+  muons_.set_name(string("muons"));
   parametres_.read_accelerateur(name); 
 }
 
@@ -52,6 +54,7 @@ void GUINEA::run( char *par,char *prot)
 void GUINEA::save_results_on_files()
 {
   grid_.save_lumi_on_files(switches, lumi_ee_file_, lumi_eg_file_, lumi_ge_file_, lumi_gg_file_);
+  if(switches.get_do_tertphot())  grid_.save_tertphot_on_file(tertphot_file_);
   if (switches.get_store_beam()) 
     {
       float gridMaxZ = grid_.get_max_z();
@@ -104,6 +107,8 @@ void GUINEA::save_results_on_files()
   //   if (switches.get_store_secondaries() > 1) secondaries_.save_pairs0_on_file(secondaries0_file_);
   if (switches.get_track_pairs() || switches.get_store_pairs()) secondaries_.save_pairs_on_file(secondaries_file_);
   if (switches.get_store_pairs() > 1) secondaries_.save_pairs0_on_file(secondaries0_file_);
+  if (switches.get_track_muons() || switches.get_store_muons()) muons_.save_pairs_on_file(muons_file_);
+  if (switches.get_store_muons() > 1) muons_.save_pairs0_on_file(muons0_file_);
   if (switches.get_do_bhabhas())
     {
       grid_.get_bhabhas().save_on_files(switches.get_do_bhabhas(), bhabha_prod_, bhphoton_prod_,bhphotons_);
@@ -460,6 +465,10 @@ void GUINEA::set_output_data_and_files()
     {
       secondaries_.resize(grid_.get_n_cell_z());
     }
+  if (switches.get_do_muons() )
+    {
+      muons_.resize(grid_.get_n_cell_z());
+    }
 }
 
 void GUINEA::simulate()
@@ -481,7 +490,9 @@ void GUINEA::simulate()
   beam1_.backstep(1, gridMaxZ, gridStep, gridTimestep, gridScalStep);
   beam2_.backstep(2, gridMaxZ, gridStep, gridTimestep, gridScalStep);
 
-  secondaries_.set_pair_parameters(beam1_, beam2_, switches.get_pair_ecut(), switches.get_pair_step(), grid_.get_step(), grid_.get_timestep());
+  /* Third parameter: 0 for electrons, 1 for muons*/
+  secondaries_.set_pair_parameters(beam1_, beam2_, 0, switches.get_pair_ecut(), switches.get_pair_step(), grid_.get_step(), grid_.get_timestep());
+  muons_.set_pair_parameters(beam1_, beam2_, 1, switches.get_muon_ecut(), switches.get_pair_step(), grid_.get_step(), grid_.get_timestep());
 
   switch (switches.get_time_order())
     {
@@ -490,10 +501,17 @@ void GUINEA::simulate()
       exit(0);
       //      break;
     case 2:
-      //if (switches.get_track_secondaries() ) 
-      if (switches.get_track_pairs() ) 
+      if (switches.get_track_pairs() && switches.get_track_muons())
+	{
+	  beam_interaction_with_trackpair_muon(secondaries_, muons_, sor_parameter );	  
+	} 
+      else if (switches.get_track_pairs()) 
 	{
 	  beam_interaction_with_trackpair(secondaries_, sor_parameter );
+	}
+      else if (switches.get_track_muons()) 
+	{
+	  beam_interaction_with_trackpair(muons_, sor_parameter );
 	}
       else  beam_interaction( sor_parameter );
       break;
@@ -517,6 +535,15 @@ string GUINEA::output_flow() const
   if (switches.get_track_pairs()) 
    {
      sortie << " pairs are saved on file : " << secondaries_file_ << endl;
+   }
+  if (switches.get_store_muons()) 
+    {
+      sortie << " initial muons are saved on file : " << muons0_file_ << endl;
+    }
+  //if (switches.get_track_secondaries()) 
+  if (switches.get_track_muons()) 
+   {
+     sortie << " muons are saved on file : " << muons_file_ << endl;
    }
   if (switches.get_do_bhabhas())
     {
@@ -549,6 +576,10 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
   float min_z = 0.5*(i2-i1-1);
 
   const PAIR_PARAMETER& ppar = secondaries_.get_pair_parameters();
+  const PAIR_PARAMETER& mpar = muons_.get_pair_parameters();
+  if(ppar.get_s4()!=mpar.get_s4()){
+    cout << "s4 must be the same for muons and pairs" << endl;
+  }
   grid_.all_distribute(i1, i2, switches,ppar.get_s4(), ppar.get_lns4());
 				
   for (i_grid=1;i_grid<=switches.get_extra_grids();i_grid++)
@@ -584,12 +615,12 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
   if ( switches.get_do_photons(1) || switches.get_do_photons(2) || switches.get_load_photon())
     {
       grid_.distribute_photons(i1,i2, switches.get_photon_ratio(),generateur_ );    
-      grid_.photon_lumi(min_z,switches,secondaries_, generateur_);
+      grid_.photon_lumi(min_z,switches,secondaries_, muons_, generateur_);
 
       if(switches.get_do_pairs()||switches.get_do_hadrons()||switches.get_do_compt() || switches.get_do_muons())
 	{
 	  // c'est la qu'on va generer des paires
-	  grid_.photon_lumi_2(min_z,switches, secondaries_, generateur_);
+	  grid_.photon_lumi_2(min_z,switches, secondaries_, muons_, generateur_);
 	}
       if (switches.get_do_compt()) 
 	{
@@ -615,13 +646,55 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
       double d_eps_1, d_eps_2;
 
       secondaries_.get_pair_parameters().get_d_eps(d_eps_1, d_eps_2);
-      if (i_offset<0)
+      if(switches.get_do_tertphot())
 	{
-	  grid_.move_pairs(gridsPtr_, secondaries_, i1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	  if (i_offset<0)
+	    {
+	      grid_.move_pairs_tertphot(gridsPtr_, secondaries_, i1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	    }
+	  else
+	    {
+	      grid_.move_pairs_tertphot(gridsPtr_,secondaries_, i1-i_offset-1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	    }
 	}
       else
 	{
-	  grid_.move_pairs(gridsPtr_,secondaries_, i1-i_offset-1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	  if (i_offset<0)
+	    {
+	      grid_.move_pairs(gridsPtr_, secondaries_, i1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	    }
+	  else
+	    {
+	      grid_.move_pairs(gridsPtr_,secondaries_, i1-i_offset-1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	    }
+	}
+    }
+  if(switches.get_track_muons())
+    {
+      double d_eps_1_mu, d_eps_2_mu;
+
+      muons_.get_pair_parameters().get_d_eps(d_eps_1_mu, d_eps_2_mu);
+      if(switches.get_do_tertphot())
+	{
+	  if (i_offset<0)
+	    {
+	      grid_.move_pairs_tertphot(gridsPtr_, muons_, i1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	    }
+	  else
+	    {
+	      grid_.move_pairs_tertphot(gridsPtr_, muons_, i1-i_offset-1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	    }
+	}
+      else
+	{
+	  if (i_offset<0)
+	    {
+	      grid_.move_pairs(gridsPtr_, muons_, i1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	    }
+	  else
+	    {
+	      grid_.move_pairs(gridsPtr_, muons_, i1-i_offset-1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	    }	  
 	}
     }
   // cout << " vers extra photons " << endl;
@@ -682,6 +755,36 @@ void GUINEA::iteration_on_overlaping_slices_with_trackpair(PAIR_BEAM& pair_beam_
     } 
 }
 
+void GUINEA::iteration_on_overlaping_slices_with_trackpair_muon(PAIR_BEAM& pair_beam_ref, PAIR_BEAM& muon_beam_ref, int firstSliceOfBeam1, int lastSliceOfBeam2, PHI_FLOAT* sor_parameter)
+{
+  int i0;
+  unsigned int numberToDistribute = lastSliceOfBeam2-firstSliceOfBeam1+1;
+  if (switches.get_load_event()) 
+    {
+      //pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_secondaries(), generateur_);
+      pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_pairs(), generateur_);
+    }
+  for (i0=0;i0<grid_.get_timestep();i0++)
+    {
+      pair_beam_ref.distribute_pairs(grid_.get_delta_z(),numberToDistribute);
+      pair_beam_ref.move_unactive_pairs(grid_.get_step());
+      muon_beam_ref.distribute_pairs(grid_.get_delta_z(),numberToDistribute);
+      muon_beam_ref.move_unactive_pairs(grid_.get_step());
+
+      make_time_step_on_slices(firstSliceOfBeam1, lastSliceOfBeam2, sor_parameter);
+      // once the current pairs have been moved the have to be redistributed
+      // and before that, desactived
+      pair_beam_ref.desactive_current_pairs(numberToDistribute);
+      muon_beam_ref.desactive_current_pairs(numberToDistribute);
+    }
+  if (switches.get_do_dump())
+    {
+      int istep;
+      istep = firstSliceOfBeam1 + lastSliceOfBeam2;
+      if (istep%switches.get_dump_step() ==0)
+	dump_beams(istep,switches.get_dump_step(), switches.get_dump_particle());
+    } 
+}
 
 void GUINEA::print_program_outputs(string nameOfProtokoll)
 {
@@ -704,10 +807,14 @@ void GUINEA::print_program_outputs(string nameOfProtokoll)
     {
       filout.save_object_on_output_listing(&grid_.get_trident_results());
     }
-  if (switches.get_do_pairs() || switches.get_do_bhabhas() || switches.get_do_compt() || switches.get_do_muons())
+  if (switches.get_do_pairs() || switches.get_do_bhabhas() || switches.get_do_compt())
     {
       //     filout.save_object_on_output_file(&secondaries_);
       filout.save_object_on_output_listing(secondaries_.get_results());
+    }
+  if (switches.get_do_muons())
+    {
+      filout.save_object_on_output_listing(muons_.get_results());
     }
   if (switches.get_do_jets())
     {

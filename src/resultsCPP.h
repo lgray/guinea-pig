@@ -212,6 +212,7 @@ class PAIRS_RESULTS : public ABSTRACT_IO_CLASS
   double energy_;
   double eproc_[3],nproc_[3];
   double b1_,b2_,n1_,n2_;
+  string name_;
 
   double highptsum_, highpteng_;
 
@@ -223,9 +224,11 @@ class PAIRS_RESULTS : public ABSTRACT_IO_CLASS
  public: 
   
  PAIRS_RESULTS()  {set();}
+ 
  //  PAIRS_RESULTS() : secondaries_pointer_(NULL) {set();}
  //  PAIRS_RESULTS(PAIR_BEAM* secondaries) {secondaries_pointer_ = secondaries; set();}
- 
+
+ inline void set_name(string name){name_=name;}
  inline int number() const {return number_;}
  inline double energy() const {return energy_;}
  

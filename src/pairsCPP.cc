@@ -173,8 +173,9 @@ void PAIR_BEAM::make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,
       PHYSTOOLS::lorent(e2,px2,beta_x);
       PHYSTOOLS::lorent(e2,py2,beta_y);
       e2= -e2;
-
+    
       book_keeping(mesh, index_of_process, e1,px1,py1,pz1, e2, px2,py2,pz2, sigmap,cellx, celly,min_z, switches, hasard );
+      
       if (switches.get_beam_pair())
 	{
 	  if (eorg1>0.0)
@@ -202,12 +203,12 @@ void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, i
   double pt,px1,py1,pz1,px2,py2,pz2;
   double ecm2;
   const double emass2=EMASS*EMASS;
-  const double fact=1.23088e-29*EMASS*EMASS/MUMASS/MUMASS*1e4;
+  const double fact=1.23088e-29*EMASS*EMASS/MUMASS/MUMASS;
   ecm2 = eph1 * eph2;
   if (ecm2 < mumass_2) return;
   gam2i = mumass_2 / ecm2;
   beta = sqrt(one - gam2i);
-  sigma = gam2i * fact * flum * ((gam2i * 2. + 2. - gam2i * gam2i) *
+  sigma = gam2i * fact * flum * switches.get_muon_scale() * ((gam2i * 2. + 2. - gam2i * gam2i) *
 				 log((one + beta) / (one - beta)) 
 				 - (gam2i * 2. * gam2i 
 				    / (one - beta * beta) + 2.) * beta);
@@ -263,8 +264,8 @@ void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, i
       PHYSTOOLS::lorent(e2,py2,beta_y);
       e2= -e2;
 
-      book_keeping(mesh,index_of_process, e1,px1,py1,pz1, e2, px2,py2,pz2, sigmap,cellx, celly,min_z, switches, hasard );
-
+      book_keeping_muon(mesh,index_of_process, e1,px1,py1,pz1, e2, px2,py2,pz2, sigmap,cellx, celly,min_z, switches, hasard );
+      
     }
 } /* make_muon */
 
@@ -372,7 +373,7 @@ void PAIR_BEAM::compute_pairs_calls(long int& n1, double& e1, long int& n2, doub
     }
 }
 
-void  PAIR_PARAMETER::init(BEAM& beam1, BEAM& beam2, float pair_ecut, float pair_step, float step, int timestep)
+void  PAIR_PARAMETER::init(BEAM& beam1, BEAM& beam2, int massflag, float pair_ecut, float pair_step, float step, int timestep)
 {
 
   float sigma_x1, sigma_y1;
@@ -386,10 +387,14 @@ void  PAIR_PARAMETER::init(BEAM& beam1, BEAM& beam2, float pair_ecut, float pair
 
   s4 =  beam1.get_ebeam()  *  beam2.get_ebeam();
   lns4=log(s4/(EMASS*EMASS));
-
   d_eps_1_ = 2.0*RE*1e9* step *EMASS* pair_step / (( sigma_x1+ sigma_y1 )* sigma_y1 * timestep);
-
   d_eps_2_ = 2.0*RE*1e9*step*EMASS*pair_step / ((sigma_x2+sigma_y2)*sigma_y2*timestep);
+  if(massflag==0){
+    mass_=EMASS;
+  }
+  else if(massflag==1){
+    mass_=MUMASS;
+  }
 }
 
 void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q2,float& wgt, RNDM& hasard) const

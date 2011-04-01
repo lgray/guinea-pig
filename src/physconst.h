@@ -5,6 +5,7 @@
 #define EMASSeV 0.51099906e+6 /* eV */
 #define EMASSMeV 0.51099906 /* MeV */
 #define MUMASS 105.658389e-3 /* GeV */
+#define MUMASSeV 105.658389e+6 /* eV */
 #define ANOMEL 1.15965221e-3 
 
 #define Cvelocity 299792458.0 /* m/s */

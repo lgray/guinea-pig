@@ -147,12 +147,6 @@ void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* e
 {  
   vector<float> energies;
   float kap;
-  /* Beginning of part to be removed */
-//    if(ups>5)
-//      {
-//        goto bottom;
-//      }
-  /* End of part to be removed */
   e_phot=0;
   q2=0;
   virtExist=makeVirtualPhoton(Emother,&e_phot,&q2,hasard);   
