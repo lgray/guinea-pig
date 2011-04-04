@@ -53,8 +53,8 @@ class PAIR_PARAMETER
   
   void  init(BEAM& beam1, BEAM& beam2, int massflag, float pair_ecut, float pair_step, float step, int timestep);
   
-  inline double get_s4() const {return s4;};
-  inline double get_lns4() const {return lns4;};
+  inline double get_s4() const {return s4;}
+  inline double get_lns4() const {return lns4;}
   inline double get_ecut() const {return ecut;}
   
   inline void get_d_eps(double& d_1, double& d_2) const 

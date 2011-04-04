@@ -662,7 +662,7 @@ void GRID::distribute_virtual_photons(int i_slice1,
   //   {
   //    case 1:
   xmin=switches->get_compt_x_min()*emass2/s4;
-  
+
   electronScatter(extra_photon_pointer1_, 1, i_slice1, xmin, s4, lns4, ratio, switches->get_ext_field(), geom, ratio_i_1, r_scal);
   
   electronScatter( extra_photon_pointer2_,  2, i_slice2, xmin, s4, lns4, ratio, switches->get_ext_field(), geom, ratio_i_2, r_scal);

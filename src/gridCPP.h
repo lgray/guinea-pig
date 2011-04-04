@@ -547,11 +547,11 @@ class PARTICLE_POINTER
 
     virtual  ~PARTICLE_POINTER() {;}
     inline float weight() const {return weight_;}; 
-    virtual inline  void velocities(float& vx, float& vy) const = 0;
-    virtual inline  const TRIDVECTOR& getSpin() const = 0;
-    virtual inline   float energy() const = 0;
-    //   virtual inline float q2() const = 0;
-    //   virtual inline float eorg() const = 0;
+    virtual   void velocities(float& vx, float& vy) const = 0;
+    virtual   const TRIDVECTOR& getSpin() const = 0;
+    virtual    float energy() const = 0;
+    //   virtual  float q2() const = 0;
+    //   virtual  float eorg() const = 0;
 };
 
   
@@ -608,8 +608,8 @@ class PHOTON_POINTER : public PARTICLE_POINTER
  PHOTON_POINTER(float weight) : PARTICLE_POINTER(weight) {;}
  virtual ~PHOTON_POINTER() {;}
  
- virtual inline float q2() const = 0;
- virtual inline float eorg() const = 0;
+ virtual  float q2() const = 0;
+ virtual  float eorg() const = 0;
 
 };
 

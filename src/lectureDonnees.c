@@ -1,6 +1,7 @@
 #include "lectureDonnees.h"
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 
 extern  VAR_HEAP var_heap;
 extern INPUT_MAISON input;
@@ -1053,19 +1054,25 @@ void def_param(MEMORY_ACCOUNT* m_account)
   def_named_variable("emin",T_DOUBLE);
   //def_named_variable("track_secondaries",T_INT);
   def_named_variable("track_pairs",T_INT);
+  def_named_variable("track_muons",T_INT);
   def_named_variable("bhabha_ecmload",T_DOUBLE);
   //def_named_variable("store_secondaries",T_INT);
   def_named_variable("store_pairs",T_INT);
+  def_named_variable("store_muons",T_INT);
   def_named_variable("pair_ecut",T_DOUBLE);
+  def_named_variable("muon_ecut",T_DOUBLE);
   def_named_variable("pair_step",T_DOUBLE);
   def_named_variable("beam_size",T_INT);
   def_named_variable("beam_size_scale",T_DOUBLE);
   def_named_variable("ext_field",T_INT);
   def_named_variable("pair_ratio",T_DOUBLE);
+  def_named_variable("muon_ratio",T_DOUBLE);
+  def_named_variable("muon_scale",T_DOUBLE);
   def_named_variable("bhabha_ratio",T_DOUBLE);
   def_named_variable("pair_q2",T_INT);
   def_named_variable("grids",T_INT);
   def_named_variable("beam_pair",T_INT);
+  def_named_variable("do_tertphot",T_INT);
 
   def_named_variable("electron_ratio",T_DOUBLE);
   def_named_variable("do_eloss",T_INT);
@@ -1164,7 +1171,8 @@ void def_param(MEMORY_ACCOUNT* m_account)
   define_values("{beam_pair=0;}", m_account);
   //define_values("{do_pairs=0;track_secondaries=0;pair_ratio=1.0;pair_q2=2;}", m_account);
   define_values("{do_pairs=0;track_pairs=0;pair_ratio=1.0;pair_q2=2;}", m_account);
-  define_values("{pair_ecut=5e-3;pair_step=1.0;do_muons=0;}", m_account);
+  define_values("{pair_ecut=5e-3;pair_step=1.0;do_muons=0;track_muons=0;store_muons=0;}", m_account);
+  define_values("{do_tertphot=0;muon_ecut=0;muon_ratio=0;muon_scale=0;}", m_account);
   //define_values("{beam_size=1;beam_size_scale=1.0;ext_field=0;store_secondaries=1;}", m_account);
   define_values("{beam_size=1;beam_size_scale=1.0;ext_field=0;store_pairs=1;}", m_account);
   define_values("{do_compt=0;do_compt_phot=0;compt_x_min=1.0;}", m_account);

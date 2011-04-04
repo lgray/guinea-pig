@@ -176,12 +176,12 @@ class ABSTRACT_BHABHA_PHOTON_SAMPLES
 
    ABSTRACT_BHABHA_PHOTON_SAMPLES() {;}
  virtual  ~ABSTRACT_BHABHA_PHOTON_SAMPLES() {;}
- virtual inline int get_label() const = 0;
- virtual inline int nb_samples() const = 0;
+ virtual  int get_label() const = 0;
+ virtual  int nb_samples() const = 0;
  
- virtual inline void get_parameters_for_output(int numero, int& numero_bhabha, float& en,float& vx,float& vy, float&vz) const = 0;
+ virtual  void get_parameters_for_output(int numero, int& numero_bhabha, float& en,float& vx,float& vy, float&vz) const = 0;
  
- virtual inline void add_bhabha_photon(float px, float py, float pz, float en) = 0;
+ virtual  void add_bhabha_photon(float px, float py, float pz, float en) = 0;
  
  
 };
@@ -191,11 +191,11 @@ class ABSTRACT_BHABHASAMPLES
   public : 
     ABSTRACT_BHABHASAMPLES() {;}
   virtual ~ABSTRACT_BHABHASAMPLES() {;}
-  virtual inline int nb_samples() const = 0;
+  virtual  int nb_samples() const = 0;
   
-  virtual inline void get_parameters_for_output(int numero, unsigned long& rank1_index, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, unsigned long& rank2_index, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const = 0;
+  virtual  void get_parameters_for_output(int numero, unsigned long& rank1_index, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, unsigned long& rank2_index, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const = 0;
   
-  virtual inline int add_bhabha(float px1, float py1, float pz1, float e1, float px2, float py2, float pz2, float e2, int nbphot) = 0;
+  virtual  int add_bhabha(float px1, float py1, float pz1, float e1, float px2, float py2, float pz2, float e2, int nbphot) = 0;
   
 };
 
