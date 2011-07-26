@@ -219,9 +219,9 @@ class ABSTRACT_LUMI_HEAP : public ABSTRACT_IO_CLASS
   ABSTRACT_LUMI_HEAP() {;}
   virtual ~ABSTRACT_LUMI_HEAP() {;}
 
-  virtual inline int nb_pairs() const = 0;
-  virtual inline void get_parameters_for_output(int numero, float& e1,float& e2,float& x,float& y,float& z) const = 0;
-  virtual inline void get_parameters_for_output(int numero, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2,int& t)  const = 0;
+  virtual  int nb_pairs() const = 0;
+  virtual  void get_parameters_for_output(int numero, float& e1,float& e2,float& x,float& y,float& z) const = 0;
+  virtual  void get_parameters_for_output(int numero, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2,int& t)  const = 0;
   virtual string output_flow() const 
     {
       ostringstream sortie;

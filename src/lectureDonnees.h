@@ -3,6 +3,8 @@
 
 #include "memory.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define max_buffer 512
 #define max_buffer2 10000

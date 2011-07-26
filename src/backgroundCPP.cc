@@ -58,7 +58,7 @@ void COMPT::compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BE
 		  if (theta_e>0.1) 
 		    {
 		      pt=0.0;
-		      cerr << " COMPT::compt_do, warning : theta_e= " << theta_e << endl;;
+		      cout << " COMPT::compt_do, warning : theta_e= " << theta_e << endl;;
 		    }
 		  if(compton_phot_file_ != NULL)
 		    {

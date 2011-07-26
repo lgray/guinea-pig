@@ -1,7 +1,5 @@
 #include "lectureDonnees.h"
 #include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
 
 extern  VAR_HEAP var_heap;
 extern INPUT_MAISON input;

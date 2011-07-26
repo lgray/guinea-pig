@@ -2,6 +2,8 @@
 #define RNDM_SEEN
 
 #include "LesDefines.h"
+#include "stdio.h"   //   exit function 
+#include "stdlib.h"  //   exit function
 
 #define RNDM_EPS 6e-8
 

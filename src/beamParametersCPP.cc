@@ -1,7 +1,8 @@
-#include "beamParametersCPP.h"
 #include "physconst.h"
 #include <iostream>
 #include <cmath>
+#include <cstring>
+#include "beamParametersCPP.h"
 
 using namespace std;
 
@@ -78,7 +79,7 @@ void BEAM_PARAMETERS::setLabel(char label)
 
 void BEAM_PARAMETERS::former_nom(char* name, string param)
 {
-  strcpy(name,param.c_str());
+  strcpy(name, param.c_str());
   strcat(name, extension_);
 }
 

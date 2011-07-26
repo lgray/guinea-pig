@@ -3,6 +3,8 @@
 //#include "typeDefs.h"
 #include <iostream>
 #include <vector>
+#include "stdio.h"   //   exit function 
+#include "stdlib.h"  //   exit function
 
 using namespace std;
 
