@@ -62,7 +62,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
 	  return getline(infile_, ligne);
 	}
       
-      virtual bool write_line(string& ligne) 
+      virtual void write_line(string& ligne) 
 	{
 	  outfile_ << ligne << endl;
 	}

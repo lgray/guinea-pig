@@ -2,6 +2,7 @@
 #define LECTUREDONNEE_SEEN
 
 #include "memory.h"
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -178,7 +179,9 @@ int file_read_double(DATEI *datei,double *x);
 
 int file_read_int(DATEI *datei,int *n);
 
+#if !HAVE_STPCPY
 #define stpcpy(a,b) (strcpy(a,b)+strlen(b))
+#endif
 
 int file_read_until(DATEI *datei,char *end,char *buff,int n_max);
 

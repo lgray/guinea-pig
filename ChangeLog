@@ -1,0 +1,3 @@
+07-10-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
+	* fix gcc warnings
+	* create ChangeLog

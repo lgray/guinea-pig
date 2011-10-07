@@ -158,7 +158,7 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
       filout.close();
     }
   
-  virtual inline int add_bhabha(float px1, float py1, float pz1, float e1, float px2, float py2, float pz2, float e2, int nbphot)
+  virtual inline void add_bhabha(float px1, float py1, float pz1, float e1, float px2, float py2, float pz2, float e2, int nbphot)
     {
       BHABHA_INI bhab;
       bhab.p1 = QUADRIVECTOR(px1,py1,pz1,e1);

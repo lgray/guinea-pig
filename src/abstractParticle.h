@@ -195,7 +195,7 @@ class ABSTRACT_BHABHASAMPLES
   
   virtual  void get_parameters_for_output(int numero, unsigned long& rank1_index, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, unsigned long& rank2_index, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const = 0;
   
-  virtual  int add_bhabha(float px1, float py1, float pz1, float e1, float px2, float py2, float pz2, float e2, int nbphot) = 0;
+  virtual  void add_bhabha(float px1, float py1, float pz1, float e1, float px2, float py2, float pz2, float e2, int nbphot) = 0;
   
 };
 

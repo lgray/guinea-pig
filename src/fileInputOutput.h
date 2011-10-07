@@ -36,7 +36,7 @@ class FILE_IN_OUT
       out_to_file_->set_header(head);
     }
   
-  virtual  inline void close() { out_to_file_->close();}
+  virtual inline void close() { out_to_file_->close();}
   
   virtual inline void set_jet_header(float ptmin, float sqrt_s)
     {
@@ -73,7 +73,7 @@ class FILE_IN_OUT
       return  out_to_file_->read_line(ligne);
     }
   
-  virtual inline  bool  write_line(string& ligne) 
+  virtual inline  void  write_line(string& ligne) 
     {
       return  out_to_file_->write_line(ligne);
     }

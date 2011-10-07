@@ -51,8 +51,7 @@ void PAIR_BEAM::move_unactive_pairs(float step)
 
 void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& hasard )
 {
-  
-  float xmin;
+  // float xmin;
   // test if particle energy is above the required minumum 
   if (fabs(energy) < pair_parameter_.get_ecut() )   
     {

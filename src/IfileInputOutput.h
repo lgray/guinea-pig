@@ -27,7 +27,7 @@ class IFILE_IN_OUT
   virtual bool  read_particle(PARTICLE_INTERFACE& part)  = 0;
 
   virtual bool read_line(string& ligne)  = 0;
-  virtual bool write_line(string& ligne)  = 0;
+  virtual void write_line(string& ligne)  = 0;
 
 
   //  virtual void save_pair_particle(const ABSTRACT_PAIR_PARTICLE& pair_part)  = 0;
@@ -37,10 +37,10 @@ class IFILE_IN_OUT
   virtual void save_bhabhaPhotonSamples(const ABSTRACT_BHABHA_PHOTON_SAMPLES*  bhabhaPhot)  = 0;
 
 
-  virtual inline  bool read_bhabhaPhotonsamples(ABSTRACT_BHABHA_PHOTON_SAMPLES* const bhabhasPhoton) = 0;
+  virtual bool read_bhabhaPhotonsamples(ABSTRACT_BHABHA_PHOTON_SAMPLES* const bhabhasPhoton) = 0;
   virtual int read_pythia_file(int& logx, int& logy, vector<double>& x, vector<double>& y) = 0;
  
-  virtual inline bool read_cross(ABSTRACT_CROSS_DATA* const crossIni) = 0;
+  virtual bool read_cross(ABSTRACT_CROSS_DATA* const crossIni) = 0;
   virtual void save_lumi_heap(const ABSTRACT_LUMI_HEAP* const lumi_heap)  =0;
   //  virtual void save_lumi_heap_full(const ABSTRACT_LUMI_HEAP* const lumi_heap)  =0;
   // virtual void dump_photons(const ABSTRACT_BEAM& beam,int istep, int timestep, float step, float max_z) = 0;

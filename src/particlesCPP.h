@@ -129,10 +129,10 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   
   virtual inline const TRIDVECTOR& getSpin() const
     {
-      const TRIDVECTOR tv(0.0,0.0,0.0);
       cerr << " PARTICLE::get_spin : a PARTICLE has no spin, use PARTICLE_WITH_SPIN " << endl;
       exit(0);
-      return tv;
+/*       const TRIDVECTOR tv(0.0,0.0,0.0); */
+/*       return tv; */
     }
 
 
@@ -344,10 +344,10 @@ class PHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   
   virtual inline const TRIDVECTOR& getSpin() const 
     { 
-      const TRIDVECTOR tv(0.0,0.0,0.0);
       cerr << " PHOTON::getSpin : not programmed " << endl;
       exit(0);
-      return tv;
+/*       const TRIDVECTOR tv(0.0,0.0,0.0); */
+/*       return tv; */
     }
   
   
@@ -404,10 +404,10 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   virtual ~PAIR_PARTICLE () {;}
   
   virtual const TRIDVECTOR& getSpin() const {
-    const TRIDVECTOR tv(0.0,0.0,0.0);
     cerr << " PARTICLE::get_spin : a PAIR_PARTICLE has no spin, use PARTICLE_WITH_SPIN " << endl;
     exit(0);
-    return tv;
+/*     const TRIDVECTOR tv(0.0,0.0,0.0); */
+/*     return tv; */
   }
     
   virtual string name_of_class() const { return string("PAIR_PARTICLE");}
@@ -624,10 +624,10 @@ class TERTPHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   
   virtual inline const TRIDVECTOR& getSpin() const 
     { 
-      const TRIDVECTOR tv(0.0,0.0,0.0);
       cerr << " PHOTON::getSpin : not programmed " << endl;
       exit(0);
-      return tv;
+/*       const TRIDVECTOR tv(0.0,0.0,0.0); */
+/*       return tv; */
     }
 };
 

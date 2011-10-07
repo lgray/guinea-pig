@@ -437,14 +437,14 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   public : 
 
 
-    PARTICLE_BEAM() : ABSTRACT_PARTICLE_BEAM(),  ABSTRACT_IO_CLASS() 
+  PARTICLE_BEAM() : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM()
     {
       tirage_ = NULL;
     }
   
   ~PARTICLE_BEAM()
     {
-      unsigned long  int j,k;
+      unsigned long int j,k;
       for (j=0; j < particle_.size(); j++)
 	{
 	  for (k=0; k < particle_[j].size(); k++)
@@ -468,7 +468,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
 
-  PARTICLE_BEAM(int nb_slices,int bmt_rotate,TRIDVECTOR polar, RNDM* hasard) : ABSTRACT_PARTICLE_BEAM(),  ABSTRACT_IO_CLASS()
+  PARTICLE_BEAM(int nb_slices,int bmt_rotate,TRIDVECTOR polar, RNDM* hasard) : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM()
     {
       set(bmt_rotate, polar);
       particle_ = vector< vector<PARTICLE*> >(nb_slices);

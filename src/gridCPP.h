@@ -635,10 +635,10 @@ class BEAM_PHOTON_POINTER : public PHOTON_POINTER
   
   virtual inline const TRIDVECTOR& getSpin() const 
     { 
-      const TRIDVECTOR tv(0.0,0.0,0.0);
       cerr << " pas de spin pour le photon " << endl;
       exit(0);
-      return tv;
+/*       const TRIDVECTOR tv(0.0,0.0,0.0); */
+/*       return tv; */
     }
   
   
@@ -682,10 +682,10 @@ class EXTRA_PHOTON_POINTER : public PHOTON_POINTER
   virtual inline void velocities(float& vx, float& vy) const { extra_phot_->velocities(vx, vy);}
   virtual inline const TRIDVECTOR& getSpin() const 
     { 
-      const TRIDVECTOR tv(0.0,0.0,0.0);
       cerr << " pas de spin pour extra photon " << endl;
       exit(0);
-      return tv;
+/*       const TRIDVECTOR tv(0.0,0.0,0.0); */
+/*       return tv; */
     }
   
 };
