@@ -407,7 +407,7 @@ void PHYSTOOLS::referenceSpin(double vxd, double vyd, TRIDVECTOR& e1, TRIDVECTOR
   e2.setComponents( e3(1)*e1(2) - e3(2)*e1(1), e3(2)*e1(0) - e3(0)*e1(2), e3(0)*e1(1) - e3(1)*e1(0) );
 }
 
-// transverse Lorents force in eV/m, with respect to a particle trajectory
+// transverse Lorentz force in eV/m, with respect to a particle trajectory
 // data E and B, in eV/m
 TRIDVECTOR PHYSTOOLS::transverse_Lorentz_force(double vxd, double vyd, TRIDVECTOR E, TRIDVECTOR B)
 {
@@ -418,7 +418,7 @@ TRIDVECTOR PHYSTOOLS::transverse_Lorentz_force(double vxd, double vyd, TRIDVECTO
   double ElongProjection = vxd*E(0) + vyd*E(1) + E(2);
   xcomp = E(0) - vxd*ElongProjection + vyd*B(2) - B(1);
   ycomp = E(1) - vyd*ElongProjection + B(0) - vxd*B(2);
-  zcomp = E(3) - ElongProjection     + vxd*B(1) - vyd*B(0);
+  zcomp = E(2) - ElongProjection     + vxd*B(1) - vyd*B(0);
   Ftrans.setComponents(xcomp, ycomp, zcomp);
   return Ftrans;
 }
