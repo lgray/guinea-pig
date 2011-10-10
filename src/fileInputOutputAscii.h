@@ -1,11 +1,9 @@
 #ifndef FILEOUTPUTASCII_SEEN
 #define FILEOUTPUTASCII_SEEN
 
-#include "fileInputOutput.h"
 #include "IfileInputOutput.h"
 #include <iostream>
 #include <fstream>
-//#include <sstream>
 
 class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
 {
