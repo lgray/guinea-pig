@@ -206,10 +206,10 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
 	    zaux =(2.0*tirage_->rndm()-1.0)*bunchlength;
 	    dispatch_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
 	  }
-	break; 
-      }    
+      }
+      break; 
     default:
-      cerr << " PARTICLE_BEAM::assign_xyz_distribution :: unknown z distribution dist_z = " << dist_z << endl;
+      cerr << " PARTICLE_BEAM::assign_xyz_normal_distribution :: unknown z distribution dist_z = " << dist_z << endl;
       exit(0); 
     }
 }
@@ -242,7 +242,7 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
       }
       break;
     default:
-      cerr << " PARTICLE_BEAM::assign_xyz_symmetric_distribution :: unknown z distribution dist_z = " << dist_z << endl;
+      cerr << " PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution :: unknown z distribution dist_z = " << dist_z << endl;
       exit(0); 
     }
 }

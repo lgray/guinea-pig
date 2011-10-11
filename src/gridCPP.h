@@ -985,7 +985,6 @@ inline TRIVECTOR EBfieldOnParticle(const PARTICLE* particle, const vector<GENERA
 
 void beamstrahlungSingleCoherentParticle(PARTICLE* particle, TRIVECTOR EBfield, float dzOnRadius, const vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, const PHI_FLOAT *phi, float pasDeTemps, float emin,int do_prod, int extra_grids, float charge_sign);
 
-// TRIDVECTOR transverse_Lorentz_force(PARTICLE& part, TRIDVECTOR E, TRIDVECTOR B);
 //void advanceCoherentParticlesNGP();
 //void advanceCoherentParticlesCIC(PARTICLE& particle, const vector<GENERAL_GRID*>& grids, PHI_FLOAT *phi, int i_beam, float emin, int do_prod, int extra_grids, float scal_step, RNDM& hasard);
 //float requiv(double lns4, float xmin,int iflag);

@@ -263,6 +263,13 @@ class PHYSTOOLS
   
   static TRIDVECTOR transverse_Lorentz_force(double vxd, double vyd, TRIDVECTOR E, TRIDVECTOR B);
   
+/**********************************************/
+/*! Routines for the generation of secondaries */
+/**********************************************/
+
+/*! This routine gives the number of equivalent photons for an electron
+   with energy e above an energy fraction xmin according to spectrum number
+   iflag */
 
 inline static float requiv(double lns4, float xmin,int iflag)
 {
@@ -306,6 +313,8 @@ inline static float requiv(double lns4, float xmin,int iflag)
     }
   return 0.0;
 } /* requiv */
+
+/*! New version of equiv */
 
 inline static void mequiv (double s4, double lns4, float xmin,float e,int iflag,float *eph,float *q2,float *one_m_x, RNDM& hasard)
 {
