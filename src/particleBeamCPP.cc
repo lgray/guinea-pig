@@ -232,12 +232,14 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
       break;
       // constant distribution in z 
     case 1: 
-      float bunchlength=SQRT3*sigma_z;
-      for (k=0;k< initial_number_of_particles_;k++)
-	{
-	  zaux =(2.0*tirage_->rndm()-1.0)*bunchlength;
-	  dispatch_symmetric_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
-	}
+      {
+	float bunchlength=SQRT3*sigma_z;
+	for (k=0;k< initial_number_of_particles_;k++)
+	  {
+	    zaux =(2.0*tirage_->rndm()-1.0)*bunchlength;
+	    dispatch_symmetric_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
+	  }
+      }
       break;
     default:
       cerr << " PARTICLE_BEAM::assign_xyz_symmetric_distribution :: unknown z distribution dist_z = " << dist_z << endl;
