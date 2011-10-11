@@ -232,15 +232,13 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
       break;
       // constant distribution in z 
     case 1: 
-      {
-	float bunchlength=SQRT3*sigma_z;
-	for (k=0;k< initial_number_of_particles_;k++)
-	  {
-
-	    zaux =(2.0*tirage_->rndm()-1.0)*bunchlength;
-	    dispatch_symmetric_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
-	  }
-      }
+      float bunchlength=SQRT3*sigma_z;
+      for (k=0;k< initial_number_of_particles_;k++)
+	{
+	  zaux =(2.0*tirage_->rndm()-1.0)*bunchlength;
+	  dispatch_symmetric_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
+	}
+      break;
     default:
       cerr << " PARTICLE_BEAM::assign_xyz_symmetric_distribution :: unknown z distribution dist_z = " << dist_z << endl;
       exit(0); 
@@ -282,7 +280,6 @@ unsigned int PARTICLE_BEAM::load_particles(BEAM_FROM_FILE*& bff, float emin, flo
   //TRIDVECTOR polar;
   number_of_particles_dispatched_in_slices_ = 0;
   
-
   while( bff->not_empty() )
     {
       const PARTICLE_INTERFACE& partaux = bff->pick_last();
@@ -709,7 +706,7 @@ void PARTICLE_BEAM::dump_beam(string name, int istep, int every_particle, int ti
 	      PARTICLE* part = newPart(*particle_[slice][nopart_in_slice]);
 	      part->set_z_for_dump(istep,dz0, max_z, sign_label ); 
 	      file.save_object_on_persistent_file( part); 
-	      if (part != NULL) delete part;
+	      delete part;
 	    }
 	  nopartIni += nb_part_in_slice;
 	}
@@ -725,8 +722,7 @@ void PARTICLE_BEAM::dump_beam(string name, int istep, int every_particle, int ti
 	      PARTICLE* part = newPart(*particle_[slice][nopart_in_slice]);
 	      part->set_z_velocity_corrected_for_dump(slice, istep,0, dz0, max_z,sign_label );
 	      file.save_object_on_persistent_file( part); 
-	      if (part != NULL) delete part;
-
+	      delete part;
 	    }
 	  nopartIni += nb_part_in_slice;
 	}
@@ -749,8 +745,7 @@ void PARTICLE_BEAM::dump_beam(string name, int istep, int every_particle, int ti
 
 
 	      file.save_object_on_persistent_file( part); 
-	      if (part != NULL) delete part;
-
+	      delete part;
 	    }
 	  nopartIni += nb_part_in_slice;
 	}
@@ -767,7 +762,7 @@ void PARTICLE_BEAM::dump_beam(string name, int istep, int every_particle, int ti
 	      PARTICLE* part = newPart(*particle_[slice][nopart_in_slice]);
 	      part->set_z_for_dump(istep,dz0, max_z, sign_label );
 	      file.save_object_on_persistent_file( part); 
-	      if (part != NULL) delete part;
+	      delete part;
 	    }
 	  nopartIni += nb_part_in_slice;
 	}
@@ -947,7 +942,7 @@ void PHOTON_BEAM::dump_photons(string name,int istep,int every_particle, int tim
 		  PHOTON* phot = new PHOTON(getPhotonVector(k)[j]);
 		  phot->set_z_for_dump(istep,dz0, max_z, sign_label ); 
 		  file.save_object_on_persistent_file( phot); 
-		  if (phot != NULL) delete phot;
+		  delete phot;
 		}
 	    }
 	}
@@ -960,7 +955,7 @@ void PHOTON_BEAM::dump_photons(string name,int istep,int every_particle, int tim
 		  PHOTON* phot = new PHOTON(getPhotonVector(k)[j]);
 		  phot->set_z_velocity_corrected_for_dump(k,istep,0,dz0,max_z,sign_label);
 		  file.save_object_on_persistent_file( phot); 
-		  if (phot != NULL) delete phot;
+		  delete phot;
 		}
 	    }
 	}
@@ -976,7 +971,7 @@ void PHOTON_BEAM::dump_photons(string name,int istep,int every_particle, int tim
 		  PHOTON* phot = new PHOTON(getPhotonVector(k)[j]);
 		  phot->set_z_velocity_corrected_for_dump(k,istep,n_slice_,dz0,max_z,sign_label);
 		  file.save_object_on_persistent_file( phot); 
-		  if (phot != NULL) delete phot;
+		  delete phot;
 		}
 	    }
 	}
@@ -989,7 +984,7 @@ void PHOTON_BEAM::dump_photons(string name,int istep,int every_particle, int tim
 		  PHOTON* phot = new PHOTON(getPhotonVector(k)[j]);
 		  phot->set_z_for_dump(istep,dz0,max_z,sign_label); 
 		  file.save_object_on_persistent_file( phot); 
-		  if (phot != NULL) delete phot;
+		  delete phot;
 		}
 	    }
 	}
