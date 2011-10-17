@@ -121,7 +121,7 @@ float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOn
 int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& stokes, float dzOnRadius,float* photonEnergy, RNDM& hasard)
 {
   int j,k;
-  double x, s1, s2, s3;
+  double x, s2, s3;
   double fu0, fusp;
   double p0,p1,v1,v3,g;
   double fK13, fKi13, fKi53, fK23;
@@ -210,9 +210,7 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
 // without spin flip
 int PHYSTOOLS::synrad_0_no_spin_flip (float upsilonSingleP, float eng, float dzOnRadius,float* photonEnergy, RNDM& hasard)
 {
-  int j=0;//,k;
-  double x;//, s2, s3;
-  //double fu0, fusp;
+  double x;
   double p0,p1,v1,v3,g;
   double fKi53, fK23;//fK13, fKi13, 
   //j=0;

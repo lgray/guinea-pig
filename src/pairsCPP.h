@@ -63,7 +63,7 @@ class PAIR_PARAMETER
       d_2 = d_eps_2_;
     }
   
-  inline const double get_mass() const {return mass_;}
+  inline double get_mass() const {return mass_;}
 
   inline float jet_requiv(float xmin,float e,int iflag) const
     {

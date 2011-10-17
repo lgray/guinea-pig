@@ -1,3 +1,6 @@
+17-10-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
+	* backgroundCPP.h: fix memory leaks
+	* small fixes
 11-10-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
 	* particleBeamCPP: fix Coverity bugs 34580 (missing break statement), 34602, 34603
 	* some cleanup

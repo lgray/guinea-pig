@@ -305,6 +305,8 @@ class mCROSS  : public GENERAL_CROSS
 	  sum2_[j]=0.0;
 	}
       cross_call_ = 0;
+      delete[] xx;
+      delete[] yy;
     } 
   
   virtual void cross_add(float e1,float e2,float flum)
@@ -449,7 +451,7 @@ class CROSS  : public GENERAL_CROSS
        }
      int ncross_per_ener = cross_val[0].size();
      xx = new double[nb_ener_];
-     yy = new double[ nb_ener_];
+     yy = new double[nb_ener_];
      for (k=0; k< nb_ener_; k++)
        {
 	 xx[k] = energ[k];
@@ -466,6 +468,8 @@ class CROSS  : public GENERAL_CROSS
      sum_=0.0;
      sum2_=0.0;       
      cross_call_ = 0;
+     delete[] xx;
+     delete[] yy;
    }
  
 ~CROSS() {;}
