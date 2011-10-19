@@ -58,6 +58,10 @@ x86_64-*-linux-*)
   LDFLAGS="$LDFLAGS"
   CFLAGS="$CFLAGS -fPIC -m64 -DCOMPUTER64b"
 ;;
+*-apple-darwin1*)
+  CFLAGS="$CFLAGS -DCOMPUTER64b"
+  LDFLAGS="$LDFLAGS -L/sw/lib"
+;;
 *-apple-darwin*)
   CFLAGS="$CFLAGS"
   LDFLAGS="$LDFLAGS -L/sw/lib"

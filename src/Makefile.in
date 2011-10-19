@@ -93,7 +93,7 @@ guineapigCPP.o: guineapigCPP.cc guineapigCPP.h rndmCPP.h LesDefines.h \
   beamParametersCPP.h abstractParticle.h typeDefs.h \
   mathematicalEntities.h mathematicalTools.h besselCPP.h splineCPP.h \
   physconst.h abstractIOclass.h parametersCPP.h lectureDonnees.h memory.h \
-  version.h gridCPP.h meshCPP.h beamCPP.h particleBeamCPP.h \
+  gridCPP.h meshCPP.h beamCPP.h particleBeamCPP.h \
   particlesCPP.h physicalTools.h mathconst.h fileInputOutput.h \
   fileInputOutputAscii.h IfileInputOutput.h extraPhotonCPP.h \
   switchesCPP.h resultsCPP.h pairsCPP.h lumiCPP.h jetParameterCPP.h \
@@ -150,7 +150,7 @@ principal.o: principal.cc guineapigCPP.h rndmCPP.h LesDefines.h \
   beamParametersCPP.h abstractParticle.h typeDefs.h \
   mathematicalEntities.h mathematicalTools.h besselCPP.h splineCPP.h \
   physconst.h abstractIOclass.h parametersCPP.h lectureDonnees.h memory.h \
-  version.h gridCPP.h meshCPP.h beamCPP.h particleBeamCPP.h \
+  gridCPP.h meshCPP.h beamCPP.h particleBeamCPP.h \
   particlesCPP.h physicalTools.h mathconst.h fileInputOutput.h \
   fileInputOutputAscii.h IfileInputOutput.h extraPhotonCPP.h \
   switchesCPP.h resultsCPP.h pairsCPP.h lumiCPP.h jetParameterCPP.h \

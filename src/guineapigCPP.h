@@ -6,7 +6,7 @@
 #include <algorithm>
 #include "rndmCPP.h"
 #include "beamParametersCPP.h"
-#include "version.h"
+#include "config.h"
 #include "gridCPP.h"
 #include "switchesCPP.h"
 #include "beamCPP.h"
@@ -565,7 +565,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     {
       ostringstream sortie;
       sortie <<  "****************************************************** " << endl;
-      sortie <<  "* guineapig++ Version " << VERSION << endl;
+      sortie <<  "* guineapig++ Version " << PACKAGE_VERSION << endl;
       sortie <<  "* Program written by Daniel Schulte at DESY and CERN " << endl;
       sortie <<  "* object oriented by Guy Le Meur at LAL-Orsay " << endl;
       sortie <<  "* modified by B. Dalena and J. Esberg CERN " << endl;
