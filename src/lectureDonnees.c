@@ -189,6 +189,9 @@ void set_variable(VARIABLE *var,VALUE val)
 	var->value.im[0]=CONTENTS(val);
 	var->value.im[1]=CONTENTS(val);
 	break;
+    default:
+      fprintf(stderr,"set_variable: case not implemented\n");
+      exit(1);
     }
 }
 
@@ -222,12 +225,16 @@ void get_variable(VARIABLE *var,VALUE *val)
   case T_INT_MIRROR:
   case T_DOUBLE_2:
   case T_INT_2:
-    fprintf(stderr,"Error: Variable <%s> not a single value\n",var);
+    fprintf(stderr,"Error: Variable <%s> not a single value\n",var->name);
     fprintf(stderr,"Error occured in get_variable\n");
     exit(1);
   case T_STRING:
     val->type=T_STRING;
     val->value.s=var->value.string;
+    break;
+  default:
+    fprintf(stderr,"get_variable: case not implemented\n");
+    exit(1);
   }
 }
 
@@ -236,7 +243,7 @@ void get_variable_element(VARIABLE *var,INDEX index,VALUE *val)
   switch(var->type){
   case T_DOUBLE:
   case T_INT:
-    fprintf(stderr,"Error: Variable <%s> is a single value\n",var);
+    fprintf(stderr,"Error: Variable <%s> is a single value\n",var->name);
     fprintf(stderr,"Error occured in get_variable_element\n");
     exit(1);
   case T_DOUBLE_MIRROR:
@@ -251,7 +258,7 @@ void get_variable_element(VARIABLE *var,INDEX index,VALUE *val)
       }
       else{
 	fprintf(stderr,"Error: Variable <%s> has only elements 1 \
-and 2\n",var);
+and 2\n",var->name);
 	fprintf(stderr,"Error occured in get_variable_element\n");
 	exit(1);
       }
@@ -269,11 +276,15 @@ and 2\n",var);
       }
       else{
 	fprintf(stderr,"Error: Variable <%s> has only elements 1 \
-and 2\n",var);
+and 2\n",var->name);
 	fprintf(stderr,"Error occured in get_variable_element\n");
 	exit(1);
       }
     }
+    break;
+  default:
+    fprintf(stderr,"get_variable_element: case not implemented\n");
+    exit(1);
   }
 }
 
@@ -284,7 +295,7 @@ void set_variable_element(VARIABLE *var,INDEX index,VALUE val)
     switch(var->type){
     case T_DOUBLE:
     case T_INT:
-        fprintf(stderr,"Error: Variable <%s> is single value\n",var);
+        fprintf(stderr,"Error: Variable <%s> is single value\n",var->name);
 	fprintf(stderr,"Error occured in set_variable_element\n");
 	exit(1);
 	break;
@@ -299,7 +310,7 @@ void set_variable_element(VARIABLE *var,INDEX index,VALUE val)
 	    }
 	    else{
                 sprintf(msg,"Error: Variable <%s> contains only elements 1 \
-and 2\n",var);
+and 2\n",var->name);
                 read_error(msg);
         	fprintf(stderr,"Error occured in set_variable_element\n");
 		exit(1);
@@ -317,13 +328,16 @@ and 2\n",var);
 	    }
 	    else{
                 sprintf(msg,"Error: Variable <%s> contains only elements 1 \
-and 2\n",var);
+and 2\n",var->name);
                 read_error(msg);
         	fprintf(stderr,"Error occured in set_variable_element\n");
 		exit(1);
 	    }
 	}
 	break;
+    default:
+      fprintf(stderr,"set_variable_element: case not implemented\n");
+      exit(1);
     }
 }
 
@@ -343,7 +357,7 @@ void print_variable(VARIABLE *var)
 	printf("DOUBLE:%g\n",var->value.d);
 	break;
     case T_INT:
-	printf("INT: %d\n",var->value.i);
+	printf("INT: %ld\n",var->value.i);
 	break;
     case T_DOUBLE_2:
     case T_DOUBLE_MIRROR:
@@ -352,12 +366,15 @@ void print_variable(VARIABLE *var)
 	break;
     case T_INT_2:
     case T_INT_MIRROR:
-	printf("INT.1: %d\n",var->value.im[0]);
-	printf("INT.2: %d\n",var->value.im[1]);
+	printf("INT.1: %ld\n",var->value.im[0]);
+	printf("INT.2: %ld\n",var->value.im[1]);
 	break;
     case T_STRING:
 	printf("STRING: %s\n",var->value.string);
 	break;
+    default:
+      fprintf(stderr,"print_variable: case not implemented\n");
+      exit(1);
     }
 }
 
@@ -454,7 +471,6 @@ void set_named_variable_string(char name[],char cont[], MEMORY_ACCOUNT* m_accoun
 {
   char buffer[1000],*point;//    char buffer[1000],*point,*end;
   int is_simple;
-  INDEX index;
   VARIABLE *var;
   
   strncpy(buffer,name,1000);
@@ -606,6 +622,9 @@ void print_token(TOKEN token)
 {
   printf("<");
   switch(token){
+  case START:
+    printf("START");
+    break;
   case ERROR:
     printf("ERROR");
     break;
@@ -645,6 +664,8 @@ void print_token(TOKEN token)
   case ASSIGN:
     printf("ASSIGN");
     break;
+  default:
+    printf(" ");
   }
   printf(">");
 }
@@ -1411,12 +1432,6 @@ int string_get_list(char *line,char *word,float *x,int *n)
   *n=i;
   return 1;
 }
-
-
-int file_read_next_word(DATEI *datei,char *word)
-{
-}
-
 
 void imprimerBuffer(char* buffer)
 {

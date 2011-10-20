@@ -157,7 +157,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
       virtual void save_bhabhasamples(const ABSTRACT_BHABHASAMPLES* const bhabhas)  
 	{
 	  
-	  int k;
+	  unsigned int k;
 	  unsigned long rank1_index, rank2_index;
 	  float mother1_en, e1, vx1, vy1, vz1, mother2_en, e2, vx2, vy2, vz2;
 	  int nbphot;
@@ -183,7 +183,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
       virtual void save_bhabhaPhotonSamples(const ABSTRACT_BHABHA_PHOTON_SAMPLES*  bhabhaPhot)  
 	{
 	  
-	  int k;
+	  unsigned int k;
 	  float en, vx, vy, vz;
 	  int num_bhabha;
 	  for (k=0; k < bhabhaPhot->nb_samples(); k++)

@@ -84,13 +84,13 @@ void GUINEA::save_results_on_files()
 	  for (int h=0; h < grid_.get_n_cell_z(); h++)
 	    {	    
 	      vector<PHOTON>& lesPhotons1 =  beam1_.getPhotonVector(h);
-	      for(int k=0;k<lesPhotons1.size();k++)
+	      for(unsigned int k=0;k<lesPhotons1.size();k++)
 		{
 		  if (lesPhotons1[k].energy()>0.0)
 		    filout.save_object_on_persistent_file( &lesPhotons1[k]);
 		}
 	      vector<PHOTON>& lesPhotons2 =  beam2_.getPhotonVector(h);
-	      for(int k=0;k<lesPhotons2.size();k++){
+	      for(unsigned int k=0;k<lesPhotons2.size();k++){
 		float ene = lesPhotons2[k].energy();
 		if (lesPhotons2[k].energy()>0.0)
 		  {
@@ -117,7 +117,7 @@ void GUINEA::save_results_on_files()
 
 void GUINEA::outputs(string nameOfProtokoll)
 {
-  int i1;
+  //  int i1;
   float miss1, miss2;
   long out1, out2;
   grid_.get_miss(miss1, out1, miss2, out2);

@@ -2,7 +2,7 @@
 
 bool BHABHA_PHOTON_SAMPLES::pick_next(float ecmratio, float& en,float& px,float& py,float& pz, int& found) 
 {
-  if (next_ >= (int) bhabha_photons_.size() ) 
+  if (next_ >= bhabha_photons_.size() ) 
     {
       cerr << " WARNING BHABHA_PHOTON_SAMPLES::pick_next() : the vector of bhabha photons samples is out  bhabha_photons_.size()= " <<  bhabha_photons_.size() << " next= " << next_ << endl;
       return false;
@@ -60,7 +60,7 @@ void BHABHA::boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float par
   float px2,py2,pz2;
   float beta_x,beta_y;
   float theta1,theta2;
-  float phi1,phi2;
+  float phi1=0.0,phi2=0.0;
   float theta,phi;
   float px,py,pz,en;
   int current_bhabha, numero_in_bhabha_file;

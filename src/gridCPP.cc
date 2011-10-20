@@ -275,7 +275,7 @@ void GRID::save_tertphot_on_file(string tertphotfile)
 {
   FILE_IN_OUT filout;
   filout.open_file(tertphotfile,"w");
-  for(int i =0; i<tertphot_.size();i++)
+  for(unsigned int i =0; i<tertphot_.size();i++)
     {
       filout.save_object_on_persistent_file(&tertphot_[i]);
     }
@@ -685,7 +685,7 @@ void GRID::electronScatter(vector< list<EXTRA_PHOTON_POINTER> >& extra_phot_ptr,
   int i_equiv=6;
   int n_phot, i_phot;
   float energy, r_phot;
-  float e_phot,q2,one_m_x,x,y, radius, theta;
+  float e_phot,q2,one_m_x,x=0.0,y=0.0, radius, theta;
   float xVelocity, yVelocity;
   //PHYSTOOLS phys;
 
@@ -1137,7 +1137,6 @@ void GRID::move_particles(const vector<GENERAL_GRID*>& grids,  int i_beam, int i
 		  {
 		    particuleCourante->setUps(particuleCourante->getUps()*particuleCourante->getEnergy()/oldener);
 		  }
-		float oldnyr=particuleCourante->getEnergy();
 		particuleCourante->createTridents(step_*slice_of_beam_[i_beam-1].get_scal_step(),&electrons,&positrons,&virt,*hasard_);
 		for(i=0;i<electrons.size();i++)
 		  {
@@ -1272,7 +1271,8 @@ void GRID::registerPhotons(const vector<float>& photonEnergies, PARTICLE& partic
   for (k=0; k < photonEnergies.size() ;k++)
     {
       
-      const PHOTON& foton = beam->new_photon(photonEnergies[k],particle, i_slice);
+      //      const PHOTON& foton = 
+      beam->new_photon(photonEnergies[k],particle, i_slice);
 
       //     energy -= photonEnergies[k];
       //      const PHOTON& foton = beam->new_photon(photonEnergies[k],particle, i_slice);
@@ -2261,6 +2261,7 @@ void GRID::step_pair_1_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_PARTICL
   float thetamax;
   float ex,ey,bx,by;
   int i;
+  unsigned int j;
   vector<float> photon_e;
   // initial half step 
  
@@ -2280,9 +2281,9 @@ void GRID::step_pair_1_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_PARTICL
   paire.advancePosition(step);
   field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
   thetamax = max( thetamax, (float)2.0*paire.apply_final_half_step_fields(step, mass, ex,ey, bx, by, thetamax,hasard));
-  for(i=0;i<photon_e.size();i++)
+  for(j=0;j<photon_e.size();j++)
     {
-      tertphot_.push_back(TERTPHOTON(photon_e[i],paire));
+      tertphot_.push_back(TERTPHOTON(photon_e[j],paire));
     }
   if (	!paire.last_rescaling_ok() )
     {

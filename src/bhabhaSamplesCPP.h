@@ -20,7 +20,7 @@ class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
   vector<QUADRIVECTOR> bhabha_photons_;
   vector<int> numero_bhabha_;
   int label_;
-  int next_;
+  unsigned int next_;
   public :
     
     BHABHA_PHOTON_SAMPLES() : label_(-1), next_(0) {;}
@@ -31,14 +31,14 @@ class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
   virtual inline int get_label() const  { return label_;}
   
   
-  virtual inline int nb_samples() const 
+  virtual inline unsigned int nb_samples() const 
     {
       if ( next_ == 0 ) return bhabha_photons_.size();
       else return next_;
     }
   
   
-  virtual inline void get_parameters_for_output(int numero, int& numero_bhabha, float& en,float& vx,float& vy, float& vz) const
+  virtual inline void get_parameters_for_output(unsigned int numero, int& numero_bhabha, float& en,float& vx,float& vy, float& vz) const
     {
       bhabha_photons_[numero].trivector(vx, vy, vz);
       en = bhabha_photons_[numero].composante4();
@@ -115,7 +115,7 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
   virtual  ~BHABHASAMPLES() {;}
   
   
-  virtual inline void get_parameters_for_output(int numero, unsigned long& rank1_index, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, unsigned long& rank2_index, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const
+  virtual inline void get_parameters_for_output(unsigned int numero, unsigned long& rank1_index, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, unsigned long& rank2_index, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const
     {
       float px, py, pz;
       
@@ -144,7 +144,7 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
       nbphot = bhabha_[numero].nbphot;
  }
  
-  virtual inline int nb_samples() const {return next_;}
+  virtual inline unsigned int nb_samples() const {return next_;}
   
 
   bool pick_next_bhabha(float e1, float e2, float ecmratio, float& px1,float& py1,float& pz1, float& en1,float& px2,float& py2,float& pz2,float& en2, int& nbphot, int& numero_bhabha); 

@@ -241,7 +241,7 @@ void RNDM::rndmst7(unsigned long i)
 
   rndm7_store.i= 0L;
   unsigned long a_coeff;
-  unsigned long  c_coeff;
+  unsigned long c_coeff;
   unsigned long test7[11];
 
   // 32-bits machine 
@@ -440,7 +440,8 @@ float RNDM::exp_dev()
 // randomly shuffled 
 void RNDM::getShuffledIntegerSequence(int maxInt, vector<unsigned long int>& vec)
 {
-  unsigned long int k,j, iaux;
+  int k, j;
+  unsigned long int iaux;
   float u;
   vec.clear();
   vec.resize(maxInt);
