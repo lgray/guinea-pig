@@ -123,21 +123,28 @@ class FIELD
 
   ~FIELD() 
     {
-          if (dist_ != NULL)  delete [] dist_;
-	  if (phi1_ != NULL)  delete [] phi1_;
-	  if (phi2_ != NULL)  delete [] phi2_;
+      if (dist_ != NULL)  delete [] dist_;
+      if (phi1_ != NULL)  delete [] phi1_;
+      if (phi2_ != NULL)  delete [] phi2_;
     }
 
-  inline FIELD& operator = (const FIELD& f)
+  inline const FIELD& operator = (const FIELD& f)
     {
+      if (this == &f) return *this; // protect against self-assignment
       int k;
-       set (f.nb_cells_x_, f.nb_cells_y_, f.integration_method_); 
-	if (integration_method_ == 2)
-	  {
-	    fourier_transform_forward_ = f.fourier_transform_forward_;
-	    fourier_transform_backward_ = f.fourier_transform_backward_;
-	  }
+      // delete old memory:
+      if (dist_ != NULL)  delete [] dist_;
+      if (phi1_ != NULL)  delete [] phi1_;
+      if (phi2_ != NULL)  delete [] phi2_;
+      // assign new memory:
+      set (f.nb_cells_x_, f.nb_cells_y_, f.integration_method_); 
+      if (integration_method_ == 2)
+	{
+	  fourier_transform_forward_ = f.fourier_transform_forward_;
+	  fourier_transform_backward_ = f.fourier_transform_backward_;
+	}
       for (k = 0; k < dist_size_; k++) dist_[k] = f.dist_[k];
+      return *this;
     }
 
   inline const PHI_FLOAT* get_phi(int index) const 

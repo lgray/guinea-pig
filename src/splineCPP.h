@@ -29,7 +29,14 @@ spline_tab_entry *tab_;
   {
     recop(spl);
   }
- SPLINE operator = (const SPLINE& spl) { recop(spl); return *this;} 
+ const SPLINE& operator = (const SPLINE& spl) { 
+   if (this == &spl) return *this; // protect against self-assignment
+   // delete old memory:
+   if (tab_!= NULL) delete [] tab_;
+   // assign new memory:
+   recop(spl); 
+   return *this;
+ } 
 
  void spline_init(string pythiaFile);
  void spline_init(const vector<double>& x,int xscald, const vector<double>&,int yscald,int nd);
@@ -76,8 +83,16 @@ void mspline_init(const double* x,int xscal,const double* y,int yscal,int n,int 
 
  ~MSPLINE();
 
- MSPLINE operator = (const MSPLINE& spl) { recop(spl); return *this;} 
-
+ const MSPLINE& operator = (const MSPLINE& spl) {
+   if (this == &spl) return *this; // protect against self-assignment
+   // delete old memory:
+   if (x_ != NULL) delete [] x_;
+   if (y_ != NULL) delete [] y_;
+   if (y2_ != NULL) delete [] y2_;
+   // assign new memory:
+   recop(spl); 
+   return *this;
+ }
 
  inline void recop(const MSPLINE& spl)
  {

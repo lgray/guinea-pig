@@ -118,8 +118,9 @@ class SLICE_ON_GRID
       if (rho_ != NULL) delete [] rho_;
     }
   
-  inline SLICE_ON_GRID& operator = (const SLICE_ON_GRID& s)
+  inline const SLICE_ON_GRID& operator = (const SLICE_ON_GRID& s)
     {
+      if (this == &s) return *this; // protect against self-assignment
       int k;
       setZero();
       beam_ = s.beam_;
@@ -128,8 +129,12 @@ class SLICE_ON_GRID
       nb_macroparticles_ = s.nb_macroparticles_;
       nb_cells_y_ = s.nb_cells_y_;
       dim_rho_ = s.dim_rho_;
+      // delete old memory:
+      delete[] rho_;
+      // assign new memory:
       set_rho( dim_rho_);
       for (k=0; k < dim_rho_ ; k++) rho_[k] = s.rho_[k];
+      return *this;
     }
   
   inline void connect_beam(BEAM* b) { beam_ = b;}
