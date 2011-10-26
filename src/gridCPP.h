@@ -131,6 +131,7 @@ class SLICE_ON_GRID
       dim_rho_ = s.dim_rho_;
       // delete old memory:
       delete[] rho_;
+      rho_ = NULL;
       // assign new memory:
       set_rho( dim_rho_);
       for (k=0; k < dim_rho_ ; k++) rho_[k] = s.rho_[k];
