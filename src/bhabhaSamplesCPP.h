@@ -204,12 +204,11 @@ class BHABHA
   
   void lorent_bhabha(float e1,float e2,float pz1,float pz2,float& e,float& pz)
     {
-      float beta, eold, gam,pzold;
+      float beta, eold, gam;
       
       beta = -(pz1 + pz2) / (e1 + e2);
       gam = 1.0 / sqrt(1.0 - beta * beta);
       eold = e;
-      pzold= pz;
       e = gam * (e - beta * pz);
       pz = gam * (pz - beta * eold);
     }

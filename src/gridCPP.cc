@@ -1891,7 +1891,7 @@ void GRID::move_photons2(BEAM& beam,int ibeam,int i_slice, RNDM& hasard)
 	    }
 	    else {
 	      nd=(int)(tmp/0.1+1.0);
-	      int ds=tmp/nd;
+	      float ds=tmp/nd;
 	      tmp=0.0;
 	      for (i=0;i<nd;++i) {
 		if (hasard.rndm()<ds) {

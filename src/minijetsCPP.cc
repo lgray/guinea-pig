@@ -1005,10 +1005,6 @@ void MINIJETS::store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT ep
 
 void MINIJETS_PYTHIA::initPythia(float s, float ptmin)
 {
-  JET_FLOAT xmin, xmax;
-  //int n=1024;
-  xmax=sqrt(1.0-ptmin*ptmin/(0.25*s));
-  xmin=-xmax;
   jet_spline0_.spline_init( string("pythia0.ini") );
   jet_spline1_.spline_init( string("pythia1.ini") );
   jet_spline2_.spline_init( string("pythia2.ini") );

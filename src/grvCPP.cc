@@ -159,13 +159,12 @@ double GRVPAR::grvbl(double x,double q2)
   /*    double log(); */
 
     /* Local variables */
-    static double s, s2;
+    static double s;
 
 /* ************************************ */
 /* * Same as GRVUL, but for b-quarks. * */
 /* ************************************ */
     s    = log(log(q2 * 18.58) / 1.536);
-    s2   = s * s;
     sp_  = 1.351;
     alp_ = 1.016;
     bet_ = .338;
@@ -404,14 +403,13 @@ double GRVPAR::grvbh(double x,double q2)
     /*   double log(), atan(); */
 
     /* Local variables */
-    static double s, s2;
+    static double s;
     static double bgamma, eq, pi;
 
 /* ************************************ */
 /* * Same as GRVUH, but for b-quarks. * */
 /* ************************************ */
     s    = log(log(q2 * 16.26) / 1.585);
-    s2   = s * s;
     sp_  = 1.297;
     alp_ = .969;
     bet_ = .266;
@@ -599,13 +597,12 @@ double GRVPAR::grvbh0(double x,double q2)
   /*    double log(); */
 
     /* Local variables */
-    static double s, s2;
+    static double s;
 
 /* ************************************* */
 /* * Same as GRVUH0, but for b-quarks. * */
 /* ************************************* */
     s    = log(log(q2 * 16.26) / 1.585);
-    s2   = s * s;
     sp_  = 1.297;
     alp_ = .97;
     bet_ = .207;

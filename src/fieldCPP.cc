@@ -26,7 +26,7 @@ void FIELD::fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT
   // (in fact number of charges in cells) and a Green's kernel (dist)
 
   int i1,i2,i,j,j0,m,m2;
-  int nn[2];
+  //  int nn[2];
   float eps=1e-5;
 #ifdef SHORTCUT_FFT
   int flag1=0,flag2=0;
@@ -42,8 +42,8 @@ void FIELD::fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT
 	}
       return;
     }
-  nn[0]=2*n_y;
-  nn[1]=2*n_x;
+  // nn[0]=2*n_y;
+  // nn[1]=2*n_x;
 
   double* temp = fourier_forward->data_vector();
   double* temp_back =  fourier_backward->data_vector();

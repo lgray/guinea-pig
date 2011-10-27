@@ -450,7 +450,7 @@ void RNDM::getShuffledIntegerSequence(int maxInt, vector<unsigned long int>& vec
   while (j > 1)
     {
       u = rndm();
-      k = floor(j*u) +1;
+      k = (int)floor(j*u) +1;
       iaux = vec[k-1];
       vec[k-1] = vec[j-1];
       vec[j-1] = iaux;

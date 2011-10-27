@@ -377,8 +377,6 @@ COMPT_RESULTS::COMPT_RESULTS()
 // 'composante' is old 'scdn1+scdn2'
 int COMPT_RESULTS::store_compt(int composante, double e,double px,double py,double pz,double wgt,RNDM& hasard)
 {
-    double pt;
-   pt=sqrt(px*px+py*py);
     if(pz>0.0)
       {
 	n1_ += wgt;

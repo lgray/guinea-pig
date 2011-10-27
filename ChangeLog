@@ -1,3 +1,5 @@
+27-10-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
+	* fix compiler warnings
 26-10-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
 	* fix small mistake in assignment operator
 21-10-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>

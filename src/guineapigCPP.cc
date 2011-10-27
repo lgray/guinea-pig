@@ -950,7 +950,7 @@ void GUINEA::main_grid_automatic_xycuts(const ABSTRACT_PARTICLE_BEAM& bff1,const
   float Dx, Dy;
   float betax, betay;
   float decalage;
-  float emittx1, emitty1, emittx2, emitty2, emittx, emitty;
+  float emittx1, emitty1, emittx2, emitty2;
   float z01, sigmaz1;
   float z02, sigmaz2;
   float sigmaz;
@@ -962,8 +962,8 @@ void GUINEA::main_grid_automatic_xycuts(const ABSTRACT_PARTICLE_BEAM& bff1,const
   gam1 = bff1.gamma();
   gam2 = bff2.gamma();
 
-  emittx = 0.5*(emittx1+emittx2);
-  emitty = 0.5*(emitty1+emitty2);
+  // emittx = 0.5*(emittx1+emittx2);
+  // emitty = 0.5*(emitty1+emitty2);
 
   npart1  = beam_parameters1_.n_particles();
   npart2  = beam_parameters2_.n_particles();

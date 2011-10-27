@@ -120,12 +120,11 @@ float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOn
 // fill the vector of the stokes parameters of the emitted photon
 int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& stokes, float dzOnRadius,float* photonEnergy, RNDM& hasard)
 {
-  int j,k;
+  int k;
   double x, s2, s3;
   double fu0, fusp;
   double p0,p1,v1,v3,g;
   double fK13, fKi13, fKi53, fK23;
-  j=0;
   if (eng<=0.0)
     {
       cerr << "Initial particle energy below zero : " << eng << endl;
@@ -240,9 +239,7 @@ int PHYSTOOLS::synrad_0_no_spin_flip (float upsilonSingleP, float eng, float dzO
   double z = x/(upsilon_bar * x1);
   synradKi53andK23(z, fKi53, fK23);
   double F00 = fKi53 + (x*x/x1) * fK23;
-  double F00star;
 
-  F00star = F00;
   double dxdy = 3.0 * v1 * v1 * (  upsilon_bar + x * (1.0 - upsilon_bar * v3 ) ) /xden;
   g  = F00 * dxdy * factor /(CONST0  * upsilon );
   if ( p1 < g) 
