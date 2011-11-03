@@ -13,8 +13,8 @@ void BEAM::write_size(int first_slice, int last_slice)
        ostr << " "<<  k << " "<< xrms << " "<<  yrms <<  " "<< xmin << " "<<  xmax << " "<< xmean << " "<< ymin << " "<< ymax << " "<<  ymean << endl;
      }
    ostr << endl;
-  string sortie = ostr.str();
-  size_log_file_->write_line(sortie);
+  string out = ostr.str();
+  size_log_file_->write_line(out);
  }
 
 

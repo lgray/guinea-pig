@@ -184,28 +184,28 @@ void RESULTS::bpm_signal_coherent(const BEAM& beam)
 string  RESULTS::output_flow() const 
 {
   int j1,j2;
-  ostringstream sortie;
-  sortie << titre(string("general results"));
-  sortie <<  "lumi_fine = " << lumi_fine << " m**(-2) (from charge densities) " << endl;
-  sortie <<  "lumi_ee = " << lumi_ee << " m**(-2) (from beam particles collisions)" << endl;
-  sortie <<  "lumi_ee_high = " << lumi_ee_high << " 1/m2 (par bunch cross. above energy ecm_min)" << endl;
-  sortie <<  "lumi_pp = " << lumi_pp << " m**(-2) " << endl;
-  sortie <<  "lumi_eg = " << lumi_eg << " m**(-2) (e - gamma) " << endl;
-  sortie <<  "lumi_ge = " << lumi_ge << " m**(-2) ( gamma - e) " << endl;
-  sortie <<  "lumi_gg = " << lumi_gg << " m**(-2) (gamma - gamma) " << endl;
+  ostringstream out;
+  out << title(string("general results"));
+  out <<  "lumi_fine = " << lumi_fine << " m**(-2) (from charge densities) " << endl;
+  out <<  "lumi_ee = " << lumi_ee << " m**(-2) (from beam particles collisions)" << endl;
+  out <<  "lumi_ee_high = " << lumi_ee_high << " 1/m2 (par bunch cross. above energy ecm_min)" << endl;
+  out <<  "lumi_pp = " << lumi_pp << " m**(-2) " << endl;
+  out <<  "lumi_eg = " << lumi_eg << " m**(-2) (e - gamma) " << endl;
+  out <<  "lumi_ge = " << lumi_ge << " m**(-2) ( gamma - e) " << endl;
+  out <<  "lumi_gg = " << lumi_gg << " m**(-2) (gamma - gamma) " << endl;
   float f_rep = switches_->get_f_rep();
   float n_b = switches_->get_n_b();
-  //sortie <<  "lumi_gg_high = " << lumi_gg_high*f_rep*n_b << " 1/m2 (gamma - gamma, with c.o.m energy more than gg_cut) " << endl;
-  sortie <<  "lumi_gg_high = " << lumi_gg_high << " 1/m2 (gamma - gamma, with c.o.m energy more than gg_cut) " << endl;
+  //out <<  "lumi_gg_high = " << lumi_gg_high*f_rep*n_b << " 1/m2 (gamma - gamma, with c.o.m energy more than gg_cut) " << endl;
+  out <<  "lumi_gg_high = " << lumi_gg_high << " 1/m2 (gamma - gamma, with c.o.m energy more than gg_cut) " << endl;
   
   for (j1=0;j1<3;j1++)
     {
       for (j2=0;j2<3;j2++)
 	{
-	  sortie <<  "lumi[" << j1 << "][" << j2 << "] = " << lumi[j1][j2]*f_rep*n_b << endl;
+	  out <<  "lumi[" << j1 << "][" << j2 << "] = " << lumi[j1][j2]*f_rep*n_b << endl;
 	}
     }
-  sortie <<  "upsmax= " << upsmax << " (maximal value of the beamstrahlung paramater that occured) " << endl;
+  out <<  "upsmax= " << upsmax << " (maximal value of the beamstrahlung paramater that occured) " << endl;
 
   double temp1, temp2;
   const float eps=1e-6;
@@ -219,38 +219,38 @@ string  RESULTS::output_flow() const
       temp1 = -1.0;
       temp2 = temp1;
     }
-  sortie << "E_cm = " << temp1 << " E_cm_var = " << temp2 << endl;
-  sortie << " ............................................... " << endl;
+  out << "E_cm = " << temp1 << " E_cm_var = " << temp2 << endl;
+  out << " ............................................... " << endl;
 
-  sortie << " average and RMS angles (x or y ) of the particles of each beam after the interaction (microradians) : " << endl;
+  out << " average and RMS angles (x or y ) of the particles of each beam after the interaction (microradians) : " << endl;
 
-  sortie << "bpm_vx.1=" << c_vx_1*1e6  <<  ";bpm_sig_vx.1=" << sig_vx_1*1e6 << ";" << endl;
-  sortie << "bpm_vy.1=" << c_vy_1*1e6  <<  ";bpm_sig_vy.1=" << sig_vy_1*1e6 << ";" << endl;
-  sortie << "bpm_vx.2=" << c_vx_2*1e6  <<  ";bpm_sig_vx.2=" << sig_vx_2*1e6 << ";" << endl;
-  sortie << "bpm_vy.2=" << c_vy_2*1e6  <<  ";bpm_sig_vy.2=" << sig_vy_2*1e6 << ";" << endl;
-  sortie << " average and RMS angles (x or y ) including coherent particles of each beam after the interaction (microradians) : " << endl;
-  sortie << "bpm_vx_coh.1=" << c_vx_1_coh*1e6 << ";" << endl; 
-  sortie << "bpm_vy_coh.1=" << c_vy_1_coh*1e6 << ";" << endl;
-  sortie << "bpm_vx_coh.2=" << c_vx_2_coh*1e6 << ";" << endl;
-  sortie << "bpm_vy_coh.2=" << c_vy_2_coh*1e6 << ";" << endl;
-  sortie << " ............................................... " << endl;
-  sortie << " minimal photon-photon center of mass energies for hadronic events (GeV) : " << endl;
-  sortie << "hadron_cut.1=" << 2.0 << ";"<<  "hadron_cut.2=" << 5.0 << ";"<< "hadron_cut.3=" << 10.0 << ";"<< endl;
-  sortie << " nb of hadronic events per bunch crossing due to the virtual photons in ee collisions : " << endl;
-  sortie << "hadrons_ee.1=" << hadrons_ee[0] << ";hadrons_ee.2=" << hadrons_ee[1] << ";hadrons_ee.3=" << hadrons_ee[2] << ";"<< endl;
-  sortie << " nb of hadronic evts per bx due to e-gamma collisions " << endl;
-  sortie << "hadrons_eg.1=" <<  hadrons_eg[0] << ";hadrons_eg.2=" << hadrons_eg[1] << ";hadrons_eg.3=" << hadrons_eg[2] << ";"<< endl;
-  sortie << " .. due to gamma-e collisions : " << endl;
-  sortie << "hadrons_ge.1=" << hadrons_ge[0] << ";hadrons_ge.2=" << hadrons_ge[1] << ";hadrons_ge.3=" << hadrons_ge[2] << ";"<< endl;
-  sortie << " ... due to gamma-gamma collisions : " << endl;
-  sortie << "hadrons_gg.1=" << hadrons_gg[0] << ";hadrons_gg.2=" << hadrons_gg[1] << ";hadrons_gg.3=" << hadrons_gg[2] << ";"<< endl;
-  sortie << " ... due to all types of  collisions : " << endl;
-  sortie << "hadrons_sum.1=" << hadrons_ee[0]+hadrons_eg[0]+hadrons_ge[0]+hadrons_gg[0] << ";hadrons_sum.2=" << hadrons_ee[1]+hadrons_eg[1]+hadrons_ge[1]+hadrons_gg[1] << ";hadrons_sum.3=" << hadrons_ee[2]+hadrons_eg[2]+hadrons_ge[2]+hadrons_gg[2] << ";" << endl;
-  sortie << " ............................................... " << endl << endl;
+  out << "bpm_vx.1=" << c_vx_1*1e6  <<  ";bpm_sig_vx.1=" << sig_vx_1*1e6 << ";" << endl;
+  out << "bpm_vy.1=" << c_vy_1*1e6  <<  ";bpm_sig_vy.1=" << sig_vy_1*1e6 << ";" << endl;
+  out << "bpm_vx.2=" << c_vx_2*1e6  <<  ";bpm_sig_vx.2=" << sig_vx_2*1e6 << ";" << endl;
+  out << "bpm_vy.2=" << c_vy_2*1e6  <<  ";bpm_sig_vy.2=" << sig_vy_2*1e6 << ";" << endl;
+  out << " average and RMS angles (x or y ) including coherent particles of each beam after the interaction (microradians) : " << endl;
+  out << "bpm_vx_coh.1=" << c_vx_1_coh*1e6 << ";" << endl; 
+  out << "bpm_vy_coh.1=" << c_vy_1_coh*1e6 << ";" << endl;
+  out << "bpm_vx_coh.2=" << c_vx_2_coh*1e6 << ";" << endl;
+  out << "bpm_vy_coh.2=" << c_vy_2_coh*1e6 << ";" << endl;
+  out << " ............................................... " << endl;
+  out << " minimal photon-photon center of mass energies for hadronic events (GeV) : " << endl;
+  out << "hadron_cut.1=" << 2.0 << ";"<<  "hadron_cut.2=" << 5.0 << ";"<< "hadron_cut.3=" << 10.0 << ";"<< endl;
+  out << " nb of hadronic events per bunch crossing due to the virtual photons in ee collisions : " << endl;
+  out << "hadrons_ee.1=" << hadrons_ee[0] << ";hadrons_ee.2=" << hadrons_ee[1] << ";hadrons_ee.3=" << hadrons_ee[2] << ";"<< endl;
+  out << " nb of hadronic evts per bx due to e-gamma collisions " << endl;
+  out << "hadrons_eg.1=" <<  hadrons_eg[0] << ";hadrons_eg.2=" << hadrons_eg[1] << ";hadrons_eg.3=" << hadrons_eg[2] << ";"<< endl;
+  out << " .. due to gamma-e collisions : " << endl;
+  out << "hadrons_ge.1=" << hadrons_ge[0] << ";hadrons_ge.2=" << hadrons_ge[1] << ";hadrons_ge.3=" << hadrons_ge[2] << ";"<< endl;
+  out << " ... due to gamma-gamma collisions : " << endl;
+  out << "hadrons_gg.1=" << hadrons_gg[0] << ";hadrons_gg.2=" << hadrons_gg[1] << ";hadrons_gg.3=" << hadrons_gg[2] << ";"<< endl;
+  out << " ... due to all types of  collisions : " << endl;
+  out << "hadrons_sum.1=" << hadrons_ee[0]+hadrons_eg[0]+hadrons_ge[0]+hadrons_gg[0] << ";hadrons_sum.2=" << hadrons_ee[1]+hadrons_eg[1]+hadrons_ge[1]+hadrons_gg[1] << ";hadrons_sum.3=" << hadrons_ee[2]+hadrons_eg[2]+hadrons_ge[2]+hadrons_gg[2] << ";" << endl;
+  out << " ............................................... " << endl << endl;
    
-  sortie <<  "lumi_ee=" << lumi_ee << ";"<< endl;   
-  sortie <<  "lumi_ee_high=" << lumi_ee_high << ";"<< endl;   
-  return sortie.str();
+  out <<  "lumi_ee=" << lumi_ee << ";"<< endl;   
+  out <<  "lumi_ee_high=" << lumi_ee_high << ";"<< endl;   
+  return out.str();
 }
 
 void PAIRS_RESULTS::set()
@@ -317,43 +317,43 @@ void PAIRS_RESULTS::update_contribution(int composante, double ener,double px,do
 
 string PAIRS_RESULTS::output_flow() const 
 {
-  ostringstream sortie;
+  ostringstream out;
   //PAIRS
   string str1 ("pairs");
 
   if(name_.compare("pairs")==0){
-    sortie << titre(string(" results for ")+(string)name_+string(" "));
-    sortie << "nb of pairs per bunch crossing : n_pairs = " << number_ << " total energy e_pairs = " << energy_ << " GeV " << endl;
-    sortie << endl;
-    sortie << " Breit-Wheeler process : n_BW = " << nproc_[0] <<  " e_BW = " << eproc_[0] << " GeV " << endl;
-    sortie << " Bethe-Heitler process : n_BH = " << nproc_[1] <<  " e_BH = " << eproc_[1] << " GeV " << endl;
-    sortie << " Landau-Lifschitz process : n_LL = " << nproc_[2] << " e_LL = " << eproc_[2] <<  " GeV " << endl;
-    sortie << endl;
-    sortie << " total numer (an total energy, in GeV) of the particles due to the 3 processes : " << endl;
-    sortie << "n.1 = " << n1_ << " b.1 = " << b1_ << endl;
-    sortie << "n.2 = " << n2_ << " b.2 = " << b2_ << endl;
-    sortie << endl;
-    sortie << " nb of particles (and energy in GeV) due to thr 3 previous processes with a transverse momentum of more than 20 MeV and an angle with respect to the beam axis of more than 150 mrad : " << endl;
-    sortie << "n_pt=" << highptsum_<< ";e_pt=" << highpteng_ <<";" << endl;
-    sortie << "n_pairs=" << number_<< ";e_pairs=" << energy_ << ";" << endl;
+    out << title(string(" results for ")+(string)name_+string(" "));
+    out << "nb of pairs per bunch crossing : n_pairs = " << number_ << " total energy e_pairs = " << energy_ << " GeV " << endl;
+    out << endl;
+    out << " Breit-Wheeler process : n_BW = " << nproc_[0] <<  " e_BW = " << eproc_[0] << " GeV " << endl;
+    out << " Bethe-Heitler process : n_BH = " << nproc_[1] <<  " e_BH = " << eproc_[1] << " GeV " << endl;
+    out << " Landau-Lifschitz process : n_LL = " << nproc_[2] << " e_LL = " << eproc_[2] <<  " GeV " << endl;
+    out << endl;
+    out << " total numer (an total energy, in GeV) of the particles due to the 3 processes : " << endl;
+    out << "n.1 = " << n1_ << " b.1 = " << b1_ << endl;
+    out << "n.2 = " << n2_ << " b.2 = " << b2_ << endl;
+    out << endl;
+    out << " nb of particles (and energy in GeV) due to thr 3 previous processes with a transverse momentum of more than 20 MeV and an angle with respect to the beam axis of more than 150 mrad : " << endl;
+    out << "n_pt=" << highptsum_<< ";e_pt=" << highpteng_ <<";" << endl;
+    out << "n_pairs=" << number_<< ";e_pairs=" << energy_ << ";" << endl;
   } else {
     // MUONS
-    sortie << titre(string(" results for ")+(string)name_+string(" "));
-    sortie << "nb of pairs per bunch crossing : n_"<< name_ <<" = " << number_ << " total energy e_"<<name_<<" = " << energy_ << " GeV " << endl;
-    sortie << endl;
-    sortie << " Breit-Wheeler process : n_BW_"<<name_<<" = " << nproc_[0] <<  " e_BW_"<<name_<<" = " << eproc_[0] << " GeV " << endl;
-    sortie << " Bethe-Heitler process : n_BH_"<<name_<<" = " << nproc_[1] <<  " e_BH_"<<name_<<" = " << eproc_[1] << " GeV " << endl;
-    sortie << " Landau-Lifschitz process : n_LL_"<<name_<<" = " << nproc_[2] << " e_LL_"<<name_<<" = " << eproc_[2] <<  " GeV " << endl;
-    sortie << endl;
-    sortie << " total numer (an total energy, in GeV) of the particles due to the 3 processes : " << endl;
-    sortie << "n.1_"<<name_<<" = " << n1_ << " b.1_"<<name_<<" = " << b1_ << endl;
-    sortie << "n.2_"<<name_<<" = " << n2_ << " b.2_"<<name_<<" = " << b2_ << endl;
-    sortie << endl;
-    sortie << " nb of particles (and energy in GeV) due to thr 3 previous processes with a transverse momentum of more than 20 MeV and an angle with respect to the beam axis of more than 150 mrad : " << endl;
-    sortie << "n_pt_"<<name_<<"=" << highptsum_<< ";e_pt_"<<name_<<"=" << highpteng_ <<";" << endl;
-    sortie << "n_"<<name_<<"=" << number_<< ";e_"<<name_<<"=" << energy_ << ";" << endl;
+    out << title(string(" results for ")+(string)name_+string(" "));
+    out << "nb of pairs per bunch crossing : n_"<< name_ <<" = " << number_ << " total energy e_"<<name_<<" = " << energy_ << " GeV " << endl;
+    out << endl;
+    out << " Breit-Wheeler process : n_BW_"<<name_<<" = " << nproc_[0] <<  " e_BW_"<<name_<<" = " << eproc_[0] << " GeV " << endl;
+    out << " Bethe-Heitler process : n_BH_"<<name_<<" = " << nproc_[1] <<  " e_BH_"<<name_<<" = " << eproc_[1] << " GeV " << endl;
+    out << " Landau-Lifschitz process : n_LL_"<<name_<<" = " << nproc_[2] << " e_LL_"<<name_<<" = " << eproc_[2] <<  " GeV " << endl;
+    out << endl;
+    out << " total numer (an total energy, in GeV) of the particles due to the 3 processes : " << endl;
+    out << "n.1_"<<name_<<" = " << n1_ << " b.1_"<<name_<<" = " << b1_ << endl;
+    out << "n.2_"<<name_<<" = " << n2_ << " b.2_"<<name_<<" = " << b2_ << endl;
+    out << endl;
+    out << " nb of particles (and energy in GeV) due to thr 3 previous processes with a transverse momentum of more than 20 MeV and an angle with respect to the beam axis of more than 150 mrad : " << endl;
+    out << "n_pt_"<<name_<<"=" << highptsum_<< ";e_pt_"<<name_<<"=" << highpteng_ <<";" << endl;
+    out << "n_"<<name_<<"=" << number_<< ";e_"<<name_<<"=" << energy_ << ";" << endl;
   }
-  return sortie.str();
+  return out.str();
 }
 
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -414,52 +414,52 @@ int COMPT_RESULTS::store_compt(int composante, double e,double px,double py,doub
 
 string COHERENT_RESULTS::output_flow() const 
 {
-  ostringstream sortie;
-  sortie << titre(string("coherent particles results"));
+  ostringstream out;
+  out << title(string("coherent particles results"));
   
   if (do_coherent_)
     {
-      sortie << "coherent.sum=" <<sum_ << ";" << endl;
-      sortie << "coherent.sumeng=" << sumeng_ << ";" << endl;
-      sortie << "coherent.upsmax=" << upsmax_ << ";" << endl;
-      sortie <<  "coherent.probmax=" <<  probmax_ << ";" << endl;
-      sortie << "coherent.count=" << count_ << ";" << endl;
-      sortie << "coherent.total_energy=" << total_energy_ << ";" << endl;
+      out << "coherent.sum=" <<sum_ << ";" << endl;
+      out << "coherent.sumeng=" << sumeng_ << ";" << endl;
+      out << "coherent.upsmax=" << upsmax_ << ";" << endl;
+      out <<  "coherent.probmax=" <<  probmax_ << ";" << endl;
+      out << "coherent.count=" << count_ << ";" << endl;
+      out << "coherent.total_energy=" << total_energy_ << ";" << endl;
     }
   else
     {
 
-      sortie << "coherent.sum=" << -1.0 << ";" <<endl;
-      sortie << "coherent.sumeng=" << -1.0 << ";" <<endl;
-      sortie << "coherent.upsmax=" << -1.0 << ";" <<endl;
-      sortie << "coherent.count=" << -1 << ";" <<endl;
-      sortie << "coherent.total_energy=" << -1.0 << ";" <<endl;
+      out << "coherent.sum=" << -1.0 << ";" <<endl;
+      out << "coherent.sumeng=" << -1.0 << ";" <<endl;
+      out << "coherent.upsmax=" << -1.0 << ";" <<endl;
+      out << "coherent.count=" << -1 << ";" <<endl;
+      out << "coherent.total_energy=" << -1.0 << ";" <<endl;
     }
-  return sortie.str();
+  return out.str();
 }
 
 string TRIDENT_RESULTS::output_flow() const 
 {
-  ostringstream sortie;
-  sortie << titre(string("trident results"));
+  ostringstream out;
+  out << title(string("trident results"));
   
   if (do_trident_)
     {
-//       sortie << "coherent.sum = " <<sum_ << endl;
-//       sortie << "coherent.sumeng = " << sumeng_ << endl;
-//       sortie << "coherent.upsmax = " << upsmax_ << endl;
-//       sortie <<  "coherent.probmax = " <<  probmax_ << endl;
-       sortie << "trident.count=" << count_ << ";" <<endl;
-       sortie << "trident.total_energy=" << total_energy_ << ";" <<endl;
+//       out << "coherent.sum = " <<sum_ << endl;
+//       out << "coherent.sumeng = " << sumeng_ << endl;
+//       out << "coherent.upsmax = " << upsmax_ << endl;
+//       out <<  "coherent.probmax = " <<  probmax_ << endl;
+       out << "trident.count=" << count_ << ";" <<endl;
+       out << "trident.total_energy=" << total_energy_ << ";" <<endl;
     }
   else
     {
 
-//       sortie << "coherent.sum = " << -1.0 << endl;
-//       sortie << "coherent.sumeng = " << -1.0 << endl;
-//       sortie << "coherent.upsmax = " << -1.0 << endl;
-       sortie << "trident.count=" << -1 << ";" <<endl;
-       sortie << "trident.total_energy=" << -1.0 << ";" <<endl;
+//       out << "coherent.sum = " << -1.0 << endl;
+//       out << "coherent.sumeng = " << -1.0 << endl;
+//       out << "coherent.upsmax = " << -1.0 << endl;
+       out << "trident.count=" << -1 << ";" <<endl;
+       out << "trident.total_energy=" << -1.0 << ";" <<endl;
     }
-  return sortie.str();
+  return out.str();
 }

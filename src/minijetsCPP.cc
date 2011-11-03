@@ -55,24 +55,24 @@ void ABSTRACT_MINIJETS::update_statistics_arrays(JET_FLOAT pz1,JET_FLOAT pz2,JET
 
 string ABSTRACT_MINIJETS::output_flow() const 
 {
-  ostringstream sortie;
+  ostringstream out;
   // int i_c,i_pt;
   //int n_pt = pt_.size();
   //int n_c = c_.size();
-  sortie << jet_results_.output_flow();
+  out << jet_results_.output_flow();
   // do not delete the following statements
-  //   sortie << titre(string("jets storage data"));
-  //   sortie << "jet_storage=(";
+  //   out << title(string("jets storage data"));
+  //   out << "jet_storage=(";
   //   for (i_pt=0;i_pt< n_pt;i_pt++)
   //     {
   //       for (i_c=0;i_c<n_c;i_c++)
   // 	{
-  // 	  sortie << v_[i_c+n_c*i_pt];
+  // 	  out << v_[i_c+n_c*i_pt];
   // 	}
-  //       sortie << endl;
+  //       out << endl;
   //     }
-  //   sortie << ")" << endl;
-  return sortie.str();
+  //   out << ")" << endl;
+  return out.str();
 }
 
 MINIJETS::MINIJETS() {;}

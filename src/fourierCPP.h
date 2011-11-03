@@ -230,7 +230,7 @@ class FFT_SERVER
 
  private : 
 
-  vector<ABSTRACT_FOURIER*> pointeur_fourier_;
+  vector<ABSTRACT_FOURIER*> pointer_fourier_;
 
  public : 
 
@@ -239,35 +239,35 @@ class FFT_SERVER
   ~FFT_SERVER()
 {
   unsigned int k;
-  for (k=0; k < pointeur_fourier_.size(); k++) delete pointeur_fourier_[k];
+  for (k=0; k < pointer_fourier_.size(); k++) delete pointer_fourier_[k];
 }
 
  inline ABSTRACT_FOURIER* new_fft(string prep, int nn[2])
 {
   
 #ifdef USE_FFT_LOCAL
-  pointeur_fourier_.push_back(new LOCAL_FOURIER(prep,nn));
+  pointer_fourier_.push_back(new LOCAL_FOURIER(prep,nn));
 #else
 
 #ifdef USE_FFTW2
   if (prep == string("for2") || prep == string("back2"))
     {
-      pointeur_fourier_.push_back(new FOUR_FFTW2_ONE(prep, nn));
+      pointer_fourier_.push_back(new FOUR_FFTW2_ONE(prep, nn));
     }
   else
     {
-      pointeur_fourier_.push_back(new FOUR_FFTW2_MANY(prep, nn));
+      pointer_fourier_.push_back(new FOUR_FFTW2_MANY(prep, nn));
     }
 #else  
 
 #ifdef USE_FFTW3
   if (prep == string("for2") || prep == string("back2"))
     {
-      pointeur_fourier_.push_back(new FOUR_FFTW3_ONE(prep, nn));
+      pointer_fourier_.push_back(new FOUR_FFTW3_ONE(prep, nn));
     }
   else
     {
-      pointeur_fourier_.push_back(new FOUR_FFTW3_MANY(prep, nn));
+      pointer_fourier_.push_back(new FOUR_FFTW3_MANY(prep, nn));
     }
 #else
   cerr << " GUINEA:: error : a Fourier Transform must be assigned " << endl;
@@ -275,7 +275,7 @@ class FFT_SERVER
 #endif
 #endif
 #endif
-  return pointeur_fourier_.back();
+  return pointer_fourier_.back();
 
 }
 

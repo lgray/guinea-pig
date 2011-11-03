@@ -31,7 +31,7 @@ using namespace std;
 
  attributes of derived class GRID are arrays giving for each cell pointers to particles and photons which are affected to this cell. (as a result of 'distribute')
 
-inheriting class EXTRA_GRID has the same attributes as GENERAL_GRID
+ inheriting class EXTRA_GRID has the same attributes as GENERAL_GRID
 */ 
 
 class SLICE_ON_GRID
@@ -664,10 +664,10 @@ class EXTRA_PHOTON_POINTER : public PHOTON_POINTER
   
   public :
     
-    EXTRA_PHOTON_POINTER() : extra_phot_(NULL) {;}
-  ~EXTRA_PHOTON_POINTER() 
+  EXTRA_PHOTON_POINTER() : extra_phot_(NULL) {;}
+  ~EXTRA_PHOTON_POINTER()
     {
-      //  cout << " destructeur EXTRA_PHOTON_POINTER() pointeur = "<< extra_phot_ << endl;
+      //  cout << " destructor EXTRA_PHOTON_POINTER() pointer = "<< extra_phot_ << endl;
       if (extra_phot_ != NULL) delete extra_phot_;
     }
 
@@ -688,7 +688,7 @@ class EXTRA_PHOTON_POINTER : public PHOTON_POINTER
   virtual inline void velocities(float& vx, float& vy) const { extra_phot_->velocities(vx, vy);}
   virtual inline const TRIDVECTOR& getSpin() const 
     { 
-      cerr << " pas de spin pour extra photon " << endl;
+      cerr << " no spin for extra photon " << endl;
       exit(0);
 /*       const TRIDVECTOR tv(0.0,0.0,0.0); */
 /*       return tv; */
@@ -903,9 +903,9 @@ void step_pair_1_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pai
 void registerPhotons(const vector<float>& photonEnergies, PARTICLE& particle, int i_beam, int i_slice);
 // void referenceSpin(PARTICLE& part, TRIDVECTOR& e1, TRIDVECTOR& e2, TRIDVECTOR& e3, TRIDVECTOR Efield, TRIDVECTOR Bfield, float charge_sign);
 // void distributeElectronScatter1(int i_beam, int i_slice,float ratio, float ratio_i, vector< list<BEAM_PARTICLE_POINTER> >& part_pointer);
-void distributeScatter1(const vector<PARTICLE*>& lesParticles,float ratio, float ratio_i, vector< list<BEAM_PARTICLE_POINTER> >& part_pointer);
+void distributeScatter1(const vector<PARTICLE*>& theParticles,float ratio, float ratio_i, vector< list<BEAM_PARTICLE_POINTER> >& part_pointer);
 //void distributeElectronScatter2(int i_beam, int i_slice,float ratio, float ratio_i, vector< list<BEAM_PARTICLE_POINTER> >& part_pointer);
-void distributeScatter2(const vector<PARTICLE*>& lesParticles,float ratio, float ratio_i, vector< list<BEAM_PARTICLE_POINTER> >& part_pointer);
+void distributeScatter2(const vector<PARTICLE*>& theParticles,float ratio, float ratio_i, vector< list<BEAM_PARTICLE_POINTER> >& part_pointer);
 
 void electronScatter( vector< list<EXTRA_PHOTON_POINTER> >& extra_phot_ptr, int i_beam, int i_slice, float xmin, double s4,double lns4, float ratio, int ext_field, int geom, float ratio_i, float r_scal);
 
@@ -1122,8 +1122,7 @@ inline void init_jet(float s,float ptmin,int iparam,int jet_pythia, int jet_sele
 
 inline void all_distribute(int i1, int i2, SWITCHES& switches,double s4, double lns4)
 {
-  // distribue les charges des particules (electrons...) sur les noeuds 
-  // de la grille
+  // distribute the particle (electrons...) charges over the grid
   distribute_particles(i1, i2, switches.get_electron_distribution_rho(), switches.get_force_symmetric());
   
   // Distributes the particles for background calculation 

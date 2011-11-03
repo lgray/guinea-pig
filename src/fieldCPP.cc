@@ -363,17 +363,16 @@ void FIELD::foldfields (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
   // or : Phi(x,y) ~ (e/(4.pi.epsilon0.delx.dely.delz))SIGMAij nij(1/(delx.dely))f_potential(i,j)
   // (Qij = nij.e)
   // 
- // the factor below is : 
+  // the factor below is : 
   // factor = 2.*(electron radius)(electron mass in eV)/(delx*dely*delz)
   // i.e. :  e/(2.pi.epsilon0.delx*dely*delz)
   // so that Phi could be written : 
   // Phi(x,y) = (1/2).factor.SIGMAij(nij.f_potential(i,j))
   // here is prepared the kernel  : factor.f_potential
   // its Fourier transform is calculated
-  // pour le moment, je ne comprends pas bien ce qui se passe avec le 
-  // facteur 1/2 (GLM)
-  // compte tenu des unites de longueur, le potentiel calcule semble etre en GigaVolts
-  //
+
+  // For the moment, I don't understand well what happens with the factor 1/2 (GLM)
+  // hold length units, the potential looks calculated in GigaVolts
 
 void FIELD::dist_init(PHI_FLOAT factor, float deltax, float deltay,   FFT_SERVER* fourier)
 {

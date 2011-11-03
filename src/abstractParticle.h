@@ -8,7 +8,6 @@
 #include "mathematicalEntities.h"
 using namespace std;
 
-
 class ABSTRACT_BEAM
 {
 
@@ -16,7 +15,7 @@ class ABSTRACT_BEAM
  public: 
   ABSTRACT_BEAM() {;}
   virtual ~ABSTRACT_BEAM() {;}
-  virtual int sizeOfPhotonSlice(int tranche) const = 0;
+  virtual int sizeOfPhotonSlice(int slice) const = 0;
   virtual int number_of_slices() const =0;
   virtual int numberOfParticlesOfSlice(int slice) const = 0;
   
@@ -224,9 +223,9 @@ class ABSTRACT_LUMI_HEAP : public ABSTRACT_IO_CLASS
   virtual  void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2,int& t)  const = 0;
   virtual string output_flow() const 
     {
-      ostringstream sortie;
-      sortie << " ABSTRACT_LUMI_HEAP:: no data for output file in abstract class " << endl;
-      return sortie.str();
+      ostringstream out;
+      out << " ABSTRACT_LUMI_HEAP:: no data for output file in abstract class " << endl;
+      return out.str();
     }
 };
 

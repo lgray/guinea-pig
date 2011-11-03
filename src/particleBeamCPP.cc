@@ -829,11 +829,11 @@ void PARTICLE_BEAM::ang_dis(unsigned int n_bin, vector< vector<float> >& bin ) c
 
 string PARTICLE_BEAM::output_flow() const
 {
-  ostringstream sortie;
+  ostringstream out;
   int i,nslice,j, n_tot=0;
   unsigned int k;
   double esum,esum_tot=0.0;
-  sortie <<  " ---------- " << string("particle beam") << " : " << endl;
+  out <<  " ---------- " << string("particle beam") << " : " << endl;
 
   nslice = coherent_.size();
   for( j=0; j <nslice; j++){
@@ -845,15 +845,15 @@ string PARTICLE_BEAM::output_flow() const
 	i++;
 	esum += point[k]->energy();
       }
-    if (i) sortie << "slice " << j << " contains " << i << "  coherent particles with " << esum << " GeV " << endl;
+    if (i) out << "slice " << j << " contains " << i << "  coherent particles with " << esum << " GeV " << endl;
     esum_tot += esum;
     n_tot += i;
   }
-  sortie << " total number of coherent particles is " << n_tot << " with " << esum_tot << " GeV " << endl;
+  out << " total number of coherent particles is " << n_tot << " with " << esum_tot << " GeV " << endl;
 
-  sortie << " number of tracked macroparticles : " << number_of_particles_dispatched_in_slices_ << endl;
+  out << " number of tracked macroparticles : " << number_of_particles_dispatched_in_slices_ << endl;
 
-  return sortie.str();
+  return out.str();
 }
 
 double PARTICLE_BEAM::meanLostEnergy(float ebeam) const
@@ -874,7 +874,7 @@ double PARTICLE_BEAM::meanLostEnergy(float ebeam) const
   }
 
 
-////////// classe PHOTON_BEAM  //////////////////////////////
+////////// class PHOTON_BEAM  //////////////////////////////
 
 
 

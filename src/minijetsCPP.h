@@ -289,14 +289,14 @@ void hadrons_grv(JET_FLOAT x1,JET_FLOAT x2,JET_FLOAT q2,int flavours, JET_FLOAT 
 
 void hadrons_dg(JET_FLOAT x1,JET_FLOAT x2,JET_FLOAT q2,int flavours, JET_FLOAT *parton1,JET_FLOAT *parton2,JET_FLOAT& alphas);
 
-inline void prepareToStoreHadCross(int numero, JET_FLOAT* s, JET_FLOAT facteur, JET_FLOAT cmax, JET_FLOAT e0, JET_FLOAT e1,JET_FLOAT  e2, JET_FLOAT& pz1, JET_FLOAT& pz2,JET_FLOAT& pt, RNDM& hasard)
+inline void prepareToStoreHadCross(int numero, JET_FLOAT* s, JET_FLOAT factor, JET_FLOAT cmax, JET_FLOAT e0, JET_FLOAT e1,JET_FLOAT  e2, JET_FLOAT& pz1, JET_FLOAT& pz2,JET_FLOAT& pt, RNDM& hasard)
 {
   JET_FLOAT ehad1,ehad2;
   JET_FLOAT xkekseksa;
   JET_FLOAT aux;
   newton_[numero].get_angle_sigma(cmax,xkekseksa,aux, hasard);
 // get_angle( numero,cmax,xkekseksa,aux, hasard);
-    s[numero]=facteur*aux;
+    s[numero]=factor*aux;
     ehad1=e0;
     ehad2=e0;
     pz1=e0*xkekseksa;

@@ -323,13 +323,13 @@ string PAIR_BEAM::output_flow() const
   // PAIR_BEAM::compute_pairs_calls)
   double e1,e2;
   long int n1,n2;
-  ostringstream sortie;
-  sortie << titre(string("pair beams"));
+  ostringstream out;
+  out << title(string("pair beams"));
   compute_pairs_calls(n1, e1, n2, e2); 
-  sortie << "pairs_ncal.1 = " << n1 << " energy (GeV) : pairs_cal.1 = " << e1 << endl;
-  sortie << "pairs_ncal.2 = " << n2 << " energy (GeV) : pairs_cal.2 = " << e2 << endl;
-  sortie << "mstp: " << count_pairs_ << " " << pair_track_.call() << " " <<  (float)pair_track_.step()/ max( (float)pair_track_.call(),float(1.0)) << endl;
-  return sortie.str();
+  out << "pairs_ncal.1 = " << n1 << " energy (GeV) : pairs_cal.1 = " << e1 << endl;
+  out << "pairs_ncal.2 = " << n2 << " energy (GeV) : pairs_cal.2 = " << e2 << endl;
+  out << "mstp: " << count_pairs_ << " " << pair_track_.call() << " " <<  (float)pair_track_.step()/ max( (float)pair_track_.call(),float(1.0)) << endl;
+  return out.str();
 }
 
 void PAIR_BEAM::compute_pairs_calls(long int& n1, double& e1, long int& n2, double& e2) const

@@ -5,21 +5,21 @@ class  ABSTRACT_IO_CLASS
 {
 
  protected :
- inline string titre(string str) const 
+ inline string title(string str) const 
    
 {
-  ostringstream sortie;
+  ostringstream out;
   
-  sortie << "                                         " << endl;
-  sortie << " *********************************************************************** " << endl;
-  sortie << " ------------- " << str << " ------------ " << endl;
-  sortie << "             " << endl;
-  return sortie.str();
+  out << "                                         " << endl;
+  out << " *********************************************************************** " << endl;
+  out << " ------------- " << str << " ------------ " << endl;
+  out << "             " << endl;
+  return out.str();
 }
 
  public :
    
-   ABSTRACT_IO_CLASS() {;}
+ ABSTRACT_IO_CLASS() {;}
  virtual  ~ABSTRACT_IO_CLASS() {;}
  
  virtual string name_of_class() const = 0;

@@ -195,20 +195,20 @@ void BEAM_PARAMETERS::set_polar(double compx, double compy, double compz)
 
 string BEAM_PARAMETERS::output_flow() const
 {
-  ostringstream sortie;
-  string entete(" beam parameter ");
-  entete.append(string(&extension_[1]));
-  sortie << titre(entete);
-  sortie << " energy : " << ebeam_ << " GeV ; particles : " << n_particles_ << endl;
-  sortie << "  sigma_x  : "  << sigma_x_ << " nm ;  sigma_y : " << sigma_y_ << " nm ; sigma_z : " << sigma_z_*1e-3 << " micrometers " <<  endl;
-  sortie << " emitt_x : " << em_x_*1.e6 <<  " emitt_y : " << em_y_*1.e6 << "  (mm.mrad) " << endl;
-  sortie << " beta_x : " << beta_x_*1e3 <<  " beta_y : " << beta_y_*1e3 << " (micrometers) " << endl;
-  sortie << " offset_x : "  << offset_x_ << " nm ; offset_y : " << offset_y_ << " nm ; offset_z : " << offset_z_*1.e-3 << " micrometers " << endl;
-  sortie << " waist_x : " << waist_x_*1.e-3 <<  " waist_y : " << waist_y_*1.e-3 << " (micrometers) " << endl;
-  sortie << " angle_x : "  << x_angle_ << " angle_y : " << y_angle_ << " angle_phi : " << phi_angle_ << " (radians) " << endl;
-  sortie << " type of distribution charge :  dist_x : " << dist_x_ <<  " dist_z : " << dist_z_ << endl;
-  sortie << " initial polarization (ONLY FOR bmt_precession = 1 and internally generated beam) : polar_x = " << polar_.getComponent(0) << " polar_y = " << polar_.getComponent(0) << " polar_z = " << polar_.getComponent(2) << endl;
-  return sortie.str();
+  ostringstream out;
+  string start(" beam parameter ");
+  start.append(string(&extension_[1]));
+  out << title(start);
+  out << " energy : " << ebeam_ << " GeV ; particles : " << n_particles_ << endl;
+  out << "  sigma_x  : "  << sigma_x_ << " nm ;  sigma_y : " << sigma_y_ << " nm ; sigma_z : " << sigma_z_*1e-3 << " micrometers " <<  endl;
+  out << " emitt_x : " << em_x_*1.e6 <<  " emitt_y : " << em_y_*1.e6 << "  (mm.mrad) " << endl;
+  out << " beta_x : " << beta_x_*1e3 <<  " beta_y : " << beta_y_*1e3 << " (micrometers) " << endl;
+  out << " offset_x : "  << offset_x_ << " nm ; offset_y : " << offset_y_ << " nm ; offset_z : " << offset_z_*1.e-3 << " micrometers " << endl;
+  out << " waist_x : " << waist_x_*1.e-3 <<  " waist_y : " << waist_y_*1.e-3 << " (micrometers) " << endl;
+  out << " angle_x : "  << x_angle_ << " angle_y : " << y_angle_ << " angle_phi : " << phi_angle_ << " (radians) " << endl;
+  out << " type of distribution charge :  dist_x : " << dist_x_ <<  " dist_z : " << dist_z_ << endl;
+  out << " initial polarization (ONLY FOR bmt_precession = 1 and internally generated beam) : polar_x = " << polar_.getComponent(0) << " polar_y = " << polar_.getComponent(0) << " polar_z = " << polar_.getComponent(2) << endl;
+  return out.str();
 }
 
 

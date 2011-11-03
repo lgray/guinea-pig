@@ -212,7 +212,7 @@ class TRIDVECTOR
 
 class named_int_vector : public ABSTRACT_IO_CLASS
 {
-  vector<int> vecteur_;
+  vector<int> vector_;
   string name_;
 
  public :
@@ -223,26 +223,26 @@ class named_int_vector : public ABSTRACT_IO_CLASS
   inline void clear()
   {
     name_ = string (" ");
-    vecteur_.clear();
+    vector_.clear();
   }
   inline void  add_component(int comp) 
   {
-    vecteur_.push_back(comp);
+    vector_.push_back(comp);
   }
   ~named_int_vector() {;}
 
   virtual string output_flow() const 
   {
-    ostringstream sortie;
-    string entete = string("vector").append(name_);
-    sortie << titre(entete);
-    sortie << " vector " << name_ << endl;
+    ostringstream out;
+    string start = string("vector").append(name_);
+    out << title(start);
+    out << " vector " << name_ << endl;
     int k;
-    for (k=0; k < (int)vecteur_.size(); k++)
+    for (k=0; k < (int)vector_.size(); k++)
       {
-	sortie << name_ << " k = " << k << " :" << vecteur_[k] << endl;
+	out << name_ << " k = " << k << " :" << vector_[k] << endl;
       }
-    return sortie.str();  
+    return out.str();  
   }
   
   

@@ -37,54 +37,54 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
 
   inline virtual string output_flow() const
     {
-      ostringstream sortie;
+      ostringstream out;
       double esum;
       double sumphot;
       int numphot;
       ostringstream aux;
       aux <<  beam_label_ ;
-      string entete("beam");
-      entete.append(aux.str());
-      sortie << titre(entete);
-      sortie << particle_beam_.output_flow();
+      string start("beam");
+      start.append(aux.str());
+      out << title(start);
+      out << particle_beam_.output_flow();
       esum = particle_beam_.meanLostEnergy(beam_parameters_->ebeam());
-      sortie << "average energy loss of the beam particles (GeV) : de = " <<  esum << endl;
+      out << "average energy loss of the beam particles (GeV) : de = " <<  esum << endl;
 
-      sortie << " ---photon statistics : " << endl;
-      sortie << " initial : " << endl;
+      out << " ---photon statistics : " << endl;
+      out << " initial : " << endl;
       double  nb_part = (double)particle_beam_.numberOfParticles();
       PHOTON_COUNTER pc = photon_beam_.get_photon_counter();
       string photstat;
       photstat+=" initial average photon energy (GeV) phot-e";
       photstat+=aux.str();
       photstat+=" : ";
-      sortie << photstat <<  pc.getSum()/max(1,pc.getNumber()) << endl;
+      out << photstat <<  pc.getSum()/max(1,pc.getNumber()) << endl;
       photstat.erase();
       photstat+=" initial number of phot. per tracked macropart.";
       photstat+=aux.str();
       photstat+=" : ";
-      sortie << photstat << pc.getNumber()/nb_part << endl;
-      sortie << " final : " << endl;
+      out << photstat << pc.getNumber()/nb_part << endl;
+      out << " final : " << endl;
       photon_beam_.photon_info(sumphot,numphot);
       photstat.erase();
       photstat+=" final average photon energy (GeV) phot-e";
       photstat+=aux.str();
       photstat+=" : ";
-      sortie << photstat << sumphot/max(1,numphot) <<endl;
+      out << photstat << sumphot/max(1,numphot) <<endl;
       photstat.erase();
       photstat+=" final number of phot. per tracked macropart.";
       photstat+=aux.str();
       photstat+=" : ";
-      sortie <<  photstat << numphot/nb_part << endl << endl;
+      out <<  photstat << numphot/nb_part << endl << endl;
       // final quantities for post processing
       if ( beam_label_ == 1) {
-	sortie << "phot-e1=" << sumphot/max(1,numphot) << ";n_phot1=" <<  numphot/nb_part << ";" << endl;
-	sortie << "de1=" << esum <<  ";" << endl;
+	out << "phot-e1=" << sumphot/max(1,numphot) << ";n_phot1=" <<  numphot/nb_part << ";" << endl;
+	out << "de1=" << esum <<  ";" << endl;
       } else if ( beam_label_ == 2 ) {
-	sortie << "phot-e2=" << sumphot/max(1,numphot) << ";n_phot2=" <<  numphot/nb_part << ";" << endl;
-	sortie << "de2=" << esum <<  ";" << endl;
+	out << "phot-e2=" << sumphot/max(1,numphot) << ";n_phot2=" <<  numphot/nb_part << ";" << endl;
+	out << "de2=" << esum <<  ";" << endl;
       }
-      return sortie.str();
+      return out.str();
     } 
 
   inline const PARTICLE_BEAM& particle_beam() const { return particle_beam_;}
@@ -136,8 +136,8 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
       size_log_file_->open_file(nomfic, "w");
       nom.seekp(0);
       nom << string("#slice x_rms y_rms xmin xmax xmean ymin ymax ymean") << endl;
-      string sortie = nom.str();
-      size_log_file_->write_line(sortie);
+      string out = nom.str();
+      size_log_file_->write_line(out);
     }
 
   
@@ -283,9 +283,9 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
   inline int number_of_coherent_vectors() const {return particle_beam_.number_of_coherent_vectors();}
   virtual   inline int number_of_slices() const { return particle_beam_.number_of_slices();}
   
-  virtual inline int sizeOfPhotonSlice(int tranche) const
+  virtual inline int sizeOfPhotonSlice(int slice) const
     {
-      return photon_beam_.sizeOfSlice(tranche);
+      return photon_beam_.sizeOfSlice(slice);
     }
   
   inline vector<PHOTON>& getPhotonVector(int slice) { return photon_beam_.getPhotonVector(slice);}

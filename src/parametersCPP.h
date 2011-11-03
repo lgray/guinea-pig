@@ -64,7 +64,7 @@ class PARAMETERS
 
  public: 
 
-  inline void read_accelerateur(char *name) 
+  inline void read_accelerator(char *name) 
   {
     int n=max_buffer2;
     char buffer[max_buffer2];
@@ -77,7 +77,7 @@ class PARAMETERS
 	  {
 	    if (fileFindWord(&datei_,"$ACCELERATOR::")==0) 
 	      {
-		cerr << "Error: Accelerator  not found with name "<< name << endl;
+		cerr << "Error: Accelerator not found with name "<< name << endl;
 		return;
 	      }
 	  }

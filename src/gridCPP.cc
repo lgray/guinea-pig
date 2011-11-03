@@ -316,25 +316,25 @@ void GRID::read(const PARAMETERS& param, int automatic)
 
 string GRID::output_flow() const 
 {
-  ostringstream sortie;
-  sortie << titre(string("grid parameters"));
-  sortie << "n_x = " << n_cell_x_ << " n_y = " << n_cell_y_ << endl;
+  ostringstream out;
+  out << title(string("grid parameters"));
+  out << "n_x = " << n_cell_x_ << " n_y = " << n_cell_y_ << endl;
 
-  sortie << "n_z = " << n_cell_z_ << " n_t = " << timestep_ << endl;
+  out << "n_z = " << n_cell_z_ << " n_t = " << timestep_ << endl;
 
-  sortie << "n_m.1 = " << slice_of_beam_[0].get_macroparticles()  << " n_m.2 = " << slice_of_beam_[1].get_macroparticles() << endl;
+  out << "n_m.1 = " << slice_of_beam_[0].get_macroparticles()  << " n_m.2 = " << slice_of_beam_[1].get_macroparticles() << endl;
 
-  sortie << "cut_x = " << cut_x_ << " nm ; cut_y = " << cut_y_ << " nm ; cut_z = " << cut_z_*1e-3 << " micrometers " << endl;
+  out << "cut_x = " << cut_x_ << " nm ; cut_y = " << cut_y_ << " nm ; cut_z = " << cut_z_*1e-3 << " micrometers " << endl;
 
-  sortie << endl;
-  sortie << " ...................................................... " << endl;
-  sortie << " relative amount of interacting particles that were outside the grid during one time step : " << endl;
-  sortie << "beam 1 : miss = " << distribute1_.delta <<  "  beam 2 : miss = " << distribute2_.delta << endl;
-  sortie << " number of interacting part. that were outside the grid during one time step : " << endl;
-  sortie << "out.1=" << distribute1_.tot <<  ";out.2=" << distribute2_.tot << ";" << endl; 
+  out << endl;
+  out << " ...................................................... " << endl;
+  out << " relative amount of interacting particles that were outside the grid during one time step : " << endl;
+  out << "beam 1 : miss = " << distribute1_.delta <<  "  beam 2 : miss = " << distribute2_.delta << endl;
+  out << " number of interacting part. that were outside the grid during one time step : " << endl;
+  out << "out.1=" << distribute1_.tot <<  ";out.2=" << distribute2_.tot << ";" << endl; 
 
 
- return sortie.str();
+ return out.str();
 }
 
 
@@ -531,7 +531,7 @@ void GRID::distribute_particles_for_background(int i_slice1,
 }
 
 //
-void GRID::distributeScatter1(const vector<PARTICLE*>& lesParticles, float ratio, float ratio_i, vector< list<BEAM_PARTICLE_POINTER> >& part_pointer)
+void GRID::distributeScatter1(const vector<PARTICLE*>& theParticles, float ratio, float ratio_i, vector< list<BEAM_PARTICLE_POINTER> >& part_pointer)
 {
 
   float xpart, ypart;
@@ -539,38 +539,36 @@ void GRID::distributeScatter1(const vector<PARTICLE*>& lesParticles, float ratio
   //  int k,j;
   int j;
   unsigned int k;
-  //    const vector<PARTICLE*>& lesParticles = slice_of_beam_[i_beam-1].get_beam()->getParticleVector(i_slice);
-    for (k = 0; k < lesParticles.size(); k++)
+  //    const vector<PARTICLE*>& theParticles = slice_of_beam_[i_beam-1].get_beam()->getParticleVector(i_slice);
+    for (k = 0; k < theParticles.size(); k++)
     {
       if (hasard_->rndm()<ratio)
 	{
-	lesParticles[k]->XYposition(xpart, ypart);
+	theParticles[k]->XYposition(xpart, ypart);
 	  if (particleInGrid(xpart, ypart, i1, i2))
 	    {
 	      j=i1*n_cell_y_+i2;
-	      part_pointer[j].push_back(BEAM_PARTICLE_POINTER(lesParticles[k], ratio_i));
+	      part_pointer[j].push_back(BEAM_PARTICLE_POINTER(theParticles[k], ratio_i));
 	    }
 	}
     }
 }
 
+// This method is not used, uses time to calculate.
+// Don't delete for the moment
 
-
-// cette methode n'est pas utilisee, consomme du temps de calcul. Ne pas 
-// detruire pour le moment.
-void GRID::distributeScatter2(const vector<PARTICLE*>& lesParticles,float ratio, float ratio_i, vector< list<BEAM_PARTICLE_POINTER> >& part_pointer)
+void GRID::distributeScatter2(const vector<PARTICLE*>& theParticles,float ratio, float ratio_i, vector< list<BEAM_PARTICLE_POINTER> >& part_pointer)
 {
 
   float xpart, ypart,poids,h_x,h_y;
   int i1, i2;
-  //int k,j;
   int j;
   unsigned int k;
 
-  //  const vector<PARTICLE*>& lesParticles = slice_of_beam_[i_beam-1].get_beam()->getParticleVector(i_slice);
-    for (k = 0; k < lesParticles.size(); k++)
+  //  const vector<PARTICLE*>& theParticles = slice_of_beam_[i_beam-1].get_beam()->getParticleVector(i_slice);
+    for (k = 0; k < theParticles.size(); k++)
       {
-	lesParticles[k]->XYposition(xpart, ypart);
+	theParticles[k]->XYposition(xpart, ypart);
 	if (particleInGrid(xpart, ypart, h_x, h_y, i1, i2))
 	  {
 	    if (hasard_->rndm()<ratio)
@@ -578,16 +576,16 @@ void GRID::distributeScatter2(const vector<PARTICLE*>& lesParticles,float ratio,
 		j=i1*n_cell_y_+i2;
 		poids = (1.0-h_x)*(1.0-h_y)*ratio_i;
 
-	      part_pointer[j].push_back(BEAM_PARTICLE_POINTER(lesParticles[k], poids));
+	      part_pointer[j].push_back(BEAM_PARTICLE_POINTER(theParticles[k], poids));
 		j=(i1+1)*n_cell_y_+i2;
 		poids =  h_x*(1.0-h_y)*ratio_i;
-	      part_pointer[j].push_back(BEAM_PARTICLE_POINTER(lesParticles[k], poids));
+	      part_pointer[j].push_back(BEAM_PARTICLE_POINTER(theParticles[k], poids));
 		j=i1*n_cell_y_+i2+1;
 		poids =  (1.0-h_x)*h_y*ratio_i;
-	      part_pointer[j].push_back(BEAM_PARTICLE_POINTER(lesParticles[k], poids));
+	      part_pointer[j].push_back(BEAM_PARTICLE_POINTER(theParticles[k], poids));
 		j=(i1+1)*n_cell_y_+i2+1;
 		poids = h_x*h_y*ratio_i;
-			      part_pointer[j].push_back(BEAM_PARTICLE_POINTER(lesParticles[k], poids));
+			      part_pointer[j].push_back(BEAM_PARTICLE_POINTER(theParticles[k], poids));
 	      }
 	  }
       }
@@ -689,12 +687,12 @@ void GRID::electronScatter(vector< list<EXTRA_PHOTON_POINTER> >& extra_phot_ptr,
   float xVelocity, yVelocity;
   //PHYSTOOLS phys;
 
-    const vector<PARTICLE*>& lesParticles = slice_of_beam_[i_beam-1].get_beam()->getParticleVector(i_slice);
-    for (k = 0; k < lesParticles.size(); k++)
+    const vector<PARTICLE*>& theParticles = slice_of_beam_[i_beam-1].get_beam()->getParticleVector(i_slice);
+    for (k = 0; k < theParticles.size(); k++)
       //  for (i=beam->firstParticleOfSlice(i_slice);i<beam->firstParticleOfSlice(i_slice+1);i++)
     {
       //      energy=beam->energyOfParticle(i);
-      energy=lesParticles[k]->energy();
+      energy=theParticles[k]->energy();
       //r_phot=phys.requiv(lns4,xmin,i_equiv)*ratio;
       r_phot=PHYSTOOLS::requiv(lns4,xmin,i_equiv)*ratio;
       n_phot=(int)floor(r_phot);
@@ -706,7 +704,7 @@ void GRID::electronScatter(vector< list<EXTRA_PHOTON_POINTER> >& extra_phot_ptr,
 	  //phys.mequiv(s4, lns4,xmin,energy,i_equiv,&e_phot,&q2,&one_m_x, *hasard_);
 	  PHYSTOOLS::mequiv(s4, lns4,xmin,energy,i_equiv,&e_phot,&q2,&one_m_x, *hasard_);
 	  //#ifdef EXT_FIELD
-	  if (ext_field && (pow(q2/(EMASS*EMASS),1.5)*energy*energy < e_phot*e_phot*lesParticles[k]->getUps()) )
+	  if (ext_field && (pow(q2/(EMASS*EMASS),1.5)*energy*energy < e_phot*e_phot*theParticles[k]->getUps()) )
 	    {
 	      e_phot=-1.0;
 	    }
@@ -716,20 +714,20 @@ void GRID::electronScatter(vector< list<EXTRA_PHOTON_POINTER> >& extra_phot_ptr,
 	      switch(geom)
 		{
 		case 0:
-		  lesParticles[k]->XYposition(x, y);
+		  theParticles[k]->XYposition(x, y);
 		  break;
 		case 1:
 		  radius=HBAR*Cvelocity/sqrt(q2*one_m_x)*r_scal*1e9;
 		  radius=min(radius,float(1.0e5));
 
-		  lesParticles[k]->XYposition(x, y);
+		  theParticles[k]->XYposition(x, y);
 		  x += hasard_->rndm_sincos(&theta)*radius;
 		  y += theta*radius;
 		  break;
 		case 2:
 		  radius=HBAR*Cvelocity/sqrt(q2*one_m_x)*r_scal*1e9;
 		  radius=min(radius,float(1e5));
-		  lesParticles[k]->XYposition(x, y);
+		  theParticles[k]->XYposition(x, y);
 		  x += hasard_->gasdev()*radius;
 		  y += hasard_->gasdev()*radius;
 		  break;
@@ -737,7 +735,7 @@ void GRID::electronScatter(vector< list<EXTRA_PHOTON_POINTER> >& extra_phot_ptr,
 	      if (particleInGrid(x, y, i1, i2))
 		{
 		  j=i1*n_cell_y_+i2;
-		  lesParticles[k]->velocities(xVelocity, yVelocity);
+		  theParticles[k]->velocities(xVelocity, yVelocity);
 		  extra_phot_ptr[j].push_back(EXTRA_PHOTON_POINTER(e_phot, xVelocity, yVelocity,q2,energy,ratio_i));
 		  //		  photon->store_vir_photon(e_phot,xVelocity, yVelocity,q2,energy,ratio_i,j);
 		}
@@ -757,10 +755,10 @@ void GRID::assignBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice, DISTRIBUTE& distr
   unsigned int k;
   int i1, i2;
   float xpart, ypart;
-  const vector<PARTICLE*>& lesParticles = sog.get_beam()->getParticleVector(i_slice);    
-  for (k = 0; k < lesParticles.size(); k++)
+  const vector<PARTICLE*>& theParticles = sog.get_beam()->getParticleVector(i_slice);    
+  for (k = 0; k < theParticles.size(); k++)
     {
-      lesParticles[k]->XYposition(xpart, ypart);
+      theParticles[k]->XYposition(xpart, ypart);
       if (particleInGrid(xpart, ypart, i1, i2))
 	{
 	  sog.assignChargeToNGP( i1, i2, 1.0);
@@ -778,10 +776,10 @@ void GRID::assignBeamSliceCIC(SLICE_ON_GRID& sog, int i_slice, DISTRIBUTE& distr
   int i1, i2;
   float h_x,h_y;
   float xpart, ypart;
-const vector<PARTICLE*>& lesParticles = sog.get_beam()->getParticleVector(i_slice);
- for (k = 0; k < lesParticles.size(); k++)
+const vector<PARTICLE*>& theParticles = sog.get_beam()->getParticleVector(i_slice);
+ for (k = 0; k < theParticles.size(); k++)
 	{
-	lesParticles[k]->XYposition(xpart, ypart);
+	theParticles[k]->XYposition(xpart, ypart);
 	  if (particleInGrid(xpart, ypart, h_x, h_y, i1, i2))
 	    {
 	      sog.assignChargeToCIC( i1, i2, h_x, h_y, 1.0);
@@ -789,7 +787,7 @@ const vector<PARTICLE*>& lesParticles = sog.get_beam()->getParticleVector(i_slic
 	    }
 	  else
 	    {
-	      //	      cout << " particule no "  << k+1 << " tranche " << i_slice << " hors grille : x= " << xpart << " y= " << ypart << endl;
+	      //	      cout << " particle no "  << k+1 << " slice " << i_slice << " out of grid : x= " << xpart << " y= " << ypart << endl;
 	      distribute.out++;
 	    }
 	  
@@ -1073,7 +1071,7 @@ void GRID::move_particles(const vector<GENERAL_GRID*>& grids,  int i_beam, int i
       //     phi=phi1_;
       phi= champ_.get_phi(1);
     }
-  const vector<PARTICLE*>& lesParticles = slice_of_beam_[i_beam-1].get_beam()->getParticleVector(i_slice);
+  const vector<PARTICLE*>& theParticles = slice_of_beam_[i_beam-1].get_beam()->getParticleVector(i_slice);
   switch (interpolation)
     {
     case 1:
@@ -1086,37 +1084,37 @@ void GRID::move_particles(const vector<GENERAL_GRID*>& grids,  int i_beam, int i
 	TRIDVECTOR Efield, Bfield;
 	float dzOnRadius,oldener;
 	////////////////////////////////////////////////
-	// en cas de do_beamstrahlung, voir l'implementation du cas  (do_prod>1)&&(i_beam==1) 
+	// in case of do_beamstrahlung, see the implementation in the case of (do_prod>1)&&(i_beam==1) 
 	///////////////////////////////////////////////
-	PARTICLE* particuleCourante;
-	for (k = 0; k < lesParticles.size(); k++)
+	PARTICLE* particleIterator;
+	for (k = 0; k < theParticles.size(); k++)
 	  {
-	    particuleCourante = lesParticles[k];
-	    oldener=particuleCourante->getEnergy();
-	    EBfield = EBfieldOnParticle( particuleCourante, grids, phi, i_beam, extra_grids);
+	    particleIterator = theParticles[k];
+	    oldener=particleIterator->getEnergy();
+	    EBfield = EBfieldOnParticle( particleIterator, grids, phi, i_beam, extra_grids);
 
 
-	    dzOnRadius = particuleCourante->advanceDueToEBfield(EBfield, step_,slice_of_beam_[i_beam-1].get_scal_step());
+	    dzOnRadius = particleIterator->advanceDueToEBfield(EBfield, step_,slice_of_beam_[i_beam-1].get_scal_step());
 
 
 	    Efield = EBfield;
 	    Bfield = TRIDVECTOR(EBfield(1), -EBfield(0), 0.0);      
 	    if (bmt_rotate)
 	      {
-		particuleCourante->rotateBMT(Efield, Bfield, charge_sign, step_);
+		particleIterator->rotateBMT(Efield, Bfield, charge_sign, step_);
 		if (do_beamstrahlung)
 		  { 
 		    vector<float> photonEnergies;
-		    results_.updateUpsmax(particuleCourante->getUps());
+		    results_.updateUpsmax(particleIterator->getUps());
 		    if (sokolov) 
 		      {
-			particuleCourante->beamstrahlungSokolov(Efield, Bfield, dzOnRadius, emin, charge_sign,photonEnergies, *hasard_);
+			particleIterator->beamstrahlungSokolov(Efield, Bfield, dzOnRadius, emin, charge_sign,photonEnergies, *hasard_);
 		      }
 		    else 
 		      {
-			particuleCourante->beamstrahlung(Efield, Bfield, dzOnRadius,emin,photonEnergies, *hasard_);
+			particleIterator->beamstrahlung(Efield, Bfield, dzOnRadius,emin,photonEnergies, *hasard_);
 		      }
-		    registerPhotons(photonEnergies, *(particuleCourante), i_beam, i_slice);    
+		    registerPhotons(photonEnergies, *(particleIterator), i_beam, i_slice);    
 		  }
 	      }
 	    else
@@ -1124,10 +1122,10 @@ void GRID::move_particles(const vector<GENERAL_GRID*>& grids,  int i_beam, int i
 		if(do_beamstrahlung)
 		  {
 		    vector<float> photonEnergies;
-		    results_.updateUpsmax(particuleCourante->getUps());
-		    // 		    particleBeamstrahlung(particuleCourante,Efield, Bfield, dzOnRadius, emin, photonEnergies);
-		    particuleCourante->beamstrahlung(Efield, Bfield, dzOnRadius, emin, photonEnergies, *hasard_);
-		    registerPhotons(photonEnergies, *(particuleCourante), i_beam, i_slice);    
+		    results_.updateUpsmax(particleIterator->getUps());
+		    // 		    particleBeamstrahlung(particleIterator,Efield, Bfield, dzOnRadius, emin, photonEnergies);
+		    particleIterator->beamstrahlung(Efield, Bfield, dzOnRadius, emin, photonEnergies, *hasard_);
+		    registerPhotons(photonEnergies, *(particleIterator), i_beam, i_slice);    
 		  }
 	      }
 	    if(do_trident)
@@ -1135,13 +1133,13 @@ void GRID::move_particles(const vector<GENERAL_GRID*>& grids,  int i_beam, int i
 		vector<float> electrons,positrons,virt;
 		if(do_beamstrahlung)
 		  {
-		    particuleCourante->setUps(particuleCourante->getUps()*particuleCourante->getEnergy()/oldener);
+		    particleIterator->setUps(particleIterator->getUps()*particleIterator->getEnergy()/oldener);
 		  }
-		particuleCourante->createTridents(step_*slice_of_beam_[i_beam-1].get_scal_step(),&electrons,&positrons,&virt,*hasard_);
+		particleIterator->createTridents(step_*slice_of_beam_[i_beam-1].get_scal_step(),&electrons,&positrons,&virt,*hasard_);
 		for(i=0;i<electrons.size();i++)
 		  {
-		    particuleCourante->XYposition(xpos,ypos);
-		    particuleCourante->velocities(vx,vy);
+		    particleIterator->XYposition(xpos,ypos);
+		    particleIterator->velocities(vx,vy);
 		    store_trident_particle(*slice_of_beam_[i_beam-1].get_beam(),electrons[i],vx,vy,xpos,ypos,i_slice);
 		    store_trident_particle(*slice_of_beam_[i_beam-1].get_beam(),positrons[i],vx,vy,xpos,ypos,i_slice);
 		  }
@@ -1162,18 +1160,18 @@ void GRID::move_pairs(const vector<GENERAL_GRID*>& grids, PAIR_BEAM& pairs, int 
   int n_pair_steps;
   double mass=pairs.get_pair_parameters().get_mass();
 
-  vector<PAIR_PARTICLE>& les_paires = pairs.get_pairs(i_slice);
+  vector<PAIR_PARTICLE>& the_pairs = pairs.get_pairs(i_slice);
   //  list<PAIR_PARTICLE>::iterator itr;
   unsigned int k;
-  //  for (itr = les_paires.begin(); itr !=  les_paires.end(); itr++)
-  for (k = 0; k <  les_paires.size(); k++)
+  //  for (itr = the_pairs.begin(); itr !=  the_pairs.end(); itr++)
+  for (k = 0; k <  the_pairs.size(); k++)
     {      
       //      d=sqrt((rho_sum_1_*d_eps_1 + rho_sum_2_*d_eps_2)/fabs(itr->energy()));
-      d=sqrt( (rho_sum_1_*d_eps_1 + rho_sum_2_*d_eps_2)/les_paires[k].unsigned_energy() );
+      d=sqrt( (rho_sum_1_*d_eps_1 + rho_sum_2_*d_eps_2)/the_pairs[k].unsigned_energy() );
       n_pair_steps=(int)d+1;
       pairs.add_pair_steps(n_pair_steps);
       stepLocal=step_/(float)n_pair_steps;
-      step_pair_1(grids,les_paires[k],mass,stepLocal,n_pair_steps, extra_grids, charge_sign_0, hasard);
+      step_pair_1(grids,the_pairs[k],mass,stepLocal,n_pair_steps, extra_grids, charge_sign_0, hasard);
     }
 }
 
@@ -1183,18 +1181,18 @@ void GRID::move_pairs_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_BEAM& pa
   int n_pair_steps;
   double mass=pairs.get_pair_parameters().get_mass();
 
-  vector<PAIR_PARTICLE>& les_paires = pairs.get_pairs(i_slice);
+  vector<PAIR_PARTICLE>& the_pairs = pairs.get_pairs(i_slice);
   //  list<PAIR_PARTICLE>::iterator itr;
   unsigned int k;
-  //  for (itr = les_paires.begin(); itr !=  les_paires.end(); itr++)
-  for (k = 0; k <  les_paires.size(); k++)
+  //  for (itr = the_pairs.begin(); itr !=  the_pairs.end(); itr++)
+  for (k = 0; k <  the_pairs.size(); k++)
     {      
       //      d=sqrt((rho_sum_1_*d_eps_1 + rho_sum_2_*d_eps_2)/fabs(itr->energy()));
-      d=sqrt( (rho_sum_1_*d_eps_1 + rho_sum_2_*d_eps_2)/les_paires[k].unsigned_energy() );
+      d=sqrt( (rho_sum_1_*d_eps_1 + rho_sum_2_*d_eps_2)/the_pairs[k].unsigned_energy() );
       n_pair_steps=(int)d+1;
       pairs.add_pair_steps(n_pair_steps);
       stepLocal=step_/(float)n_pair_steps;
-      step_pair_1_tertphot(grids,les_paires[k],mass,stepLocal,n_pair_steps, extra_grids, charge_sign_0, hasard);
+      step_pair_1_tertphot(grids,the_pairs[k],mass,stepLocal,n_pair_steps, extra_grids, charge_sign_0, hasard);
     }
 }
 
@@ -1310,7 +1308,7 @@ void GRID::beamstrahlungSingleCoherentParticle(PARTICLE* particle, TRIVECTOR EBf
     }
   if ((do_prod>1)&&( i_beam ==1))
     {
-      cerr << " GRID:: do_prod a implanter "  << endl;
+      cerr << " GRID:: do_prod not implemented "  << endl;
       exit(0);
     }
   if (particle->energy() < 0.0)
@@ -1451,19 +1449,19 @@ void GRID::distributePhotonInBeam(   vector< list<BEAM_PHOTON_POINTER> >& grid_p
 
   float aux;
 
-  const vector<PHOTON>& lesPhotons =  slice_of_beam_[i_beam-1].get_beam()->getPhotonVector(slice);
+  const vector<PHOTON>& thePhotons =  slice_of_beam_[i_beam-1].get_beam()->getPhotonVector(slice);
   unsigned int k;
-  for(k=0; k < lesPhotons.size(); k++)
+  for(k=0; k < thePhotons.size(); k++)
     {
       aux = hasard.rndm();
       if (aux<ratio)
 	{
-	  lesPhotons[k].XYposition(xphot, yphot);
+	  thePhotons[k].XYposition(xphot, yphot);
 
 	  if (particleInGrid(xphot, yphot, i1, i2))
 	    {
 	      j = i1*n_cell_y_ + i2;
-	      grid_photon[j].push_back(BEAM_PHOTON_POINTER(&lesPhotons[k],ratio_i ));
+	      grid_photon[j].push_back(BEAM_PHOTON_POINTER(&thePhotons[k],ratio_i ));
 
 		
 	    }
@@ -1844,11 +1842,11 @@ void GRID::move_photons2(BEAM& beam,int ibeam,int i_slice, RNDM& hasard)
     phi = champ_.get_phi(1);
     wgt= slice_of_beam_[1].get_nb_part_per_macro();
   }
-  vector<PHOTON>& lesPhotons =  beam.getPhotonVector(i_slice);
+  vector<PHOTON>& thePhotons =  beam.getPhotonVector(i_slice);
   unsigned int k;
-  for(k=0; k < lesPhotons.size(); k++)
+  for(k=0; k < thePhotons.size(); k++)
     {
-      lesPhotons[k].XYposition(x, y);
+      thePhotons[k].XYposition(x, y);
       if ( coordinatesInGridRange(x, y) )
 	{ 
 	  interpolePotential(x, y, h_x, h_y, phi1_x, phi2_x, phi3_x, phi1_y, phi2_y, phi3_y, phi);
@@ -1860,15 +1858,15 @@ void GRID::move_photons2(BEAM& beam,int ibeam,int i_slice, RNDM& hasard)
 	  ax = 0.0;
 	  ay = 0.0;
 	}
-      float facteur = step_*scal_step_local;
-      //      photItr->move(facteur);
-      lesPhotons[k].advancePosition(facteur);
+      float factor = step_*scal_step_local;
+      //      photItr->move(factor);
+      thePhotons[k].advancePosition(factor);
 
       radius_i = sqrt(ax*ax+ay*ay)*1e9/scal_step_local;
       
       upsilon0=LAMBDA_BAR/EMASS*radius_i;
       //     upsilon=upsilon0*photItr->get_energy()/EMASS;
-      upsilon=upsilon0*lesPhotons[k].energy()/EMASS;
+      upsilon=upsilon0*thePhotons[k].energy()/EMASS;
       
       if (upsilon>1e-10)
 	{
@@ -1878,9 +1876,9 @@ void GRID::move_photons2(BEAM& beam,int ibeam,int i_slice, RNDM& hasard)
 	  tmp*=1.36;
 	  if (hasard.rndm()<tmp) {
 	    if (tmp<0.1) {
-	      if (coherent_generate(beam,i_slice,upsilon,lesPhotons[k], hasard)) {
-		coherent_results_.updateSumeng(wgt*lesPhotons[k].energy());
-		lesPhotons[k].razEnergy();//photon->energy=0.0;
+	      if (coherent_generate(beam,i_slice,upsilon,thePhotons[k], hasard)) {
+		coherent_results_.updateSumeng(wgt*thePhotons[k].energy());
+		thePhotons[k].razEnergy();//photon->energy=0.0;
 		tmp=1.0;
 		//nyes++;
 	      }
@@ -1895,9 +1893,9 @@ void GRID::move_photons2(BEAM& beam,int ibeam,int i_slice, RNDM& hasard)
 	      tmp=0.0;
 	      for (i=0;i<nd;++i) {
 		if (hasard.rndm()<ds) {
-		  if (coherent_generate(beam,i_slice,upsilon,lesPhotons[k], hasard)) {
-		    coherent_results_.updateSumeng(wgt*lesPhotons[k].energy());
-		    lesPhotons[k].razEnergy();//photon->energy=0.0;
+		  if (coherent_generate(beam,i_slice,upsilon,thePhotons[k], hasard)) {
+		    coherent_results_.updateSumeng(wgt*thePhotons[k].energy());
+		    thePhotons[k].razEnergy();//photon->energy=0.0;
 		    tmp=1.0;
 		    //nyes++;
 		    i=nd;
@@ -1913,26 +1911,26 @@ void GRID::move_photons2(BEAM& beam,int ibeam,int i_slice, RNDM& hasard)
 	    if (tmp>1.0)
 	    {
 	    //	      coherent_results.updateSumeng(wgt*photItr->get_energy());
-	    coherent_results_.updateSumeng(wgt*lesPhotons[k].energy());
-	    coherent_generate(beam,i_slice,upsilon,lesPhotons[k], hasard);
+	    coherent_results_.updateSumeng(wgt*thePhotons[k].energy());
+	    coherent_generate(beam,i_slice,upsilon,thePhotons[k], hasard);
 	    //	      photItr->razEnergy();
-	    lesPhotons[k].razEnergy();
+	    thePhotons[k].razEnergy();
 	    tmp=1.0;
 	    }
 	    else
 	    {
 	    if (hasard.rndm()<tmp*1.36) 
 	    {
-	    coherent_generate(beam,i_slice,upsilon,lesPhotons[k], hasard);
+	    coherent_generate(beam,i_slice,upsilon,thePhotons[k], hasard);
 	    //		  photItr->razEnergy();
-	    lesPhotons[k].razEnergy();
+	    thePhotons[k].razEnergy();
 	    }
 	    }
 	    // end test
 	  */ 
 	  tmp*=wgt;
 	  //	  coherent_results.updateSums(tmp, photItr->get_energy(), upsilon0);
-	  coherent_results_.updateSums(tmp, lesPhotons[k].energy(), upsilon0);
+	  coherent_results_.updateSums(tmp, thePhotons[k].energy(), upsilon0);
 	}
       //      photItr++;
     }
@@ -2521,10 +2519,10 @@ void EXTRA_GRID::assignTridentBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice)
 // {
 //   int k, i1, i2;
 //   float xpart, ypart;
-//     vector<PARTICLE*>& lesParticles = beam->getParticleVector(i_slice);
-//     for (k = 0; k < lesParticles.size(); k++)
+//     vector<PARTICLE*>& theParticles = beam->getParticleVector(i_slice);
+//     for (k = 0; k < theParticles.size(); k++)
 //    {
-// 	lesParticles[k]->XYposition(xpart, ypart);
+// 	theParticles[k]->XYposition(xpart, ypart);
 //       if (particleInGrid(xpart, ypart, i1, i2)) assignChargeToNGP(rho, i1, i2, n_macro);
 //     }
 // }
@@ -2533,10 +2531,10 @@ void EXTRA_GRID::assignBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice)
   unsigned int k;
   int i1, i2;
   float xpart, ypart;
-    const vector<PARTICLE*>& lesParticles = sog.get_beam()->getParticleVector(i_slice);
-    for (k = 0; k < lesParticles.size(); k++)
+    const vector<PARTICLE*>& theParticles = sog.get_beam()->getParticleVector(i_slice);
+    for (k = 0; k < theParticles.size(); k++)
    {
-	lesParticles[k]->XYposition(xpart, ypart);
+	theParticles[k]->XYposition(xpart, ypart);
       if (particleInGrid(xpart, ypart, i1, i2)) sog.assignChargeToNGP(i1, i2,1.0);
     }
 }
@@ -2545,10 +2543,10 @@ void EXTRA_GRID::assignBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice)
 //   int k, i1, i2;
 //   float h_x,h_y;
 //   float xpart, ypart;
-//     vector<PARTICLE*>& lesParticles = beam->getParticleVector(i_slice);
-//     for (k = 0; k < lesParticles.size(); k++)
+//     vector<PARTICLE*>& theParticles = beam->getParticleVector(i_slice);
+//     for (k = 0; k < theParticles.size(); k++)
 // 	{
-// 	lesParticles[k]->XYposition(xpart, ypart);
+// 	theParticles[k]->XYposition(xpart, ypart);
 // 	  if (particleInGrid(xpart, ypart, h_x, h_y, i1, i2)) assignChargeToCIC(rho, i1, i2, h_x, h_y, n_macro);	    	  
 // 	}
 // }
@@ -2558,10 +2556,10 @@ void EXTRA_GRID::assignBeamSliceCIC(SLICE_ON_GRID& sog, int i_slice)
   int i1, i2;
   float h_x,h_y;
   float xpart, ypart;
-  const vector<PARTICLE*>& lesParticles = sog.get_beam()->getParticleVector(i_slice);
-  for (k = 0; k < lesParticles.size(); k++)
+  const vector<PARTICLE*>& theParticles = sog.get_beam()->getParticleVector(i_slice);
+  for (k = 0; k < theParticles.size(); k++)
     {
-      lesParticles[k]->XYposition(xpart, ypart);
+      theParticles[k]->XYposition(xpart, ypart);
       if (particleInGrid(xpart, ypart, h_x, h_y, i1, i2)) sog.assignChargeToCIC(i1, i2, h_x, h_y, 1.0);	    	  
     }
 }

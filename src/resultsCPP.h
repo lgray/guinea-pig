@@ -201,7 +201,7 @@ class  RESULTS : public ABSTRACT_IO_CLASS
     }
   
 
-  void output_flow(ostringstream& sortie ) const ;
+  void output_flow(ostringstream& out ) const ;
   virtual string  output_flow() const ;
 
 };
@@ -278,13 +278,13 @@ class COMPT_RESULTS : public ABSTRACT_IO_CLASS
   
   virtual  inline string output_flow() const 
     {
-      ostringstream sortie;
-      sortie << titre(string("Compton results"));
-      sortie << "compt_npart_0 = " << nproc_[0] << " compt_epart_0 = " << eproc_[0] << endl;
-      sortie << "compt_npart_1 = " << nproc_[1] << " compt_epart_1 = " << eproc_[1] << endl;
-      sortie << "compt_n.1 = " << n1_ << " compt_b.1 = " << b1_ << endl;
-      sortie << "compt_n.2 = " << n2_ << " compt_b.2 = " << b2_ << endl;
-      return sortie.str();
+      ostringstream out;
+      out << title(string("Compton results"));
+      out << "compt_npart_0 = " << nproc_[0] << " compt_epart_0 = " << eproc_[0] << endl;
+      out << "compt_npart_1 = " << nproc_[1] << " compt_epart_1 = " << eproc_[1] << endl;
+      out << "compt_n.1 = " << n1_ << " compt_b.1 = " << b1_ << endl;
+      out << "compt_n.2 = " << n2_ << " compt_b.2 = " << b2_ << endl;
+      return out.str();
     }
 };
 
@@ -299,15 +299,15 @@ class COMPT_RESULTS : public ABSTRACT_IO_CLASS
   
   inline string output_flow() const 
   {
-  ostringstream sortie;
-  sortie << titre(string("Muons results"));
-  sortie << "muon_n.0 = " << nproc[0] << " muon_e.0 = " << eproc[0] << endl;
-  sortie << "muon_n.1 = " << nproc[1] << " muon_e.1 = " << eproc[1] << endl;
-  sortie << "muon_n.2 = " << nproc[2] << " muon_e.2 = " << eproc[2] << endl;
+  ostringstream out;
+  out << title(string("Muons results"));
+  out << "muon_n.0 = " << nproc[0] << " muon_e.0 = " << eproc[0] << endl;
+  out << "muon_n.1 = " << nproc[1] << " muon_e.1 = " << eproc[1] << endl;
+  out << "muon_n.2 = " << nproc[2] << " muon_e.2 = " << eproc[2] << endl;
   
-  sortie << "muon_n_sum = " << nproc[0] + nproc[1]+nproc[2] <<  " muon_e_sum = " << eproc[0]+eproc[1] + eproc[2] << endl;
+  out << "muon_n_sum = " << nproc[0] + nproc[1]+nproc[2] <<  " muon_e_sum = " << eproc[0]+eproc[1] + eproc[2] << endl;
   
-  return sortie.str();
+  return out.str();
   }
   };
 */
@@ -338,12 +338,12 @@ class JET_RESULTS : public ABSTRACT_IO_CLASS
   
   virtual inline string output_flow() const 
     {
-      ostringstream sortie;
-      sortie << titre(string("jets results"));
-      sortie << " nb of minijet evts per bx due to the direct process : jets0 = " << sigma_[0] << endl;
-      sortie << "nb of minijet evts per bx due to the once resolved process : jets1 = " << sigma_[1] << endl;
-      sortie << "nb of minijet evts per bx due to the twice resolved process : jets2 = " << sigma_[2] << endl;
-      return sortie.str();
+      ostringstream out;
+      out << title(string("jets results"));
+      out << " nb of minijet evts per bx due to the direct process : jets0 = " << sigma_[0] << endl;
+      out << "nb of minijet evts per bx due to the once resolved process : jets1 = " << sigma_[1] << endl;
+      out << "nb of minijet evts per bx due to the twice resolved process : jets2 = " << sigma_[2] << endl;
+      return out.str();
     }
 };
 
@@ -367,10 +367,10 @@ class JET_RESULTS : public ABSTRACT_IO_CLASS
 /*       }; */
 /*  inline string output_flow() const  */
 /* { */
-/*   ostringstream sortie; */
-/*   sortie << titre(string("photons results")); */
-/*   sortie << "e_phot.1 = " << energy_[0]/max(double(1.0),double(number_[0])) << " e_phot.2 = " << energy_[1]/max(double(1.0),double(number_[1])) << endl; */
-/*   return sortie.str(); */
+/*   ostringstream out; */
+/*   out << title(string("photons results")); */
+/*   out << "e_phot.1 = " << energy_[0]/max(double(1.0),double(number_[0])) << " e_phot.2 = " << energy_[1]/max(double(1.0),double(number_[1])) << endl; */
+/*   return out.str(); */
 /* } */
 /* }; */
 

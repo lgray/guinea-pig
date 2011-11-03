@@ -62,11 +62,11 @@ class BEAM_FROM_FILE : public ABSTRACT_PARTICLE_BEAM
       PARTICLE_INTERFACE partaux;
       filin.open_file(filename, "r");
       
-      unsigned int compteur = 0;
+      unsigned int counter = 0;
       
       while(filin.read_particle(partaux))
 	{
-	  compteur++;
+	  counter++;
 	  partaux.transform_to_internal_units(1e3, 1e-6);
 	  if (partaux.good() )
 	    {
@@ -74,7 +74,7 @@ class BEAM_FROM_FILE : public ABSTRACT_PARTICLE_BEAM
 	    }
 	  else 
 	    {
-	      cerr << " BEAM_FROM_FILE:: error reading file " << filename << " line " << compteur << " : skipped " << endl;
+	      cerr << " BEAM_FROM_FILE:: error reading file " << filename << " line " << counter << " : skipped " << endl;
 	    }
 	}
       filin.close();
@@ -677,7 +677,7 @@ class  PHOTON_BEAM
   
   void load_photons(string filename, int type_of_beam, float delta_z, float max_z, int n_cell_z);
   
-  inline int sizeOfSlice(int tranche) const  {return (int) slice_photon_vector_[tranche].size();}
+  inline int sizeOfSlice(int slice) const  {return (int) slice_photon_vector_[slice].size();}
   
   //int store_photon(string name) const;
 

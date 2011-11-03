@@ -169,9 +169,9 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
 
   virtual string persistent_flow() const
     {
-      ostringstream sortie;
-      sortie <<  energy_ << " " << xpos_*1e-3 << " " << ypos_*1e-3 << " " << zpos_*1e-3 << " " << vx_*1e6 << " " << vy_*1e6;
-      return sortie.str();
+      ostringstream out;
+      out <<  energy_ << " " << xpos_*1e-3 << " " << ypos_*1e-3 << " " << zpos_*1e-3 << " " << vx_*1e6 << " " << vy_*1e6;
+      return out.str();
     }
   
 
@@ -261,9 +261,9 @@ class PARTICLE_WITH_SPIN : public PARTICLE
   
   virtual string persistent_flow() const
     {
-      ostringstream sortie;
-      sortie <<  PARTICLE::persistent_flow() << " " << spin_(0) << " " << spin_(1) << " " << spin_(2);
-      return sortie.str();
+      ostringstream out;
+      out <<  PARTICLE::persistent_flow() << " " << spin_(0) << " " << spin_(1) << " " << spin_(2);
+      return out.str();
     }
   
   
@@ -317,12 +317,12 @@ class PHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
 
   virtual string persistent_flow() const
     {
-      ostringstream sortie;
-      /*   sortie <<  energy_ << " " << xpos_*1e-3 << " " << ypos_*1e-3 << " " << zpos_*1e-3 << " " << vx_*1e6 << " " << vy_*1e6 << " " << helicity_ << " " << no_; */
-      // sortie d'origine, a modifier eventuellement
-      sortie <<  energy_ << " " <<  vx_ << " " << vy_<< " ";
+      ostringstream out;
+      /*   out <<  energy_ << " " << xpos_*1e-3 << " " << ypos_*1e-3 << " " << zpos_*1e-3 << " " << vx_*1e6 << " " << vy_*1e6 << " " << helicity_ << " " << no_; */
+      // out d'origine, a modifier eventuellement
+      out <<  energy_ << " " <<  vx_ << " " << vy_<< " ";
       
-      return sortie.str();
+      return out.str();
     }
 
   virtual  inline void init_from_input_file(float energy, float xpos, float ypos, float zpos, float vx, float vy) 
@@ -421,14 +421,14 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   
   virtual string persistent_flow() const
     {
-      ostringstream sortie;
+      ostringstream out;
       float ener;
       if ( icharge_) ener = -energy_;
       else ener = energy_;
       
-      //sortie <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << process_ << " " << label_;
-      sortie <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << xpos_ << " " << ypos_ << " " << zpos_;
-      return sortie.str();
+      //out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << process_ << " " << label_;
+      out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << xpos_ << " " << ypos_ << " " << zpos_;
+      return out.str();
     }
 
   inline int get_label() const {return label_;}
@@ -614,12 +614,12 @@ class TERTPHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
 
   virtual string persistent_flow() const
     {
-      ostringstream sortie;
-      /*   sortie <<  energy_ << " " << xpos_*1e-3 << " " << ypos_*1e-3 << " " << zpos_*1e-3 << " " << vx_*1e6 << " " << vy_*1e6 << " " << helicity_ << " " << no_; */
-      // sortie d'origine, a modifier eventuellement
-      sortie <<  energy_ << " " <<  vx_ << " " << vy_<< " " << vz_ << " "<<  xpos_ << " " << ypos_<< " " << zpos_ << " ";
+      ostringstream out;
+      /*   out <<  energy_ << " " << xpos_*1e-3 << " " << ypos_*1e-3 << " " << zpos_*1e-3 << " " << vx_*1e6 << " " << vy_*1e6 << " " << helicity_ << " " << no_; */
+      // out d'origine, a modifier eventuellement
+      out <<  energy_ << " " <<  vx_ << " " << vy_<< " " << vz_ << " "<<  xpos_ << " " << ypos_<< " " << zpos_ << " ";
       
-      return sortie.str();
+      return out.str();
     }
   
   virtual inline const TRIDVECTOR& getSpin() const 

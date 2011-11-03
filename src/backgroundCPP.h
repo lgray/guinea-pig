@@ -121,14 +121,14 @@ class COMPT : public ABSTRACT_IO_CLASS
   
   virtual inline string  output_flow() const 
     {
-      ostringstream sortie;
-      sortie << titre(string("compton parameters"));
-      sortie << "compt_sum = " << sum_ << endl;
-      sortie << "compt_sum2 = " << sum2_ << endl;
-      sortie << "compt_sum3 = " << sum3_ << " compt_sume3 = " << sume3_ << endl;
-      sortie << "compt_sum4 = " << sum4_ << " compt_sume4 = " << sume4_ << endl;
-      sortie << compt_results_.output_flow();
-      return sortie.str();
+      ostringstream out;
+      out << title(string("compton parameters"));
+      out << "compt_sum = " << sum_ << endl;
+      out << "compt_sum2 = " << sum2_ << endl;
+      out << "compt_sum3 = " << sum3_ << " compt_sume3 = " << sume3_ << endl;
+      out << "compt_sum4 = " << sum4_ << " compt_sume4 = " << sume4_ << endl;
+      out << compt_results_.output_flow();
+      return out.str();
     }
 
   
@@ -329,25 +329,25 @@ class mCROSS  : public GENERAL_CROSS
   
   virtual string output_flow() const 
     {
-      ostringstream sortie;
+      ostringstream out;
       int k;
-      sortie << titre(string("m-cross parameters"));
-      sortie << " cross={ ";
-      for (k=0; k < ncross_per_ener_; k++) sortie << "  " << sum_[k];
-      sortie << " } " << endl;;
-      sortie << " errors of the cross section calculation : cross_var= " << endl;
-      sortie << " { ";
+      out << title(string("m-cross parameters"));
+      out << " cross={ ";
+      for (k=0; k < ncross_per_ener_; k++) out << "  " << sum_[k];
+      out << " } " << endl;;
+      out << " errors of the cross section calculation : cross_var= " << endl;
+      out << " { ";
       for (k=0; k < ncross_per_ener_; k++)
 	{
-	  if (cross_call_ <= 1) sortie << " 0.0 " ;
+	  if (cross_call_ <= 1) out << " 0.0 " ;
 	  else 
 	    {
-	      sortie <<  "  " << sqrt(max(0.0,(sum2_[k]/(double)cross_call_ - sum_[k]*sum_[k]/((double)cross_call_*(double)cross_call_))*(double)cross_call_));
+	      out <<  "  " << sqrt(max(0.0,(sum2_[k]/(double)cross_call_ - sum_[k]*sum_[k]/((double)cross_call_*(double)cross_call_))*(double)cross_call_));
 	    }
 	}
-      sortie << "} " << endl;
-      sortie << " ncross_ncall= " << cross_call_ << endl;
-      return sortie.str();
+      out << "} " << endl;
+      out << " ncross_ncall= " << cross_call_ << endl;
+      return out.str();
     }
 };
 
@@ -407,17 +407,17 @@ class maverCROSS : public mCROSS
   
   virtual string output_flow() const 
     {
-      ostringstream sortie;
+      ostringstream out;
       int j;
-      sortie << mCROSS::output_flow() << endl;
+      out << mCROSS::output_flow() << endl;
       
-      sortie << "cross_aver={ ";
+      out << "cross_aver={ ";
       for (j=0;j<ncross_per_ener_;j++)
 	{
-	  sortie << " " << cross_aver_[j]/sum_[j];
+	  out << " " << cross_aver_[j]/sum_[j];
 	}
-      sortie << " }" <<  endl;
-      return sortie.str();
+      out << " }" <<  endl;
+      return out.str();
     }
 };
 
@@ -496,16 +496,16 @@ class CROSS  : public GENERAL_CROSS
  
  virtual string output_flow() const 
    {
-     ostringstream sortie;
-     sortie << titre(string(" cross parameters ")); 
-     sortie << "cross= " << sum_ << endl;
-     if(cross_call_ <=1 )   sortie << "cross_var= 0.0 " << endl;
+     ostringstream out;
+     out << title(string(" cross parameters ")); 
+     out << "cross= " << sum_ << endl;
+     if(cross_call_ <=1 )   out << "cross_var= 0.0 " << endl;
      else
        {
-	 sortie << "cross_var= " << sqrt(max(0.0,(sum2_/(double)cross_call_ - sum_*sum_/((double)cross_call_*cross_call_))*(double)cross_call_)) << endl;
+	 out << "cross_var= " << sqrt(max(0.0,(sum2_/(double)cross_call_ - sum_*sum_/((double)cross_call_*cross_call_))*(double)cross_call_)) << endl;
        }
-     sortie << "cross_ncall=" << cross_call_ << endl;
-     return sortie.str(); 
+     out << "cross_ncall=" << cross_call_ << endl;
+     return out.str(); 
    }
 };
 
@@ -552,12 +552,12 @@ class averCROSS : public CROSS
  
  virtual string output_flow() const 
    {
-     ostringstream sortie;
+     ostringstream out;
      //int j;
-     sortie << CROSS::output_flow() << endl;
+     out << CROSS::output_flow() << endl;
 
-     sortie << "cross_aver= " << cross_aver_/sum_ << endl;
-   return sortie.str();
+     out << "cross_aver= " << cross_aver_/sum_ << endl;
+   return out.str();
    } 
 };
 

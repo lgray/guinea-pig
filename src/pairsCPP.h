@@ -203,7 +203,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   
   inline int n_particles() const { return count_pairs_;}
   
-  inline int nombreDeParticules(int slice) const {return active_pairs_[slice].size();}
+  inline int numberOfParticles(int slice) const {return active_pairs_[slice].size();}
   
   inline vector<PAIR_PARTICLE>& get_pairs(int slice) { return active_pairs_[slice];}
   

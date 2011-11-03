@@ -11,44 +11,44 @@ GUINEA::GUINEA(char *name)
   beam_parameters2_.setLabel('2');
   secondaries_.set_name(string("pairs"));
   muons_.set_name(string("muons"));
-  parametres_.read_accelerateur(name); 
+  params_.read_accelerator(name); 
 }
 
 void GUINEA::run( char *par,char *prot)
 {
   //  the order of the following sequence must not be changed : 
   // reading ACCELERATOR parameters
-  //  parametres_.read_accelerateur(name); 
+  //  params_.read_accelerator(name); 
   // setting, from previously read data, of beam characteristics (emittance,
   // sigmas a.s;
-  beam_parameters1_.read(parametres_);
-  beam_parameters2_.read(parametres_);
+  beam_parameters1_.read(params_);
+  beam_parameters2_.read(params_);
 
   // reading 'PARAMETERS' : switches and grid parameters
-  parametres_.read_parameters(par );
-  switches.read(parametres_);
+  params_.read_parameters(par );
+  switches.read(params_);
 
-  // la methode suivante a besoin des switches
+  // the next method needs the switches
   init_output_file_names();
 
 #ifdef TWOBEAM
-  cerr << " LE CAS TWOBEAM N'EST PAS PROGRAMME " << endl;
+  cerr << " THE TWOBEAM IS NOT PROGRAMMED " << endl;
   exit(0);
 #endif
 
-  grid_.read(parametres_, switches.get_automatic_grid_sizing());
-  //      cout << " guineapig : lecture params de grid "  << " nmacros " << grid_.get_nb_macroparticles(1) << endl;
+  grid_.read(params_, switches.get_automatic_grid_sizing());
+  //      cout << " guineapig : grid parameters "  << " nmacros " << grid_.get_nb_macroparticles(1) << endl;
 
   beam1_.connect_parameters(&beam_parameters1_);
   beam2_.connect_parameters(&beam_parameters2_);
   grid_.connect_beams(&beam1_, &beam2_);
-  generateur_ = RNDM(switches.get_rndm_seed());
-  grid_.connect_random_generator(&generateur_);
+  generator_ = RNDM(switches.get_rndm_seed());
+  grid_.connect_random_generator(&generator_);
   if ( !check_parameters() ) exit(0);
   simulate();
   grid_.set_bpm_signals();
   outputs (string(prot) );
-  if (switches.get_rndm_save()) generateur_.rndm_save();
+  if (switches.get_rndm_save()) generator_.rndm_save();
 }
 
 void GUINEA::save_results_on_files()
@@ -83,19 +83,19 @@ void GUINEA::save_results_on_files()
 	  filout.open_file(photon_file_, "w");
 	  for (int h=0; h < grid_.get_n_cell_z(); h++)
 	    {	    
-	      vector<PHOTON>& lesPhotons1 =  beam1_.getPhotonVector(h);
-	      for(unsigned int k=0;k<lesPhotons1.size();k++)
+	      vector<PHOTON>& thePhotons1 =  beam1_.getPhotonVector(h);
+	      for(unsigned int k=0;k<thePhotons1.size();k++)
 		{
-		  if (lesPhotons1[k].energy()>0.0)
-		    filout.save_object_on_persistent_file( &lesPhotons1[k]);
+		  if (thePhotons1[k].energy()>0.0)
+		    filout.save_object_on_persistent_file( &thePhotons1[k]);
 		}
-	      vector<PHOTON>& lesPhotons2 =  beam2_.getPhotonVector(h);
-	      for(unsigned int k=0;k<lesPhotons2.size();k++){
-		float ene = lesPhotons2[k].energy();
-		if (lesPhotons2[k].energy()>0.0)
+	      vector<PHOTON>& thePhotons2 =  beam2_.getPhotonVector(h);
+	      for(unsigned int k=0;k<thePhotons2.size();k++){
+		float ene = thePhotons2[k].energy();
+		if (thePhotons2[k].energy()>0.0)
 		  {
-		    lesPhotons2[k].setEnergy(-ene);
-		    filout.save_object_on_persistent_file(&lesPhotons2[k]);
+		    thePhotons2[k].setEnergy(-ene);
+		    filout.save_object_on_persistent_file(&thePhotons2[k]);
 		  }
 	      }
 	    // photon_vector_.store_photon(photon_file_);
@@ -187,7 +187,7 @@ bool GUINEA::check_parameters() const
     }
 
   const BEAM_PARAMETERS* bpPtr[2]  = {&beam_parameters1_, &beam_parameters2_};  
-  float cutz = parametres_.readFValue("cut_z");
+  float cutz = params_.readFValue("cut_z");
   if ( !switches.get_load_beam() )
     {
       // program generated beam
@@ -244,7 +244,7 @@ bool GUINEA::check_parameters() const
 	}
       else
 	{
-	  if ( parametres_.readFValue("cut_x") <= 0.0 || parametres_.readFValue("cut_y") <= 0.0 )
+	  if ( params_.readFValue("cut_x") <= 0.0 || params_.readFValue("cut_y") <= 0.0 )
 	    {
 	      bool test = false;
 	      for (k=0; k < 2; k++)
@@ -310,15 +310,15 @@ bool GUINEA::check_parameters() const
 
 // void GUINEA::close()
 // {
-//     if (switches.get_rndm_save()) generateur_.rndm_save();
+//     if (switches.get_rndm_save()) generator_.rndm_save();
 // }
 
 void GUINEA::set_simulation()
 {
   grid_.check_distribute(0);
   int n_slice=grid_.get_n_cell_z();
-  beam1_.make_beam(n_slice, switches.get_bmt_precession(), &generateur_);
-  beam2_.make_beam(n_slice, switches.get_bmt_precession(), &generateur_);
+  beam1_.make_beam(n_slice, switches.get_bmt_precession(), &generator_);
+  beam2_.make_beam(n_slice, switches.get_bmt_precession(), &generator_);
 
   if (switches.get_do_size_log())
     {
@@ -328,7 +328,7 @@ void GUINEA::set_simulation()
 
   if (switches.get_rndm_load()) 
     {
-      generateur_.rndm_load();
+      generator_.rndm_load();
     }
   if (switches.get_load_event())
     {
@@ -407,7 +407,7 @@ void GUINEA::set_beams_and_grids()
     {
 
 
-      //      int  n_cell_z= parametres_.readIValue("n_z");
+      //      int  n_cell_z= params_.readIValue("n_z");
       int  n_cell_z = grid_.get_n_cell_z();
       if (n_cell_z <= 0) 
 	{
@@ -424,13 +424,6 @@ void GUINEA::set_beams_and_grids()
       xycuts_for_grids( beam1_.particle_beam(), beam2_.particle_beam(),switches.get_extra_grids()+1, size_x, size_y, updated_n_cell_x, updated_n_cell_y);
       init_grid_phys(beam_parameters1_.n_particles(), beam_parameters2_.n_particles(), size_x,size_y,size_z,updated_n_cell_x, updated_n_cell_y);
     }
-  // cout << " sortie de faisceau inital pour test " << endl;
-   // beam1_.store_beam(string("beam1_0.dat"));
-   // beam2_.store_beam(string("beam2_0.dat"));
-
-
-  // imprimerCaracteristiquesFaiseauInitial(beam1_);
-
 
   if(switches.get_load_photon()) 
     {
@@ -520,52 +513,52 @@ void GUINEA::simulate()
 
 string GUINEA::output_flow() const 
 {
-  ostringstream sortie;
+  ostringstream out;
   //double esum1,esum2;
-  sortie << titre(string("other informations "));
+  out << title(string("other informations "));
   //   esum1 = beam1_.meanEnergy();
   //   esum2 = beam2_.meanEnergy();
-  //   sortie << " de1 = " <<  esum1 << " de2 = " <<  esum2 << endl;
+  //   out << " de1 = " <<  esum1 << " de2 = " <<  esum2 << endl;
   //if (switches.get_store_secondaries()) 
   if (switches.get_store_pairs()) 
     {
-      sortie << " initial pairs are saved on file : " << secondaries0_file_ << endl;
+      out << " initial pairs are saved on file : " << secondaries0_file_ << endl;
     }
   //if (switches.get_track_secondaries()) 
   if (switches.get_track_pairs()) 
    {
-     sortie << " pairs are saved on file : " << secondaries_file_ << endl;
+     out << " pairs are saved on file : " << secondaries_file_ << endl;
    }
   if (switches.get_store_muons()) 
     {
-      sortie << " initial muons are saved on file : " << muons0_file_ << endl;
+      out << " initial muons are saved on file : " << muons0_file_ << endl;
     }
   //if (switches.get_track_secondaries()) 
   if (switches.get_track_muons()) 
    {
-     sortie << " muons are saved on file : " << muons_file_ << endl;
+     out << " muons are saved on file : " << muons_file_ << endl;
    }
   if (switches.get_do_bhabhas())
     {
       int nbhabha_ini, nbhabha_photon_ini;
       grid_.get_bhabhas().numbers_of_loaded(nbhabha_ini, nbhabha_photon_ini); 
-      sortie << " " << nbhabha_ini << " bhabhas have been loaded " << nbhabha_photon_ini << " bhabha_photons have been loaded " <<endl; 
-      sortie << " read bhabha samples are saved on file : " << bhabha_prod_ << endl;
+      out << " " << nbhabha_ini << " bhabhas have been loaded " << nbhabha_photon_ini << " bhabha_photons have been loaded " <<endl; 
+      out << " read bhabha samples are saved on file : " << bhabha_prod_ << endl;
     }
   if (switches.get_do_jets())
     {
-      sortie << " jets are saved on file : " << jet_file_ << endl;
+      out << " jets are saved on file : " << jet_file_ << endl;
     }
     if (switches.get_store_beam()) 
     {
-      sortie << number_of_stored_particles1_  << " particles are saved on file : " << beam1_file_ << endl;
-      sortie << number_of_stored_particles2_  << " particles are saved on file : " << beam2_file_ << endl;
-      sortie << " coherent particles of beam1 are saved on file : " << coh1_file_ << endl;
-      sortie << " coherent particles of beam2 are saved on file : " << coh2_file_ << endl;
-      sortie << " trident particles of beam1 are saved on file : " << tri1_file_ << endl;
-      sortie << " trident particles of beam2 are saved on file : " << tri2_file_ << endl;
+      out << number_of_stored_particles1_  << " particles are saved on file : " << beam1_file_ << endl;
+      out << number_of_stored_particles2_  << " particles are saved on file : " << beam2_file_ << endl;
+      out << " coherent particles of beam1 are saved on file : " << coh1_file_ << endl;
+      out << " coherent particles of beam2 are saved on file : " << coh2_file_ << endl;
+      out << " trident particles of beam1 are saved on file : " << tri1_file_ << endl;
+      out << " trident particles of beam2 are saved on file : " << tri2_file_ << endl;
     }
-   return sortie.str();
+   return out.str();
 }
 
 void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
@@ -614,22 +607,22 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
  
   if ( switches.get_do_photons(1) || switches.get_do_photons(2) || switches.get_load_photon())
     {
-      grid_.distribute_photons(i1,i2, switches.get_photon_ratio(),generateur_ );    
-      grid_.photon_lumi(min_z,switches,secondaries_, muons_, generateur_);
+      grid_.distribute_photons(i1,i2, switches.get_photon_ratio(),generator_ );    
+      grid_.photon_lumi(min_z,switches,secondaries_, muons_, generator_);
 
       if(switches.get_do_pairs()||switches.get_do_hadrons()||switches.get_do_compt() || switches.get_do_muons())
 	{
 	  // c'est la qu'on va generer des paires
-	  grid_.photon_lumi_2(min_z,switches, secondaries_, muons_, generateur_);
+	  grid_.photon_lumi_2(min_z,switches, secondaries_, muons_, generator_);
 	}
       if (switches.get_do_compt()) 
 	{
-	  grid_.photon_lumi_3(min_z,switches, secondaries_, generateur_);
+	  grid_.photon_lumi_3(min_z,switches, secondaries_, generator_);
 	}
       if (switches.get_do_coherent())
 	{
-	  grid_.move_photons2(beam1_,1,i1, generateur_);
-	  grid_.move_photons2(beam2_,2,i2,  generateur_);
+	  grid_.move_photons2(beam1_,1,i1, generator_);
+	  grid_.move_photons2(beam2_,2,i2,  generator_);
 	}
       else
 	{
@@ -650,22 +643,22 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
 	{
 	  if (i_offset<0)
 	    {
-	      grid_.move_pairs_tertphot(gridsPtr_, secondaries_, i1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	      grid_.move_pairs_tertphot(gridsPtr_, secondaries_, i1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generator_);
 	    }
 	  else
 	    {
-	      grid_.move_pairs_tertphot(gridsPtr_,secondaries_, i1-i_offset-1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	      grid_.move_pairs_tertphot(gridsPtr_,secondaries_, i1-i_offset-1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generator_);
 	    }
 	}
       else
 	{
 	  if (i_offset<0)
 	    {
-	      grid_.move_pairs(gridsPtr_, secondaries_, i1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	      grid_.move_pairs(gridsPtr_, secondaries_, i1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generator_);
 	    }
 	  else
 	    {
-	      grid_.move_pairs(gridsPtr_,secondaries_, i1-i_offset-1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	      grid_.move_pairs(gridsPtr_,secondaries_, i1-i_offset-1, d_eps_1, d_eps_2, switches.get_extra_grids(), switches.get_charge_sign_0(), generator_);
 	    }
 	}
     }
@@ -678,22 +671,22 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
 	{
 	  if (i_offset<0)
 	    {
-	      grid_.move_pairs_tertphot(gridsPtr_, muons_, i1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	      grid_.move_pairs_tertphot(gridsPtr_, muons_, i1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generator_);
 	    }
 	  else
 	    {
-	      grid_.move_pairs_tertphot(gridsPtr_, muons_, i1-i_offset-1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	      grid_.move_pairs_tertphot(gridsPtr_, muons_, i1-i_offset-1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generator_);
 	    }
 	}
       else
 	{
 	  if (i_offset<0)
 	    {
-	      grid_.move_pairs(gridsPtr_, muons_, i1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	      grid_.move_pairs(gridsPtr_, muons_, i1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generator_);
 	    }
 	  else
 	    {
-	      grid_.move_pairs(gridsPtr_, muons_, i1-i_offset-1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generateur_);
+	      grid_.move_pairs(gridsPtr_, muons_, i1-i_offset-1, d_eps_1_mu, d_eps_2_mu, switches.get_extra_grids(), switches.get_charge_sign_0(), generator_);
 	    }	  
 	}
     }
@@ -734,8 +727,8 @@ void GUINEA::iteration_on_overlaping_slices_with_trackpair(PAIR_BEAM& pair_beam_
   unsigned int numberToDistribute = lastSliceOfBeam2-firstSliceOfBeam1+1;
   if (switches.get_load_event()) 
     {
-      //pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_secondaries(), generateur_);
-      pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_pairs(), generateur_);
+      //pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_secondaries(), generator_);
+      pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_pairs(), generator_);
     }
   for (i0=0;i0<grid_.get_timestep();i0++)
     {
@@ -761,8 +754,8 @@ void GUINEA::iteration_on_overlaping_slices_with_trackpair_muon(PAIR_BEAM& pair_
   unsigned int numberToDistribute = lastSliceOfBeam2-firstSliceOfBeam1+1;
   if (switches.get_load_event()) 
     {
-      //pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_secondaries(), generateur_);
-      pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_pairs(), generateur_);
+      //pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_secondaries(), generator_);
+      pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_pairs(), generator_);
     }
   for (i0=0;i0<grid_.get_timestep();i0++)
     {
@@ -836,7 +829,7 @@ void GUINEA::print_program_outputs(string nameOfProtokoll)
 
 void GUINEA::xycuts_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 , int nbgrids, vector<float>& size_x, vector<float>& size_y, int& updated_n_cell_x, int& updated_n_cell_y ) const
 {
-  int compteur;
+  int counter;
   float tmp;
    //float cutx, cuty;
   if (nbgrids > 7) 
@@ -848,7 +841,7 @@ void GUINEA::xycuts_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_
   size_y.clear();
   size_x.resize(nbgrids);
   size_y.resize(nbgrids);
-  compteur = 1;
+  counter = 0;
   if (switches.get_automatic_grid_sizing() ) 
     {
       // automatic generation of cuts
@@ -859,35 +852,35 @@ void GUINEA::xycuts_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_
       // cuts from user's data : 
       main_grid_xycuts_from_user(bff1,bff2, size_x[0], size_y[0]);
     }
-  if (compteur >= nbgrids) return;
-  compteur++;
-  size_x[compteur - 1]=2.0*size_x[0];
-  size_y[compteur - 1]=2.0*size_y[0];
-  if (compteur >= nbgrids) return;
-  compteur++;
-  size_x[compteur - 1]=size_x[1];
+  counter++;
+  if (counter >= nbgrids) return;
+  size_x[counter]=2.0*size_x[0];
+  size_y[counter]=2.0*size_y[0];
+  counter++;
+  if (counter >= nbgrids) return;
+  size_x[counter]=size_x[1];
   tmp=pow((double)(size_x[0]/size_y[0]),(double)0.333);
-  size_y[compteur - 1]=size_y[1]*tmp;
-  if (compteur >= nbgrids) return;
-   compteur++;
+  size_y[counter]=size_y[1]*tmp;
+  counter++;
+  if (counter >= nbgrids) return;
 
-  size_x[compteur - 1]=size_x[1];
-  size_y[compteur - 1]=size_y[1]*tmp*tmp;
-  if (compteur >= nbgrids) return;
-   compteur++;
+  size_x[counter]=size_x[1];
+  size_y[counter]=size_y[1]*tmp*tmp;
+  counter++;
+  if (counter >= nbgrids) return;
 
-  size_x[compteur - 1]=size_x[1];
-  size_y[compteur - 1]=size_x[1];
-  if (compteur >= nbgrids) return;
-   compteur++;
+  size_x[counter]=size_x[1];
+  size_y[counter]=size_x[1];
+  counter++;
+  if (counter >= nbgrids) return;
 
-  size_x[compteur - 1]=size_x[1]*2.0;
-  size_y[compteur - 1]=size_x[1]*2.0;
-  if (compteur >= nbgrids) return;
-   compteur++;
+  size_x[counter]=size_x[1]*2.0;
+  size_y[counter]=size_x[1]*2.0;
+  counter++;
+  if (counter >= nbgrids) return;
 
-  size_x[compteur - 1]=size_x[1]*6.0;
-  size_y[compteur - 1]=size_x[1]*6.0;
+  size_x[counter]=size_x[1]*6.0;
+  size_y[counter]=size_x[1]*6.0;
 }
 
 float GUINEA::zcut_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ) const
@@ -913,8 +906,8 @@ void GUINEA::main_grid_xycuts_from_loaded_beam(const BEAM_FROM_FILE& bff1,const 
   float cutx, cuty;
       float dumx, dumy;
       float sigx, sigy, sigx2, sigy2; 
-      cutx = parametres_.readFValue("cut_x_factor");
-      cuty = parametres_.readFValue("cut_y_factor");
+      cutx = params_.readFValue("cut_x_factor");
+      cuty = params_.readFValue("cut_y_factor");
       bff1.beamXyRms(dumx, dumy, sigx, sigy);
       bff2.beamXyRms(dumx, dumy, sigx2, sigy2);
       if (sigx < sigx2) sigx = sigx2;
@@ -929,7 +922,7 @@ float GUINEA::main_grid_zcut_from_loaded_beam(const BEAM_FROM_FILE& bff1,const B
   float  cutz;
   float dumz, size_z;
       float sigz, sigz2; 
-      cutz = parametres_.readFValue("cut_z_factor");
+      cutz = params_.readFValue("cut_z_factor");
       bff1.beamZRms(dumz, sigz);
       bff2.beamZRms( dumz,sigz2);
       if (sigz < sigz2) sigz = sigz2;

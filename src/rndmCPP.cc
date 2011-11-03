@@ -18,7 +18,7 @@ RNDM::RNDM(unsigned long seed)
   rndmst7(seed);
   rndmst8(1);
   iset_ = 0;
-  compteurRndm7_ = 0;
+  counterRndm7_ = 0;
 }
 
 void  RNDM::rndmst0(int i)
@@ -326,7 +326,7 @@ bool RNDM::rndm_test7(unsigned long a_coeff, unsigned long c_coeff, const unsign
 
 float RNDM::rndm7()
 {
-  compteurRndm7_++;
+  counterRndm7_++;
   rndm7_store.i=rndm7_a_coeff_*rndm7_store.i+rndm7_c_coeff_;
 /* additional factor to ensure rndm7!=1.0 if float */
   return  (float)rndm7_store.i*rndm7_modulo_dividing_factor_*(1.0-RNDM_EPS);

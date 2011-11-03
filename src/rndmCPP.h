@@ -35,7 +35,7 @@ class RNDM
   int iset_;
   float v1_,v2_;
 
-  int compteurRndm7_;
+  int counterRndm7_;
   unsigned long rndm7_a_coeff_, rndm7_c_coeff_;
   float rndm7_modulo_dividing_factor_;
 

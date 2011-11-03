@@ -25,10 +25,10 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 {
 
   TIMER time_;
-  RNDM generateur_;
-  FFT_SERVER fourier_serveur_;
+  RNDM generator_;
+  FFT_SERVER fourier_server_;
 
-  PARAMETERS parametres_;
+  PARAMETERS params_;
 
   SWITCHES switches;
   PHOTON_BEAM photon_vector_;
@@ -61,8 +61,8 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   string muons_file_;
   string muons0_file_;
   string bhabha_prod_;
-  string bhphoton_prod_; // photons de bhabhas initiaux
-  string bhphotons_; // photons de bhabhas boostes
+  string bhphoton_prod_; // intial bhabhas photons
+  string bhphotons_; // boosted bhabhas photons
 
 
   string jet_file_;
@@ -108,9 +108,9 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       muons0_file_ = string("muons0.dat");
       jet_file_ = string("minijet.dat");
       
-      bhabha_prod_ = string("bhabha_prod.dat"); // bhabhas initiaux
-      bhphoton_prod_ = string("bhphoton_prod.dat"); // photons de bhabhas initiaux
-      bhphotons_ = string("bhphotons.dat"); // photons de bhabhas boostes
+      bhabha_prod_ = string("bhabha_prod.dat"); // initial bhabhas
+      bhphoton_prod_ = string("bhphoton_prod.dat"); // initial bhabhas photons
+      bhphotons_ = string("bhphotons.dat"); // boosted bhabhas photons
       
       lumi_ee_file_ = string("lumi.ee.out");
       lumi_eg_file_ = string("lumi.eg.out");
@@ -188,9 +188,9 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     {
       int extra_grids;
       unsigned int i1;
-      grid_.init_grid_comp (n_cell_x, n_cell_y, switches.get_integration_method(), &fourier_serveur_);
+      grid_.init_grid_comp (n_cell_x, n_cell_y, switches.get_integration_method(), &fourier_server_);
       
-      grid_.init_grid_phys(n_particles1, n_particles2,size_x[0],size_y[0],size_z, switches.get_charge_sign(), &fourier_serveur_);
+      grid_.init_grid_phys(n_particles1, n_particles2,size_x[0],size_y[0],size_z, switches.get_charge_sign(), &fourier_server_);
       extra_grids = switches.get_extra_grids();
       if ( extra_grids < 0 ) extra_grids = 0;
       gridsPtr_ = vector<GENERAL_GRID*>(extra_grids+1);
@@ -198,7 +198,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       for (i1=1; i1 <  gridsPtr_.size() ;i1++)
 	{
 	  gridsPtr_[i1] = new EXTRA_GRID(grid_);
-	  gridsPtr_[i1]->init_grid_phys(n_particles1, n_particles2,size_x[i1],size_y[i1],size_z, switches.get_charge_sign(), &fourier_serveur_);
+	  gridsPtr_[i1]->init_grid_phys(n_particles1, n_particles2,size_x[i1],size_y[i1],size_z, switches.get_charge_sign(), &fourier_server_);
 	}
       if(switches.get_do_pairs()||switches.get_do_hadrons()||switches.get_do_compt()
 	 ||switches.get_do_muons())
@@ -263,7 +263,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       // THETA = 0.5*DD*(sigma/sigmaz)*f_form
       // DELTA = f*0.5*DD*sigma*f_form
       // on choisit A = 1, c-a-d beta = 10^-6 sigmaz
-      ofstream sortie1, sortie2;
+      ofstream out1, out2;
       float delta, AA, DD, formfct, factor,  decalage;
       //float sigma, 
       float theta0;
@@ -273,29 +273,29 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       DD = theta0*sigmaz/sigmax;
       AA = sigmaz/(betax*1.0e6);
       //   cout << " ******** Dx = " << DD << " AA = " << AA << " ************ " << endl;
-      sortie1.open("disrupx.dat", ios::out);
+      out1.open("disrupx.dat", ios::out);
       for (delta = 0.; delta <= 5. ; delta +=  0.01)
 	{
 	  formfct = form_function(AA, DD, delta);
 	  factor = offset_factor(0.5*delta);
 	  decalage = 0.5*formfct*DD*factor*sigmax;
-	  //	 cout << " delta = " << delta << " decal= " << decalage << " facteur de forme : " << formfct << " facteur empirique: " << factor << endl;
-	  sortie1 << delta << " " << decalage << " " << factor << endl;
+	  //	 cout << " delta = " << delta << " decal= " << decalage << " form factor : " << formfct << " factor: " << factor << endl;
+	  out1 << delta << " " << decalage << " " << factor << endl;
 	}
-      sortie1.close();
+      out1.close();
       DD = theta0*sigmaz/sigmay;
       AA = sigmaz/(betay*1.0e6);
       //   cout << " ******** Dy = " << DD << " AA = " << AA << " ************ " << endl;
-      sortie2.open("disrupy.dat", ios::out);
+      out2.open("disrupy.dat", ios::out);
       for (delta = 0.; delta <= 5. ; delta +=  0.01)
 	{
 	  formfct = form_function(AA, DD, delta);
 	  factor = offset_factor(0.5*delta);
 	  decalage = 0.5*formfct*DD*factor*sigmay;
-	  //	 cout << " delta = " << delta << " decal= " << decalage << " facteur de forme : " << formfct << " facteur empirique: " << factor << endl;
-	  sortie2 << delta << " " << decalage << " " << factor << endl;
+	  //	 cout << " delta = " << delta << " decal= " << decalage << " form factor : " << formfct << " factor: " << factor << endl;
+	  out2 << delta << " " << decalage << " " << factor << endl;
 	}
-      sortie2.close();
+      out2.close();
     }
   
   inline float form_function(float AA,float DD, float delta) const
@@ -319,38 +319,38 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       return formfct;
     }
   
-  // compute a special factor to determine a automatic grid size 
+  // compute a special factor to determine an automatic grid size 
   // (see method automatic_transverse_cuts() )
-  // the limits are chose in a totally empirical way. May be raffined
+  // the limits are chosen in a totally empirical way. May be refined
   inline float offset_factor(float hh) const
     {
       //	float test = dxx/sigmaxx;
-      float facteur;
+      float factor;
       float x1 = 0.75;
       float x2 = 1.25;
       float x3 = 2.;
       if (hh > x3) 
 	{
-	  facteur = 3. - (hh - x3)/(x3-x2) ;
-	  if (facteur <= 0.0) facteur = 1.0;
+	  factor = 3. - (hh - x3)/(x3-x2) ;
+	  if (factor <= 0.0) factor = 1.0;
 	}
       else
 	if (hh > x2 ) 
 	  { 
-	    facteur = 4. - (hh - x2)/(x3 - x2);
+	    factor = 4. - (hh - x2)/(x3 - x2);
 	  }
 	else
 	  if (hh > x1 ) 
 	    {
-	      facteur = 5. - (hh - x1)/(x2 - x1);
+	      factor = 5. - (hh - x1)/(x2 - x1);
 	    }
 	  else 
 	    {
-	      facteur = 6. - hh/x1;
+	      factor = 6. - hh/x1;
 	    }
-      //  facteur = 0.;
-      facteur = 6. - 3.*hh/x3;
-      return facteur;
+      //  factor = 0.;
+      factor = 6. - 3.*hh/x3;
+      return factor;
     }
   
   // for method automatic_transverse_cuts()
@@ -359,13 +359,13 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       float AA;
       float factor, formfct;
       float decalage, hh;
-      // beta est en mm, sigma en nanometres
+      // beta is in mm, sigma in nanometres
       AA = sigmaz/(beta*1.0e6);
       //  cout << " A= " << AA << " beta = " << beta << endl;
       hh = dxx/sigma;
       formfct = form_function(AA, DD, 2.*hh);
       factor = offset_factor(hh);
-      //  cout << " facteur = " << factor << endl;
+      //  cout << " factor = " << factor << endl;
       decalage = 0.5*formfct*theta0*factor*sigmaz;
       return decalage;
     }
@@ -376,7 +376,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       float cut;
       string cut_dir("cut_");
       cut_dir += dir;
-      cut = parametres_.readFValue(cut_dir);
+      cut = params_.readFValue(cut_dir);
       if (cut <= 0.0) 
 	{ 
 	  cerr << " GUINEA::transverse_cut_from_data() : WARNING : non automatic grid sizing, but cut_x or cut_y is not given. default values will be computed from sigma's " << endl;
@@ -400,7 +400,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 	}
       else
 	{
-	  cutz = parametres_.readFValue("cut_z");
+	  cutz = params_.readFValue("cut_z");
 	  if(cutz>0.0) cutz *= 1e3;
 	  else 
 	    {
@@ -563,14 +563,14 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   
   string header() const 
     {
-      ostringstream sortie;
-      sortie <<  "****************************************************** " << endl;
-      sortie <<  "* guineapig++ Version " << PACKAGE_VERSION << endl;
-      sortie <<  "* Program written by Daniel Schulte at DESY and CERN " << endl;
-      sortie <<  "* object oriented by Guy Le Meur at LAL-Orsay " << endl;
-      sortie <<  "* modified by B. Dalena and J. Esberg CERN " << endl;
-      sortie <<  "**************************************************** " << endl;
-      return sortie.str();
+      ostringstream out;
+      out <<  "****************************************************** " << endl;
+      out <<  "* guineapig++ Version " << PACKAGE_VERSION << endl;
+      out <<  "* Program written by Daniel Schulte at DESY and CERN " << endl;
+      out <<  "* object oriented by Guy Le Meur at LAL-Orsay " << endl;
+      out <<  "* modified by B. Dalena and J. Esberg CERN " << endl;
+      out <<  "**************************************************** " << endl;
+      return out.str();
     }
   
   GUINEA() {;}

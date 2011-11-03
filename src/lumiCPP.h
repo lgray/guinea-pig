@@ -44,16 +44,16 @@ class LUMI_PAIR : public ABSTRACT_IO_CLASS
   
   virtual string output_flow() const 
     {
-      ostringstream sortie;
-      sortie << " LUMI_PAIR:: no data for output file " << endl;
-      return sortie.str();
+      ostringstream out;
+      out << " LUMI_PAIR:: no data for output file " << endl;
+      return out.str();
     }
   
   virtual string persistent_flow() const
     {
-      ostringstream sortie;
-      sortie << e1_ << " " << e2_ << " " << x_ << " " << y_ << " " << z_*1e-3 << " " ;
-      return sortie.str();
+      ostringstream out;
+      out << e1_ << " " << e2_ << " " << x_ << " " << y_ << " " << z_*1e-3 << " " ;
+      return out.str();
     }
   
   inline void get_parameters_for_output(float& e1,float& e2,float& x,float& y,float& z) const
@@ -132,12 +132,12 @@ protected :
   
   virtual string persistent_flow() const
     {
-      ostringstream sortie;
+      ostringstream out;
       
-      sortie << LUMI_PAIR::persistent_flow();
-      sortie << " " << t_ << " " << vx1_ << " " << vy1_ << " " << vx2_ << " " << vy2_ << " " <<  spin1_(0) << " " << spin1_(1) << " " << spin1_(2) << " " << spin2_(0) << " " << spin2_(1) << " " <<  spin2_(2) << " ";
+      out << LUMI_PAIR::persistent_flow();
+      out << " " << t_ << " " << vx1_ << " " << vy1_ << " " << vx2_ << " " << vy2_ << " " <<  spin1_(0) << " " << spin1_(1) << " " << spin1_(2) << " " << spin2_(0) << " " << spin2_(1) << " " <<  spin2_(2) << " ";
       
-      return sortie.str();
+      return out.str();
     }
 };
 
@@ -225,7 +225,7 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
     {
       //unsigned long int k;
       int k;
-      ostringstream sortie;
+      ostringstream out;
       vector<unsigned long int> ordre;
       //unsigned long int npairs  =  data_.size();
       int npairs = (int) data_.size();
@@ -239,9 +239,9 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
       hasard_->getShuffledIntegerSequence(npairs, ordre);
       for (k = 0; k < npairs; k++)
 	{
-	  sortie << data_[ordre[k] - 1 ].persistent_flow() << " " << ordre[k] << endl;
+	  out << data_[ordre[k] - 1 ].persistent_flow() << " " << ordre[k] << endl;
 	}
-      return sortie.str();
+      return out.str();
     }
   
   
@@ -297,7 +297,7 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
     {
       //unsigned long int k;
       int k;
-      ostringstream sortie;
+      ostringstream out;
       vector<unsigned long int> ordre;
       //unsigned long int npairs  =  data_.size();
       int npairs = (int) data_.size();
@@ -311,9 +311,9 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
       hasard_->getShuffledIntegerSequence(npairs, ordre);
       for (k = 0; k < npairs; k++)
 	{
-	  sortie << data_[ ordre[k] - 1 ].persistent_flow() << " " << ordre[k] << endl;
+	  out << data_[ ordre[k] - 1 ].persistent_flow() << " " << ordre[k] << endl;
 	}
-      return sortie.str();
+      return out.str();
     }
   
   
