@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([guinea-pig], [1.4.4], [barbara.dalena@cern.ch])
+AC_INIT([guinea-pig], [1.2.0], [barbara.dalena@cern.ch])
 
 EXTERNAL_CFLAGS="$CFLAGS"
 EXTERNAL_CXXFLAGS="$CXXFLAGS"

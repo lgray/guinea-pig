@@ -568,7 +568,8 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       out <<  "* guineapig++ Version " << PACKAGE_VERSION << endl;
       out <<  "* Program written by Daniel Schulte at DESY and CERN " << endl;
       out <<  "* object oriented by Guy Le Meur at LAL-Orsay " << endl;
-      out <<  "* modified by B. Dalena and J. Esberg CERN " << endl;
+      out <<  "* contributions from C. Rimbault at LAL-Orsay " << endl;
+      out <<  "* B. Dalena, J. Esberg and J. Snuverink at CERN" << endl;
       out <<  "**************************************************** " << endl;
       return out.str();
     }

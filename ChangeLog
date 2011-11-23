@@ -1,3 +1,6 @@
+23-11-2011 Barbara Dalena <barbara.dalena@cern.ch>
+	* fixed version number to 1.2.0
+	* added names of contributors in header
 03-11-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
 	* use english consistently
 27-10-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
