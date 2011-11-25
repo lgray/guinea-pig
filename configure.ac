@@ -46,7 +46,7 @@ CXXFLAGS="$DEFAULT_CXXFLAGS"
 #
 
 CPPFLAGS="$CPPFLAGS -DUSE_NON_CONST"
-CFLAGS="$CFLAGS -ffast-math -fno-keep-inline-functions -Wall -Wundef -Wno-uninitialized -Wno-strict-aliasing -Wno-parentheses -Wno-write-strings -Wno-format"
+CFLAGS="$CFLAGS -ffast-math -fno-keep-inline-functions -Wall -Wundef"
 
 case "$target" in
 i[[3456]]86-*-linux-*)
@@ -56,17 +56,20 @@ i[[3456]]86-*-linux-*)
 ;;
 x86_64-*-linux-*)
   LDFLAGS="$LDFLAGS"
-  CFLAGS="$CFLAGS -fPIC -m64 -DCOMPUTER64b"
-;;
-*-apple-darwin1*)
-  CFLAGS="$CFLAGS -DCOMPUTER64b"
-  LDFLAGS="$LDFLAGS -L/sw/lib"
+  CFLAGS="$CFLAGS -fPIC"
 ;;
 *-apple-darwin*)
   CFLAGS="$CFLAGS"
   LDFLAGS="$LDFLAGS -L/sw/lib"
 ;;
 esac
+
+# Check for 64 bit
+AC_CHECK_SIZEOF([void*])
+
+if SIZEOF_VOID_P=8; then
+   CFLAGS="$CFLAGS -m64 -DCOMPUTER64b"
+fi
 
 # Checks for libraries.
 #
@@ -127,7 +130,6 @@ AC_C_INLINE
 AC_FUNC_MALLOC
 AC_FUNC_STRTOD
 AC_CHECK_FUNCS([floor pow sqrt stpcpy strstr strtol])
-
 
 #
 # last operations before substitutions
