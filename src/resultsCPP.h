@@ -37,8 +37,8 @@ class  RESULTS : public ABSTRACT_IO_CLASS
   double c_vx_2,sig_vx_2,c_vy_2,sig_vy_2;
   double c_vx_1_coh,c_vx_2_coh,c_vy_1_coh,c_vy_2_coh;
   double upsmax;
-
-  
+  vector<double> lumi_ee_step, lumi_ee_high_step;
+  double step_lumi[2];
   
  public:
    
@@ -87,6 +87,24 @@ class  RESULTS : public ABSTRACT_IO_CLASS
       lumi_ee+= x;
     }
   
+   inline void add_lumi_ee_step(double x)
+    {
+      lumi_ee_step.push_back(x);
+    }
+
+  inline void add_lumi_ee_high_step(double x)
+    {
+      lumi_ee_high_step.push_back(x);
+    }
+  inline void add_step_lumi_ee(double x)
+    {
+      step_lumi[0] += x;
+    }
+  inline void add_step_lumi_ee_high(double x)
+    {
+      step_lumi[1] += x;
+    }
+
   inline void add_lumi_ge(double x)
     {
       lumi_ge += x;
@@ -128,21 +146,10 @@ class  RESULTS : public ABSTRACT_IO_CLASS
       lumi_ecm2 += x;
     }
   
-  /*
-    inline void add_temp_1(double x)
-    {
-    temp_1 += x;
-    }
-    inline void add_temp_2(double x)
-    {
-    temp_2 += x;
-    }
-    inline void add_temp_3(double x)
-    {
-    temp_3 += x;
-    }
-  */
-
+  void set_step_lumi_ee(double x){ step_lumi[0] = x; };
+  void set_step_lumi_ee_high(double x) { step_lumi[1] = x; }   
+  double get_step_lumi_ee() { return step_lumi[0]; }
+  double get_step_lumi_ee_high() { return step_lumi[1]; }
   
   
   inline void updateUpsmax(float x) { upsmax=max(upsmax,(double)x);};
@@ -195,12 +202,6 @@ class  RESULTS : public ABSTRACT_IO_CLASS
   void bpm_signal_coherent(const BEAM& beam) ;
 
   
-  virtual inline string name_of_class() const 
-    {
-      return string("RESULTS");
-    }
-  
-
   void output_flow(ostringstream& out ) const ;
   virtual string  output_flow() const ;
 
@@ -246,12 +247,7 @@ class PAIRS_RESULTS : public ABSTRACT_IO_CLASS
        }
    } /* storep_ */
  
- virtual inline string name_of_class() const 
-   {
-     return string("PAIRS_RESULTS");
-   }
- 
- string output_flow() const ;
+ virtual string output_flow() const ;
  
  
 };
@@ -268,14 +264,8 @@ class COMPT_RESULTS : public ABSTRACT_IO_CLASS
   
   COMPT_RESULTS();
   
-  int store_compt(int composante,double e,double px,double py,double pz,double wgt,RNDM& hasard);
+  int store_compt(int composante,double e,double px,double py,double pz,double wgt,RNDM& rndm_generator);
 
-  
-  virtual inline string name_of_class() const 
-    {
-      return string("COMPT_RESULTS");
-    }
-  
   virtual  inline string output_flow() const 
     {
       ostringstream out;
@@ -329,12 +319,6 @@ class JET_RESULTS : public ABSTRACT_IO_CLASS
     {
      sigma_[index] += x;
     }
-  
-  virtual inline string name_of_class() const 
-    {
-      return string("JET_RESULTS");
-    }
-  
   
   virtual inline string output_flow() const 
     {
@@ -422,11 +406,6 @@ class COHERENT_RESULTS : public ABSTRACT_IO_CLASS
       upsmax_ = max(upsmax_, double(ups));
     }
   
-  virtual inline string name_of_class() const 
-    {
-      return string("COHERENT_RESULTS");
-    }
-
   virtual string output_flow() const ;
   
 };
@@ -464,11 +443,6 @@ class TRIDENT_RESULTS : public ABSTRACT_IO_CLASS
       total_energy_ += fabs(ener);
     }
   
-  virtual inline string name_of_class() const 
-    {
-      return string("TRIDENT_RESULTS");
-    }
-
   virtual string output_flow() const ;
   
 };

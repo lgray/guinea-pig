@@ -4,6 +4,7 @@
 #include "IfileInputOutput.h"
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 
 class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
 {
@@ -157,25 +158,34 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
       virtual void save_bhabhasamples(const ABSTRACT_BHABHASAMPLES* const bhabhas)  
 	{
 	  
-	  unsigned int k;
-	  unsigned long rank1_index, rank2_index;
-	  float mother1_en, e1, vx1, vy1, vz1, mother2_en, e2, vx2, vy2, vz2;
+	  unsigned int k, evtIndex;
+	  float eCM, mother1_en, e1, vx1, vy1, vz1, mother2_en, e2, vx2, vy2, vz2;
 	  int nbphot;
 	  for (k=0; k < bhabhas->nb_samples(); k++)
 	    {
-	      bhabhas->get_parameters_for_output(k, rank1_index, mother1_en, e1, vx1, vy1, vz1, rank2_index, mother2_en, e2, vx2, vy2, vz2, nbphot);
-	      outfile_ << rank1_index << " "  << mother1_en << " "  << e1 << " "  << vx1 << " "  << vy1 << " "  << vz1 << " " << rank2_index << " "  << mother2_en << " "  << e2 << " "  << vx2 << " "  << vy2 << " "  << vz2 << " " << nbphot << endl;
+	      bhabhas->get_parameters_for_output(k, evtIndex, eCM, mother1_en, e1, vx1, vy1, vz1, mother2_en, e2, vx2, vy2, vz2, nbphot);
+	      outfile_ << setw(8) << evtIndex << " " << setw(10) << fixed << setprecision(4) << eCM << " ";
+	      outfile_ << setw(10) << setprecision(4) << mother1_en << " " << setw(10) << e1 << " "  << setprecision(6) << setw(10) << vx1 << " "  << setw(10) << vy1 << " "  << setw(10) << vz1 << " ";
+	      outfile_ << setw(10) << setprecision(4) << mother2_en << " " << setw(10) << e2 << " "  << setprecision(6) << setw(10) << vx2 << " "  << setw(10) << vy2 << " "  << setw(10) << vz2 << " ";
+	      outfile_ << setw(4) << nbphot << endl;
 	    }
 	}
       
       
-      virtual bool read_bhabhasamples(ABSTRACT_BHABHASAMPLES* const bhabhas) 
+  virtual bool read_bhabhasamples(ABSTRACT_BHABHASAMPLES* const bhabhas)
 	{
 	  float px1, py1, pz1, e1, px2, py2, pz2, e2;
-	  int nbphot;
-	  while (  infile_ >> px1 >> py1 >> pz1 >> e1 >> px2 >> py2 >> pz2 >> e2 >> nbphot)
+	  unsigned int evtIdx, nbphot;
+	  int i=0;
+	  while (  infile_ >> evtIdx >> px1 >> py1 >> pz1 >> e1 >> px2 >> py2 >> pz2 >> e2 >> nbphot)
 	    {
-	      bhabhas->add_bhabha(px1, py1, pz1, e1, px2, py2, pz2, e2, nbphot);
+/*		  cout << "Read a new bhabha\n";
+		  cout << "P1 = (" << px1 << ", " << py1 << ", " << pz1 << ", " << e1 << ")\n";
+		  cout << "P2 = (" << px2 << ", " << py2 << ", " << pz2 << ", " << e2 << ")\n";
+		  cout << "m1**2 = " << e1*e1 - px1*px1 - py1*py1 - pz1*pz1 << endl;
+		  cout << "m2**2 = " << e2*e2 - px2*px2 - py2*py2 - pz2*pz2 << endl;
+*/	      bhabhas->add_bhabha(evtIdx, px1, py1, pz1, e1, px2, py2, pz2, e2, nbphot);
+	      i++;
 	    }
 	  return true;
 	}
@@ -185,21 +195,22 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
 	  
 	  unsigned int k;
 	  float en, vx, vy, vz;
-	  int num_bhabha;
+	  int evtIndex;
 	  for (k=0; k < bhabhaPhot->nb_samples(); k++)
 	    {
-	      bhabhaPhot->get_parameters_for_output(k,num_bhabha, en, vx, vy, vz);
-	      outfile_ << k+1 << " " << num_bhabha << " " << en << " "  << vx << " "  << vy << " "  << vz << endl;
+	      bhabhaPhot->get_parameters_for_output(k,evtIndex, en, vx, vy, vz);
+	      outfile_ << setw(8) << k+1 << " " << setw(8) << evtIndex << " " << setw(10) << fixed << setprecision(4) << en << " "  << setw(10) << vx << " "  << setw(10) << vy << " "  << setw(10) << vz << endl;
 	    }
 	}
       
-      virtual bool read_bhabhaPhotonsamples(ABSTRACT_BHABHA_PHOTON_SAMPLES* const bhabhasPhoton) 
+    virtual bool read_bhabhaPhotonsamples(ABSTRACT_BHABHA_PHOTON_SAMPLES* const bhabhasPhoton)
 	{
+      int evtIdx;
 	  float px, py, pz, en;
 	  //int nbphot;
-	  while (  infile_ >> px >> py >> pz >> en)
+	  while (infile_ >> evtIdx >> px >> py >> pz >> en)
 	    {
-	      bhabhasPhoton->add_bhabha_photon(px, py, pz, en);
+	      bhabhasPhoton->add_bhabha_photon(evtIdx, px, py, pz, en);
 	    }
 	  return true;
 	}
@@ -278,10 +289,15 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
 	}
       
       virtual void save_object_on_persistent_file(const ABSTRACT_IO_CLASS* const obj)
-	{
-	  outfile_ << obj->persistent_flow() << endl;
-	}
-      
+  	{
+  	  outfile_ << obj->persistent_flow() << endl;
+  	}
+
+      virtual void save_object_on_persistent_file(const int eventIndex, const ABSTRACT_IO_CLASS* const obj)
+  	{
+  	  outfile_ << eventIndex << " " << obj->persistent_flow() << endl;
+  	}
+
 };
 
 

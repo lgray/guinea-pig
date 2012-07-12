@@ -14,7 +14,7 @@ void PAIR_BEAM::distribute_pairs(float delta_z,unsigned int n)
   delta_i=1.0/delta_z;
   if ( n > active_pairs_.size())
     {
-      cout << " PAIR_BEAM::distribute_pairs vecteur trop petit " << endl;
+      cout << " PAIR_BEAM::distribute_pairs vector too small " << endl;
       exit(0);
     }
   for(k=0;k<n;k++) 
@@ -49,9 +49,8 @@ void PAIR_BEAM::move_unactive_pairs(float step)
 }
 
 
-void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& hasard )
+void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator )
 {
-  // float xmin;
   // test if particle energy is above the required minumum 
   if (fabs(energy) < pair_parameter_.get_ecut() )   
     {
@@ -59,8 +58,46 @@ void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int
     }    
 
   // reduce the number of stored particles if requested (to speed up tracking) 
+  if (rndm_generator.rndm_pairs() > ratio)
+    {
+      return;
+    }
 
-  if (hasard.rndm_pairs() > ratio) 
+  // store particles for tracking?
+  if (!tracking  && !saving  ) return;
+
+  float xx,yy,zz,vxx,vyy,vzz;
+
+  mesh.pair_guess_position_in_cell(cellx, celly, min_z, xx, yy, zz,rndm_generator);
+
+  vxx=px/fabs(energy);
+  vyy=py/fabs(energy);
+  vzz=pz/fabs(energy);
+
+  count_pairs_++;
+  PAIR_PARTICLE pair_aux = PAIR_PARTICLE(count_pairs_, index_of_process,xx,yy,zz,vxx,vyy,vzz, energy);
+  // if (store_pairs>1) store particles at production time for comparison
+  if (saving > 1)
+    {
+      pairs0_.push_back(pair_aux);
+    }
+
+  if (tracking)
+    {
+      reserve_.push_back(pair_aux);
+    }
+}
+
+void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator )
+{
+  // test if particle energy is above the required minumum
+  if (fabs(energy) < pair_parameter_.get_ecut() )
+    {
+      return;
+    }
+
+  // reduce the number of stored particles if requested (to speed up tracking)
+  if (rndm_generator.rndm_pairs() > ratio) 
     {
       return;
     }    
@@ -70,14 +107,14 @@ void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int
   
   float xx,yy,zz,vxx,vyy,vzz;
   
-  mesh.pair_guess_position_in_cell(cellx, celly, min_z, xx, yy, zz,hasard);
+  mesh.pair_guess_position_in_cell(cellx, celly, min_z, xx, yy, zz,rndm_generator);
   
   vxx=px/fabs(energy);
   vyy=py/fabs(energy);
   vzz=pz/fabs(energy);
   
   count_pairs_++;
-  PAIR_PARTICLE pair_aux = PAIR_PARTICLE(count_pairs_, index_of_process,xx,yy,zz,vxx,vyy,vzz, energy);
+  PAIR_PARTICLE pair_aux = PAIR_PARTICLE(evtIndex, index_of_process,xx,yy,zz,vxx,vyy,vzz, energy);
   // if (store_pairs>1) store particles at production time for comparison 
   if (saving > 1)
     {
@@ -90,8 +127,8 @@ void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int
     }
 }
 
-// incoherent pair creation : Beit-Wheeler processus
-void PAIR_BEAM::make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,int index_of_process, float eph1,float q2_1,float eorg1, float eph2,float q2_2,float eorg2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& hasard)
+// incoherent pair creation : Breit-Wheeler processus
+void PAIR_BEAM::make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,int index_of_process, float eph1,float q2_1,float eorg1, float eph2,float q2_2,float eorg2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& rndm_generator)
 {
   const double emass_2=EMASS*EMASS,one=1.0;
   double beta,phi;
@@ -117,7 +154,7 @@ void PAIR_BEAM::make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,
   sigma /= niter;
   for (i = 1; i <= niter; ++i)
     {
-      PHYSTOOLS::mkit(gam2i, c, hasard);
+      PHYSTOOLS::mkit(gam2i, c, rndm_generator);
       ptot = sqrt(ecm2 - emass_2);
       pt = sqrt(one - c * c) * ptot;
       pz1 = c * ptot;
@@ -158,7 +195,7 @@ void PAIR_BEAM::make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,
 	    }
 	  break;
 	}
-      phi=2.0*PI*hasard.rndm_pairs();
+      phi=2.0*PI*rndm_generator.rndm_pairs();
       px1=sin(phi)*pt;
       py1=cos(phi)*pt;
       px2=-px1;
@@ -173,24 +210,24 @@ void PAIR_BEAM::make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,
       PHYSTOOLS::lorent(e2,py2,beta_y);
       e2= -e2;
     
-      book_keeping(mesh, index_of_process, e1,px1,py1,pz1, e2, px2,py2,pz2, sigmap,cellx, celly,min_z, switches, hasard );
+      book_keeping(mesh, index_of_process, e1,px1,py1,pz1, e2, px2,py2,pz2, sigmap,cellx, celly,min_z, switches, rndm_generator );
       
       if (switches.get_beam_pair())
 	{
 	  if (eorg1>0.0)
 	    {
-	      book_keeping_p(mesh, index_of_process, eorg1-eph1,sigmap,cellx, celly,min_z,switches, hasard );
+	      book_keeping_p(mesh, index_of_process, eorg1-eph1,sigmap,cellx, celly,min_z,switches, rndm_generator );
 	    }
 	  if (eorg2>0.0)
 	    {
-	      book_keeping_p(mesh,index_of_process, -(eorg2-eph2),sigmap,cellx, celly,min_z,switches,hasard );
+	      book_keeping_p(mesh,index_of_process, -(eorg2-eph2),sigmap,cellx, celly,min_z,switches,rndm_generator );
 	    }
 	}
     }
 } /* pair_bw */
 
 
-void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float eph1,float q2_1,float eph2,float q2_2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& hasard)
+void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float eph1,float q2_1,float eph2,float q2_2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& rndm_generator)
 {
   const double mumass_2=MUMASS*MUMASS,one=1.0;
   double beta,phi;
@@ -215,7 +252,7 @@ void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, i
   sigma /= niter;
   for (i = 1; i <= niter; ++i)
     {
-      PHYSTOOLS::mkit(gam2i, c, hasard);
+      PHYSTOOLS::mkit(gam2i, c, rndm_generator);
       ptot = sqrt(ecm2 - mumass_2);
       pt = sqrt(one - c * c) * ptot;
       pz1 = c * ptot;
@@ -250,7 +287,7 @@ void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, i
 	}
 	break;
       }
-      phi=2.0*PI*hasard.rndm_pairs();
+      phi=2.0*PI*rndm_generator.rndm_pairs();
       px1=sin(phi)*pt;
       py1=cos(phi)*pt;
       px2=-px1;
@@ -263,14 +300,14 @@ void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, i
       PHYSTOOLS::lorent(e2,py2,beta_y);
       e2= -e2;
 
-      book_keeping_muon(mesh,index_of_process, e1,px1,py1,pz1, e2, px2,py2,pz2, sigmap,cellx, celly,min_z, switches, hasard );
+      book_keeping_muon(mesh,index_of_process, e1,px1,py1,pz1, e2, px2,py2,pz2, sigmap,cellx, celly,min_z, switches, rndm_generator );
       
     }
 } /* make_muon */
 
 
 
-void PAIR_BEAM::load_events(int time_counter,float ratio, int tracking, RNDM& hasard)
+void PAIR_BEAM::load_events(int time_counter,float ratio, int tracking, RNDM& rndm_generator)
 {
   float e,x,y,z,vx,vy,vz;
   string ligne;
@@ -285,7 +322,7 @@ void PAIR_BEAM::load_events(int time_counter,float ratio, int tracking, RNDM& ha
 	{
 	  if (tt >> e >> x >> y >> z >> vx >> vy >> vz)
 	    {
-	      new_event(e, x, y, z, vx, vy, vz,ratio, tracking, hasard);
+	      new_event(e, x, y, z, vx, vy, vz,ratio, tracking, rndm_generator);
 	    }
 	  else 
 	    {
@@ -307,7 +344,7 @@ void PAIR_BEAM::load_events(int time_counter,float ratio, int tracking, RNDM& ha
       else 
 	{
 	  if (ss >> e >> x >> y >> z >> vx >> vy >> vz)
-	      new_event(e, x, y, z, vx, vy, vz, ratio, tracking, hasard);
+	      new_event(e, x, y, z, vx, vy, vz, ratio, tracking, rndm_generator);
 	  else
 	    {
 	      cerr << " PAIR_BEAM::load_events: error reading load event on file " << endl;
@@ -396,7 +433,7 @@ void  PAIR_PARAMETER::init(BEAM& beam1, BEAM& beam2, int massflag, float pair_ec
   }
 }
 
-void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q2,float& wgt, RNDM& hasard) const
+void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q2,float& wgt, RNDM& rndm_generator) const
 {
   const float emass2=EMASS*EMASS,eps=1e-30;
   float help,q2max,q2min,lnx,x,qxmin;
@@ -405,7 +442,7 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
     {
     case 1:
       q2max=1.0;
-      eph=(1.0-xmin)*hasard.rndm_equiv()+xmin;
+      eph=(1.0-xmin)*rndm_generator.rndm_equiv()+xmin;
       help=1.0-eph;
       if (help<=eps){
 	  eph=0.0;
@@ -419,21 +456,21 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
 	   *log(q2max/q2min)
 	   /lns4*(1.0-xmin);
       wgt=max(float(0.0),wgt);
-      q2= q2min*pow(q2max/q2min,hasard.rndm_equiv());
+      q2= q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
       eph *= e;
       return;
     case 2:
-      eph=(1.0-xmin)*hasard.rndm_equiv()+xmin;
+      eph=(1.0-xmin)*rndm_generator.rndm_equiv()+xmin;
       help=1.0 - eph;
       q2min=emass2;
       wgt=-0.5*(1.0+(help*help)) / (eph*log(xmin))*(1.0-xmin);
       wgt=max(float(0.0),wgt);
-      q2= q2min*pow(e*e/q2min,hasard.rndm_equiv());
+      q2= q2min*pow(e*e/q2min,rndm_generator.rndm_equiv());
       eph *= e;
       return;
     case 3:
       q2max=1.0;
-      eph = (1.0-xmin)*hasard.rndm_equiv()+xmin;
+      eph = (1.0-xmin)*rndm_generator.rndm_equiv()+xmin;
       help=1.0 - eph;
       if (help<=eps){
 	  eph=0.0;
@@ -447,11 +484,11 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
 	   *log(q2max/q2min)
 	   /lns4*(1.0-xmin);
       wgt=max(float(0.0),wgt);
-      q2= q2min*pow(q2max/q2min,hasard.rndm_equiv());
+      q2= q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
       eph *= e;
       return;
     case 4:
-      eph=(1.0-xmin)*hasard.rndm_equiv()+xmin;
+      eph=(1.0-xmin)*rndm_generator.rndm_equiv()+xmin;
       help=1.0 - eph;
       if (help<=0.0){
 	  eph=0.0;
@@ -465,30 +502,30 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
 	   *(lns4-log(qxmin))
 	   /lns4*(1.0-xmin);
       wgt=max(float(0.0),wgt);
-      q2= q2min*pow(e*e/q2min,hasard.rndm_equiv());
+      q2= q2min*pow(e*e/q2min,rndm_generator.rndm_equiv());
       eph*=e;
       return;
     case 5:
-	if(hasard.rndm_equiv()<0.5){
-	    lnx=-sqrt(hasard.rndm_equiv())
+	if(rndm_generator.rndm_equiv()<0.5){
+	    lnx=-sqrt(rndm_generator.rndm_equiv())
 		*lns4;
 	    x=exp(lnx);
 	    q2min=x*x*emass2;
 	    q2max=emass2;
 	}
 	else{
-	    lnx=-hasard.rndm_equiv()*lns4;
+	    lnx=-rndm_generator.rndm_equiv()*lns4;
 	    x=exp(lnx);
 	    q2min=emass2;
 	    q2max=s4;
 	}
-	if((1.0+(1.0-x)*(1.0-x))*0.5<hasard.rndm_equiv()){
+	if((1.0+(1.0-x)*(1.0-x))*0.5<rndm_generator.rndm_equiv()){
 	    eph=0.0;
 	    q2=0.0;
 	}
 	else{
 	    eph=e*x;
-	    q2=q2min*pow(q2max/q2min,hasard.rndm_equiv());
+	    q2=q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
 	}
 	if (q2*(1.0-x)<x*x*emass2) eph=0.0;
 	return;

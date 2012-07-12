@@ -45,28 +45,29 @@ class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
       numero_bhabha = numero_bhabha_[numero];
     }
   
-  virtual inline void add_bhabha_photon(float px, float py, float pz, float en) 
+  virtual inline void add_bhabha_photon(int nbhabha, float px, float py, float pz, float en)
     {
       QUADRIVECTOR bhab_phot = QUADRIVECTOR(px,py,pz,en);
-      numero_bhabha_.push_back(-1);
+      numero_bhabha_.push_back(nbhabha);
       bhabha_photons_.push_back(bhab_phot);
     }
   
   
   inline void set_label(int label)  {label_ = label;}
   
-  inline void create_bhabha_photon(int numero_bhabha, float px, float py, float pz, float en) 
+/*  inline void create_bhabha_photon(int numero_bhabha, float px, float py, float pz, float en)
     {
       QUADRIVECTOR bhab_phot = QUADRIVECTOR(px,py,pz,en);
       bhabha_photons_.push_back(bhab_phot);
       numero_bhabha_.push_back(numero_bhabha);
     }
-  
-  inline void set_numero_bhabha(int index, int num)
+*/
+/* This function shouldn't exist - no changing the number of bhabha after loading
+    inline void set_numero_bhabha(int index, int num)
     {
       numero_bhabha_[index] = num;
     }
-  
+*/
   inline  int load(string bhabhaPhotonFIleIni)
     {
       FILE_IN_OUT filin;
@@ -78,12 +79,12 @@ class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
   
   bool pick_next(float ecmratio, float& en,float& px,float& py,float& pz, int& found)  ; 
   
-  inline  void set(int index, float en,float px,float py,float pz, int numero_bhabha)
+/*  inline  void set(int index, float en,float px,float py,float pz, int numero_bhabha)
     {
       bhabha_photons_[index].set(px, py, pz, en);
       numero_bhabha_[index] = numero_bhabha;
     }
-  
+*/
   inline void save_on_file(string nameOfOutputFile) const 
     {
       FILE_IN_OUT filout;
@@ -98,9 +99,9 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
   
   typedef struct
   {
-    
     QUADRIVECTOR p1, p2;
-    float mother1,mother2;
+    float mother1,mother2,eCM;
+    unsigned int evtIndex;
     int nbphot;
   } BHABHA_INI;
   
@@ -115,17 +116,17 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
   virtual  ~BHABHASAMPLES() {;}
   
   
-  virtual inline void get_parameters_for_output(unsigned int numero, unsigned long& rank1_index, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, unsigned long& rank2_index, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const
+  virtual inline void get_parameters_for_output(unsigned int numero, unsigned int& evtIdx, float& eCM, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const
     {
       float px, py, pz;
       
       if (numero >= next_)
-	{
-	  cerr << " WARNING : BHABHASAMPLES::get_parameters_for_output: numero of bhabha_prod to save is out of range numero = " << numero << " next_= " << next_  << endl;
-	  return;
-	}
-      rank1_index = 2*numero+1;
-      rank2_index = rank1_index+1;
+		{
+		  cerr << " WARNING : BHABHASAMPLES::get_parameters_for_output: numero of bhabha_prod to save is out of range numero = " << numero << " next_= " << next_  << endl;
+		  return;
+		}
+      evtIdx = bhabha_[numero].evtIndex;
+      eCM = bhabha_[numero].eCM;
       mother1_en = bhabha_[numero].mother1;
       mother2_en = bhabha_[numero].mother2;
       
@@ -142,12 +143,12 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
       vy2=py/abs(e2);
       vz2=pz/abs(e2); 
       nbphot = bhabha_[numero].nbphot;
- }
+    }
  
   virtual inline unsigned int nb_samples() const {return next_;}
   
 
-  bool pick_next_bhabha(float e1, float e2, float ecmratio, float& px1,float& py1,float& pz1, float& en1,float& px2,float& py2,float& pz2,float& en2, int& nbphot, int& numero_bhabha); 
+  bool pick_next_bhabha(float e1, float e2, float ecmratio, float eCM, float& px1,float& py1,float& pz1, float& en1,float& px2,float& py2,float& pz2,float& en2, int& nbphot, unsigned int& numero_bhabha);
   
   
   inline void save_on_file(string nameOfOutputFile) const 
@@ -158,12 +159,13 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
       filout.close();
     }
   
-  virtual inline void add_bhabha(float px1, float py1, float pz1, float e1, float px2, float py2, float pz2, float e2, int nbphot)
+  virtual inline void add_bhabha(unsigned int evtIdx, float px1, float py1, float pz1, float e1, float px2, float py2, float pz2, float e2, int nbphot)
     {
       BHABHA_INI bhab;
       bhab.p1 = QUADRIVECTOR(px1,py1,pz1,e1);
       bhab.p2 = QUADRIVECTOR(px2,py2,pz2,e2);
       bhab.nbphot = nbphot;
+      bhab.evtIndex = evtIdx;
       bhabha_.push_back(bhab);
     }
   
@@ -191,17 +193,65 @@ class BHABHA
   /********************************************************/
   /*!boost bhabha from CM frame of e+e- (P1P2) to lab frame*/
   /********************************************************/
-  void bhabha_rotation(float theta, float phi, float& px1, float& py1, float& pz1)
+  void bhabha_rotation(float theta, float phi, float& px, float& py, float& pz)
     {
-      float px,py,pz;
-      px=px1;
-      py=py1;
-      pz=pz1;
-      px1 = cos(theta)*cos(phi)*px-sin(phi)*py+sin(theta)*cos(phi)*pz;
-      py1 = cos(theta)*sin(phi)*px+cos(phi)*py+sin(theta)*sin(phi)*pz;
-      pz1 = -sin(theta)*px+cos(theta)*pz;
+      double pxin=px;
+      double pyin=py;
+      double pzin=pz;
+      double costh = cos(theta);
+      double sinth = sin(theta);
+      double cosphi = cos(phi);
+      double sinphi = sin(phi);
+      px = costh*cosphi*pxin-sinphi*pyin+sinth*cosphi*pzin;
+      py = costh*sinphi*pxin+cosphi*pyin+sinth*sinphi*pzin;
+      pz = -sinth*pxin+costh*pzin;
     }
   
+  int fourboost(float &en, float &px, float &py, float &pz, double beta_x, double beta_y, double beta_z)
+  {
+		double ein = en;
+		double pxin = px;
+		double pyin = py;
+		double pzin = pz;
+		double check_invar_mass = ein*ein - pxin*pxin - pyin*pyin - pzin*pzin;
+
+		double betasq = beta_x*beta_x + beta_y*beta_y + beta_z*beta_z;
+
+		if(1. - betasq < 1.e-20)
+		{
+			printf("Boost too far in fourboost. beta = (%f, %f, %f)\n", beta_x, beta_y, beta_z);
+			px = py = pz = en = 0;
+			return -1;
+		}
+
+		double gamma = 1./sqrt(1.- betasq);
+		double gm1 = gamma - 1.;
+		double Bxx = gm1*beta_x*beta_x/betasq;
+		double Bxy = gm1*beta_x*beta_y/betasq;
+		double Bxz = gm1*beta_x*beta_z/betasq;
+		double Byy = gm1*beta_y*beta_y/betasq;
+		double Byz = gm1*beta_y*beta_z/betasq;
+		double Bzz = gm1*beta_z*beta_z/betasq;
+
+		double enout = gamma*(ein - beta_x*pxin - beta_y*pyin - beta_z*pzin);
+		double pxout = -gamma*beta_x*ein + (Bxx+1.)*pxin + Bxy*pyin + Bxz*pzin;
+		double pyout = -gamma*beta_y*ein + Bxy*pxin + (Byy+1.)*pyin + Byz*pzin;
+		double pzout = -gamma*beta_z*ein + Bxz*pxin + Byz*pyin + (Bzz+1.)*pzin;
+		en = enout; px = pxout; py = pyout; pz = pzout;
+
+		double end_invar_mass = enout*enout - pxout*pxout - pyout*pyout - pzout*pzout;
+
+		if(fabs(check_invar_mass) > 1. || fabs(end_invar_mass) > 1. || fabs(check_invar_mass - end_invar_mass)>1.)
+		{
+			printf("Start invariant mass: %f\n", check_invar_mass);
+			printf("End invariant mass: %f\n", end_invar_mass);
+			return -2;
+		}
+
+		return 0;
+  }
+
+/*
   void lorent_bhabha(float e1,float e2,float pz1,float pz2,float& e,float& pz)
     {
       float beta, eold, gam;
@@ -215,7 +265,6 @@ class BHABHA
   
   void lorent_bhabha_back(float& e,float& pl,float beta)
     {
-      /* +beta because want to transform back */
       float gamma,eold;
       gamma=1.0/sqrt(1.0-beta*beta);
       eold=e;
@@ -231,16 +280,16 @@ class BHABHA
       
       theta=asin(sqrt(partVx*partVx+partVy*partVy));
       if(abs(theta)<0.00001)
-	{
-	  phi=0.;
-	}
+		{
+		  phi=0.;
+		}
       else
-	{
-	  cosphi=partVx/sin(theta);
-	  sinphi=partVy/sin(theta);
-	  if(sinphi>0.) phi=acos(cosphi);
-	  if(sinphi<0.) phi=2*PI-acos(cosphi);
-	}
+		{
+		  cosphi=partVx/sin(theta);
+		  sinphi=partVy/sin(theta);
+		  if(sinphi>0.) phi=acos(cosphi);
+		  if(sinphi<0.) phi=2*PI-acos(cosphi);
+		}
     }
   
   void lorent_bhabha_transformation(float e1, float e2, float pz1, float pz2,float beta_x, float beta_y, float theta, float phi, float& pxin,float& pyin,float& pzin,float& ein)
@@ -251,6 +300,7 @@ class BHABHA
       lorent_bhabha_back( ein,pyin,beta_y);
       bhabha_rotation(theta,phi,pxin,pyin,pzin);
     }
+*/
   void boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float part2Vy,float e1, float e2, float& px1in,float& py1in,float& pz1in,float& e1in,float& px2in,float& py2in,float& pz2in,float& e2in, int nphot, float ecmratio,  int do_bhabha, int numero_bhabha);
   
  public:
@@ -260,30 +310,29 @@ class BHABHA
   
   inline void load_samples(int do_bhabhas, string bhabha_samples, string bhabha_photon_samples)
     {
+	  cout << "Loading Bhabha samples\n";
       nbhabha_ini_ = bhabhaReserve_.load_bhabha(bhabha_samples);
       if (do_bhabhas > 1) 
-	{
-	  nbhabha_photon_ini_ =  bhabhaPhotonReserve_.load(bhabha_photon_samples);
-	}
+		{
+    	  cout << "Loading Bhabha photons\n";
+		  nbhabha_photon_ini_ =  bhabhaPhotonReserve_.load(bhabha_photon_samples);
+		}
     }
   
-  inline void make_bhabha(PAIR_BEAM& bhabhas, float part1Vx, float part1Vy, float part2Vx, float part2Vy, float e1, float e2,float ecm, float weight, MESH& mesh, int cellx, int celly,float min_z, const SWITCHES& switches, RNDM& hasard)
+  inline void make_bhabha(PAIR_BEAM& bhabhas, float part1Vx, float part1Vy, float part2Vx, float part2Vy, float e1, float e2,float ecm, float weight, MESH& mesh, int cellx, int celly,float min_z, const SWITCHES& switches, RNDM& rndm_generator)
     {
-      double bhabhan;
-      float ecmratio;
       float px1, py1, pz1, en1, px2, py2, pz2, en2;
-      int nbphot, numero_bhabha;
-      ecmratio = ecm/switches.get_bhabha_ecmload();
-      bhabhan = switches.get_bhabha_scal()*weight/(ecmratio*ecmratio);
-      if (hasard.rndm()< bhabhan)
+      int nbphot;
+      unsigned int evtIndex;
+      float ecmratio = ecm/switches.get_bhabha_ecmload();
+      double bhabhan = switches.get_bhabha_scal()*weight*std::pow(float(ecmratio*ecmratio),float(-.9891));
+      if (rndm_generator.rndm()< bhabhan)
 	{
-	  if (	bhabhaReserve_.pick_next_bhabha(e1, e2, ecmratio, px1, py1, pz1, en1, px2, py2, pz2, en2, nbphot, numero_bhabha) )
+	  if (	bhabhaReserve_.pick_next_bhabha(e1, e2, ecmratio, ecm, px1, py1, pz1, en1, px2, py2, pz2, en2, nbphot, evtIndex) )
 	    {
-	      boost_bhabha(part1Vx, part1Vy, part2Vx, part2Vy, e1, e2, px1, py1, pz1, en1, px2, py2, pz2, en2, nbphot, ecmratio, switches.get_do_bhabhas(), numero_bhabha);
-	      //bhabhas.new_pair(mesh, cellx, celly,min_z, -1, en1, px1, py1,pz1, switches.get_bhabha_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), hasard );  
-	      //bhabhas.new_pair(mesh, cellx, celly, min_z, -1, en2, px2, py2,pz2, switches.get_bhabha_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), hasard );
-	      bhabhas.new_pair(mesh, cellx, celly, min_z, -1, en1, px1, py1,pz1, switches.get_bhabha_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), hasard );  
-	      bhabhas.new_pair(mesh, cellx, celly, min_z, -1, en2, px2, py2,pz2, switches.get_bhabha_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), hasard );
+	      boost_bhabha(part1Vx, part1Vy, part2Vx, part2Vy, e1, e2, px1, py1, pz1, en1, px2, py2, pz2, en2, nbphot, ecmratio, switches.get_do_bhabhas(), evtIndex);
+	      bhabhas.new_pair(evtIndex, mesh, cellx, celly, min_z, -1, en1, px1, py1,pz1, switches.get_bhabha_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator );
+	      bhabhas.new_pair(evtIndex, mesh, cellx, celly, min_z, -1, en2, px2, py2,pz2, switches.get_bhabha_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator );
 	    }
 	}
     }
@@ -296,13 +345,16 @@ class BHABHA
     }
   inline void save_on_files(int do_bhabhas, string bhabha_prod, string bhphoton_prod, string bhphotons) const
     {
+	  cout << "Saving Bhabha samples in " << bhabha_prod << endl;
       bhabhaReserve_.save_on_file(bhabha_prod);
       //     bhabhaSamples_.save_on_file_pour_C(string("bhabhaIniPourC"));
       if (do_bhabhas == 2)
-	{
-	  bhabhaPhotonReserve_.save_on_file(bhphoton_prod);
-	  boostedBhabhaPhotons_.save_on_file(bhphotons);
-	}
+		{
+    	  cout << "Saving Bhabha photon samples in " << bhphoton_prod << endl;
+		  bhabhaPhotonReserve_.save_on_file(bhphoton_prod);
+    	  cout << "Saving boosted Bhabha photons in " << bhphotons << endl;
+		  boostedBhabhaPhotons_.save_on_file(bhphotons);
+		}
     }
 };
 

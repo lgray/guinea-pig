@@ -31,17 +31,11 @@ class LUMI_PAIR : public ABSTRACT_IO_CLASS
   ~LUMI_PAIR() {;}
   
   
-  inline void random_position(const MESH& mesh, int cellx, int celly,float min_z, RNDM& hasard)
+  inline void random_position(const MESH& mesh, int cellx, int celly,float min_z, RNDM& rndm_generator)
     {
-      mesh.guess_position_in_cell(cellx, celly,min_z, x_, y_, z_, hasard);
+      mesh.guess_position_in_cell(cellx, celly,min_z, x_, y_, z_, rndm_generator);
     }
    
-  
-  virtual inline string name_of_class() const 
-    {
-      return string("LUMI_PAIR");
-    }
-  
   virtual string output_flow() const 
     {
       ostringstream out;
@@ -124,12 +118,6 @@ protected :
       t = t_;
     }
   
-  virtual inline string name_of_class() const 
-    {
-      return string("LUMI_PAIR_EE");
-    }
-  
-  
   virtual string persistent_flow() const
     {
       ostringstream out;
@@ -145,19 +133,19 @@ class GENERAL_LUMI_HEAP : public ABSTRACT_LUMI_HEAP
 {
   protected : 
     
-    RNDM* hasard_;
+    RNDM* rndm_generator_;
   
   int nmax_;
   int nb_pairs_;
   float p_;
   
   public : 
-    GENERAL_LUMI_HEAP()  { hasard_ = NULL;}
+    GENERAL_LUMI_HEAP()  { rndm_generator_ = NULL;}
   
   
-  GENERAL_LUMI_HEAP(int nmax, float p, RNDM* hasard)
+  GENERAL_LUMI_HEAP(int nmax, float p, RNDM* rndm_generator)
     {
-      hasard_ = hasard;
+      rndm_generator_ = rndm_generator;
       nmax_ = nmax;
       p_ = p;
       nb_pairs_ = 0;
@@ -165,7 +153,7 @@ class GENERAL_LUMI_HEAP : public ABSTRACT_LUMI_HEAP
   
   inline bool random_ok() const
     {
-      return hasard_ != NULL;
+      return rndm_generator_ != NULL;
     }
   
   
@@ -177,11 +165,11 @@ class GENERAL_LUMI_HEAP : public ABSTRACT_LUMI_HEAP
       int nstore;
       nstore=(int)store;
       store -= nstore;
-      if (hasard_->rndm() <= store) nstore++;
+      if (rndm_generator_->rndm() <= store) nstore++;
       return nstore;
     }
   
-  int stack_vector(int nstore, vector<int>& selectionned_indices);
+  int stack_vector(int nstore, vector<int>& selected_indices);
   
   
 };
@@ -196,7 +184,7 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
   
   LUMI_HEAP(): GENERAL_LUMI_HEAP() {;};
   
-  LUMI_HEAP( int nmax, float p, RNDM* hasard) : GENERAL_LUMI_HEAP( nmax,p, hasard)
+  LUMI_HEAP( int nmax, float p, RNDM* rndm_generator) : GENERAL_LUMI_HEAP( nmax,p, rndm_generator)
     {
       data_.reserve(nmax_);
     }
@@ -214,13 +202,6 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
   
   virtual inline void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2, int& t) const {;}
   
-
-  virtual inline string name_of_class() const 
-    {
-      return string("LUMI_HEAP");
-    }
-
-  
   virtual string persistent_flow() const
     {
       //unsigned long int k;
@@ -236,7 +217,7 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
 	  exit(0);
 	}
       
-      hasard_->getShuffledIntegerSequence(npairs, ordre);
+      rndm_generator_->getShuffledIntegerSequence(npairs, ordre);
       for (k = 0; k < npairs; k++)
 	{
 	  out << data_[ordre[k] - 1 ].persistent_flow() << " " << ordre[k] << endl;
@@ -269,7 +250,7 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
     
     LUMI_HEAP_EE() : GENERAL_LUMI_HEAP() {;}
   
-  LUMI_HEAP_EE( int nmax, float p, RNDM* hasard) : GENERAL_LUMI_HEAP( nmax,p, hasard)
+  LUMI_HEAP_EE( int nmax, float p, RNDM* rndm_generator) : GENERAL_LUMI_HEAP( nmax,p, rndm_generator)
     {
       data_.reserve(nmax_);
     }
@@ -287,12 +268,6 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
       /*      cout << sx2 << " " << sy2 << " " << sz2 << endl; */
     }
   
-  virtual inline string name_of_class() const 
-    {
-  return string("LUMI_HEAP_EE");
-    }
-  
-
   virtual string persistent_flow() const
     {
       //unsigned long int k;
@@ -308,7 +283,7 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
 	  cerr << " LUMI_HEAP_EE problem avec npombre de paires npairs = " << npairs << " nb_pairs_ = " << nb_pairs_ << endl;
 	  exit(0);
 	}
-      hasard_->getShuffledIntegerSequence(npairs, ordre);
+      rndm_generator_->getShuffledIntegerSequence(npairs, ordre);
       for (k = 0; k < npairs; k++)
 	{
 	  out << data_[ ordre[k] - 1 ].persistent_flow() << " " << ordre[k] << endl;

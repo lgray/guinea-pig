@@ -1,9 +1,6 @@
 #include "timerCPP.h"
 #include <iostream>
-#include "LesDefines.h"
 
-
-using namespace std;
 TIMER::TIMER()
 {
   int i;
@@ -28,7 +25,7 @@ void TIMER::add_timer(int i)
 
 void TIMER::print_timer(int i)
 {
-  cout << "timer no " << i << " :  " << (timer_store[i]-zero_clock)/CLK_TCK << endl;
+  std::cout << "timer no " << i << " :  " << (float)(timer_store[i]-zero_clock)/CLOCKS_PER_SEC << " s " << std::endl;
 }
 
 /* prints all the timers to stdout */
@@ -38,5 +35,5 @@ void TIMER::print_timer_all(int n)
   int i;
   int sum=0;
   for(i=0;i<=n;i++) sum+=(int)(timer_store[i]-zero_clock);
-cout << "timer sum : " << (float)sum/CLK_TCK << endl;
+  std::cout << "timer sum : " << (float)sum/CLOCKS_PER_SEC << std::endl;
 }

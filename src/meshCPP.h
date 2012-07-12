@@ -29,18 +29,18 @@ MESH(float delta_x, float delta_y, float delta_z, float offset_x, float offset_y
 
 
 
-inline void guess_position_in_cell(int cell_x, int cell_y, float min_z, float& x,float& y, float& z, RNDM& hasard) const
+inline void guess_position_in_cell(int cell_x, int cell_y, float min_z, float& x,float& y, float& z, RNDM& rndm_generator) const
 {
-    z=(min_z + hasard.rndm())*delta_z_;
-    x=(cell_x + hasard.rndm() - offset_x_)*delta_x_;
-    y=(cell_y + hasard.rndm() - offset_y_)*delta_y_;
+    z=(min_z + rndm_generator.rndm())*delta_z_;
+    x=(cell_x + rndm_generator.rndm() - offset_x_)*delta_x_;
+    y=(cell_y + rndm_generator.rndm() - offset_y_)*delta_y_;
 }
 
-inline void pair_guess_position_in_cell(int cell_x, int cell_y, float min_z, float& x,float& y, float& z, RNDM& hasard) const
+inline void pair_guess_position_in_cell(int cell_x, int cell_y, float min_z, float& x,float& y, float& z, RNDM& rndm_generator) const
 {
-    z=(min_z + hasard.rndm_pairs())*delta_z_;
-    x=(cell_x + hasard.rndm_pairs() - offset_x_)*delta_x_;
-    y=(cell_y + hasard.rndm_pairs() - offset_y_)*delta_y_;
+    z=(min_z + rndm_generator.rndm_pairs())*delta_z_;
+    x=(cell_x + rndm_generator.rndm_pairs() - offset_x_)*delta_x_;
+    y=(cell_y + rndm_generator.rndm_pairs() - offset_y_)*delta_y_;
 }
 
 };

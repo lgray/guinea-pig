@@ -51,7 +51,7 @@ class COMPT : public ABSTRACT_IO_CLASS
       return sigc;
     }
 
-  double compt_select(float sp, RNDM& hasard)
+  double compt_select(float sp, RNDM& rndm_generator)
     {
       double cmin,cmax,c,y,ym,x;
       x=sp/(EMASS*EMASS);
@@ -59,7 +59,7 @@ class COMPT : public ABSTRACT_IO_CLASS
       ym=x/(x+1.0);
       cmin=compt_int(0.0);
       cmax=compt_int(ym);
-      y=hasard.rndm();
+      y=rndm_generator.rndm();
       c=cmin+(cmax-cmin)*y;
       y*=ym;
       TOOLS::equal_newton(&COMPT::compt_int,&COMPT::compt_diff,0.0,ym,c,y);
@@ -109,16 +109,8 @@ class COMPT : public ABSTRACT_IO_CLASS
       compton_phot_file_->open_file(name, "w");
     }
   
-  void compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BEAM& secondaries, int index_of_process,float epart,float ephot,float q2,float vx,float vy,float wgt, int dir,SWITCHES& switches, RNDM& hasard);
-  
-  
-  
-  virtual inline string name_of_class() const 
-    {
-      return string("COMPT");
-    }
-  
-  
+  void compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BEAM& secondaries, int index_of_process,float epart,float ephot,float q2,float vx,float vy,float wgt, int dir,SWITCHES& switches, RNDM& rndm_generator);
+    
   virtual inline string  output_flow() const 
     {
       ostringstream out;
@@ -320,13 +312,6 @@ class mCROSS  : public GENERAL_CROSS
       delete [] store;
     }
   
-  
-  virtual inline string name_of_class() const 
-    {
-      return string("mCROSS");
-    }
-
-  
   virtual string output_flow() const 
     {
       ostringstream out;
@@ -397,13 +382,6 @@ class maverCROSS : public mCROSS
       delete [] store;
       cross_call_++;
     }
-  
-  
-  virtual inline string name_of_class() const 
-    {
-      return string("maverCROSS");
-    }
-  
   
   virtual string output_flow() const 
     {
@@ -488,12 +466,6 @@ class CROSS  : public GENERAL_CROSS
      cross_call_++;
    }
  
- virtual inline string name_of_class() const 
-   {
-     return string("CROSS");
-   }
-
- 
  virtual string output_flow() const 
    {
      ostringstream out;
@@ -543,13 +515,6 @@ class averCROSS : public CROSS
     cross_call_++;
   }
 
- 
- virtual inline string name_of_class() const 
-   {
-  return string("averCROSS");
-   }
- 
- 
  virtual string output_flow() const 
    {
      ostringstream out;

@@ -5,7 +5,7 @@
 double COMPT::x_compt_ = 0.0;
 
 /* px and py are beta_x and beta_y at input */
-void COMPT::compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BEAM& secondaries, int index_of_process, float epart,float ephot,float q2,float vx,float vy,float wgt, int dir, SWITCHES& switches, RNDM& hasard)
+void COMPT::compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BEAM& secondaries, int index_of_process, float epart,float ephot,float q2,float vx,float vy,float wgt, int dir, SWITCHES& switches, RNDM& rndm_generator)
 {
   double tmp,y,scal,theta_g,theta_e,x,e,pz,pt,phi_e,s,px,py;
   int n,i;
@@ -29,7 +29,7 @@ void COMPT::compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BE
   x=4.0*ephot*epart/(EMASS*EMASS);
   for (i=0;i<n;i++) 
     {
-      y=compt_select(s, hasard);
+      y=compt_select(s, rndm_generator);
       if (scal>eps)
 	{
 	  theta_g=EMASS/epart*sqrt((x-(x+1.0)*y)/y);
@@ -42,7 +42,7 @@ void COMPT::compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BE
 	      px=vx*e;
 	      py=vy*e;
 	      pt=theta_e*e;
-	      phi_e=2.0*PI*hasard.rndm();
+	      phi_e=2.0*PI*rndm_generator.rndm();
 	      px += pt*sin(phi_e);
 	      py += pt*cos(phi_e);
 	      pz=sqrt(e*e-px*px-py*py-EMASS*EMASS);
@@ -51,10 +51,10 @@ void COMPT::compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BE
 		  e = -e;
 		  pz = -pz;
 		}
-	      if(compt_results_.store_compt(index_of_process, e,px,py,pz,scal,hasard)) 
+	      if(compt_results_.store_compt(index_of_process, e,px,py,pz,scal,rndm_generator)) 
 		{
-// 		 secondaries.new_pair(mesh, cellx, celly,min_z,index_of_process, e,px,py,pz, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), hasard);
-		 secondaries.new_pair(mesh, cellx, celly,min_z,index_of_process, e,px,py,pz, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), hasard);
+// 		 secondaries.new_pair(mesh, cellx, celly,min_z,index_of_process, e,px,py,pz, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), rndm_generator);
+		 secondaries.new_pair(mesh, cellx, celly,min_z,index_of_process, e,px,py,pz, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
 		  if (theta_e>0.1) 
 		    {
 		      pt=0.0;

@@ -227,7 +227,7 @@ class PHYSTOOLS
     }
   
   
-  static void mkit(double gam2i,double& c, RNDM& hasard);
+  static void mkit(double gam2i,double& c, RNDM& rndm_generator);
   
   inline static float synrad_p0(float eng,float dzOnRadius) 
     {
@@ -248,13 +248,13 @@ class PHYSTOOLS
   static double fradu0(double ups);
   static double fradsp(double ups);
   
-  static float synrad_spin_flip (float upsilonSingleP, float eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3,TRIDVECTOR& polar, float dzOnRadius,vector<float>& photon, RNDM& hasard);
-  static float synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius, vector<float>&  photon, RNDM& hasard); 
-  static float synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOnRadius,vector<float>& photon, RNDM& hasard);
+  static float synrad_spin_flip (float upsilonSingleP, float eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3,TRIDVECTOR& polar, float dzOnRadius,vector<float>& photon, RNDM& rndm_generator);
+  static float synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius, vector<float>&  photon, RNDM& rndm_generator); 
+  static float synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOnRadius,vector<float>& photon, RNDM& rndm_generator);
   
-  static int synrad_0_no_spin_flip (float upsilonSingleP,float eng,float dzOnRadius,float* x, RNDM& hasard);
-  static int synrad_0_spin_flip (float upsilonSingleP,float eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius,float* x, RNDM& hasard);
-  static int synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& stokes, float dzOnRadius,float* photonEnergy, RNDM& hasard);
+  static int synrad_0_no_spin_flip (float upsilonSingleP,float eng,float dzOnRadius,float* x, RNDM& rndm_generator);
+  static int synrad_0_spin_flip (float upsilonSingleP,float eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius,float* x, RNDM& rndm_generator);
+  static int synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& stokes, float dzOnRadius,float* photonEnergy, RNDM& rndm_generator);
   
   
   static double BformFunction(double ups);
@@ -316,65 +316,65 @@ inline static float requiv(double lns4, float xmin,int iflag)
 
 /*! New version of equiv */
 
-inline static void mequiv (double s4, double lns4, float xmin,float e,int iflag,float *eph,float *q2,float *one_m_x, RNDM& hasard)
+inline static void mequiv (double s4, double lns4, float xmin,float e,int iflag,float *eph,float *q2,float *one_m_x, RNDM& rndm_generator)
 {
   const float emass2=EMASS*EMASS,eps=1e-5;
   float help,q2max,q2min,lnx,x,lnxmin,z;
   switch (iflag)
     {
     case 1:
-      *eph=e*powf(xmin,sqrt(1.0-hasard.rndm_equiv()));
+      *eph=e*powf(xmin,sqrt(1.0-rndm_generator.rndm_equiv()));
       *q2=0.0;
       *one_m_x=0.0;
       return;
     case 2:
-      x=pow(xmin,sqrt(hasard.rndm_equiv()));
+      x=pow(xmin,sqrt(rndm_generator.rndm_equiv()));
       help=1.0-x;
       *eph = e*x;
-      if (hasard.rndm_equiv()>(help*help+1.0)*0.5) *eph=0.0;
+      if (rndm_generator.rndm_equiv()>(help*help+1.0)*0.5) *eph=0.0;
       *q2=0.0;
       *one_m_x=help;
       return;
     case 3:
-      x=pow(xmin,hasard.rndm_equiv());
+      x=pow(xmin,rndm_generator.rndm_equiv());
       help=1.0-x;
       *eph=e*x;
-      if (hasard.rndm_equiv()>(help*help+1.0)*0.5) *eph=0.0;
-      *q2=emass2*pow(e*e/emass2,hasard.rndm_equiv());
+      if (rndm_generator.rndm_equiv()>(help*help+1.0)*0.5) *eph=0.0;
+      *q2=emass2*pow(e*e/emass2,rndm_generator.rndm_equiv());
       *one_m_x=help;
       return;
     case 4:
-      *eph=pow(xmin,hasard.rndm_equiv());
+      *eph=pow(xmin,rndm_generator.rndm_equiv());
       help=1.0-*eph;
       *eph*=e;
-      if (hasard.rndm_equiv()>(help*help+1.0)*0.5) *eph=0.0;
-      *q2=emass2*pow(e*e/emass2,hasard.rndm_equiv());
+      if (rndm_generator.rndm_equiv()>(help*help+1.0)*0.5) *eph=0.0;
+      *q2=emass2*pow(e*e/emass2,rndm_generator.rndm_equiv());
       *one_m_x=help;
       return;
     case 5:
-	if(hasard.rndm_equiv()<0.5){
-	    lnx=-sqrt(hasard.rndm_equiv())*lns4;
+	if(rndm_generator.rndm_equiv()<0.5){
+	    lnx=-sqrt(rndm_generator.rndm_equiv())*lns4;
 	    x=exp(lnx);
 	    q2min=x*x*emass2;
 	    q2max=emass2;
 	}
 	else{
-	    lnx=-hasard.rndm_equiv()*lns4;
+	    lnx=-rndm_generator.rndm_equiv()*lns4;
 	    x=exp(lnx);
 	    q2min=emass2;
 	    q2max=s4;
 	}
-	if((1.0+(1.0-x)*(1.0-x))*0.5<hasard.rndm_equiv()){
+	if((1.0+(1.0-x)*(1.0-x))*0.5<rndm_generator.rndm_equiv()){
 	    *eph=0.0;
 	    *q2=0.0;
 	}
 	else{
 	    *eph=e*x;
-	    *q2=q2min*pow(q2max/q2min,hasard.rndm_equiv());
+	    *q2=q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
 	}
 /*	if (*q2*(1.0-x)<x*x*emass2) *eph=0.0;*/
 /*	if (*q2<x*x*emass2/(1.0-x)*exp(1.0/(1.0+0.5*x*x/(1.0-x)))) *eph=0.0;*/
-/*	if (hasard.rndm_equiv()>(log(*q2*(1.0-x)/(x*x*emass2))
+/*	if (rndm_generator.rndm_equiv()>(log(*q2*(1.0-x)/(x*x*emass2))
 			  -2.0*(1.0-x)/(1.0+(1.0-x)*(1.0-x)))
 	    /log(*q2*(1.0-x)/(x*x*emass2)))
 	    *eph=0.0;*/
@@ -382,89 +382,89 @@ inline static void mequiv (double s4, double lns4, float xmin,float e,int iflag,
 	return;
     case 6:
         lnxmin=-log(xmin);
-	if(hasard.rndm_equiv()<lnxmin/(lnxmin+lns4)){
-	    lnx=-sqrt(hasard.rndm_equiv())*lnxmin;
+	if(rndm_generator.rndm_equiv()<lnxmin/(lnxmin+lns4)){
+	    lnx=-sqrt(rndm_generator.rndm_equiv())*lnxmin;
 	    x=exp(lnx);
 	    q2min=x*x*emass2;
 	    q2max=emass2;
 	}
 	else{
-	    lnx=-hasard.rndm_equiv()*lnxmin;
+	    lnx=-rndm_generator.rndm_equiv()*lnxmin;
 	    x=exp(lnx);
 	    q2min=emass2;
 	    q2max=s4;
 	}
-	if((1.0+(1.0-x)*(1.0-x))*0.5<hasard.rndm_equiv()){
+	if((1.0+(1.0-x)*(1.0-x))*0.5<rndm_generator.rndm_equiv()){
 	    *eph=0.0;
 	    *q2=0.0;
 	}
 	else{
 	    *eph=e*x;
-	    *q2=q2min*pow(q2max/q2min,hasard.rndm_equiv());
+	    *q2=q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
 	}
 	if (*q2*(1.0-x)<x*x*emass2) *eph=0.0;
 	*one_m_x=1.0-x;
 	return;
     case 7:
         lnxmin=-log(xmin);
-	if(hasard.rndm_equiv()<lnxmin/(lnxmin+lns4)){
-	    lnx=-sqrt(hasard.rndm_equiv())*lnxmin;
+	if(rndm_generator.rndm_equiv()<lnxmin/(lnxmin+lns4)){
+	    lnx=-sqrt(rndm_generator.rndm_equiv())*lnxmin;
 	    x=exp(lnx);
 	    q2min=x*x*emass2;
 	    q2max=emass2;
 	}
 	else{
-	    lnx=-hasard.rndm_equiv()*lnxmin;
+	    lnx=-rndm_generator.rndm_equiv()*lnxmin;
 	    x=exp(lnx);
 	    q2min=emass2;
 	    q2max=s4;
 	}
-	if((1.0+(1.0-x)*(1.0-x))*0.5<hasard.rndm_equiv()){
+	if((1.0+(1.0-x)*(1.0-x))*0.5<rndm_generator.rndm_equiv()){
 	    *eph=0.0;
 	    *q2=0.0;
 	}
 	else{
 	    *eph=e*x;
-	    *q2=q2min*pow(q2max/q2min,hasard.rndm_equiv());
+	    *q2=q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
 	}
 	*one_m_x=1.0-x;
 	return;
     case 8:
         lnxmin=-log(xmin);
-	if(hasard.rndm_equiv()<lnxmin/(lnxmin+lns4)){
-	    lnx=-sqrt(hasard.rndm_equiv())*lnxmin;
+	if(rndm_generator.rndm_equiv()<lnxmin/(lnxmin+lns4)){
+	    lnx=-sqrt(rndm_generator.rndm_equiv())*lnxmin;
 	    x=exp(lnx);
 	    q2min=x*x*emass2;
 	    q2max=emass2;
 	}
 	else{
-	    lnx=-hasard.rndm_equiv()*lnxmin;
+	    lnx=-rndm_generator.rndm_equiv()*lnxmin;
 	    x=exp(lnx);
 	    q2min=emass2;
 	    q2max=s4;
 	}
         *eph=e*x;
-        *q2=q2min*pow(q2max/q2min,hasard.rndm_equiv());
+        *q2=q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
 	*one_m_x=1.0-x;
 	return;
     case 9:
         lnxmin=-log(xmin);
-	if(hasard.rndm_equiv()*(lnxmin+lns4)<lnxmin){
-	    lnx=-sqrt(hasard.rndm_equiv())*lnxmin;
+	if(rndm_generator.rndm_equiv()*(lnxmin+lns4)<lnxmin){
+	    lnx=-sqrt(rndm_generator.rndm_equiv())*lnxmin;
 	    x=exp(lnx);
 	    q2min=x*x*emass2;
 	    q2max=emass2;
 	}
 	else{
-	    lnx=-hasard.rndm_equiv()*lnxmin;
+	    lnx=-rndm_generator.rndm_equiv()*lnxmin;
 	    x=exp(lnx);
 	    q2min=emass2;
 	    q2max=s4;
 	}
         *eph=e*x;
-        z=q2min*pow(q2max/q2min,hasard.rndm_equiv());
+        z=q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
 	*q2=z-x*x*emass2;
-	if (2.0*(1.0-x)* *q2+x*x*z<hasard.rndm_equiv()*2.0*z){
+	if (2.0*(1.0-x)* *q2+x*x*z<rndm_generator.rndm_equiv()*2.0*z){
 	  *q2=0.0;
 	  *eph=0.0;
 	}
@@ -487,9 +487,9 @@ inline static void mequiv (double s4, double lns4, float xmin,float e,int iflag,
  
       double spin= .00232460830350086*(-7.0/6.0-1/3*xmin*xmin*xmin+0.5*xmin*xmin+xmin-log(xmin)); //total spin part of spectrum
       double eps = 0.00001; // how close it should be to the random number
-      if (spin/(spin+requiv(lns4,xmin,iflag))>hasard.rndm_equiv())
+      if (spin/(spin+requiv(lns4,xmin,iflag))>rndm_generator.rndm_equiv())
 	{
-	  double yk=hasard.rndm_equiv()*spin/.00232460830350086;
+	  double yk=rndm_generator.rndm_equiv()*spin/.00232460830350086;
 	  double y1=yk;
 	  double x0;
 	  double x1=exp(-y1);;
@@ -508,10 +508,10 @@ inline static void mequiv (double s4, double lns4, float xmin,float e,int iflag,
 	}
       else
 	{
-	  x=pow(xmin,sqrt(hasard.rndm_equiv()));
+	  x=pow(xmin,sqrt(rndm_generator.rndm_equiv()));
 	  help=1.0-x;
 	  *eph = e*x;
-	  if (hasard.rndm_equiv()>(help*help+1.0)*0.5) *eph=0.0;
+	  if (rndm_generator.rndm_equiv()>(help*help+1.0)*0.5) *eph=0.0;
 	  *q2=0.0;
 	  *one_m_x=0;
 	}

@@ -8,7 +8,7 @@ void BEAM_FROM_FILE::emittances(float& emittx, float& emitty) const
 {
   unsigned int k;
   int n_particles = particles_.size();
-  float xcour, ycour;
+  float xpos, ypos;
   float x2, y2;
   float vx, vy;
   float beta_x2,beta_y2;
@@ -25,31 +25,31 @@ void BEAM_FROM_FILE::emittances(float& emittx, float& emitty) const
   y_beta_y = 0.0;
   for (k=0; k < particles_.size(); k++)
     {
-	  particles_[k].XYposition(xcour, ycour);
+	  particles_[k].XYposition(xpos, ypos);
 	  particles_[k].velocities(vx,vy);
-	  // les positions sont en nm, les "vitesses" sont en radians.
-	  // en fait, il s'agit de betax, betay (betaz etant supposé
-	  // pratiquement égal à 1)
-	  // l'energie est en GeV
+	  // the positions are in nm, the "speed" is in radians.
+	  // in fact, only betax, betay (betaz is supposed 
+	  // practically equal to�1)
+	  // the energy is in GeV
 
-	  // x, y en mm
+	  // x, y in mm
 
-	  xcour *= 1.0e-6;
-	  ycour *= 1.0e-6;
+	  xpos *= 1.0e-6;
+	  ypos *= 1.0e-6;
 
-	  // les beta en mrad
+	  // beta in mrad
 	  vx *= 1.0e3;
 	  vy *= 1.0e3;
 
-	  // pour l'instant x2 et y2 en mm carres
-	  x2 += xcour*xcour;
-	  y2 += ycour*ycour;
+	  // for now x2 et y2 in mm^2
+	  x2 += xpos*xpos;
+	  y2 += ypos*ypos;
 	  beta_x2 += vx*vx;
 	  beta_y2 += vy*vy;
 
 	  // mm.mrad
-	  x_beta_x += xcour*vx;
-	  y_beta_y += ycour*vy;
+	  x_beta_x += xpos*vx;
+	  y_beta_y += ypos*vy;
 	
     }
 
@@ -59,7 +59,7 @@ void BEAM_FROM_FILE::emittances(float& emittx, float& emitty) const
   beta_y2 /= n_particles;
   x_beta_x /= n_particles;
   y_beta_y /= n_particles;
-  // en mm.mrad
+  // in mm.mrad
   emittx = sqrt(x2*beta_x2 - x_beta_x*x_beta_x)*gamma_;
   emitty = sqrt(y2*beta_y2 - y_beta_y*y_beta_y)*gamma_;
 }
@@ -67,7 +67,7 @@ void BEAM_FROM_FILE::emittances(float& emittx, float& emitty) const
 void BEAM_FROM_FILE::beamXyRms(float& xmean, float& ymean,float& sigmaxRms, float& sigmayRms) const
 {
   int j;
-  float xcour, ycour;
+  float xpos, ypos;
   float x0, y0;
   float sigmax, sigmay;
 
@@ -80,11 +80,11 @@ void BEAM_FROM_FILE::beamXyRms(float& xmean, float& ymean,float& sigmaxRms, floa
 
   for (j=0; j < n_particles; j++)
     {
-      particles_[j].XYposition(xcour, ycour);
-      x0 += xcour;
-      y0 += ycour;
-      sigmax += xcour*xcour;
-      sigmay += ycour*ycour;
+      particles_[j].XYposition(xpos, ypos);
+      x0 += xpos;
+      y0 += ypos;
+      sigmax += xpos*xpos;
+      sigmay += ypos*ypos;
     }
   x0 /= (float)n_particles;
   y0 /= (float)n_particles;
@@ -99,7 +99,7 @@ void BEAM_FROM_FILE::beamXyRms(float& xmean, float& ymean,float& sigmaxRms, floa
 void BEAM_FROM_FILE::beamZRms(float& zmean, float& sigmazRms) const
 {
   unsigned int j;
-  float zcour;
+  float zpos;
   float z0;
   float sigmaz;
 
@@ -110,9 +110,9 @@ void BEAM_FROM_FILE::beamZRms(float& zmean, float& sigmazRms) const
 
   for (j=0; j < particles_.size(); j++)
     {
-      zcour = particles_[j].z();
-      z0 += zcour;
-      sigmaz += zcour*zcour;
+      zpos = particles_[j].z();
+      z0 += zpos;
+      sigmaz += zpos*zpos;
     }
   z0 /= (float)n_particles;
   sigmaz /= (float)n_particles;
@@ -130,9 +130,9 @@ void PARTICLE_BEAM::init_particles(unsigned long int nbpart, float sigma_x,float
 
   initial_number_of_particles_ = nbpart;
  
-  // ici, il y a des imprecisions numeriques avec les puissances de 10
-  // ay numerateur et au denominateur. J'ai remplace EMASS (Gev) par 
-  // EMASSeV en eV, pour voir. Il faudra adimensionner le probleme!!
+  // here, there are numerical problems with the powers of 10
+  // in numerator and in the denominator. I have replaced EMASS (GeV) for 
+  // EMASSeV in eV, to see. This has to be fixed!!
   //  sigma_x_prime=emx*EMASS/(energy*sigma_x*1e-9);
   //  sigma_y_prime=emy*EMASS/(energy*sigma_y*1e-9);
 
@@ -193,7 +193,7 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
     case 0:      
       for (k=0;k< initial_number_of_particles_;k++)
 	{
-	  zaux=tirage_->gasdev()*sigma_z;
+	  zaux=rndm_generator_->gasdev()*sigma_z;
 	  dispatch_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
 	}
       break;
@@ -203,7 +203,7 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
 	float bunchlength=SQRT3*sigma_z;
 	for (k=0;k< initial_number_of_particles_;k++)
 	  {
-	    zaux =(2.0*tirage_->rndm()-1.0)*bunchlength;
+	    zaux =(2.0*rndm_generator_->rndm()-1.0)*bunchlength;
 	    dispatch_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
 	  }
       }
@@ -226,7 +226,7 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
     case 0:      
       for (k=0;k< initial_number_of_particles_/4;k++)
 	{
-	  zaux=tirage_->gasdev()*sigma_z;
+	  zaux=rndm_generator_->gasdev()*sigma_z;
 	  dispatch_symmetric_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
 	}
       break;
@@ -236,7 +236,7 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
 	float bunchlength=SQRT3*sigma_z;
 	for (k=0;k< initial_number_of_particles_;k++)
 	  {
-	    zaux =(2.0*tirage_->rndm()-1.0)*bunchlength;
+	    zaux =(2.0*rndm_generator_->rndm()-1.0)*bunchlength;
 	    dispatch_symmetric_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
 	  }
       }
@@ -246,30 +246,6 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
       exit(0); 
     }
 }
-
-/*
-  void PARTICLE_BEAM::assign_xy_special_distribution(float sigma_x,float sigma_y,float sigma_x_prime,float sigma_y_prime, float energy)
-  {
-  int k;
-  float xaux, yaux, vxaux, vyaux;
-  for (k=0;k< particle_.size();k++)
-  {
-  do
-  {
-  xaux = 2.0*tirage_->rndm()-1.0;
-  yaux = 2.0*tirage_->rndm()-1.0;
-  }
-  while ( xaux*xaux + yaux*yaux >1.0 );
-  xaux *= 2.0*sigma_x;
-  yaux *= 2.0*sigma_y;
-  vxaux = tirage_->gasdev()*sigma_x_prime;
-  vyaux = tirage_->gasdev()*sigma_y_prime;
-  particle_[k].setCinematicParameters(xaux, yaux, vxaux, vyaux);
-  particle_[k].setEnergy(energy);
-  particle_[k].setSpin(0.0, 0.0,1.0);
-  }
-  }
-*/
 
 // after loading, the object pointed by bff is empty and 
 // the pointer bff is invalidated
@@ -334,7 +310,7 @@ void PARTICLE_BEAM::emittances(float& emittx, float& emitty) const
 {
   unsigned int k,j;
   int n_particles = number_of_particles_dispatched_in_slices_;
-  float xcour, ycour;
+  float xpos, ypos;
   float x2, y2;
   float vx, vy;//, gamma;
   float beta_x2,beta_y2;
@@ -354,34 +330,33 @@ void PARTICLE_BEAM::emittances(float& emittx, float& emitty) const
     {
       for (k=0; k < particle_[j].size(); k++)
 	{
-	  particle_[j][k]->XYposition(xcour, ycour);
+	  particle_[j][k]->XYposition(xpos, ypos);
 	  particle_[j][k]->velocities(vx,vy);
 	  //	  energie = particle_[j][k].energy();
-	  // les positions sont en nm, les "vitesses" sont en radians.
-	  // en fait, il s'agit de betax, betay (betaz etant supposé
-	  // pratiquement égal à 1)
-	  // l'energie est en GeV
+	  // the positions are in nm, the "speed" is in radians.
+	  // in fact, only betax, betay (betaz is supposed 
+	  // practically equal to�1)
+	  // the energy is in GeV
 
-	  // x, y en mm
+	  // x, y in mm
+	  xpos *= 1.0e-6;
+	  ypos *= 1.0e-6;
 
-	  xcour *= 1.0e-6;
-	  ycour *= 1.0e-6;
-
-	  // les beta en mrad
+	  // beta in mrad
 	  vx *= 1.0e3;
 	  vy *= 1.0e3;
 
 	  //	  gamma += energie;
 
-	  // pour l'instant x2 et y2 en mm carres
-	  x2 += xcour*xcour;
-	  y2 += ycour*ycour;
+	  // for now x2 and y2 in mm^2
+	  x2 += xpos*xpos;
+	  y2 += ypos*ypos;
 	  beta_x2 += vx*vx;
 	  beta_y2 += vy*vy;
 
 	  // mm.mrad
-	  x_beta_x += xcour*vx;
-	  y_beta_y += ycour*vy;
+	  x_beta_x += xpos*vx;
+	  y_beta_y += ypos*vy;
 	}
     }
 
@@ -393,7 +368,7 @@ void PARTICLE_BEAM::emittances(float& emittx, float& emitty) const
   y_beta_y /= n_particles;
   //  gamma /= EMASS*n_particles;
 
-  // en mm.mrad
+  // in mm.mrad
   emittx = sqrt(x2*beta_x2 - x_beta_x*x_beta_x)*gamma_;
   emitty = sqrt(y2*beta_y2 - y_beta_y*y_beta_y)*gamma_;
 }
@@ -401,7 +376,7 @@ void PARTICLE_BEAM::emittances(float& emittx, float& emitty) const
 void PARTICLE_BEAM::beamXyRms(float& xmean, float& ymean,  float& sigmaxRms, float& sigmayRms) const
 {
   unsigned int k,j;
-  float xcour, ycour;
+  float xpos, ypos;
   float x0, y0;
   float sigmax, sigmay;
   x0 = 0.;
@@ -415,11 +390,11 @@ void PARTICLE_BEAM::beamXyRms(float& xmean, float& ymean,  float& sigmaxRms, flo
     {
       for (k=0; k < particle_[j].size(); k++)
 	{
-	  particle_[j][k]->XYposition(xcour, ycour);
-	  x0 += xcour;
-	  y0 += ycour;
-	  sigmax += xcour*xcour;
-	  sigmay += ycour*ycour;
+	  particle_[j][k]->XYposition(xpos, ypos);
+	  x0 += xpos;
+	  y0 += ypos;
+	  sigmax += xpos*xpos;
+	  sigmay += ypos*ypos;
 	}
     }
   x0 /= (float)n_particles;
@@ -434,7 +409,7 @@ void PARTICLE_BEAM::beamXyRms(float& xmean, float& ymean,  float& sigmaxRms, flo
 void PARTICLE_BEAM::beamZRms(float& zmean,  float& sigmazRms) const
 {
   unsigned int k,j;
-  float  zcour;
+  float  zpos;
   float z0;
   float  sigmaz;
   z0 = 0.;
@@ -446,9 +421,9 @@ void PARTICLE_BEAM::beamZRms(float& zmean,  float& sigmazRms) const
     {
       for (k=0; k < particle_[j].size(); k++)
 	{
-	  zcour = particle_[j][k]->z();
-	  z0 += zcour;
-	  sigmaz += zcour*zcour;
+	  zpos = particle_[j][k]->z();
+	  z0 += zpos;
+	  sigmaz += zpos*zpos;
 	}
     }
   z0 /= (float)n_particles;
@@ -460,7 +435,7 @@ void PARTICLE_BEAM::beamZRms(float& zmean,  float& sigmazRms) const
 void PARTICLE_BEAM::transverseRms(int slice,double& xmin,double& xmax,double& xmean,double&  ymin,double& ymax,double& ymean,double&  sigmaxRms,double& sigmayRms) const 
 {
   unsigned int k;
-  float xcour, ycour;
+  float xpos, ypos;
   double x0, y0, xmn, ymn, xmx, ymx;
   double sigmax, sigmay;
   double dx, dy;
@@ -471,9 +446,9 @@ void PARTICLE_BEAM::transverseRms(int slice,double& xmin,double& xmax,double& xm
   sigmax=0.0; sigmay=0.0;
   for (k=0; k< particle_[slice].size(); k++)
     {
-      particle_[slice][k]->XYposition(xcour, ycour);
-      dx = (double)xcour;
-      dy = (double)ycour;
+      particle_[slice][k]->XYposition(xpos, ypos);
+      dx = (double)xpos;
+      dy = (double)ypos;
       xmn = min(xmn, dx);
       xmx = max(xmx, dx);
       x0 += dx;
@@ -557,30 +532,22 @@ void  PARTICLE_BEAM::set_particles_offset(int slice, float offset_x,float offset
 
 void PARTICLE_BEAM::backstep (int beam,int trav_focus, float max_z, float step,  int timestep, float scal_step[2])
 {
-// note: the particles are tracked only if they reached the head of the other  bunch, thus the backstepping distance has to be halfed     
-  if (ZPOS) 
+// note: the particles are tracked only if they reached the head of the other bunch, thus the backstepping distance has to be halfed     
+  if (trav_focus) 
     {
-      if (trav_focus)
-	{
-	  backParticlesBefore(max_z);
-	}
-      else
+      backParticlesBefore(max_z);
+    }
+  else 
+    {
+      if (ZPOS) 
 	{
 	  backSlicesWithZ(max_z);
-	}
-    }
-  else
-    {
-      if (trav_focus)
-	{
-	  backParticlesBefore(max_z);
-	}
-      else
+	} 
+      else 
 	{
 	  backSlices(beam, step,  timestep, scal_step);
 	}
-    }
-  
+    }  
 }
 
 void PARTICLE_BEAM::backstep2 (int nbeam, float max_z, float step,  int timestep, float scal_step[2])
@@ -614,7 +581,7 @@ int PARTICLE_BEAM::store_beam(string name) const
   int j;
   vector<unsigned long int> ordre;
   number = numberOfParticles();
-  tirage_->getShuffledIntegerSequence(number, ordre);
+  rndm_generator_->getShuffledIntegerSequence(number, ordre);
 
    for (h = 0; h < number; h++) 
      {
@@ -1008,7 +975,7 @@ void PHOTON_BEAM::dump_photons(string name,int istep,int every_particle, int tim
 //   //int j;
 //   vector<unsigned long int> ordre;
 //   //photon_info(en_sum,number);
-//   //tirage_->getShuffledIntegerSequence(number, ordre);
+//   //rndm_generator_->getShuffledIntegerSequence(number, ordre);
 //   //   for (h = 0; h < number; h++)
 //   //     {
 //   //       //  index_slice( ordre[h] -1 , k,j);

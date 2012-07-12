@@ -85,7 +85,7 @@ class PAIR_PARAMETER
       return 0.0;
     } 
   
-  void jet_equiv (float xmin,float e,int iflag,float& eph,float& q2,float& wgt, RNDM& hasard) const;
+  void jet_equiv (float xmin,float e,int iflag,float& eph,float& q2,float& wgt, RNDM& rndm_generator) const;
   
   inline float jet_requiv(float xmin,int iflag) const
     {
@@ -127,7 +127,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   
   void compute_pairs_calls(long int& n1, double& e1, long int& n2, double& e2) const;
   
-  inline void new_event(float e,float x,float y,float z,float vx,float vy,float vz, float ratio, int tracking, RNDM& hasard)
+  inline void new_event(float e,float x,float y,float z,float vx,float vy,float vz, float ratio, int tracking, RNDM& rndm_generator)
     {
       int index_of_process = -99;
       // test if particle energy is above the required minumum 
@@ -138,7 +138,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
       
       // reduce the number of stored particles if requested (to speed up tracking) 
       
-      if (hasard.rndm_pairs() > ratio) 
+      if (rndm_generator.rndm_pairs() > ratio) 
 	{
 	  return;
 	}    
@@ -232,59 +232,54 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   void distribute_pairs(float delta_z,unsigned int n);
   void move_unactive_pairs(float step);
   
-  void load_events(int time_counter,float ratio, int tracking, RNDM& hasard);
-  
-  virtual inline string name_of_class() const 
-    {
-      return string("PAIR_BEAM");
-    }
-  
+  void load_events(int time_counter,float ratio, int tracking, RNDM& rndm_generator);
   
   string output_flow() const ;
   
-  void book_keeping(const MESH& mesh, int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& hasard )
+  void book_keeping(const MESH& mesh, int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& rndm_generator )
     {
       bool lucky = true;
-      if (wgt<hasard.rndm()) lucky = false;
+      if (wgt<rndm_generator.rndm()) lucky = false;
       pairs_results_.store_full_pair(index_of_process,e1,px1,py1,pz1,e2,px2,py2,pz2,wgt,lucky );
       if (lucky)
 	{
-	  /*       new_pair(mesh, cellx, celly,min_z,index_of_process, (float)e1,(float)px1,(float)py1,(float)pz1, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), hasard); */
-	  /*       new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), hasard); */
-	  new_pair(mesh, cellx, celly,min_z,index_of_process, (float)e1,(float)px1,(float)py1,(float)pz1, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), hasard);
-	  new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), hasard);
+	  /*       new_pair(mesh, cellx, celly,min_z,index_of_process, (float)e1,(float)px1,(float)py1,(float)pz1, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), rndm_generator); */
+	  /*       new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), rndm_generator); */
+	  new_pair(mesh, cellx, celly,min_z,index_of_process, (float)e1,(float)px1,(float)py1,(float)pz1, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
+	  new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
 	}
     }
 
-  void book_keeping_muon(const MESH& mesh, int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& hasard )
+  void book_keeping_muon(const MESH& mesh, int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& rndm_generator )
     {
       bool lucky = true;
-      if (wgt<hasard.rndm()) lucky = false;
+      if (wgt<rndm_generator.rndm()) lucky = false;
       pairs_results_.store_full_pair(index_of_process,e1,px1,py1,pz1,e2,px2,py2,pz2,wgt/switches.get_muon_scale(),lucky );
       if (lucky)
 	{
-	  new_pair(mesh, cellx, celly,min_z,index_of_process, (float)e1,(float)px1,(float)py1,(float)pz1, switches.get_muon_ratio(), switches.get_track_muons(), switches.get_store_muons(), hasard);
-	  new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_muon_ratio(), switches.get_track_muons(), switches.get_store_muons(), hasard);
+	  new_pair(mesh, cellx, celly,min_z,index_of_process, (float)e1,(float)px1,(float)py1,(float)pz1, switches.get_muon_ratio(), switches.get_track_muons(), switches.get_store_muons(), rndm_generator);
+	  new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_muon_ratio(), switches.get_track_muons(), switches.get_store_muons(), rndm_generator);
 	}
     }
   
-  void book_keeping_p(const MESH& mesh,int index_of_process, double e,double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& hasard )
+  void book_keeping_p(const MESH& mesh,int index_of_process, double e,double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& rndm_generator )
     {
       bool lucky = true;
-      if (wgt<hasard.rndm()) lucky = false;
+      if (wgt<rndm_generator.rndm()) lucky = false;
       pairs_results_.storep_(index_of_process, e,wgt, lucky);
       if (lucky)
 	{
-	  /*       new_pair(mesh, cellx, celly, min_z,index_of_process, (float)(e),0.0,0.0,(float)(e), switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), hasard); */
-	  new_pair(mesh, cellx, celly, min_z,index_of_process, (float)(e),0.0,0.0,(float)(e), switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), hasard);
+	  /*       new_pair(mesh, cellx, celly, min_z,index_of_process, (float)(e),0.0,0.0,(float)(e), switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), rndm_generator); */
+	  new_pair(mesh, cellx, celly, min_z,index_of_process, (float)(e),0.0,0.0,(float)(e), switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
 	}
     }
   
-  void make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,int index_of_process, float eph1,float q2_1,float eorg1, float eph2,float q2_2,float eorg2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& hasard);
+  void make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,int index_of_process, float eph1,float q2_1,float eorg1, float eph2,float q2_2,float eorg2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& rndm_generator);
   
-  void  make_muon(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float eph1,float q2_1,float eph2,float q2_2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& hasard);
+  void  make_muon(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float eph1,float q2_1,float eph2,float q2_2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& rndm_generator);
   
-  void new_pair(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& hasard );
+  void new_pair(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator );
+  void new_pair(const unsigned index, const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& hasard );
  
   inline void save_pairs_on_file(string nameOfOutputFile) const
     {
@@ -293,23 +288,51 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
       
       list<PAIR_PARTICLE>::const_iterator point = reserve_.begin();
       for ( point = reserve_.begin(); point != reserve_.end(); point++)
-	{
-	  //      filout.save_pair_particle(*point);
-	  filout.save_object_on_persistent_file( &(*point) ); 
-	}
+		{
+		  //      filout.save_pair_particle(*point);
+		  filout.save_object_on_persistent_file( &(*point) );
+		}
       filout.close();
     }
-  
+
   inline void save_pairs0_on_file(string nameOfOutputFile)
     {
       unsigned int k;
       FILE_IN_OUT filout;
       filout.open_file(nameOfOutputFile, "w");
       for (k=0; k < pairs0_.size(); k++)
-	{
-	  //     filout.save_pair_particle(pairs0_[k]);
-	  filout.save_object_on_persistent_file( &pairs0_[k] ); 
-	}
+		{
+		  //     filout.save_pair_particle(pairs0_[k]);
+		  filout.save_object_on_persistent_file( &pairs0_[k] );
+		}
+      filout.close();
+    }
+
+  inline void save_bhabhas_on_file(string nameOfOutputFile) const
+    {
+      FILE_IN_OUT filout;
+      filout.open_file(nameOfOutputFile, "w");
+      cout << "Saving tracked Bhabha particles in " << nameOfOutputFile << endl;
+      list<PAIR_PARTICLE>::const_iterator point = reserve_.begin();
+      for ( point = reserve_.begin(); point != reserve_.end(); point++)
+		{
+		  //      filout.save_pair_particle(*point);
+		  filout.save_object_on_persistent_file(point->get_label(), &(*point) );
+		}
+      filout.close();
+    }
+  
+  inline void save_bhabhas0_on_file(string nameOfOutputFile)
+    {
+      unsigned int k;
+      FILE_IN_OUT filout;
+      filout.open_file(nameOfOutputFile, "w");
+      cout << "Saving boosted Bhabha particles in " << nameOfOutputFile << endl;
+      for (k=0; k < pairs0_.size(); k++)
+		{
+		  //     filout.save_pair_particle(pairs0_[k]);
+		  filout.save_object_on_persistent_file(pairs0_[k].get_label() , &pairs0_[k] );
+		}
       filout.close();
     }
 };

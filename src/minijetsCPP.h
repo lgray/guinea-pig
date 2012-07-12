@@ -62,7 +62,7 @@ void make_newton(double (*f)(double),double (*df)(double),double xmin,double xma
     x_[n-1] = xmax;
 }
 
-void get_angle_sigma(double c0,double& c, double& sigma, RNDM& hasard) const
+void get_angle_sigma(double c0,double& c, double& sigma, RNDM& rndm_generator) const
 {
     double sigma0,y,xmin,xmax,tmp;
     int i;
@@ -70,7 +70,7 @@ void get_angle_sigma(double c0,double& c, double& sigma, RNDM& hasard) const
        sigma=(*f_)(c0)-sigma0;
 
 
-    y=sigma*hasard.rndm()+sigma0;
+    y=sigma*rndm_generator.rndm()+sigma0;
     tmp=(y-ymin_)*dy_i_;
     i=(int)floor(tmp);
     tmp-=i;
@@ -80,10 +80,10 @@ void get_angle_sigma(double c0,double& c, double& sigma, RNDM& hasard) const
     TOOLS::equal_newton(f_,df_,xmin,xmax,y,c);
 }
 
-inline double get_angle(double c0, RNDM& hasard) const
+inline double get_angle(double c0, RNDM& rndm_generator) const
 {
   double c, sigma;
-  get_angle_sigma(c0, c, sigma,hasard);
+  get_angle_sigma(c0, c, sigma,rndm_generator);
   return c;
 }
 
@@ -150,18 +150,18 @@ class ABSTRACT_MINIJETS : public ABSTRACT_IO_CLASS
   // v2_.resize(n_pt*n_c, 0.0);
 }
 
-  inline int update_niter(float rphot, RNDM& hasard)
+  inline int update_niter(float rphot, RNDM& rndm_generator)
 {
   int niter;
   niter = (int) rphot;
-  if ( hasard.rndm_jet() <= (rphot-niter) ) ++niter;
+  if ( rndm_generator.rndm_jet() <= (rphot-niter) ) ++niter;
   return niter;
 }
 
 void init_jet_file(float s,float ptmin, string jetfileName);
 void update_statistics_arrays(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT pt,JET_FLOAT h);
 
-virtual  void store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT eph2, JET_FLOAT pt,JET_FLOAT h,int event, SWITCHES& switches, RNDM& hasard) = 0;
+virtual  void store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT eph2, JET_FLOAT pt,JET_FLOAT h,int event, SWITCHES& switches, RNDM& rndm_generator) = 0;
 
 
 
@@ -183,16 +183,16 @@ virtual  ~ABSTRACT_MINIJETS()
 
 
   // This routine produces the minijets from gamma gamma collision (?)
-virtual void mkjll_(const PAIR_PARAMETER& pair_parameter,float e1,float e2, float flum, SWITCHES& switches, RNDM& hasard) = 0;
+virtual void mkjll_(const PAIR_PARAMETER& pair_parameter,float e1,float e2, float flum, SWITCHES& switches, RNDM& rndm_generator) = 0;
 
   // This routine produces the minijets from gamma e collision 
-virtual   void mkjbh1_(const PAIR_PARAMETER& pair_parameter, float eph1,float e2,float flum, SWITCHES& switches, RNDM& hasard) =0;
+virtual   void mkjbh1_(const PAIR_PARAMETER& pair_parameter, float eph1,float e2,float flum, SWITCHES& switches, RNDM& rndm_generator) =0;
 
  //This routine produces the minijets from e gamma collision 
-virtual  void mkjbh2_(const PAIR_PARAMETER& pair_parameter, float e1,float eph2, float flum, SWITCHES& switches, RNDM& hasard) =0;
+virtual  void mkjbh2_(const PAIR_PARAMETER& pair_parameter, float e1,float eph2, float flum, SWITCHES& switches, RNDM& rndm_generator) =0;
 
 // This routine produces the minijets from e+e- collision 
-virtual void mkjbw_(float eph1,float eph2,float flum, SWITCHES& switches, RNDM& hasard) =0;
+virtual void mkjbw_(float eph1,float eph2,float flum, SWITCHES& switches, RNDM& rndm_generator) =0;
 
 
 virtual string output_flow() const ;
@@ -208,7 +208,7 @@ class MINIJETS : public ABSTRACT_MINIJETS
 
 
 
-virtual   void store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT eph2, JET_FLOAT pt,JET_FLOAT h,int event, SWITCHES& switches, RNDM& hasard);
+virtual   void store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT eph2, JET_FLOAT pt,JET_FLOAT h,int event, SWITCHES& switches, RNDM& rndm_generator);
 
  private : 
 
@@ -229,41 +229,41 @@ typedef struct NEWTON
 
 
 
-  inline JET_FLOAT mkcos(JET_FLOAT c0, RNDM& hasard)
+  inline JET_FLOAT mkcos(JET_FLOAT c0, RNDM& rndm_generator)
   {
-    return newton_[8].get_angle(c0,hasard);
+    return newton_[8].get_angle(c0,rndm_generator);
   }
 
-  inline JET_FLOAT mkcosb(JET_FLOAT c0, RNDM& hasard)
+  inline JET_FLOAT mkcosb(JET_FLOAT c0, RNDM& rndm_generator)
   {
-    return newton_[9].get_angle(c0,hasard);
+    return newton_[9].get_angle(c0,rndm_generator);
   }
 
-void mkj_pythia1(PAIR_PARAMETER& pair_parameter,float rphot, float gam2i,float eph1,float  ener2, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& hasard);
-void mkj_pythia2(const PAIR_PARAMETER& pair_parameter, float rphot, float gam2i,float eph2,float  ener1, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& hasard);
-void mkj_pythia12(PAIR_PARAMETER& pair_parameter, float rphot, float gam2i,float ener1, float  ener2, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& hasard);
+void mkj_pythia1(PAIR_PARAMETER& pair_parameter,float rphot, float gam2i,float eph1,float  ener2, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& rndm_generator);
+void mkj_pythia2(const PAIR_PARAMETER& pair_parameter, float rphot, float gam2i,float eph2,float  ener1, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& rndm_generator);
+void mkj_pythia12(PAIR_PARAMETER& pair_parameter, float rphot, float gam2i,float ener1, float  ener2, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& rndm_generator);
 
- void mkj_no_pythia1(const PAIR_PARAMETER& pair_parameter, int spectrum, float rphot, float gam2i,float eph1,float  ener2, float flum, SWITCHES& switches, RNDM& hasard, void (MINIJETS::*make_jet_n)(float,float ,float,float , float,SWITCHES&, RNDM&));
+ void mkj_no_pythia1(const PAIR_PARAMETER& pair_parameter, int spectrum, float rphot, float gam2i,float eph1,float  ener2, float flum, SWITCHES& switches, RNDM& rndm_generator, void (MINIJETS::*make_jet_n)(float,float ,float,float , float,SWITCHES&, RNDM&));
 
- void mkj_no_pythia2(const PAIR_PARAMETER& pair_parameter, int spectrum,float rphot, float gam2i,float eph2,float  ener1, float flum, SWITCHES& switches, RNDM& hasard, void (MINIJETS::*make_jet_n)(float,float ,float,float , float,SWITCHES&, RNDM&));
-
-
- void mkj_no_pythia12(const PAIR_PARAMETER& pair_parameter,int spectrum1, int spectrum2, float rphot, float gam2i,float ener1,float  ener2, float flum, SWITCHES& switches, RNDM& hasard, void (MINIJETS::*make_jet_n)(float,float ,float,float , float,SWITCHES&, RNDM&));
-
-  void make_jet_0(float eph1,float q2_1,float eph2,float q2_2, float flum,SWITCHES& switches, RNDM& hasard);
-
-void make_jet_1a(float eph1,float q2_1,float eph2,float q2_2,float flum,SWITCHES& switches, RNDM& hasard);
-
-void make_jet_1b(float eph1,float q2_1,float eph2,float q2_2, float flum,SWITCHES& switches, RNDM& hasard);
+ void mkj_no_pythia2(const PAIR_PARAMETER& pair_parameter, int spectrum,float rphot, float gam2i,float eph2,float  ener1, float flum, SWITCHES& switches, RNDM& rndm_generator, void (MINIJETS::*make_jet_n)(float,float ,float,float , float,SWITCHES&, RNDM&));
 
 
-void make_jet_2(float eph1,float q2_1,float eph2,float q2_2,float flum, SWITCHES& switches,  RNDM& hasard)
+ void mkj_no_pythia12(const PAIR_PARAMETER& pair_parameter,int spectrum1, int spectrum2, float rphot, float gam2i,float ener1,float  ener2, float flum, SWITCHES& switches, RNDM& rndm_generator, void (MINIJETS::*make_jet_n)(float,float ,float,float , float,SWITCHES&, RNDM&));
+
+  void make_jet_0(float eph1,float q2_1,float eph2,float q2_2, float flum,SWITCHES& switches, RNDM& rndm_generator);
+
+void make_jet_1a(float eph1,float q2_1,float eph2,float q2_2,float flum,SWITCHES& switches, RNDM& rndm_generator);
+
+void make_jet_1b(float eph1,float q2_1,float eph2,float q2_2, float flum,SWITCHES& switches, RNDM& rndm_generator);
+
+
+void make_jet_2(float eph1,float q2_1,float eph2,float q2_2,float flum, SWITCHES& switches,  RNDM& rndm_generator)
 {
-    jet_results_.increment_sigma(2,hadcross(eph1,q2_1,eph2,q2_2,flum, switches, hasard));
+    jet_results_.increment_sigma(2,hadcross(eph1,q2_1,eph2,q2_2,flum, switches, rndm_generator));
 } /* make_jet_2 */
 
 
-JET_FLOAT hadcross(JET_FLOAT eph1,JET_FLOAT q2_1,JET_FLOAT eph2,JET_FLOAT q2_2, JET_FLOAT lumi, SWITCHES& switches, RNDM& hasard);
+JET_FLOAT hadcross(JET_FLOAT eph1,JET_FLOAT q2_1,JET_FLOAT eph2,JET_FLOAT q2_2, JET_FLOAT lumi, SWITCHES& switches, RNDM& rndm_generator);
 
 
 inline void hadrons(JET_FLOAT x1,JET_FLOAT x2,JET_FLOAT q2,int flavours,
@@ -289,13 +289,13 @@ void hadrons_grv(JET_FLOAT x1,JET_FLOAT x2,JET_FLOAT q2,int flavours, JET_FLOAT 
 
 void hadrons_dg(JET_FLOAT x1,JET_FLOAT x2,JET_FLOAT q2,int flavours, JET_FLOAT *parton1,JET_FLOAT *parton2,JET_FLOAT& alphas);
 
-inline void prepareToStoreHadCross(int numero, JET_FLOAT* s, JET_FLOAT factor, JET_FLOAT cmax, JET_FLOAT e0, JET_FLOAT e1,JET_FLOAT  e2, JET_FLOAT& pz1, JET_FLOAT& pz2,JET_FLOAT& pt, RNDM& hasard)
+inline void prepareToStoreHadCross(int numero, JET_FLOAT* s, JET_FLOAT factor, JET_FLOAT cmax, JET_FLOAT e0, JET_FLOAT e1,JET_FLOAT  e2, JET_FLOAT& pz1, JET_FLOAT& pz2,JET_FLOAT& pt, RNDM& rndm_generator)
 {
   JET_FLOAT ehad1,ehad2;
   JET_FLOAT xkekseksa;
   JET_FLOAT aux;
-  newton_[numero].get_angle_sigma(cmax,xkekseksa,aux, hasard);
-// get_angle( numero,cmax,xkekseksa,aux, hasard);
+  newton_[numero].get_angle_sigma(cmax,xkekseksa,aux, rndm_generator);
+// get_angle( numero,cmax,xkekseksa,aux, rndm_generator);
     s[numero]=factor*aux;
     ehad1=e0;
     ehad2=e0;
@@ -330,19 +330,13 @@ void make_the_newtons(double xmin,double xmax,int n);
 
 
 
-virtual void mkjll_(const PAIR_PARAMETER& pair_parameter,float e1,float e2, float flum, SWITCHES& switches, RNDM& hasard);
+virtual void mkjll_(const PAIR_PARAMETER& pair_parameter,float e1,float e2, float flum, SWITCHES& switches, RNDM& rndm_generator);
 
 
-virtual   void mkjbh1_(const PAIR_PARAMETER& pair_parameter, float eph1,float e2,float flum, SWITCHES& switches, RNDM& hasard);
+virtual   void mkjbh1_(const PAIR_PARAMETER& pair_parameter, float eph1,float e2,float flum, SWITCHES& switches, RNDM& rndm_generator);
 
-void mkjbh2_(const PAIR_PARAMETER& pair_parameter, float e1,float eph2, float flum, SWITCHES& switches,RNDM& hasard);
-virtual void mkjbw_(float eph1,float eph2,float flum, SWITCHES& switches, RNDM& hasard);
-
-virtual inline string name_of_class() const 
-{
-  return string("MINIJETS");
-}
-
+void mkjbh2_(const PAIR_PARAMETER& pair_parameter, float e1,float eph2, float flum, SWITCHES& switches,RNDM& rndm_generator);
+virtual void mkjbw_(float eph1,float eph2,float flum, SWITCHES& switches, RNDM& rndm_generator);
 
 };
 
@@ -350,7 +344,7 @@ class MINIJETS_PYTHIA : public  ABSTRACT_MINIJETS
 {
 
  protected : 
-virtual  void store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT eph2, JET_FLOAT pt,JET_FLOAT h,int event, SWITCHES& switches, RNDM& hasard);
+virtual  void store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT eph2, JET_FLOAT pt,JET_FLOAT h,int event, SWITCHES& switches, RNDM& rndm_generator);
  private : 
 
 SPLINE jet_spline0_,jet_spline1_,jet_spline2_;
@@ -367,46 +361,40 @@ SPLINE jet_spline0_,jet_spline1_,jet_spline2_;
 {
   initPythia(s, ptmin);
 }
- void mkjll_(const PAIR_PARAMETER& pair_parameter,float e1,float e2, float flum, SWITCHES& switches, RNDM& hasard);
+ void mkjll_(const PAIR_PARAMETER& pair_parameter,float e1,float e2, float flum, SWITCHES& switches, RNDM& rndm_generator);
 
   // This routine produces the minijets from gamma e collision 
- void mkjbh1_(const PAIR_PARAMETER& pair_parameter, float eph1,float e2, float flum, SWITCHES& switches, RNDM& hasard);
+ void mkjbh1_(const PAIR_PARAMETER& pair_parameter, float eph1,float e2, float flum, SWITCHES& switches, RNDM& rndm_generator);
 
  //This routine produces the minijets from e gamma collision 
-virtual  void mkjbh2_(const PAIR_PARAMETER& pair_parameter, float e1,float eph2, float flum, SWITCHES& switches, RNDM& hasard);
+virtual  void mkjbh2_(const PAIR_PARAMETER& pair_parameter, float e1,float eph2, float flum, SWITCHES& switches, RNDM& rndm_generator);
 
 // This routine produces the minijets from e+e- collision 
- void mkjbw_(float eph1,float eph2,float flum, SWITCHES& switches, RNDM& hasard);
+ void mkjbw_(float eph1,float eph2,float flum, SWITCHES& switches, RNDM& rndm_generator);
 
-inline void make_jet(int index, float e1,float e2,float q2_1,float q2_2,float flum,float jet_ratio, const SPLINE& jet_spline, int optionStoreJet, RNDM& hasard)
+inline void make_jet(int index, float e1,float e2,float q2_1,float q2_2,float flum,float jet_ratio, const SPLINE& jet_spline, int optionStoreJet, RNDM& rndm_generator)
 {
   float sigma;
   if (!deltaSigma(e1, e2, q2_1, q2_2, flum,jet_spline, sigma)) return;
   jet_results_.increment_sigma(index,sigma);
-  stockageJet( e1, e2, sigma, jet_ratio,hasard, optionStoreJet);
+  stockageJet( e1, e2, sigma, jet_ratio,rndm_generator, optionStoreJet);
 }
 
 
-void mkj_pythia1(const PAIR_PARAMETER& pair_parameter, int spectrum, float rphot, float gam2i,float eph1,float  ener2, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& hasard);
+void mkj_pythia1(const PAIR_PARAMETER& pair_parameter, int spectrum, float rphot, float gam2i,float eph1,float  ener2, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& rndm_generator);
 
 
 
 
- void mkj_pythia2(const PAIR_PARAMETER& pair_parameter, int spectrum, float rphot, float gam2i,float eph2,float  ener1, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& hasard);
+ void mkj_pythia2(const PAIR_PARAMETER& pair_parameter, int spectrum, float rphot, float gam2i,float eph2,float  ener1, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& rndm_generator);
 
 
- void mkj_pythia12(const PAIR_PARAMETER& pair_parameter, int spectrum1, int spectrum2,float rphot, float gam2i,float ener1, float  ener2, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& hasard);
+ void mkj_pythia12(const PAIR_PARAMETER& pair_parameter, int spectrum1, int spectrum2,float rphot, float gam2i,float ener1, float  ener2, float flum,  float ratio,const SPLINE& jet_spline, int index_of_sigma, int optionStoreJet, RNDM& rndm_generator);
 
     bool deltaSigma(float e1,float e2,float q2_1,float q2_2, float flum, const SPLINE& jet_spline, float& delta) const;
 
 
-    void stockageJet( float e1,float e2,float sigma, float jet_ratio, RNDM& hasard, int optionStoreJet) const;
-
-virtual inline string name_of_class() const 
-{
-  return string("MINIJETS_PYTHIA");
-}
-
+    void stockageJet( float e1,float e2,float sigma, float jet_ratio, RNDM& rndm_generator, int optionStoreJet) const;
 
 };
 

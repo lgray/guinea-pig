@@ -105,7 +105,7 @@ void FIELD::fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT
       fourier_backward->make();
 
 #ifdef SHORTCUT_FFT
-      //   printf("oui il y a des charges in slice\n");
+      //   printf("there are charges in slice\n");
 
     }
   else
@@ -416,8 +416,8 @@ void FIELD::dist_init(PHI_FLOAT factor, float deltax, float deltay,   FFT_SERVER
       nn[1]=2*nb_cells_x_;
 
       ABSTRACT_FOURIER* fourier_transform = fourier->new_fft(string("for2"),nn);
-      double* temporaire = fourier_transform->data_vector(); 
-      for (i1=0;i1<dist_size_;i1++) temporaire[i1]=0.0;
+      double* temp = fourier_transform->data_vector(); 
+      for (i1=0;i1<dist_size_;i1++) temp[i1]=0.0;
 
       for (i1=0;i1<nb_cells_x_;i1++)
 	{
@@ -428,28 +428,28 @@ void FIELD::dist_init(PHI_FLOAT factor, float deltax, float deltay,   FFT_SERVER
 	      y0=(double)i2;
 
 
-	      temporaire[j0]=factor*
+	      temp[j0]=factor*
 		f_potential_2(x0*deltax,y0*deltay,
 				     0.5*deltax,0.5*deltay) -phi0;
 	      if (i2>=1)
 		{
 		   	   
-		  temporaire[2*((i1+1)*2*nb_cells_y_-i2)]=temporaire[j0];
+		  temp[2*((i1+1)*2*nb_cells_y_-i2)]=temp[j0];
 		  if (i1>=1)
 		    {
 
 
-		      temporaire[2*(2*nb_cells_y_*(2*nb_cells_x_-i1)+i2)]=temporaire[j0];
+		      temp[2*(2*nb_cells_y_*(2*nb_cells_x_-i1)+i2)]=temp[j0];
 
 
-		      temporaire[2*(2*nb_cells_y_*(2*nb_cells_x_-i1)+2*nb_cells_y_-i2)]=temporaire[j0];
+		      temp[2*(2*nb_cells_y_*(2*nb_cells_x_-i1)+2*nb_cells_y_-i2)]=temp[j0];
 		    }
 		}
 	      else
 		{
 		  if (i1>=1)
 		    {
-		      temporaire[2*(2*nb_cells_y_*(2*nb_cells_x_-i1)+i2)]=temporaire[j0];
+		      temp[2*(2*nb_cells_y_*(2*nb_cells_x_-i1)+i2)]=temp[j0];
 		    }
 		}
 	    }
@@ -459,7 +459,7 @@ void FIELD::dist_init(PHI_FLOAT factor, float deltax, float deltay,   FFT_SERVER
 
       for (k=0; k < dist_size_ ; k++) 
 	{
-	  dist_[k] =  temporaire[k]/(double)(4*nb_cells_x_*nb_cells_y_);
+	  dist_[k] =  temp[k]/(double)(4*nb_cells_x_*nb_cells_y_);
 	}
  
       break;

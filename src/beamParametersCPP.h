@@ -59,12 +59,6 @@ class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
   
   BEAM_PARAMETERS();
   
-  virtual inline string name_of_class() const 
-    {
-      return string("BEAM_PARAMETERS");
-    }
-  
-  
   virtual string output_flow() const;
   
   inline int label() const 

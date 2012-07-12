@@ -464,13 +464,13 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       int k;
       int n_slice=grid_.get_n_cell_z();
       for (k=0; k<n_slice; k++)
-	{
-	  iteration_on_overlaping_slices(0,k,sor_parameter);
-	}
-      for (k=n_slice; k < 2*n_slice-1;k++)
-	{
-	  iteration_on_overlaping_slices(k - n_slice+1, n_slice-1, sor_parameter);
-	}
+		{
+		  iteration_on_overlaping_slices(0,k,sor_parameter);
+		}
+      for (k = n_slice; k < 2 * n_slice - 1; k++)
+		{
+			iteration_on_overlaping_slices(k - n_slice + 1, n_slice - 1, sor_parameter);
+		}
     }
   
   inline  void beam_interaction_with_trackpair(PAIR_BEAM& pair_beam_ref,PHI_FLOAT* sor_parameter )
@@ -513,16 +513,16 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       int slice_beam_2 = lastSliceOfBeam2;
       grid_.check_distribute(1);
       for (slice_beam_1 = firstSliceOfBeam1; slice_beam_1 <= lastSliceOfBeam2; slice_beam_1++)
-	{
-	  make_step(slice_beam_1, slice_beam_2, sor_parameter);
-	  slice_beam_2--;
-      }
+		{
+		  make_step(slice_beam_1, slice_beam_2, sor_parameter);
+		  slice_beam_2--;
+		}
       grid_.check_distribute(2);
       if (switches.get_do_size_log())
-	{
-	  beam1_.write_size(firstSliceOfBeam1, lastSliceOfBeam2);
-	  beam2_.write_size(firstSliceOfBeam1, lastSliceOfBeam2);
-	}
+		{
+		  beam1_.write_size(firstSliceOfBeam1, lastSliceOfBeam2);
+		  beam2_.write_size(firstSliceOfBeam1, lastSliceOfBeam2);
+		}
     }
   
   void save_results_on_files();
@@ -587,11 +587,6 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   void run(char *par,char *prot);
   //  void close();
   
-  virtual inline string name_of_class() const 
-    {
-      return string("GUINEA");
-    }
-   
   virtual string output_flow() const; 
   
 };

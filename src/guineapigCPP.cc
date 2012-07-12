@@ -44,7 +44,7 @@ void GUINEA::run( char *par,char *prot)
   grid_.connect_beams(&beam1_, &beam2_);
   generator_ = RNDM(switches.get_rndm_seed());
   grid_.connect_random_generator(&generator_);
-  if ( !check_parameters() ) exit(0);
+  if ( !check_parameters() ) exit(1);
   simulate();
   grid_.set_bpm_signals();
   outputs (string(prot) );
@@ -105,19 +105,23 @@ void GUINEA::save_results_on_files()
     }
   //   if (switches.get_track_secondaries() || switches.get_store_secondaries()) secondaries_.save_pairs_on_file(secondaries_file_);
   //   if (switches.get_store_secondaries() > 1) secondaries_.save_pairs0_on_file(secondaries0_file_);
-  if (switches.get_track_pairs() || switches.get_store_pairs()) secondaries_.save_pairs_on_file(secondaries_file_);
-  if (switches.get_store_pairs() > 1) secondaries_.save_pairs0_on_file(secondaries0_file_);
-  if (switches.get_track_muons() || switches.get_store_muons()) muons_.save_pairs_on_file(muons_file_);
-  if (switches.get_store_muons() > 1) muons_.save_pairs0_on_file(muons0_file_);
   if (switches.get_do_bhabhas())
     {
       grid_.get_bhabhas().save_on_files(switches.get_do_bhabhas(), bhabha_prod_, bhphoton_prod_,bhphotons_);
+      if (switches.get_track_pairs() || switches.get_store_pairs()) secondaries_.save_bhabhas_on_file(secondaries_file_);
+      if (switches.get_store_pairs() > 1) secondaries_.save_bhabhas0_on_file(secondaries0_file_);
     }
+  else
+  {
+	  if (switches.get_track_pairs() || switches.get_store_pairs()) secondaries_.save_pairs_on_file(secondaries_file_);
+	  if (switches.get_store_pairs() > 1) secondaries_.save_pairs0_on_file(secondaries0_file_);
+  }
+  if (switches.get_track_muons() || switches.get_store_muons()) muons_.save_pairs_on_file(muons_file_);
+  if (switches.get_store_muons() > 1) muons_.save_pairs0_on_file(muons0_file_);
 }
 
 void GUINEA::outputs(string nameOfProtokoll)
 {
-  //  int i1;
   float miss1, miss2;
   long out1, out2;
   grid_.get_miss(miss1, out1, miss2, out2);
@@ -131,25 +135,25 @@ void GUINEA::outputs(string nameOfProtokoll)
     }
   save_results_on_files();
   print_program_outputs(nameOfProtokoll);
-  //for(i1=1;i1<=6;i1++) time_.print_timer(i1);
+  //for(int i1=1;i1<=6;i1++) time_.print_timer(i1);
   //time_.print_timer_all(6);
 }
 
 bool GUINEA::check_parameters() const
 {
   int k;
-  bool oui = true;
+  bool check = true;
   //cerr << " checking parameters... " << endl;
 #ifdef USE_FFT_LOCAL
-  int vnx = TOOLS::verifPuissanceDe2(grid_.get_n_cell_x() );
-  int vny = TOOLS::verifPuissanceDe2(grid_.get_n_cell_y() );
+  int vnx = TOOLS::check_power_of_2(grid_.get_n_cell_x() );
+  int vny = TOOLS::check_power_of_2(grid_.get_n_cell_y() );
   if (switches.get_integration_method() == 2)
     {
       if (!vnx || !vny  )
 	{
 	  cerr << " ERROR : with integration_method = 2 the cell numbers must be power of 2 " << endl;
 	  cerr << " n_x = " << grid_.get_n_cell_x() << " n_y = " << grid_.get_n_cell_y()  << endl;
-	  oui = false;
+	  check = false;
 	}
     }
 #endif
@@ -157,14 +161,14 @@ bool GUINEA::check_parameters() const
     {
       cerr << " ERROR : key_word do_prod not completely implemented " << endl;
       // voir grid::move_particles cas do_beamstrahlung
-      oui = false;
+      check = false;
     }
   if (beam_parameters1_.dist_x() != 0 || beam_parameters2_.dist_x() != 0)
     {
       cerr << " dist_x other than 0 is not available " << endl;
       cerr << " dist_x.1 = " << beam_parameters1_.dist_x() << " dist_x.2 = "
 	   <<  beam_parameters2_.dist_x() << endl;
-      oui = false;
+      check = false;
     }
 
   bool do_photons = switches.get_do_photons(1)>0 || switches.get_do_photons(2)>0;
@@ -181,7 +185,7 @@ bool GUINEA::check_parameters() const
 	{
 	  //cerr << " with track_secondaries > 0 there must be  either do_pairs = 1 or do_compt = 1 or do_bhabhas = 1 " << endl;
 	  cerr << " with track_pairs > 0 there must be  either do_pairs = 1 or do_compt = 1 or do_bhabhas = 1 " << endl;
-	  oui = false;
+	  check = false;
 
 	}
     }
@@ -194,7 +198,7 @@ bool GUINEA::check_parameters() const
       //       if ( cutz <= 0 ) 
       // 	{
       // 	  cerr << "  GUINEA::check_parameters: the data of cut_z is mandatory. program stop " << endl;
-      // 	  oui = false;      
+      // 	  check = false;      
       // 	}
       if ( switches.get_cuts_from_loaded_beam() ) 
 	{
@@ -206,7 +210,7 @@ bool GUINEA::check_parameters() const
 	  if ( bpPtr[k]->sigma_z() <= 0.0 )
 	    {
 	      cerr << "  GUINEA::check_parameters: the data of sigma_z is mandatory. program stop " << endl;
-	      oui = false;
+	      check = false;
 	    }
 	}
 
@@ -219,7 +223,7 @@ bool GUINEA::check_parameters() const
 	  if (number < 2 )
 	    {
 	      cerr << " GUINEA::check_parameters : ERROR among beta_x, emitt_x, sigma_x only one parameter is given for beam " << k+1 << " . Two are needed " << endl;
-	      oui = false;
+	      check = false;
 	    }
 	  number = 0;
 	  if (bpPtr[k]->beta_y() > 0.0 ) number++;
@@ -228,7 +232,7 @@ bool GUINEA::check_parameters() const
 	  if (number < 2 )
 	    {
 	      cerr << " GUINEA::check_parameters : ERROR among beta_y, emitt_y, sigma_y only one parameter is given. Two are needed  " << endl;
-	      oui = false;
+	      check = false;
 	    }
 	}
     }
@@ -256,7 +260,7 @@ bool GUINEA::check_parameters() const
 		  if (number < 2 )
 		    {
 		      test = true;
-		      oui = false;
+		      check = false;
 		    }
 		  number = 0;
 		  if (bpPtr[k]->beta_y() > 0.0 ) number++;
@@ -265,7 +269,7 @@ bool GUINEA::check_parameters() const
 		  if (number < 2 )
 		    {
 		      test = true;
-		      oui = false;
+		      check = false;
 		    }
 		}
 	      if (test ) 
@@ -281,7 +285,7 @@ bool GUINEA::check_parameters() const
 		  if ( bpPtr[k]->sigma_z() <= 0.0 )
 		    {
 		      test = true;
-		      oui = false;
+		      check = false;
 		    }
 		}
 	      if (test) 
@@ -294,18 +298,18 @@ bool GUINEA::check_parameters() const
   if ( !grid_.random_ok() )
     {
       cerr << " GUINEA::check_parameters: GRID seems not to be connected to the random generator " << endl;
-      oui = false;
+      check = false;
     }
   if (switches.get_ST_spin_flip()  != 0) 
     {
       if (switches.get_bmt_precession() == 0) 
 	{
 	  cerr << " with ST_spin_flip, bmt_precession = 1 is MANDATORY " << endl;
-	  oui = false;
+	  check = false;
 	}
     }
   //cerr << " end of checking ... " << endl;
-  return oui;
+  return check;
 }
 
 // void GUINEA::close()
@@ -495,18 +499,18 @@ void GUINEA::simulate()
       //      break;
     case 2:
       if (switches.get_track_pairs() && switches.get_track_muons())
-	{
-	  beam_interaction_with_trackpair_muon(secondaries_, muons_, sor_parameter );	  
-	} 
+		{
+		  beam_interaction_with_trackpair_muon(secondaries_, muons_, sor_parameter );
+		}
       else if (switches.get_track_pairs()) 
-	{
-	  beam_interaction_with_trackpair(secondaries_, sor_parameter );
-	}
+		{
+		  beam_interaction_with_trackpair(secondaries_, sor_parameter );
+		}
       else if (switches.get_track_muons()) 
-	{
-	  beam_interaction_with_trackpair(muons_, sor_parameter );
-	}
-      else  beam_interaction( sor_parameter );
+		{
+		  beam_interaction_with_trackpair(muons_, sor_parameter );
+		}
+	  else  beam_interaction( sor_parameter );
       break;
     }
 }
@@ -515,7 +519,7 @@ string GUINEA::output_flow() const
 {
   ostringstream out;
   //double esum1,esum2;
-  out << title(string("other informations "));
+  out << title(string("other information "));
   //   esum1 = beam1_.meanEnergy();
   //   esum2 = beam2_.meanEnergy();
   //   out << " de1 = " <<  esum1 << " de2 = " <<  esum2 << endl;
@@ -600,7 +604,7 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
   grid_.moveAllParticles( gridsPtr_, i1,i2, switches.get_interpolation(), switches.get_do_beamstrahlung(),switches.get_ST_spin_flip(), switches.get_emin(), switches.get_do_prod(),switches.get_extra_grids(), switches.get_charge_sign(),switches.get_bmt_precession(),switches.get_do_trident());
   
   // nbeam = 2;
-  //  cout << " avancer le deuxième faisceau.... " << endl;
+  //  cout << " avancer le deuxiï¿½me faisceau.... " << endl;
   //  grid_.moveAllParticles( gridsPtr_, beam2_, nbeam, i2, switches.get_interpolation(), switches.get_do_beamstrahlung(),switches.get_ST_spin_flip(),switches.get_emin(), switches.get_do_prod(),switches.get_extra_grids(), switches.get_charge_sign(), switches.get_bmt_precession());
   
   time_.add_timer(4);
@@ -611,24 +615,24 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
       grid_.photon_lumi(min_z,switches,secondaries_, muons_, generator_);
 
       if(switches.get_do_pairs()||switches.get_do_hadrons()||switches.get_do_compt() || switches.get_do_muons())
-	{
-	  // c'est la qu'on va generer des paires
-	  grid_.photon_lumi_2(min_z,switches, secondaries_, muons_, generator_);
-	}
+		{
+		  // c'est la qu'on va generer des paires
+		  grid_.photon_lumi_2(min_z,switches, secondaries_, muons_, generator_);
+		}
       if (switches.get_do_compt()) 
-	{
-	  grid_.photon_lumi_3(min_z,switches, secondaries_, generator_);
-	}
+		{
+		  grid_.photon_lumi_3(min_z,switches, secondaries_, generator_);
+		}
       if (switches.get_do_coherent())
-	{
-	  grid_.move_photons2(beam1_,1,i1, generator_);
-	  grid_.move_photons2(beam2_,2,i2,  generator_);
-	}
+		{
+		  grid_.move_photons2(beam1_,1,i1, generator_);
+		  grid_.move_photons2(beam2_,2,i2,  generator_);
+		}
       else
-	{
-	  grid_.move_photons(beam1_,1,i1);
-	  grid_.move_photons(beam2_,2,i2);
-	}
+		{
+		  grid_.move_photons(beam1_,1,i1);
+		  grid_.move_photons(beam2_,2,i2);
+		}
       
     } // fin if (store photons)
   time_.add_timer(5);
@@ -706,18 +710,22 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
 void GUINEA::iteration_on_overlaping_slices(int firstSliceOfBeam1, int lastSliceOfBeam2,PHI_FLOAT* sor_parameter)
 {
   int i0;
+  grid_.get_results().set_step_lumi_ee (0.0);
+  grid_.get_results().set_step_lumi_ee_high(0.0);
   for (i0=0;i0<grid_.get_timestep();i0++)
     {
       make_time_step_on_slices(firstSliceOfBeam1, lastSliceOfBeam2, sor_parameter);
     }
+   grid_.get_results().add_lumi_ee_step(grid_.get_results().get_step_lumi_ee());
+   grid_.get_results().add_lumi_ee_high_step(grid_.get_results().get_step_lumi_ee_high());	
   if (switches.get_do_dump())
     {
       int istep;
       istep = firstSliceOfBeam1 + lastSliceOfBeam2;
       if (istep%switches.get_dump_step() ==0)
-	{
-	  dump_beams(istep,switches.get_dump_step(), switches.get_dump_particle());
-	}
+		{
+		  dump_beams(istep,switches.get_dump_step(), switches.get_dump_particle());
+		}
     } 
 }
 
@@ -725,6 +733,8 @@ void GUINEA::iteration_on_overlaping_slices_with_trackpair(PAIR_BEAM& pair_beam_
 {
   int i0;
   unsigned int numberToDistribute = lastSliceOfBeam2-firstSliceOfBeam1+1;
+  grid_.get_results().set_step_lumi_ee (0.0);
+  grid_.get_results().set_step_lumi_ee_high(0.0);
   if (switches.get_load_event()) 
     {
       //pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_secondaries(), generator_);
@@ -739,6 +749,8 @@ void GUINEA::iteration_on_overlaping_slices_with_trackpair(PAIR_BEAM& pair_beam_
       // and before that, desactived
       pair_beam_ref.desactive_current_pairs(numberToDistribute);
     }
+  grid_.get_results().add_lumi_ee_step(grid_.get_results().get_step_lumi_ee());
+  grid_.get_results().add_lumi_ee_high_step(grid_.get_results().get_step_lumi_ee_high());
   if (switches.get_do_dump())
     {
       int istep;
@@ -752,6 +764,8 @@ void GUINEA::iteration_on_overlaping_slices_with_trackpair_muon(PAIR_BEAM& pair_
 {
   int i0;
   unsigned int numberToDistribute = lastSliceOfBeam2-firstSliceOfBeam1+1;
+  grid_.get_results().set_step_lumi_ee (0.0);
+  grid_.get_results().set_step_lumi_ee_high(0.0);
   if (switches.get_load_event()) 
     {
       //pair_beam_ref.load_events(time_counter_, switches.get_pair_ratio(), switches.get_track_secondaries(), generator_);
@@ -770,6 +784,8 @@ void GUINEA::iteration_on_overlaping_slices_with_trackpair_muon(PAIR_BEAM& pair_
       pair_beam_ref.desactive_current_pairs(numberToDistribute);
       muon_beam_ref.desactive_current_pairs(numberToDistribute);
     }
+   grid_.get_results().add_lumi_ee_step(grid_.get_results().get_step_lumi_ee());
+   grid_.get_results().add_lumi_ee_high_step(grid_.get_results().get_step_lumi_ee_high());
   if (switches.get_do_dump())
     {
       int istep;

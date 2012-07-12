@@ -19,14 +19,14 @@ class TRIDENT
   TRIDENT();
   ~TRIDENT() {;}
   
-  bool makeVirtualPhoton(float* Emother,float* e_phot,float* q2, RNDM& hasard_);
-  void convertVirtualPhotons(float* Emother,vector<float> energies, vector<float>* tridents , float ups, double dz,RNDM& hasard_);
+  bool makeVirtualPhoton(float* Emother,float* e_phot,float* q2, RNDM& rndm_generator_);
+  void convertVirtualPhotons(float* Emother,vector<float> energies, vector<float>* tridents , float ups, double dz,RNDM& rndm_generator_);
 
-  bool pick_trident_energy(float kappa,float& energy, RNDM& hasard);
+  bool pick_trident_energy(float kappa,float& energy, RNDM& rndm_generator);
 
-  void createTridents(float* Emother,float ups,double dz,vector<float>* electrons,vector<float>* positrons,vector<float>* virt,RNDM& hasard);
+  void createTridents(float* Emother,float ups,double dz,vector<float>* electrons,vector<float>* positrons,vector<float>* virt,RNDM& rndm_generator);
 
-  void createTridents(float* Emother,float ups,double dz,vector<float>* electrons, vector<float>* positrons, RNDM& hasard);
+  void createTridents(float* Emother,float ups,double dz,vector<float>* electrons, vector<float>* positrons, RNDM& rndm_generator);
 
   /* Field parameter as seen by the photon */
   inline float kappa(float ups,float e_phot,float Emother)

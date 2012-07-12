@@ -479,7 +479,7 @@ int RNDM::rndm_load()
     FILE *file;	
     if ( (file = fopen("rndm.save","r")) )
       {
-        if( !fread(&rndm0_store,sizeof(rndm0_store),1,file)) return 0;
+        if( !fread(&rndm0_store,sizeof(rndm0_store),1,file)) {fclose(file); return 0;}
         fread(&rndm1_store,sizeof(rndm1_store),1,file);
         fread(&rndm2_store,sizeof(rndm2_store),1,file);
         fread(&rndm3_store,sizeof(rndm3_store),1,file);

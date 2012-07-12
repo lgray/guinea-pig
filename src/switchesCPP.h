@@ -97,12 +97,7 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   void lectureTWOBEAM(const PARAMETERS& param);
   void lectureCharge_sign_2(const PARAMETERS& param);
 
-virtual inline string name_of_class() const 
-{
-  return string("SWITCHES");
-}
-
-virtual  string output_flow() const;
+  virtual  string output_flow() const;
 
   inline int getTWOBEAM() const {return twobeam;};
   inline int get_rndm_load() const {return rndm_load;};

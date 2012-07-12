@@ -1193,7 +1193,7 @@ void def_param(MEMORY_ACCOUNT* m_account)
   define_values("{pair_ecut=5e-3;pair_step=1.0;do_muons=0;track_muons=0;store_muons=0;}", m_account);
   define_values("{do_tertphot=0;muon_ecut=0.105;muon_ratio=1.0;muon_scale=1.0;}", m_account);
   //define_values("{beam_size=1;beam_size_scale=1.0;ext_field=0;store_secondaries=1;}", m_account);
-  define_values("{beam_size=1;beam_size_scale=1.0;ext_field=0;store_pairs=1;}", m_account);
+  define_values("{beam_size=1;beam_size_scale=1.0;ext_field=0;store_pairs=0;}", m_account);
   define_values("{do_compt=0;do_compt_phot=0;compt_x_min=1.0;}", m_account);
   define_values("{compt_emax=100.0;do_coherent=0;compt_scale=1.0;}", m_account);
   define_values("{hist_ee_bins=200;hist_ee_min=0.0;hist_ee_max=-1.0;}", m_account);
@@ -1360,7 +1360,7 @@ int file_read_until(DATEI *datei,char *end,char *buff,int n_max)
     }
   if((n_max-=(tmp-datei->point)+len)>1)
     {
-      buff=strncat(buff,datei->point,tmp-datei->point+len);
+      strncat(buff,datei->point,tmp-datei->point+len);
     }
   else{
   }

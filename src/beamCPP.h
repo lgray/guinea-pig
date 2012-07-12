@@ -29,12 +29,6 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
 	}
     }
 
-  virtual inline string name_of_class() const 
-    {
-      return string("BEAM");
-    }
-  
-
   inline virtual string output_flow() const
     {
       ostringstream out;
@@ -147,10 +141,10 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
   inline int numberOfParticles() const {return particle_beam_.numberOfParticles();}
   
   
-  inline void make_beam(int n_slice, int bmt_rotate, RNDM* hasard) 
+  inline void make_beam(int n_slice, int bmt_rotate, RNDM* rndm_generator) 
     {
       photon_beam_ = PHOTON_BEAM(n_slice);
-      particle_beam_ = PARTICLE_BEAM(n_slice,bmt_rotate,beam_parameters_->get_polar(), hasard);
+      particle_beam_ = PARTICLE_BEAM(n_slice,bmt_rotate,beam_parameters_->get_polar(), rndm_generator);
     }
   
   

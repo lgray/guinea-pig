@@ -60,13 +60,13 @@ const double CONST3 = 0.01053281803;
 // ( omegac : critic pulsation of the synchrotron radiation; E energy of the 
 // electron, in joules)
 // xcrit is written as : CCRIT*(Egev)^2/rho
-// (rho : bending radius ; Egev is E, but exprimed in GeV)
+// (rho : bending radius ; Egev is E, but expressed in GeV)
 // so that CCRIT takes the value : 
 // 3/2* 10^-9 hbar*c/ ( e*(E0gev)^3)
 // from the value of omegac (thesis p. 16), with : E0gev : rest energy of
 // the electron, in GeV : e : electron charge
 // so : CCRIT = 3/2 * c * (hbar/e) 10^-9 / (E0gev)^3
-// HBAR  (see above) = hbar/e = hbar exprimed in GeV.s
+// HBAR  (see above) = hbar/e = hbar expressed in GeV.s
 const double CCRIT= 1.5*Cvelocity*HBAReVs/(EMASSMeV*EMASSMeV*EMASSMeV);
 //  const double CCRIT=2.22e-6;
 

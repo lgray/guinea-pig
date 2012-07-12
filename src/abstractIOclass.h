@@ -22,7 +22,6 @@ class  ABSTRACT_IO_CLASS
  ABSTRACT_IO_CLASS() {;}
  virtual  ~ABSTRACT_IO_CLASS() {;}
  
- virtual string name_of_class() const = 0;
  virtual string output_flow() const =0;
  virtual string persistent_flow() const {return "";}
 

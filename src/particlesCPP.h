@@ -38,10 +38,6 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
      ups_ = part.ups_;
    }
   
-  
-  virtual string name_of_class() const { return string("PARTICLE");}
-  
-
   // return the quantity dz/radius
   inline float advanceDueToEBfield(TRIVECTOR EBfield, float pasDeTemps, float scal_step_local)
     {
@@ -118,7 +114,7 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
     }
 
 
-  virtual inline void setParticle(float x,float y,float z,float vx,float vy,float energy, const TRIDVECTOR* dummy)
+  virtual inline void setParticle(float x,float y,float z,float vx,float vy,float energy, const TRIDVECTOR* /*dummy*/)
     {
       setParticle(x,y,z,vx,vy,energy);
     }
@@ -136,27 +132,27 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
     }
 
 
-  virtual inline void rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float charge_sign, float dt) {;}
+  virtual inline void rotateBMT(TRIDVECTOR /*Efield*/, TRIDVECTOR Bfield, float charge_sign, float dt) {;}
   
-  inline void beamstrahlung(TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius,  float emin, vector<float>& photonEnergies, RNDM& hasard)
+  inline void beamstrahlung(TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius,  float emin, vector<float>& photonEnergies, RNDM& rndm_generator)
     {
-      energy_ = PHYSTOOLS::synrad_no_spin_flip(ups_, energy_, dzOnRadius ,photonEnergies, hasard);
+      energy_ = PHYSTOOLS::synrad_no_spin_flip(ups_, energy_, dzOnRadius ,photonEnergies, rndm_generator);
       adjustEnergyToMinimum(emin);
     }
     
-  inline void createTridents(double dz,vector<float>* electrons,vector<float>* positrons,vector<float>* virt,RNDM& hasard)
+  inline void createTridents(double dz,vector<float>* electrons,vector<float>* positrons,vector<float>* virt,RNDM& rndm_generator)
     {
-      trident_.createTridents(&energy_,ups_,dz,electrons,positrons,virt,hasard);
+      trident_.createTridents(&energy_,ups_,dz,electrons,positrons,virt,rndm_generator);
     }
 
-  inline void createTridents(double dz,vector<float>* electrons,vector<float>* positrons,RNDM& hasard)
+  inline void createTridents(double dz,vector<float>* electrons,vector<float>* positrons,RNDM& rndm_generator)
     {
-      trident_.createTridents(&energy_,ups_,dz,electrons,positrons,hasard);
+      trident_.createTridents(&energy_,ups_,dz,electrons,positrons,rndm_generator);
     }
   
-  virtual inline void beamstrahlungSokolov(TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius,  float emin, float charge_sign, vector<float>& photonEnergies, RNDM& hasard)
+  virtual inline void beamstrahlungSokolov(TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius,  float emin, float charge_sign, vector<float>& photonEnergies, RNDM& rndm_generator)
     {
-      cerr << " appel illegal a PARTICLE::beamstrahlungSokolov " << endl;
+      cerr << " illegal call of PARTICLE::beamstrahlungSokolov " << endl;
       exit(0);
     }
   
@@ -180,7 +176,7 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
       float facPosition = 1.0e3;
       float facVelocity = 1.0e-6;
       set(energy, xpos, ypos,zpos,vx,vy);
-      // passage en nm et rad
+      // transform to nm and rad
       transform_to_internal_units(facPosition, facVelocity);
     }
 
@@ -207,11 +203,6 @@ class PARTICLE_WITH_SPIN : public PARTICLE
       spin_ = part.spin_ ;
     }
   
-  
-  
-  virtual string name_of_class() const { return string("PARTICLE_WITH_SPIN");}
-  
-  
   virtual inline const TRIDVECTOR& getSpin() const
     {
       return spin_;
@@ -234,7 +225,7 @@ class PARTICLE_WITH_SPIN : public PARTICLE
   
   inline void setSpin(TRIDVECTOR sp)
     {
-      cout << " appel setSpin " << endl;
+      //      cout << " appel setSpin " << endl;
       spin_ = sp;
     }
 
@@ -250,11 +241,11 @@ class PARTICLE_WITH_SPIN : public PARTICLE
   virtual void rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float charge_sign, float dt);
   
   
-  virtual inline void beamstrahlungSokolov(TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius,  float emin, float charge_sign, vector<float>& photonEnergies, RNDM& hasard)
+  virtual inline void beamstrahlungSokolov(TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius,  float emin, float charge_sign, vector<float>& photonEnergies, RNDM& rndm_generator)
     {
       TRIDVECTOR ev1, ev2, ev3; 
       PHYSTOOLS::referenceSpin((double)vx_, (double)vy_, ev1, ev2, ev3, Efield, Bfield, charge_sign);
-      energy_ = PHYSTOOLS::synrad_spin_flip(ups_,energy_, ev1, ev2, ev3, spin_,dzOnRadius,photonEnergies, hasard);
+      energy_ = PHYSTOOLS::synrad_spin_flip(ups_,energy_, ev1, ev2, ev3, spin_,dzOnRadius,photonEnergies, rndm_generator);
       adjustEnergyToMinimum(emin);
     }
   
@@ -306,8 +297,6 @@ class PHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
       helicity_ = helicityi;
       no_ = no;
     }
-  
-  virtual string name_of_class() const { return string("PHOTON");}
   
   virtual string  output_flow() const
     {
@@ -403,15 +392,14 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
     }
   virtual ~PAIR_PARTICLE () {;}
   
-  virtual const TRIDVECTOR& getSpin() const {
+  virtual const TRIDVECTOR& getSpin() const
+  {
     cerr << " PARTICLE::get_spin : a PAIR_PARTICLE has no spin, use PARTICLE_WITH_SPIN " << endl;
     exit(0);
 /*     const TRIDVECTOR tv(0.0,0.0,0.0); */
 /*     return tv; */
   }
     
-  virtual string name_of_class() const { return string("PAIR_PARTICLE");}
-  
   virtual string  output_flow() const
     {
       cerr << "  output_flow not programmed for class PAIR_PARTICLE " << endl;
@@ -420,16 +408,16 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   
   
   virtual string persistent_flow() const
-    {
-      ostringstream out;
-      float ener;
-      if ( icharge_) ener = -energy_;
-      else ener = energy_;
-      
-      //out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << process_ << " " << label_;
-      out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << xpos_ << " " << ypos_ << " " << zpos_;
-      return out.str();
-    }
+  {
+    ostringstream out;
+    float ener;
+    if ( icharge_) ener = -energy_;
+    else ener = energy_;
+
+    //out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << process_ << " " << label_;
+    out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << xpos_ << " " << ypos_ << " " << zpos_;
+    return out.str();
+  }
 
   inline int get_label() const {return label_;}
   inline int get_process() const {return process_;}
@@ -480,21 +468,21 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
     }
 
 
-  void synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, vector<float>* photon_e, RNDM& hasard);
+  void synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, vector<float>* photon_e, RNDM& rndm_generator);
 
-  void synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, RNDM& hasard);
+  void synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, RNDM& rndm_generator);
  
   float apply_magnetic_field_on_pair(float fac_theta, float step_q, float bx, float by);
 
-  float apply_final_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, float thetamx, RNDM& hasard);
+  float apply_final_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, float thetamx, RNDM& rndm_generator);
 
-  float apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& hasard);
+  float apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& rndm_generator);
 
-  float apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& hasard);
+  float apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& rndm_generator);
  
-  float apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& hasard); 
+  float apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& rndm_generator); 
 
-  float apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& hasard); 
+  float apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& rndm_generator); 
 
   void update_energy(double mass);
 
@@ -603,8 +591,6 @@ class TERTPHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
       vz_/=norm;
       energy_ = energy;
     }
-  
-  virtual string name_of_class() const { return string("TERTPHOTON");}
   
   virtual string  output_flow() const
     {

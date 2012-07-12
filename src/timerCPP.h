@@ -3,13 +3,10 @@
 
 #include <ctime>
 
-using namespace std;
-
 class TIMER
 {
   clock_t timer_store[100];
   clock_t old_clock,zero_clock;
-
 
  public:
 

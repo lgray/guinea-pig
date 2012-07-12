@@ -1,3 +1,16 @@
+30-12-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
+	* use english consistently
+16-12-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
+	* small fixes
+	* add cmake files
+01-12-2011 Barbara Dalena <Barbara.Dalena@cern.ch>
+	* configure package version setted to 1.2.0
+	* luminosity calculation at each step added 
+	* default store_pairs=0  
+01-12-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
+	* timerCPP.h/cc: fixes
+	* LesDefines.h: cleanup
+	* timer.h: delete
 25-11-2011 Jochem Snuverink <Jochem.Snuverink@cern.ch>
 	* configure.ac: improve check on 64 bit
 23-11-2011 Barbara Dalena <barbara.dalena@cern.ch>

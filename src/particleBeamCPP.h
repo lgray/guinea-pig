@@ -132,7 +132,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   unsigned long int initial_number_of_particles_;
   unsigned long int number_of_particles_dispatched_in_slices_;
   float r_macro,zmin,dz;
-  RNDM* tirage_;
+  RNDM* rndm_generator_;
   unsigned int typOfParticle_;
   float sigmax_, sigmay_, sigmaz_;
   TRIDVECTOR polarization_;
@@ -265,10 +265,10 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 
   inline void get_rndm_xy_particle(float sigmax, float sigmay, float sigxp, float sigyp, float& x, float& y, float& vx, float& vy) const
     {
-      x = tirage_->gasdev()*sigmax;
-      y = tirage_->gasdev()*sigmay;
-      vx = tirage_->gasdev()*sigxp;
-      vy = tirage_->gasdev()*sigyp;
+      x = rndm_generator_->gasdev()*sigmax;
+      y = rndm_generator_->gasdev()*sigmay;
+      vx = rndm_generator_->gasdev()*sigxp;
+      vy = rndm_generator_->gasdev()*sigyp;
     }
 
   void assign_xyz_normal_distribution(int dist_z,float delta_z,float sigma_x,float sigma_y, float sigmaz, float sigma_x_prime,float sigma_y_prime, float energy);
@@ -439,7 +439,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 
   PARTICLE_BEAM() : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM()
     {
-      tirage_ = NULL;
+      rndm_generator_ = NULL;
     }
   
   ~PARTICLE_BEAM()
@@ -468,13 +468,13 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
 
-  PARTICLE_BEAM(int nb_slices,int bmt_rotate,TRIDVECTOR polar, RNDM* hasard) : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM()
+  PARTICLE_BEAM(int nb_slices,int bmt_rotate,TRIDVECTOR polar, RNDM* rndm_generator) : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM()
     {
       set(bmt_rotate, polar);
       particle_ = vector< vector<PARTICLE*> >(nb_slices);
       coherent_ = vector< vector<PARTICLE*> >(nb_slices);
       trident_ = vector< vector<PARTICLE*> >(nb_slices);
-      tirage_ = hasard;
+      rndm_generator_ = rndm_generator;
     }
   
   inline  vector<PARTICLE*>& getParticleVector(int slice)  { return particle_[slice];}
@@ -608,12 +608,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 
   void ang_dis(unsigned int n_bin, vector< vector<float> >& bin ) const;
   
-  virtual inline string name_of_class() const 
-    {
-      return string("PARTICLE_BEAM");
-    }
-
-  string output_flow() const; 
+  virtual string output_flow() const; 
   int store_beam(string name) const;
   void dump_beam(string name, int istep, int every_particle, int timestep, float step, float max_z, int  sign_label);
   void store_coherent_beam(string name) const;
@@ -654,7 +649,7 @@ class  PHOTON_BEAM
   inline void new_loaded_photon(int sliceDATA, float energy, float hel, float xt, float yt, float vx,float vy)
     {
       if( sliceDATA < 0 || sliceDATA >= n_slice_) return;
-      // guineapig original, n'attribue pas de valeur a z pour le photon
+      // guineapig original, don't attribute a value to z for a photon
       photon_count_.addPhoton(energy);
       slice_photon_vector_[sliceDATA].insert(slice_photon_vector_[sliceDATA].begin(), PHOTON(xt, yt,0.0, vx, vy, energy, hel,photon_count_.getNumber()));
     }
@@ -690,7 +685,7 @@ class  PHOTON_BEAM
   
   inline void photon_info(double& sum,int& number) const
     {
-      int i,n,nt;
+      int i,n,nt=0;
       double s;
       sum = 0.0;
       number = 0;

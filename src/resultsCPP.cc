@@ -25,20 +25,10 @@ RESULTS::RESULTS() : switches_(NULL)
   lumi_ecm2=0.0;
   lumi_ecm3=0.0;
   lumi_ecm4=0.0;
-  // wrong initialization commented B.Dalena 11/02/2010
-  //   hadrons_ee[1]=0.0;
-  //   hadrons_ee[2]=0.0;
-  //   hadrons_ee[3]=0.0;
-  //   hadrons_eg[1]=0.0;
-  //   hadrons_eg[2]=0.0;
-  //   hadrons_eg[3]=0.0;
-  //   hadrons_ge[1]=0.0;
-  //   hadrons_ge[2]=0.0;
-  //   hadrons_ge[3]=0.0;
-  //   hadrons_gg[1]=0.0;
-  //   hadrons_gg[2]=0.0;
-  //   hadrons_gg[3]=0.0;
   upsmax=0.0;
+  lumi_ee_step.reserve(2);
+  lumi_ee_high_step.reserve(2);
+  for(int k=0;k<2;k++) step_lumi[k]=0.0;	
 }
 
 
@@ -250,6 +240,8 @@ string  RESULTS::output_flow() const
    
   out <<  "lumi_ee=" << lumi_ee << ";"<< endl;   
   out <<  "lumi_ee_high=" << lumi_ee_high << ";"<< endl;   
+  out <<  "step " <<  " " <<  " lumi total " << " " <<  " lumi peak " << endl;
+  for (int sstep=0;sstep< (int)lumi_ee_step.size();sstep++) out << sstep+1 << "  " << lumi_ee_step[sstep]<< "  " << lumi_ee_high_step[sstep] << endl;
   return out.str();
 }
 
@@ -329,7 +321,7 @@ string PAIRS_RESULTS::output_flow() const
     out << " Bethe-Heitler process : n_BH = " << nproc_[1] <<  " e_BH = " << eproc_[1] << " GeV " << endl;
     out << " Landau-Lifschitz process : n_LL = " << nproc_[2] << " e_LL = " << eproc_[2] <<  " GeV " << endl;
     out << endl;
-    out << " total numer (an total energy, in GeV) of the particles due to the 3 processes : " << endl;
+    out << " total nb (and total energy, in GeV) of the particles due to the 3 processes : " << endl;
     out << "n.1 = " << n1_ << " b.1 = " << b1_ << endl;
     out << "n.2 = " << n2_ << " b.2 = " << b2_ << endl;
     out << endl;
@@ -375,7 +367,7 @@ COMPT_RESULTS::COMPT_RESULTS()
 
 
 // 'composante' is old 'scdn1+scdn2'
-int COMPT_RESULTS::store_compt(int composante, double e,double px,double py,double pz,double wgt,RNDM& hasard)
+int COMPT_RESULTS::store_compt(int composante, double e,double px,double py,double pz,double wgt,RNDM& rndm_generator)
 {
     if(pz>0.0)
       {
@@ -390,7 +382,7 @@ int COMPT_RESULTS::store_compt(int composante, double e,double px,double py,doub
 	
     eproc_[composante] += fabs(e) * wgt;
     nproc_[composante] += wgt;
-    if (wgt < hasard.rndm()) 
+    if (wgt < rndm_generator.rndm()) 
       {
 	return 0;
       }

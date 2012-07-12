@@ -52,6 +52,7 @@ class IFILE_IN_OUT
   virtual void save_object_on_output_listing(const ABSTRACT_IO_CLASS* const obj) = 0;
 
   virtual void save_object_on_persistent_file(const ABSTRACT_IO_CLASS* const obj) = 0;
+  virtual void save_object_on_persistent_file(const int evtIdx, const ABSTRACT_IO_CLASS* const obj) = 0;
 
 
 };

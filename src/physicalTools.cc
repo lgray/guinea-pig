@@ -3,13 +3,13 @@
 
 BESSEL PHYSTOOLS::bessel_ = BESSEL();
 
-void PHYSTOOLS::mkit(double gam2i,double& c, RNDM& hasard)
+void PHYSTOOLS::mkit(double gam2i,double& c, RNDM& rndm_generator)
 {
    JET_FLOAT x,sigma0,beta,y;
     beta=sqrt((double)1.0-gam2i);
     //   scdgam2i_ = gam2i;
     sigma0= pair_ang_i(beta, gam2i);
-    y=(2.0*hasard.rndm_pairs()-1.0)*sigma0;
+    y=(2.0*rndm_generator.rndm_pairs()-1.0)*sigma0;
     if (y<=0.0)
       {
 	x=-0.5*beta;
@@ -24,7 +24,7 @@ void PHYSTOOLS::mkit(double gam2i,double& c, RNDM& hasard)
     c= x/beta;
 }
 
-float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius, vector<float>&  photon, RNDM& hasard) 
+float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius, vector<float>&  photon, RNDM& rndm_generator) 
 {
   int n,i,j=0;
   float tmp;
@@ -38,10 +38,10 @@ float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
   TRIDVECTOR stokes;
   for (i=0;i<n;i++)
     {
-      //      int aux = synrad_0(eng,e2, e3, polar, sokolov, radius_i,dz,photon+j, hasard);
+      //      int aux = synrad_0(eng,e2, e3, polar, sokolov, radius_i,dz,photon+j, rndm_generator);
       int aux;
 
-      aux = synrad_0_spin_flip( upsilonSingleP,eng,e1, e2, e3, polar,stokes,  dzOnRadius,&photener, hasard);
+      aux = synrad_0_spin_flip( upsilonSingleP,eng,e1, e2, e3, polar,stokes,  dzOnRadius,&photener, rndm_generator);
       if (aux) 
 	{
 	  photon.push_back(photener);
@@ -68,7 +68,7 @@ float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
 }
 
 // return final energy of the radiating particle
-float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOnRadius,vector<float>&  photon, RNDM& hasard) 
+float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOnRadius,vector<float>&  photon, RNDM& rndm_generator) 
 {
   int n,i,j=0;
   float tmp;
@@ -83,7 +83,7 @@ float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOn
     {
       int aux;
 
-      aux = synrad_0_no_spin_flip( upsilonSingleP,eng, dzOnRadius,&photener, hasard);
+      aux = synrad_0_no_spin_flip( upsilonSingleP,eng, dzOnRadius,&photener, rndm_generator);
 	
 
       if (aux) 
@@ -118,7 +118,7 @@ float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOn
 // return the photon energy in 'photonEnergy'
 // update the vector 'polar' :final polarization vector of the particle
 // fill the vector of the stokes parameters of the emitted photon
-int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& stokes, float dzOnRadius,float* photonEnergy, RNDM& hasard)
+int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& stokes, float dzOnRadius,float* photonEnergy, RNDM& rndm_generator)
 {
   int k;
   double x, s2, s3;
@@ -139,9 +139,9 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
   double gamma = eng/EMASS;
   double factor =  pow ( (1.0 + 0.5 * upsilon_bar ), 0.33333333333);
   p0 = CONST1 * dzOnRadius * gamma  / factor ; 
-  if (hasard.rndm_synrad()>p0) return 0;
-  p1=hasard.rndm_synrad();
-  while((v1=hasard.rndm_synrad())==0.0) ; /* v1!= 0.0 */
+  if (rndm_generator.rndm_synrad()>p0) return 0;
+  p1=rndm_generator.rndm_synrad();
+  while((v1=rndm_generator.rndm_synrad())==0.0) ; /* v1!= 0.0 */
   v3 = v1*v1*v1;
   double xden = 1.0 - v3 + 0.5 * upsilon_bar * ( 1.0 + v3 * v3 );
   x = upsilon_bar * v3 / xden;
@@ -207,7 +207,7 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
 // eng : energie en GeV
 // dz : metres 
 // without spin flip
-int PHYSTOOLS::synrad_0_no_spin_flip (float upsilonSingleP, float eng, float dzOnRadius,float* photonEnergy, RNDM& hasard)
+int PHYSTOOLS::synrad_0_no_spin_flip (float upsilonSingleP, float eng, float dzOnRadius,float* photonEnergy, RNDM& rndm_generator)
 {
   double x;
   double p0,p1,v1,v3,g;
@@ -229,9 +229,9 @@ int PHYSTOOLS::synrad_0_no_spin_flip (float upsilonSingleP, float eng, float dzO
   double factor =  pow ( (1.0 + 0.5 * upsilon_bar ), 0.33333333333);
   p0 = CONST1 * dzOnRadius * gamma / factor ; 
   //  cout << " p0 = " << p0 << " a l'ancienne " << synrad_p0(eng,radius_i,dz) << endl;
-  if (hasard.rndm_synrad()>p0) return 0;
-  p1=hasard.rndm_synrad();
-  while((v1=hasard.rndm_synrad())==0.0) ; /* v1!= 0.0 */
+  if (rndm_generator.rndm_synrad()>p0) return 0;
+  p1=rndm_generator.rndm_synrad();
+  while((v1=rndm_generator.rndm_synrad())==0.0) ; /* v1!= 0.0 */
   v3 = v1*v1*v1;
   double xden = 1.0 - v3 + 0.5 * upsilon_bar * ( 1.0 + v3 * v3 );
   x = upsilon_bar * v3 / xden;

@@ -17,15 +17,15 @@ TRIDENT::TRIDENT()
   flag=false;
 }
 
-bool TRIDENT::makeVirtualPhoton(float* Emother,float* e_phot,float* q2,RNDM& hasard)
+bool TRIDENT::makeVirtualPhoton(float* Emother,float* e_phot,float* q2,RNDM& rndm_generator)
 {
   int n_phot;
   float initialEnergy =fabs(*Emother);
   n_phot=(int)floor(r_phot);
   r_phot -= n_phot;
-  if(hasard.rndm()<r_phot) 
+  if(rndm_generator.rndm()<r_phot) 
     {
-      PHYSTOOLS::mequiv(s4, lns4,xmin,initialEnergy,i_equiv,e_phot,q2,&one_m_x, hasard);    
+      PHYSTOOLS::mequiv(s4, lns4,xmin,initialEnergy,i_equiv,e_phot,q2,&one_m_x, rndm_generator);    
       if(*e_phot>0.0) return true;
       else return false;
     }
@@ -35,7 +35,7 @@ bool TRIDENT::makeVirtualPhoton(float* Emother,float* e_phot,float* q2,RNDM& has
 
 /* Decides whether to create pairs from the virtual photons */
 /* Modifies the energy of the particle Emother */
-void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vector<float>* tridents , float ups, double dz,RNDM& hasard_)
+void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vector<float>* tridents , float ups, double dz,RNDM& rndm_generator_)
 {
   double p;
   float kap;
@@ -51,7 +51,7 @@ void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vecto
       //      else{
       if(p<0.01)
 	{
-	  if(p>hasard_.rndm())
+	  if(p>rndm_generator_.rndm())
 	    {
 	      tridents->push_back(energies[i]);
 	      if (*Emother < 0.0)
@@ -64,7 +64,7 @@ void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vecto
 		}  
 	    }
 	}
-      else if(1-exp(-p)>hasard_.rndm())
+      else if(1-exp(-p)>rndm_generator_.rndm())
 	{
 	  tridents->push_back(energies[i]);
 	  if (*Emother < 0.0)
@@ -80,7 +80,7 @@ void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vecto
     }
 } //jakob
 
-// void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vector<float>* tridents , float ups, double dz,RNDM& hasard_)
+// void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vector<float>* tridents , float ups, double dz,RNDM& rndm_generator_)
 // {
 //   double p;
 //   for(unsigned int i=0;i<energies.size();i++)
@@ -100,7 +100,7 @@ void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vecto
 // 	    }	  
 // 	  p-=1;
 // 	}
-//       if(p>hasard_.rndm())
+//       if(p>rndm_generator_.rndm())
 // 	{
 // 	  tridents->push_back(energies[i]);
 // 	  if (*Emother < 0.0)
@@ -115,10 +115,10 @@ void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vecto
 //     }
 // } //jakob
 
-bool TRIDENT::pick_trident_energy(float kappa,float& energy, RNDM& hasard)
+bool TRIDENT::pick_trident_energy(float kappa,float& energy, RNDM& rndm_generator)
 {
   double a=0.13513,eta,dxdy,x,h,hp,tmp,tmp2,y,coh;
-  y=2.0*hasard.rndm()-1.0;
+  y=2.0*rndm_generator.rndm()-1.0;
   eta=8.0/(3.0*kappa);
   tmp=fabs(y/(1.0+(1.0-y*y)/(2.0*sqrt(eta))));
   tmp2=1.0-tmp*tmp;
@@ -135,7 +135,7 @@ bool TRIDENT::pick_trident_energy(float kappa,float& energy, RNDM& hasard)
   dxdy=hp/sqrt(h*(h+eta))*(1.0-h/(h+eta));
   coh=PHYSTOOLS::u(kappa);
   tmp=PHYSTOOLS::fcp(kappa,x)*a/coh*dxdy;
-  if (hasard.rndm()<tmp){
+  if (rndm_generator.rndm()<tmp){
      energy *= x;
     return true;
   } else {
@@ -143,18 +143,18 @@ bool TRIDENT::pick_trident_energy(float kappa,float& energy, RNDM& hasard)
   }
 }
 
-void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* electrons, vector<float>* positrons,vector<float>* virt, RNDM& hasard) //dz is in nm
+void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* electrons, vector<float>* positrons,vector<float>* virt, RNDM& rndm_generator) //dz is in nm
 {  
   vector<float> energies;
   float kap;
   e_phot=0;
   q2=0;
-  virtExist=makeVirtualPhoton(Emother,&e_phot,&q2,hasard);   
+  virtExist=makeVirtualPhoton(Emother,&e_phot,&q2,rndm_generator);   
   if(virtExist)
     {
       energies.push_back(e_phot); 
     }
-  convertVirtualPhotons(Emother,energies,electrons,ups,dz,hasard);
+  convertVirtualPhotons(Emother,energies,electrons,ups,dz,rndm_generator);
   if (energies.size()>1) cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple photons"<<endl;
   if (electrons->size()>1) cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple electrons"<<endl;
   for(unsigned int i=0;i<electrons->size();i++)
@@ -164,7 +164,7 @@ void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* e
       kap=kappa(ups,help,fabs(*Emother));
       while(!flag)
 	{
-	  flag=pick_trident_energy(kap,(*electrons)[i],hasard);
+	  flag=pick_trident_energy(kap,(*electrons)[i],rndm_generator);
 	}
       positrons->push_back((*electrons)[i]-help);
       virt->push_back(q2);
@@ -172,18 +172,18 @@ void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* e
   //  bottom: ; //to be removed
 }
 
-void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* electrons, vector<float>* positrons, RNDM& hasard) //dz is in nm
+void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* electrons, vector<float>* positrons, RNDM& rndm_generator) //dz is in nm
 {  
   vector<float> energies;
   float kap;
   e_phot=0;
   q2=0;
-  virtExist=makeVirtualPhoton(Emother,&e_phot,&q2,hasard);   
+  virtExist=makeVirtualPhoton(Emother,&e_phot,&q2,rndm_generator);   
   if(virtExist)
     {
       energies.push_back(e_phot); 
     }
-  convertVirtualPhotons(Emother,energies,electrons,ups,dz,hasard);
+  convertVirtualPhotons(Emother,energies,electrons,ups,dz,rndm_generator);
   if (electrons->size()>1) cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple electrons"<<endl;
   for(unsigned int i=0;i<electrons->size();i++)
     {
@@ -192,7 +192,7 @@ void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* e
       kap=kappa(ups,help,fabs(*Emother));
       while(!flag)
 	{
-	  flag=pick_trident_energy(kap,(*electrons)[i],hasard);
+	  flag=pick_trident_energy(kap,(*electrons)[i],rndm_generator);
 	}
       positrons->push_back((*electrons)[i]-help);
       //      virt->push_back(q2);

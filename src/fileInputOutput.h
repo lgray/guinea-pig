@@ -27,6 +27,7 @@ class FILE_IN_OUT
 
   virtual inline void open_file(string name, const char* mode)
     { 
+//	  cout << "Opening file " << name << endl;
       out_to_file_->open_file(name, mode);
     }
 
@@ -123,6 +124,12 @@ class FILE_IN_OUT
     {
       if (obj == NULL) return;
       out_to_file_->save_object_on_persistent_file(obj);
+    }
+
+  virtual inline void save_object_on_persistent_file(const int evtIndex, const ABSTRACT_IO_CLASS* const obj)
+    {
+      if (obj == NULL) return;
+      out_to_file_->save_object_on_persistent_file(evtIndex, obj);
     }
 
 };
