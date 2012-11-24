@@ -17,7 +17,7 @@ guinearoot:
 	$(MAKE) -C src guinearoot 2>&1 | tee log.guinea-root.$$$$
 
 install: all
-	test -d $(bindir) || mkdir $(bindir)
+	test -d $(bindir) || mkdir -p $(bindir)
 	cd src && cp @make_all@ $(bindir) && cd ..
 clean: 
 	rm -f log.*
