@@ -415,7 +415,7 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
     else ener = energy_;
 
     //out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << process_ << " " << label_;
-    out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << xpos_ << " " << ypos_ << " " << zpos_;
+    out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << xpos_ << " " << ypos_ << " " << zpos_ << " " << process_;
     return out.str();
   }
 

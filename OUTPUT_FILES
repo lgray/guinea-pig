@@ -8,13 +8,11 @@ Description of GUINEA-PIG Output Files
 
    If the energy is negative the photon is from the second beam.	
 
-
 2) beam1(2).dat
    
    Particles of the first and second beam respectively.
 
    Particle Energy [GeV] | x [um] | y [um] | z [um] | x' [urad] | y' [urad]
-
 
 3) coh1(2).dat 
    
@@ -22,12 +20,16 @@ Description of GUINEA-PIG Output Files
    
    Particle Energy [GeV] | x [um] | y [um] | z [um] | x' [mrad] | y' [mrad]
 
-
 4) pairs.dat 
   
    Incoherent Pairs after beam-beam interaction.
    
-   Particle Energy [GeV] | Beta_x | Beta_y | Beta_z | x [nm] | y [nm] | z [nm]
+   Particle Energy [GeV] | Beta_x | Beta_y | Beta_z | x [nm] | y [nm] | z [nm] | process (*)
+
+   (*) 'process' can be:
+       	'0' : Breit-Wheeler
+	'1' : Bethe-Heitler
+	'2' : Landau-Lifschitz
 
 5) hadron.dat
 
