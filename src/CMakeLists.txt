@@ -17,9 +17,19 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CMAKE_CURRENT_BIN
 add_executable(guinea ${MODULES})
 
 if(FFTW2)
-   target_link_libraries(guinea fftw m)
+   if(FFTW2_FOUND)
+      target_link_libraries(guinea ${FFTW2_LIBRARIES})
+      include_directories(${FFTW2_INCLUDES})
+   else()
+      target_link_libraries(guinea fftw m)
+   endif()
 elseif(FFTW3)
-   target_link_libraries(guinea fftw3 m)
+   if(FFTW_FOUND)
+      target_link_libraries(guinea ${FFTW_LIBRARIES})
+      include_directories(${FFTW_INCLUDES})
+   else()
+      target_link_libraries(guinea fftw3 m)
+   endif()
 endif()
 
 # Installing targets and headers:
