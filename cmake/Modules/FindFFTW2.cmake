@@ -16,6 +16,6 @@ set(FFTW2_LIBRARIES ${FFTW2_LIB} ${FFTW2_M_LIB})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(FFTW2 DEFAULT_MSG
-                                  FFTW2_INCLUDES FFTW2_LIBRARIES)
+   FFTW2_LIB FFTW2_INCLUDES FFTW2_LIBRARIES)
 
 mark_as_advanced(FFTW2_INCLUDES FFTW2_LIBRARIES)
