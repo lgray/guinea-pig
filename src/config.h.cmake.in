@@ -1,5 +1,6 @@
 /* src/config.h.in.  Generated from configure.ac by autoheader.  */
 
+
 /* Define to 1 if you have the `floor' function. */
 #cmakedefine HAVE_FLOOR
 
@@ -90,3 +91,12 @@
 
 /* Define to rpl_malloc if the replacement function should be used. */
 #cmakedefine malloc
+
+/* Define to 1 if you have the <fftw.h> header file. */
+#cmakedefine HAVE_FFTW_H 1
+
+/* Define to 1 if you have (and should use) the <dfftw.h> header file. */
+#cmakedefine HAVE_DFFTW_H 1
+
+/* Define to 1 if you have (and should use) the <sfftw.h> header file. */
+#cmakedefine HAVE_SFFTW_H 1

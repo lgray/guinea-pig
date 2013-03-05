@@ -6,6 +6,8 @@
 #include "stdio.h"   //   exit function 
 #include "stdlib.h"  //   exit function
 
+#include "config.h"  // have fftw/sfftw/dfftw
+
 using namespace std;
 
 
@@ -60,7 +62,15 @@ virtual inline void make() {  fourtrans(in_,nn_,direction_);}
 #ifdef USE_FFTW2
 extern "C"
 {
+#ifdef HAVE_FFTW_H
 #include "fftw.h"
+#elif defined(HAVE_DFFTW_H)
+#include "dfftw.h"
+#elif defined(HAVE_SFFTW_H)
+#include "sfftw.h"
+#else // This is for old ./configure
+#include "fftw.h"
+#endif
 }
 
 class FOUR_FFTW2_ONE : public ABSTRACT_FOURIER

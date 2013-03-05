@@ -4,16 +4,15 @@ endif (FFTW2_INCLUDES AND FFTW2_LIBRARIES)
 
 find_path(FFTW2_INCLUDES
   NAMES
-  fftw.h
+  fftw.h dfftw.h sfftw.h
   PATHS
   $ENV{FFTW2DIR}
   ${INCLUDE_INSTALL_DIR}
 )
 
-find_library(FFTW2_LIB NAMES fftw PATHS $ENV{FFTW2DIR} ${LIB_INSTALL_DIR})
+find_library(FFTW2_LIB NAMES fftw dfftw sfftw PATHS $ENV{FFTW2DIR} ${LIB_INSTALL_DIR})
 find_library(FFTW2_M_LIB NAMES m PATHS $ENV{FFTW2DIR} ${LIB_INSTALL_DIR})
 set(FFTW2_LIBRARIES ${FFTW2_LIB} ${FFTW2_M_LIB})
-message(STATUS "FFTW2 ${FFTW2_LIBRARIES}" )
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(FFTW2 DEFAULT_MSG
