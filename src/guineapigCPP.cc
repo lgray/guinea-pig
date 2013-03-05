@@ -1,4 +1,5 @@
 #include "guineapigCPP.h"
+#include "option_args.h"
 using namespace std;
 
 
@@ -387,8 +388,8 @@ void GUINEA::set_beams_and_grids()
 	  {
 	    // these pointers will be deleted a the end of loading particles, 
 	    // by the beam objects.
-	    BEAM_FROM_FILE* bffe = new BEAM_FROM_FILE(electron_input_file_);
-	    BEAM_FROM_FILE* bffp = new BEAM_FROM_FILE(positron_input_file_);
+	    BEAM_FROM_FILE* bffe = new BEAM_FROM_FILE(get_elfilename());
+	    BEAM_FROM_FILE* bffp = new BEAM_FROM_FILE(get_posfilename());
 	    xycuts_for_grids(*bffe, *bffp, switches.get_extra_grids()+1, size_x, size_y, updated_n_cell_x, updated_n_cell_y);
 	    size_z = zcut_for_grids(*bffe, *bffp);
 

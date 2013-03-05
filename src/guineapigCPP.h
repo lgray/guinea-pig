@@ -47,8 +47,6 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 
   string event_input_file_;
   string cross_input_file_;
-  string electron_input_file_;
-  string positron_input_file_;
   string photon_input_file_;
   string bhabha_input_file_;
   string bhabha_photon_input_file_;
@@ -92,8 +90,6 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     {
       event_input_file_ = string("event.ini");
       cross_input_file_ = string("cross.ini");
-      electron_input_file_ = string("electron.ini");
-      positron_input_file_ = string("positron.ini");
       photon_input_file_ = string("photon.ini");
       bhabha_input_file_ = string("bhabha.ini");
       bhabha_photon_input_file_ = string("bhabha_photon.ini");

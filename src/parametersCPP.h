@@ -10,6 +10,8 @@ extern "C"
 #include "lectureDonnees.h"
 }
 
+#include "option_args.h"
+
 using namespace std;
 
 class PARAMETERS
@@ -115,7 +117,7 @@ class PARAMETERS
     {
       init_memory_account(&m_account_,0);
       int testFichier=0;
-      testFichier = fileOpen(&datei_,"acc.dat","r");
+      testFichier = fileOpen(&datei_,get_acc_filename(),"r");
   
       if (!testFichier) 
 	{

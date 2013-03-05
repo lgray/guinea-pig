@@ -1,13 +1,19 @@
 #include "guineapigCPP.h"
 #include "particleBeamCPP.h"
+#include "option_args.h"
 
 VAR_HEAP var_heap;
 INPUT_MAISON input;
 
-int mainGuineapig(char *argv[])
+int mainGuineapig(std::vector<std::string> input_arguments)
 {
-   GUINEA guinee(argv[1]);
-      guinee.run(argv[2],argv[3]);
+  // There is probably a nicer way to do this...
+   std::string arg1 = input_arguments[0];
+   std::string arg2 = input_arguments[1];
+   std::string arg3 = input_arguments[2];
+
+   GUINEA guinee((char*)(arg1.c_str()));
+      guinee.run((char*)(arg2.c_str()),(char*)(arg3.c_str()));
     return 0;
 }
 
@@ -15,21 +21,6 @@ int mainGuineapig(char *argv[])
   
 int main (int argc,char *argv[])
 {
-
-  if(argc!=4) 
-    {
-      if (argc>4) 
-	{
-	  cout << "Too many arguments for guinea" << endl;
-	}
-      else 
-	{
-	  cout << "Not enough arguments for guinea" << endl;
-	  cout << " principal , argc= " << argc << endl;
-	}
-      cout << "Usage : guinea accelerator parameter_set output_file " << endl;
-      return 1;
-    }
-  mainGuineapig(argv);
-  return 0;
+  std::vector<std::string> input_arguments = read_args(argc,argv);
+  return mainGuineapig(input_arguments);
 }

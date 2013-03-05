@@ -17,7 +17,7 @@ LDFLAGS = @LIBS@ @LDFLAGS@
 MODULES=besselCPP.o beamParametersCPP.o beamCPP.o backgroundCPP.o pairsCPP.o minijetsCPP.o \
 	mathematicalTools.o lumiCPP.o jetParameterCPP.o guineapigCPP.o grvCPP.o gridCPP.o fourierCPP.o \
 	fieldCPP.o bhabhaSamplesCPP.o timerCPP.o switchesCPP.o splineCPP.o rndmCPP.o resultsCPP.o principal.o \
-	physicalTools.o particlesCPP.o particleBeamCPP.o lectureDonnees.o memory.o tridentCPP.o
+	physicalTools.o particlesCPP.o particleBeamCPP.o lectureDonnees.o memory.o tridentCPP.o option_args.o
 
 all: guinea guinearoot
 

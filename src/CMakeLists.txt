@@ -5,7 +5,7 @@ jetParameterCPP.cc guineapigCPP.cc grvCPP.cc gridCPP.cc
 fourierCPP.cc fieldCPP.cc bhabhaSamplesCPP.cc timerCPP.cc 
 switchesCPP.cc splineCPP.cc rndmCPP.cc resultsCPP.cc 
 principal.cc physicalTools.cc particlesCPP.cc particleBeamCPP.cc 
-lectureDonnees.c memory.c tridentCPP.cc)
+lectureDonnees.c memory.c tridentCPP.cc option_args.cc)
 
 set(WARN_FLAGS "-Wall -Wundef")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math -finline -fPIC ${WARN_FLAGS}")
