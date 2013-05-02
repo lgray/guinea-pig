@@ -131,7 +131,7 @@ void GUINEA::outputs(string nameOfProtokoll)
       cerr << " ---------------------------------------------------------- " << endl;
       cerr << " WARNING : there is a quite important quantity of particles travelling out of grid " << endl;
       cerr  << "miss.1 = " << miss1 << " out.1 = " << out1 << " miss.2 = " << miss2 << " out.2 = " << out2 << endl; 
-      cerr << " maybe the grid dimensions are to be matched " << endl;
+      cerr << " maybe the grid dimensions should be rematched " << endl;
       cerr << " ---------------------------------------------------------- " << endl;
     }
   save_results_on_files();
