@@ -192,11 +192,11 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
     {
       unsigned int k,j;
       cout << " *******  CROSS_DATA *************** " << endl;
-      cout << " nombre d'energies : " << number_of_energies_ << endl;
-      cout << " nombre de valeurs par energie  : " << number_of_cross_sections_per_energy_ << endl;
+      cout << " number of energies : " << number_of_energies_ << endl;
+      cout << " number of values per energy  : " << number_of_cross_sections_per_energy_ << endl;
       for (k=0; k < energies_.size(); k++)
 	{
-	  cout << " en= " << energies_[k] << " valeurs: ";
+	  cout << " en= " << energies_[k] << " values: ";
 	  for (j=0;j < cross_sections_[k].size(); j++)
 	    {
 	      cout << " " << cross_sections_[k][j];

@@ -116,10 +116,10 @@ class PARAMETERS
   PARAMETERS() 
     {
       init_memory_account(&m_account_,0);
-      int testFichier=0;
-      testFichier = fileOpen(&datei_,get_acc_filename(),"r");
+      int testFile =0;
+      testFile = fileOpen(&datei_,get_acc_filename(),"r");
   
-      if (!testFichier) 
+      if (!testFile) 
 	{
 	  cerr << " PARAMETERS:: error in opening file acc.dat " << endl;
 	  exit(0);

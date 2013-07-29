@@ -264,7 +264,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       //float sigma, 
       float theta0;
       float npart = beam_parameters1_.n_particles();
-      // les sigmas sont en nanometres
+      // the sigmas are in nanometres
       theta0 = 2.*npart*RE/(gamma*(sigmax+sigmay)*1.0e-9);
       DD = theta0*sigmaz/sigmax;
       AA = sigmaz/(betax*1.0e6);
@@ -415,7 +415,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   inline float default_zcut(float sigmaz ) const
     {
       
-      // les sigmas sont en nanometres
+      // the sigmas are in nanometres
       // the factor 3.35, is an empirical value, valide for gaussian shape
       return 3.35*sigmaz;
     }
@@ -496,7 +496,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 	  iteration_on_overlaping_slices_with_trackpair_muon(pair_beam_ref, muon_beam_ref, 0, k,sor_parameter);
 	}
       
-      // de la coincidence a la fin du croisement
+      // at the end of the collision
       for (k=n_slice;k<2*n_slice-1;k++)
 	{
 	  iteration_on_overlaping_slices_with_trackpair_muon(pair_beam_ref, muon_beam_ref, k-n_slice+1,n_slice-1, sor_parameter);

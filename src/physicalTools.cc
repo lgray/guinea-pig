@@ -112,7 +112,7 @@ float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOn
 
 // synchrotron radiation of an electron (or positron?) with emission of a single photon
 // adopt the variables change of CAIN (Yokoya, user's guide 235.1 p. 111))
-// eng : energie en GeV
+// eng : energy in GeV
 // dz : metres 
 // with spin flip
 // return the photon energy in 'photonEnergy'
@@ -204,7 +204,7 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
 }
 
 // adopt the variables change of CAIN (Yokoya, user's guide 235.1 p. 111))
-// eng : energie en GeV
+// eng : energy in GeV
 // dz : metres 
 // without spin flip
 int PHYSTOOLS::synrad_0_no_spin_flip (float upsilonSingleP, float eng, float dzOnRadius,float* photonEnergy, RNDM& rndm_generator)

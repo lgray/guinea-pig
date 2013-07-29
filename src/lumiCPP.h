@@ -207,20 +207,20 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
       //unsigned long int k;
       int k;
       ostringstream out;
-      vector<unsigned long int> ordre;
+      vector<unsigned long int> order;
       //unsigned long int npairs  =  data_.size();
       int npairs = (int) data_.size();
-      // vefif a supprimer 
+      // check 
       if ( npairs != nb_pairs_) 
 	{
-	  cerr << " LUMI_HEAP_EE problem avec npombre de paires npairs = " << npairs << " nb_pairs_ = " << nb_pairs_ << endl;
+	  cerr << " LUMI_HEAP_EE problem with the number of pairs: npairs = " << npairs << " nb_pairs_ = " << nb_pairs_ << endl;
 	  exit(0);
 	}
       
-      rndm_generator_->getShuffledIntegerSequence(npairs, ordre);
+      rndm_generator_->getShuffledIntegerSequence(npairs, order);
       for (k = 0; k < npairs; k++)
 	{
-	  out << data_[ordre[k] - 1 ].persistent_flow() << " " << ordre[k] << endl;
+	  out << data_[order[k] - 1 ].persistent_flow() << " " << order[k] << endl;
 	}
       return out.str();
     }
@@ -273,20 +273,20 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
       //unsigned long int k;
       int k;
       ostringstream out;
-      vector<unsigned long int> ordre;
+      vector<unsigned long int> order;
       //unsigned long int npairs  =  data_.size();
       int npairs = (int) data_.size();
       
-      // vefif a supprimer 
+      // check 
       if ( npairs != nb_pairs_) 
 	{
-	  cerr << " LUMI_HEAP_EE problem avec npombre de paires npairs = " << npairs << " nb_pairs_ = " << nb_pairs_ << endl;
+	  cerr << " LUMI_HEAP_EE problem with the number of pairs: npairs = " << npairs << " nb_pairs_ = " << nb_pairs_ << endl;
 	  exit(0);
 	}
-      rndm_generator_->getShuffledIntegerSequence(npairs, ordre);
+      rndm_generator_->getShuffledIntegerSequence(npairs, order);
       for (k = 0; k < npairs; k++)
 	{
-	  out << data_[ ordre[k] - 1 ].persistent_flow() << " " << ordre[k] << endl;
+	  out << data_[ order[k] - 1 ].persistent_flow() << " " << order[k] << endl;
 	}
       return out.str();
     }

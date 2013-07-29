@@ -332,7 +332,7 @@ void PARTICLE_BEAM::emittances(float& emittx, float& emitty) const
 	{
 	  particle_[j][k]->XYposition(xpos, ypos);
 	  particle_[j][k]->velocities(vx,vy);
-	  //	  energie = particle_[j][k].energy();
+	  //	  energy = particle_[j][k].energy();
 	  // the positions are in nm, the "speed" is in radians.
 	  // in fact, only betax, betay (betaz is supposed 
 	  // practically equal to 1)
@@ -346,7 +346,7 @@ void PARTICLE_BEAM::emittances(float& emittx, float& emitty) const
 	  vx *= 1.0e3;
 	  vy *= 1.0e3;
 
-	  //	  gamma += energie;
+	  //	  gamma += energy;
 
 	  // for now x2 and y2 in mm^2
 	  x2 += xpos*xpos;
@@ -579,13 +579,13 @@ int PARTICLE_BEAM::store_beam(string name) const
   int h;
   int k;
   int j;
-  vector<unsigned long int> ordre;
+  vector<unsigned long int> order;
   number = numberOfParticles();
-  rndm_generator_->getShuffledIntegerSequence(number, ordre);
+  rndm_generator_->getShuffledIntegerSequence(number, order);
 
    for (h = 0; h < number; h++) 
      {
-       index_slice( ordre[h] -1 , k,j);
+       index_slice( order[h] -1 , k,j);
        filout.save_object_on_persistent_file( particle_[j][k]); 
      }
 
@@ -973,12 +973,12 @@ void PHOTON_BEAM::dump_photons(string name,int istep,int every_particle, int tim
 //   int h;
 //   int k;
 //   //int j;
-//   vector<unsigned long int> ordre;
+//   vector<unsigned long int> order;
 //   //photon_info(en_sum,number);
-//   //rndm_generator_->getShuffledIntegerSequence(number, ordre);
+//   //rndm_generator_->getShuffledIntegerSequence(number, order);
 //   //   for (h = 0; h < number; h++)
 //   //     {
-//   //       //  index_slice( ordre[h] -1 , k,j);
+//   //       //  index_slice( order[h] -1 , k,j);
 //   //       filout.save_object_on_persistent_file( getPhotonVector(k)[j]);
 //   //     }
 //   for (h=0; h < n_slice_; h++)

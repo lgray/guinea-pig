@@ -618,7 +618,7 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
 
       if(switches.get_do_pairs()||switches.get_do_hadrons()||switches.get_do_compt() || switches.get_do_muons())
 		{
-		  // c'est la qu'on va generer des paires
+		  // here the pairs are generated
 		  grid_.photon_lumi_2(min_z,switches, secondaries_, muons_, generator_);
 		}
       if (switches.get_do_compt()) 
@@ -636,7 +636,7 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
 		  grid_.move_photons(beam2_,2,i2);
 		}
       
-    } // fin if (store photons)
+    } // end if (store photons)
   time_.add_timer(5);
   i_offset=i1+i2-grid_.get_n_cell_z();
   //if(switches.get_track_secondaries())
@@ -696,7 +696,7 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
 	    }	  
 	}
     }
-  // cout << " vers extra photons " << endl;
+  // cout << " for the extra photons " << endl;
   if (switches.get_do_pairs() || 
       switches.get_do_hadrons() ||
       switches.get_do_compt() ||
@@ -960,7 +960,7 @@ void GUINEA::main_grid_automatic_xycuts(const ABSTRACT_PARTICLE_BEAM& bff1,const
   float npart1, npart2, nbpart;
   float Dx, Dy;
   float betax, betay;
-  float decalage;
+  float offset;
   float emittx1, emitty1, emittx2, emitty2;
   float z01, sigmaz1;
   float z02, sigmaz2;
@@ -992,7 +992,7 @@ void GUINEA::main_grid_automatic_xycuts(const ABSTRACT_PARTICLE_BEAM& bff1,const
   nbpart = 0.5*(npart1 + npart2);
 
 
-  // les sigmas sont en nanometres
+  // the sigmas are in nanometres
   theta0 = 2.*nbpart*RE/(gamma*(sigmax+sigmay)*1.0e-9);
 
   bff1.beamZRms(z01, sigmaz1);
@@ -1010,13 +1010,13 @@ void GUINEA::main_grid_automatic_xycuts(const ABSTRACT_PARTICLE_BEAM& bff1,const
   test_size_due_to_cdm(gamma, sigmax, sigmay, sigmaz, betax, betay);
 
 
-  decalage = size_due_to_cdm_deflection(theta0, sigmaz, sigmax, betax, Dx,dx);
-  //  cout << " decalage en x " << decalage << endl;
-  size_x = fabs(xmoy) + dx + decalage + 6.0*sigmax;
+  offset = size_due_to_cdm_deflection(theta0, sigmaz, sigmax, betax, Dx,dx);
+  //  cout << " offset in x " << offset << endl;
+  size_x = fabs(xmoy) + dx + offset + 6.0*sigmax;
   //  cout << " size_x = " << size_x << endl;
-  decalage = size_due_to_cdm_deflection(theta0, sigmaz, sigmay, betay, Dy,dy);
-  //  cout << " decalage en y " << decalage << endl;
-  size_y = fabs(ymoy) + dy + decalage + 10.0*sigmay;
+  offset = size_due_to_cdm_deflection(theta0, sigmaz, sigmay, betay, Dy,dy);
+  //  cout << " offset in y " << offset << endl;
+  size_y = fabs(ymoy) + dy + offset + 10.0*sigmay;
   //  cout << " size_y = " << size_y << endl;
   new_n_cell_x = adjust_nb_cells_from_cut(size_x, sigmax);
   new_n_cell_y = adjust_nb_cells_from_cut(size_y, sigmay);

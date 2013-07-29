@@ -109,23 +109,23 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
 	{   
 	  int k;
 	  // float  energy, xpos, ypos, zpos, vx,vy ;
-	  float valeurLue[9];
-	  for ( k =0; k < 9; k++) valeurLue[k] = 0.0;
+	  float readValue[9];
+	  for ( k =0; k < 9; k++) readValue[k] = 0.0;
 	  bool test = false;
 	  string slu;
-	  int nombre = 0;
+	  int number = 0;
 	  if ( getline(infile_, slu) )
 	    {
 	      bool goodline = false;
 	      istringstream ss(slu);
 	      float aux;
-	      while ( ss >> aux && nombre < 9) 
+	      while ( ss >> aux && number < 9) 
 		{
 		  goodline = true;
-		  valeurLue[nombre] = aux;
-		  nombre++;
+		  readValue[number] = aux;
+		  number++;
 		}
-	      part.init_from_input_file(valeurLue[0],valeurLue[1],valeurLue[2],valeurLue[3], valeurLue[4], valeurLue[5], valeurLue[6], valeurLue[7], valeurLue[8] );
+	      part.init_from_input_file(readValue[0],readValue[1],readValue[2],readValue[3], readValue[4], readValue[5], readValue[6], readValue[7], readValue[8] );
 	      if ( !goodline) cerr << " read_particle : reading failure " << endl;
 	      test = true;
 	    }

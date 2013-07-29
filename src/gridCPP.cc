@@ -955,8 +955,8 @@ void GRID::collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POIN
   cosinus = (vx1*vx2 + vy1*vy2 - vz1*vz2); // The minus sign because the particles have opposite vz
   ecm=sqrt(2.0*e1*e2*(1. - cosinus));
 
-  float energie1 = pointer1.energy();
-  float energie2 = pointer2.energy();
+  float energy1 = pointer1.energy();
+  float energy2 = pointer2.energy();
   if (switches.get_do_lumi()&1)
     {
       float p1Vx, p1Vy, p2Vx, p2Vy;
@@ -965,16 +965,16 @@ void GRID::collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POIN
       if ( bmt_precession ) 
       //      if (SPIN)
 		{
-		  lumi_heap_ee_.lumi_store_ee(mesh_, cellx, celly,min_z, energie1, p1Vx, p1Vy, energie2, p2Vx, p2Vy, weight, pointer1.getSpin(),pointer2.getSpin() , time_counter);
+		  lumi_heap_ee_.lumi_store_ee(mesh_, cellx, celly,min_z, energy1, p1Vx, p1Vy, energy2, p2Vx, p2Vy, weight, pointer1.getSpin(),pointer2.getSpin() , time_counter);
 		}
-      else lumi_heap_ee_.lumi_store_ee(mesh_, cellx, celly,min_z, energie1, p1Vx, p1Vy, energie2, p2Vx, p2Vy, weight,time_counter);
+      else lumi_heap_ee_.lumi_store_ee(mesh_, cellx, celly,min_z, energy1, p1Vx, p1Vy, energy2, p2Vx, p2Vy, weight,time_counter);
     }
 
-  if (energie1 < 0.0) j1=1;
-  if (energie2 < 0.0) j2=0;
+  if (energy1 < 0.0) j1=1;
+  if (energy2 < 0.0) j2=0;
   results_.add_lumi(j1, j2, weight);
 
-  if (energie1*energie2 > 0.0)
+  if (energy1*energy2 > 0.0)
     {
       if (switches.get_do_cross())
 		{
@@ -1998,25 +1998,25 @@ bool GRID::pick_coherent_energy(float ups,float& energy, RNDM& rndm_generator)
 }
 
 
-// void GRID::step_pair_1X(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& paire,float step,int nbSteps, int extra_grids, float charge_sign_0, RNDM& rndm_generator)
+// void GRID::step_pair_1X(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair,float step,int nbSteps, int extra_grids, float charge_sign_0, RNDM& rndm_generator)
 // {
 //   const float eps=1e-35,emass2=EMASS*EMASS;
 //   float x,y,z,vx,vy,vz,e_inv2,e_inv,step_2,step_q,vold2,scal,thetamax;
-//   float energie;
+//   float energy;
 //   float ex,ey,bx,by,b_norm,b_norm_i,theta,a1,a2,a3,vb,eng;
 //   float ph[1000],vx0,vy0,vz0,eng0;
 //   int nph;
 //   int i,icharge,j;
   
-//   paire.get_parameters(x,y,z,vx,vy,vz,energie);
-//   if (energie >0.0)
+//   pair.get_parameters(x,y,z,vx,vy,vz,energy);
+//   if (energy >0.0)
 //     {
-//       eng = energie;
+//       eng = energy;
 //       icharge=0;
 //     }
 //   else
 //     {
-//       eng=-energie;
+//       eng=-energy;
 //       icharge=1;
 //     }
 //   e_inv=1.0/eng;
@@ -2225,46 +2225,46 @@ bool GRID::pick_coherent_energy(float ups,float& energy, RNDM& rndm_generator)
 // #ifdef SCALE_ENERGY
 //   scal=sqrt((eng*eng-emass2)/((eng*eng)*(vx*vx+vy*vy+vz*vz)));
 //   if (fabs(scal-1.0)>0.01)
-//     printf("> %g %g %g %g %g\n",eng,eng-fabs(energie),thetamax,
+//     printf("> %g %g %g %g %g\n",eng,eng-fabs(energy),thetamax,
 // 	   sqrt(vx*vx+vy*vy+vz*vz),scal);
 // #else
 //   scal=1.0;
 // #endif
   
-//   if (icharge) energie = -eng;
-//   else energie =eng; 
-//   paire.set(x,y,z,vx*scal,vy*scal,vz*scal,energie);
+//   if (icharge) energy = -eng;
+//   else energy =eng; 
+//   pair.set(x,y,z,vx*scal,vy*scal,vz*scal,energy);
 // }
-void GRID::step_pair_1(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& paire, double mass,float step,int nbSteps, int extra_grids, float charge_sign_0, RNDM& rndm_generator)
+void GRID::step_pair_1(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair, double mass,float step,int nbSteps, int extra_grids, float charge_sign_0, RNDM& rndm_generator)
 {
   float thetamax;
   float ex,ey,bx,by;
   int i;
   // initial half step 
  
-  // on recupere les champs E et B
-  field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
-  thetamax = 2.0*paire.apply_initial_half_step_fields(step, mass, ex,ey, bx, by, rndm_generator);
+  // retrieve E and B fields
+  field_pair(pair, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
+  thetamax = 2.0*pair.apply_initial_half_step_fields(step, mass, ex,ey, bx, by, rndm_generator);
   /* loop over steps */
   for(i=1;i<nbSteps;i++)
     {
-      paire.advancePosition(step);
+      pair.advancePosition(step);
 
-      // on recupere les champs E et B 
-      field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);    
-      thetamax = max (thetamax, paire.apply_full_step_fields(step, mass, ex,ey, bx, by, rndm_generator)); 
+      // retrieve E and B fields
+      field_pair(pair, grids,ex,ey,bx,by, extra_grids, charge_sign_0);    
+      thetamax = max (thetamax, pair.apply_full_step_fields(step, mass, ex,ey, bx, by, rndm_generator)); 
     }
   /* last half step */
-  paire.advancePosition(step);
-  field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
-  thetamax = max( thetamax, (float)2.0*paire.apply_final_half_step_fields(step, mass, ex,ey, bx, by, thetamax,rndm_generator));
-  if (	!paire.last_rescaling_ok() )
+  pair.advancePosition(step);
+  field_pair(pair, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
+  thetamax = max( thetamax, (float)2.0*pair.apply_final_half_step_fields(step, mass, ex,ey, bx, by, thetamax,rndm_generator));
+  if (	!pair.last_rescaling_ok() )
     {
       cerr << " GRID::step_pair_1() : " << " thetamax " << thetamax << endl;
     }	  
 }
 
-void GRID::step_pair_1_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& paire, double mass,float step,int nbSteps, int extra_grids, float charge_sign_0, RNDM& rndm_generator)
+void GRID::step_pair_1_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair, double mass,float step,int nbSteps, int extra_grids, float charge_sign_0, RNDM& rndm_generator)
 {
   float thetamax;
   float ex,ey,bx,by;
@@ -2273,27 +2273,27 @@ void GRID::step_pair_1_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_PARTICL
   vector<float> photon_e;
   // initial half step 
  
-  // on recupere les champs E et B
-  field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
-  thetamax = 2.0*paire.apply_initial_half_step_fields(step, mass, ex,ey, bx, by, &photon_e, rndm_generator);
+  // retrieve E and B fields
+  field_pair(pair, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
+  thetamax = 2.0*pair.apply_initial_half_step_fields(step, mass, ex,ey, bx, by, &photon_e, rndm_generator);
   /* loop over steps */
   for(i=1;i<nbSteps;i++)
     {
-      paire.advancePosition(step);
+      pair.advancePosition(step);
 
-      // on recupere les champs E et B 
-      field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);    
-      thetamax = max (thetamax, paire.apply_full_step_fields(step, mass, ex,ey, bx, by, &photon_e, rndm_generator)); 
+      // retrieve E and B fields
+      field_pair(pair, grids,ex,ey,bx,by, extra_grids, charge_sign_0);    
+      thetamax = max (thetamax, pair.apply_full_step_fields(step, mass, ex,ey, bx, by, &photon_e, rndm_generator)); 
     }
   /* last half step */
-  paire.advancePosition(step);
-  field_pair(paire, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
-  thetamax = max( thetamax, (float)2.0*paire.apply_final_half_step_fields(step, mass, ex,ey, bx, by, thetamax,rndm_generator));
+  pair.advancePosition(step);
+  field_pair(pair, grids,ex,ey,bx,by, extra_grids, charge_sign_0);
+  thetamax = max( thetamax, (float)2.0*pair.apply_final_half_step_fields(step, mass, ex,ey, bx, by, thetamax,rndm_generator));
   for(j=0;j<photon_e.size();j++)
     {
-      tertphot_.push_back(TERTPHOTON(photon_e[j],paire));
+      tertphot_.push_back(TERTPHOTON(photon_e[j],pair));
     }
-  if (	!paire.last_rescaling_ok() )
+  if (	!pair.last_rescaling_ok() )
     {
       cerr << " GRID::step_pair_1_tertphot() : " << " thetamax " << thetamax << endl;
     }	  
@@ -2334,7 +2334,7 @@ void GRID::apply_magnetic_field_on_pair(float fac_theta, float step_q, float e_i
 }
 
 
-int GRID::field_pair(const PAIR_PARTICLE& paire, const vector<GENERAL_GRID*>& grids,float& ex,float& ey, float& bx,float& by, int extra_grids, float charge_sign_0)
+int GRID::field_pair(const PAIR_PARTICLE& pair, const vector<GENERAL_GRID*>& grids,float& ex,float& ey, float& bx,float& by, int extra_grids, float charge_sign_0)
 {
   PHI_FLOAT ax_1,ay_1,ax_2,ay_2;
   PHI_FLOAT tmp,dx,dy;
@@ -2343,7 +2343,7 @@ int GRID::field_pair(const PAIR_PARTICLE& paire, const vector<GENERAL_GRID*>& gr
   int i;
   TRIVECTOR Efield1, Efield2;
 
-  paire.XYposition(x, y);
+  pair.XYposition(x, y);
   for(i=0;i<=extra_grids;i++)
     {
       if (grids[i]->coordinatesInGridRange(x,y))

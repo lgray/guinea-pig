@@ -891,11 +891,11 @@ void scale_pair(float vold2, float& vx, float& vy, float& vz, float& vx0, float&
 
 void apply_magnetic_field_on_pair(float fac_theta,float step_q, float e_inv2, float bx, float by, float& vx,float& vy, float& vz,float& theta) const;
 
-int field_pair(const PAIR_PARTICLE& paire, const vector<GENERAL_GRID*>& grids,float& ex,float& ey, float& bx,float& by, int extra_grids, float charge_sign_0);
+int field_pair(const PAIR_PARTICLE& pair, const vector<GENERAL_GRID*>& grids,float& ex,float& ey, float& bx,float& by, int extra_grids, float charge_sign_0);
 
-//void step_pair_1X(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& paire,float step,int n, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
-void step_pair_1(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& paire,double mass,float step,int n, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
-void step_pair_1_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& paire,double mass,float step,int n, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
+//void step_pair_1X(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair,float step,int n, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
+void step_pair_1(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair,double mass,float step,int n, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
+void step_pair_1_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair,double mass,float step,int n, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
 // float  doElossParticle(PARTICLE& particle, int sokolov, TRIDVECTOR Efiekd, TRIDVECTOR Bfield, BEAM& beam, float initialEnergyForLoss, int i_slice,float radius_i, float dz, float emin, int do_prod, float charg_sign);
 
 //void computePhotonEnergies(vector<float>& photonEnergies, PARTICLE& particle, float  upsilon, int sokolov, TRIDVECTOR Efield, TRIDVECTOR Bfield,  float energy, float radius_i,  float dz, float charge_sign);
