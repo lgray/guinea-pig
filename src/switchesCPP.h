@@ -22,8 +22,8 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   float lumi_p,lumi_p_eg,lumi_p_gg;
   float electron_ratio;
 
-  // un dimensionnement a 2, suffirait, mais l'original dimensionne a 3
-  // a voir
+  // 2 dimensions was enough, but the original C had 3 dimensions
+  // to be seen..
   int do_photons_[2],write_photons;
   int photon_distribution,do_beamstrahlung_;
   float photon_ratio;

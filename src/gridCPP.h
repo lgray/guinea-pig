@@ -47,7 +47,7 @@ class SLICE_ON_GRID
 
   SLICE_ON_GRID(SLICE_ON_GRID& s) 
     {
-      cout << " COPIE NON CONST " << endl;
+      cout << " COPY NON CONST " << endl;
     }
 
 
@@ -106,9 +106,9 @@ class SLICE_ON_GRID
       nb_cells_y_ = s.nb_cells_y_;
       dim_rho_ = s.dim_rho_;
       set_rho( dim_rho_);
-      /*       cout << " SLICE_ON_GRID : constructeur copie  " << endl; */
-      /*       cout << " adresse original " << s.rho_ << " nouvelle adresse " << rho_ << endl; */
-      /*       cout << "  nb_macroparticles_ " <<  nb_macroparticles_ << endl; */
+      /*       cout << " SLICE_ON_GRID : copy constructor " << endl; */
+      /*       cout << " old address " << s.rho_ << " new address " << rho_ << endl; */
+      /*       cout << " nb_macroparticles_ " <<  nb_macroparticles_ << endl; */
       /*       cout << " nb_part_per_macro_ " << nb_part_per_macro_ << " scal_step_ " << scal_step_ << " nb_cells_y_ " << nb_cells_y_ << " dim_rho_ " << dim_rho_ << endl; */
       /*       cout << " *********************************************** " << endl; */
     }
@@ -791,10 +791,10 @@ void collide_eg(int cellx, int celly,float min_z,const BEAM_PARTICLE_POINTER& pa
 
 void collide_gg(int cellx, int celly, float min_z, const BEAM_PHOTON_POINTER& photon_pointer1, const BEAM_PHOTON_POINTER& photon_pointer2, PAIR_BEAM& secondaries, PAIR_BEAM& muons, SWITCHES& switches, RNDM& rndm_generator, double *returnCrossSectionToAdd);
 
-// avec dir = 1 et photon_q2=0., c'est l'ancien collide_ge_2
-// avec dir = 2, et photon_q2=0., c'est l'ancien collide_eg_2
-// avec dir = 1 et photon_q2 != 0., c'est l'ancien collide_ge_3
-// avec dir = 2, et photon_q2!= 0., c'est l'ancien collide_eg_3
+// with dir = 1 and photon_q2=0., it is the old collide_ge_2
+// with dir = 2 and photon_q2=0., it is the old collide_eg_2
+// with dir = 1 and photon_q2 != 0., it is the old collide_ge_3
+// with dir = 2 and photon_q2!= 0., it is the old collide_eg_3
 
 // argument  index_of_process is old 'scdn1+scdn2'
 // 0 : Breit-Wheeler

@@ -234,7 +234,7 @@ class mCROSS  : public GENERAL_CROSS
   
   mCROSS() 
     {  
-      cout << " constructeur mcross " << endl;
+      cout << " constructor mcross " << endl;
       ncross_per_ener_ = 0;
     }
   

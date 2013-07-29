@@ -490,7 +490,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     {
       int k;
       int n_slice=grid_.get_n_cell_z();
-      // du debut du croisement a la coincidence des faisceaux
+      // at the start of the collision
       for (k=0;k<n_slice;k++)
 	{
 	  iteration_on_overlaping_slices_with_trackpair_muon(pair_beam_ref, muon_beam_ref, 0, k,sor_parameter);

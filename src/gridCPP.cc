@@ -304,7 +304,7 @@ void GRID::read(const PARAMETERS& param, int automatic)
   //  if (n_n > 0) nb_macroparticles_[1] = n_n;
   if (n_n > 0) slice_of_beam_[1].set_macroparticles(n_n);
 
-  // l'indexation est bizarre, mais c'est comme ca dans l'original guineapig C
+  // the indexation is unusual, but it is like that in the original guinea-pig C
   n_f = param.readFValue("scale_step.1");
   //  if (n_f > 0.0) scal_step[1] = n_f;
   if (n_f > 0.0) slice_of_beam_[1].set_scal_step(n_f);  
