@@ -473,13 +473,13 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     {
       int k;
       int n_slice=grid_.get_n_cell_z();
-      // du debut du croisement a la coincidence des faisceaux
+      // at the start of the collision
       for (k=0;k<n_slice;k++)
 	{
 	  iteration_on_overlaping_slices_with_trackpair(pair_beam_ref, 0, k,sor_parameter);
 	}
       
-      // de la coincidence a la fin du croisement
+      // at the end of the collision
       for (k=n_slice;k<2*n_slice-1;k++)
 	{
 	  iteration_on_overlaping_slices_with_trackpair(pair_beam_ref, k-n_slice+1,n_slice-1, sor_parameter);
@@ -555,7 +555,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       //     }
     }
   
-  void imprimerCaracteristiquesFaiseauInitial(const BEAM& fais);
+  void printInitialBeam(const BEAM& beam);
   
   string header() const 
     {
@@ -566,7 +566,17 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       out <<  "* object oriented by Guy Le Meur at LAL-Orsay " << endl;
       out <<  "* contributions from C. Rimbault at LAL-Orsay " << endl;
       out <<  "* B. Dalena, J. Esberg and J. Snuverink at CERN" << endl;
+      out <<  "*" << endl;
+      out <<  "* Compiled with FFTW: " 
+#ifdef FFT_LOCAL
+	  << " FFT LOCAL (consider compiling with FFTW2 or FFTW3 to get cpu speedup) " << endl;
+#elif defined USE_FFTW2
+	  << " FFTW2 " << endl;
+#elif defined USE_FFTW3
+	  << " FFTW3 " << endl;
+#endif
       out <<  "**************************************************** " << endl;
+
       return out.str();
     }
   

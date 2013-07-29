@@ -152,7 +152,8 @@ bool GUINEA::check_parameters() const
     {
       if (!vnx || !vny  )
 	{
-	  cerr << " ERROR : with integration_method = 2 the cell numbers must be power of 2 " << endl;
+	  cerr << " ERROR : with integration_method = 2 (FFT_LOCAL) the cell numbers must be power of 2 " << endl;
+	  cerr << " Consider compiling with FFTW2 or FFTW3 (also for cpu-speed)" << endl;
 	  cerr << " n_x = " << grid_.get_n_cell_x() << " n_y = " << grid_.get_n_cell_y()  << endl;
 	  check = false;
 	}
@@ -161,7 +162,7 @@ bool GUINEA::check_parameters() const
   if ( switches.get_do_prod() )
     {
       cerr << " ERROR : key_word do_prod not completely implemented " << endl;
-      // voir grid::move_particles cas do_beamstrahlung
+      // see grid::move_particles for the do_beamstrahlung case
       check = false;
     }
   if (beam_parameters1_.dist_x() != 0 || beam_parameters2_.dist_x() != 0)
@@ -176,7 +177,7 @@ bool GUINEA::check_parameters() const
   bool load_photon = switches.get_load_photon()>0;
   if (switches.get_do_coherent() && !do_photons && !load_photon)
     {
-      cerr << " GUINEA::check_parameters:: it is not usefull to have do_coherent=1 with no do_photons nor load_photons " << endl;
+      cerr << " GUINEA::check_parameters:: it is not useful to have do_coherent=1 with no do_photons nor load_photons " << endl;
     }
   //if ( switches.get_track_secondaries() > 0 )
   if ( switches.get_track_pairs() > 0 )
@@ -438,15 +439,15 @@ void GUINEA::set_beams_and_grids()
 
 }
 
-void GUINEA::imprimerCaracteristiquesFaiseauInitial(const BEAM& fais)
+void GUINEA::printInitialBeam(const BEAM& beam)
 {
   float bidonx, bidony, bidz, bidsigz;
   float bidsigx, bidsigy;
   float bidbetax, bidbetay;
-  cout << " ******* caracteristiques faisceau : " << fais.label() << " ************** " << endl;
-  fais.transverse_sigmas(bidsigx, bidsigy);
-  fais.emittances(bidonx, bidony);
-  fais.beamZRms(bidz, bidsigz);
+  cout << " ******* initial beam characteristics : " << beam.label() << " ************** " << endl;
+  beam.transverse_sigmas(bidsigx, bidsigy);
+  beam.emittances(bidonx, bidony);
+  beam.beamZRms(bidz, bidsigz);
   cout << " sigmax = " << bidsigx << " sigmay = " << bidsigy << endl;
   cout << " emittx =" << bidonx << " emitty = " << bidony << endl;
   cout << " Z0 = " << bidz << " sigZ = " << bidsigz << endl;
@@ -605,7 +606,7 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
   grid_.moveAllParticles( gridsPtr_, i1,i2, switches.get_interpolation(), switches.get_do_beamstrahlung(),switches.get_ST_spin_flip(), switches.get_emin(), switches.get_do_prod(),switches.get_extra_grids(), switches.get_charge_sign(),switches.get_bmt_precession(),switches.get_do_trident());
   
   // nbeam = 2;
-  //  cout << " avancer le deuxi�me faisceau.... " << endl;
+  //  cout << " advance the second beam.... " << endl;
   //  grid_.moveAllParticles( gridsPtr_, beam2_, nbeam, i2, switches.get_interpolation(), switches.get_do_beamstrahlung(),switches.get_ST_spin_flip(),switches.get_emin(), switches.get_do_prod(),switches.get_extra_grids(), switches.get_charge_sign(), switches.get_bmt_precession());
   
   time_.add_timer(4);

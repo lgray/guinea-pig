@@ -1177,7 +1177,7 @@ inline void moveAllParticles(const vector<GENERAL_GRID*>& grids,  int i_slice1, 
   move_particles(grids, 1, i_slice1,interpolation, do_beamstrahlung,do_trident,sokolov,  emin, do_prod, extra_grids, charge_sign,bmt_rotate);
   move_coherent_particles(grids, 1, i_slice1, interpolation, do_beamstrahlung, emin, do_prod, extra_grids, charge_sign);
   
-  //  cout << " avancer le deuxième faisceau.... " << endl;
+  //  cout << " advance the second beam.... " << endl;
   move_particles(grids, 2, i_slice2,interpolation, do_beamstrahlung,do_trident,sokolov,  emin, do_prod, extra_grids, charge_sign,bmt_rotate);
   move_coherent_particles(grids, 2, i_slice2, interpolation, do_beamstrahlung, emin, do_prod, extra_grids, charge_sign);
   if(do_trident)
