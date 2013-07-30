@@ -1003,7 +1003,7 @@ void MINIJETS::store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT ep
 
 
 
-void MINIJETS_PYTHIA::initPythia(float s, float ptmin)
+void MINIJETS_PYTHIA::initPythia()
 {
   jet_spline0_.spline_init( string("pythia0.ini") );
   jet_spline1_.spline_init( string("pythia1.ini") );
@@ -1163,15 +1163,14 @@ void MINIJETS_PYTHIA::store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_F
   for (i=0;i<num;i++) jetfile_->save_jet(eph1,eph2,event);
 }
 
-
- void MINIJETS_PYTHIA::stockageJet( float e1,float e2,float sigma, float jet_ratio, RNDM& rndm_generator, int optionStoreJet) const 
+void MINIJETS_PYTHIA::storeJet( float e1,float e2,float sigma, float jet_ratio, RNDM& rndm_generator, int optionStoreJet) const 
    {
     int n;
     sigma *= jet_ratio;
     n = (int)floor(sigma);
     sigma -= (float)n;
-    // a quoi sert cette instruction?
-    cout << " MINIJETS::stockageJet : voir si le tirage au rndm_generator est utile??? " << endl;
+    // why do this call?
+    cout << " MINIJETS::storeJet : look if the call to rndm_generator is useful??? " << endl;
     if (rndm_generator.rndm_jet()<sigma) n++;
     jetfile_->save_jet(e1,e2,optionStoreJet);
    }

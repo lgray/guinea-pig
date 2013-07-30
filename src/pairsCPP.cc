@@ -127,7 +127,7 @@ void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cell
     }
 }
 
-// incoherent pair creation : Breit-Wheeler processus
+// incoherent pair creation : Breit-Wheeler processes
 void PAIR_BEAM::make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,int index_of_process, float eph1,float q2_1,float eorg1, float eph2,float q2_2,float eorg2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& rndm_generator)
 {
   const double emass_2=EMASS*EMASS,one=1.0;

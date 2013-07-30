@@ -1,19 +1,22 @@
 #ifndef ABSTRACTIOCLASS_SEEN
 #define ABSTRACTIOCLASS_SEEN
 
+#include <sstream>
+#include <string>
+
 class  ABSTRACT_IO_CLASS
 {
 
  protected :
- inline string title(string str) const 
+  inline std::string title(std::string str) const 
    
 {
-  ostringstream out;
+  std::ostringstream out;
   
-  out << "                                         " << endl;
-  out << " *********************************************************************** " << endl;
-  out << " ------------- " << str << " ------------ " << endl;
-  out << "             " << endl;
+  out << "                                         " << std::endl;
+  out << " *********************************************************************** " << std::endl;
+  out << " ------------- " << str << " ------------ " << std::endl;
+  out << "             " << std::endl;
   return out.str();
 }
 
@@ -22,8 +25,8 @@ class  ABSTRACT_IO_CLASS
  ABSTRACT_IO_CLASS() {;}
  virtual  ~ABSTRACT_IO_CLASS() {;}
  
- virtual string output_flow() const =0;
- virtual string persistent_flow() const {return "";}
+ virtual std::string output_flow() const =0;
+ virtual std::string persistent_flow() const {return "";}
 
 };
 

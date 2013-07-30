@@ -60,7 +60,7 @@ class LUMI_PAIR : public ABSTRACT_IO_CLASS
     }
   
   
-  inline void get_impulsion_parameters(float& vx1,float& vy1,float& vx2,float& vy2, int& t) const {;}
+  inline void get_impulsion_parameters(float& /*vx1*/,float& /*vy1*/,float& /*vx2*/,float& /*vy2*/, int& /*t*/) const {;}
   
 };
 
@@ -200,7 +200,7 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
      data_[numero].get_parameters_for_output(e1,e2,x,y,z);
    }
   
-  virtual inline void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2, int& t) const {;}
+  virtual inline void get_parameters_for_output(unsigned int /*numero*/, float& /*e1*/,float& /*e2*/,float& /*x*/,float& /*y*/,float& /*z*/, float& /*vx1*/,float& /*vy1*/,float& /*vx2*/,float& /*vy2*/, float& /*sx1*/, float& /*sy1*/, float& /*sz1*/, float& /*sx2*/, float& /*sy2*/, float& /*sz2*/, int& /*t*/) const {;}
   
   virtual string persistent_flow() const
     {
@@ -256,7 +256,7 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
     }
   
   
-  virtual inline void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z) const {;}
+  virtual inline void get_parameters_for_output(unsigned int /*numero*/, float& /*e1*/,float& /*e2*/,float& /*x*/,float& /*y*/,float& /*z*/) const {;}
   
   virtual inline void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2,int& t) const
     {

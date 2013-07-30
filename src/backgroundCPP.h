@@ -344,8 +344,7 @@ class maverCROSS : public mCROSS
   
   public :
     
-    maverCROSS() {;}
-  
+  maverCROSS() {;}
   
   maverCROSS(string crossIniFile) : mCROSS(crossIniFile)
     {
@@ -491,7 +490,7 @@ class averCROSS : public CROSS
     
   averCROSS() {;}
   
-  averCROSS(string crossIniFile)
+  averCROSS(string crossIniFile):CROSS(crossIniFile)
    {
      spline_aver_ = spline_;
      cross_aver_ = 0.0;      

@@ -275,7 +275,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   
   void assign_symmetric_xyz_normal_distribution(int dist_z,float delta_z,float sigma_x,float sigma_y,float sigmaz, float sigma_x_prime,float sigma_y_prime, float energy);
   
-  inline void dispatch_random_particle_in_slices(float zaux, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
+  inline void dispatch_random_particle_in_slices(float zaux, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
     {
       float xaux, yaux, vxaux, vyaux;
       int j=(int)floor(zaux/delta_z+0.5* nSlices+1);
@@ -293,7 +293,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
     }
   
 
-  inline void dispatch_symmetric_random_particle_in_slices(float zaux, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
+  inline void dispatch_symmetric_random_particle_in_slices(float zaux, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
     {
       float xaux, yaux, vxaux, vyaux;
       double polx, poly, polz;

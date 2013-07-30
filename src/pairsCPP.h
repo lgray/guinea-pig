@@ -65,26 +65,6 @@ class PAIR_PARAMETER
   
   inline double get_mass() const {return mass_;}
 
-  inline float jet_requiv(float xmin,float e,int iflag) const
-    {
-      float help;
-
-      if (xmin>=1.0) return 0.0;
-      switch (iflag)
-	{
-	case 1: 
-	  return log(xmin) * -.00464921660700172 * 0.5*lns4;
-	case 2:
-	case 3:
-	case 4:
-	  return log(xmin) * -.003951834115951462 * 0.5*lns4;
-	case 5:
-	  help=lns4;
-	  return 2.0*.002325*help*help;
-	}
-      return 0.0;
-    } 
-  
   void jet_equiv (float xmin,float e,int iflag,float& eph,float& q2,float& wgt, RNDM& rndm_generator) const;
   
   inline float jet_requiv(float xmin,int iflag) const

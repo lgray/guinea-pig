@@ -3,9 +3,12 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "typeDefs.h"
 #include <vector>
+
+#include "typeDefs.h"
+#include "abstractIOclass.h"
 #include "mathematicalEntities.h"
+
 using namespace std;
 
 class ABSTRACT_BEAM
@@ -124,10 +127,10 @@ class ABSTRACT_PARTICLE
   
   inline void setEnergy(float en) {energy_ = en;}; 
   
-  inline void advancePosition(float pasDeTemps)
+  inline void advancePosition(float distance)
     {
-      xpos_ += vx_*pasDeTemps;
-      ypos_ += vy_*pasDeTemps;
+      xpos_ += vx_*distance;
+      ypos_ += vy_*distance;
     };
   
   inline void advanceVelocities(float Fx, float Fy, float step)

@@ -118,7 +118,7 @@ float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOn
 // return the photon energy in 'photonEnergy'
 // update the vector 'polar' :final polarization vector of the particle
 // fill the vector of the stokes parameters of the emitted photon
-int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& stokes, float dzOnRadius,float* photonEnergy, RNDM& rndm_generator)
+int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& /*e1*/, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& /*stokes*/, float dzOnRadius,float* photonEnergy, RNDM& rndm_generator)
 {
   int k;
   double x, s2, s3;

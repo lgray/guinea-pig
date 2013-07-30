@@ -249,7 +249,7 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
 
 // after loading, the object pointed by bff is empty and 
 // the pointer bff is invalidated
-unsigned int PARTICLE_BEAM::load_particles(BEAM_FROM_FILE*& bff, float emin, float zmin, float deltaz, float sigx, float sigy, float sigz)
+unsigned int PARTICLE_BEAM::load_particles(BEAM_FROM_FILE*& bff, float /*emin*/, float zmin, float deltaz, float sigx, float sigy, float sigz)
 {
   int k;
   float ztest;

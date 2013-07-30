@@ -225,7 +225,7 @@ void PAIR_PARTICLE::synchrotron_radiation(float step, double mass, float step_fr
 #endif
 }
 
-float PAIR_PARTICLE::apply_final_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, float thetamx, RNDM& rndm_generator)
+float PAIR_PARTICLE::apply_final_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, float /*thetamx*/, RNDM& /*rndm_generator*/)
 {
   float vold2;
   float theta;

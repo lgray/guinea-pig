@@ -1055,7 +1055,7 @@ void GRID::isr2(float e1,float e2,float *e1p,float *e2p, RNDM& rndm_generator)
 
 /*! This routine moves the particles one timestep. */
 
-void GRID::move_particles(const vector<GENERAL_GRID*>& grids,  int i_beam, int i_slice,int interpolation,int do_beamstrahlung,int do_trident, int sokolov, float emin,int do_prod, int extra_grids, float charge_sign, int bmt_rotate)
+void GRID::move_particles(const vector<GENERAL_GRID*>& grids,  int i_beam, int i_slice,int interpolation,int do_beamstrahlung,int do_trident, int sokolov, float emin,int /*do_prod*/, int extra_grids, float charge_sign, int bmt_rotate)
 {
   float vx,vy,xpos,ypos;
 
@@ -1206,7 +1206,8 @@ void GRID::move_pairs_tertphot(const vector<GENERAL_GRID*>& grids, PAIR_BEAM& pa
     }
 }
 
-void GRID::deltaVelocityFromFieldCIC(float xpart,float ypart, float energy, PHI_FLOAT *phi, float pasDeTemps, float& deltavx, float& deltavy)
+/*
+void GRID::deltaVelocityFromFieldCIC(float xpart,float ypart, float energy, PHI_FLOAT *phi, float distance, float& deltavx, float& deltavy)
 {
   PHI_FLOAT phi1_x,phi2_x,phi3_x,phi1_y,phi2_y,phi3_y,h_x,h_y;
 
@@ -1215,10 +1216,10 @@ void GRID::deltaVelocityFromFieldCIC(float xpart,float ypart, float energy, PHI_
   deltavx = (h_x*(phi1_y-phi2_y)+(1.0-h_x)*(phi2_y-phi3_y))*delta_x_inverse_/energy;
   deltavy = (h_y*(phi1_x-phi2_x)+(1.0-h_y)*(phi2_x-phi3_x))*delta_y_inverse_/energy;
   //  cout << " :deltaVelocityFromFieldCIC Ex/g= " << deltavx << endl;
-      deltavx = -deltavx*pasDeTemps;
-      deltavy = -deltavy*pasDeTemps;
+      deltavx = -deltavx*distance;
+      deltavy = -deltavy*distance;
 }
-
+*/
 
 TRIVECTOR GRID::electric_field_out_of_main_grid(const vector<GENERAL_GRID*>& grids,int beam,PHI_FLOAT x,PHI_FLOAT y, int extra_grids) const
 {
@@ -1299,7 +1300,7 @@ void GRID::registerPhotons(const vector<float>& photonEnergies, PARTICLE& partic
 }
 
 
-void GRID::beamstrahlungSingleCoherentParticle(PARTICLE* particle, TRIVECTOR EBfield, float dzOnRadius, const vector<GENERAL_GRID*>& grids, int i_beam,  int i_slice, const PHI_FLOAT *phi, float pasDeTemps, float emin,int do_prod, int extra_grids, float charge_sign)
+void GRID::beamstrahlungSingleCoherentParticle(PARTICLE* particle, TRIVECTOR /*EBfield*/, float dzOnRadius, const vector<GENERAL_GRID*>& /*grids*/, int i_beam,  int i_slice, const PHI_FLOAT */*phi*/, float /*distance*/, float emin,int do_prod, int /*extra_grids*/, float /*charge_sign*/)
 {	
   float upsilon = particle->getUps();
 

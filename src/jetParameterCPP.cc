@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// cette methode est une partie de l'ancien init_jet
+// this method is part of the old init_jet
 void JET_PARAMETER::init(float s,float ptmin,int iparam)
 {
     d_spectrum_=5;

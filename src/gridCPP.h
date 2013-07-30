@@ -45,11 +45,8 @@ class SLICE_ON_GRID
   int dim_rho_;
   int nb_cells_y_;
 
-  SLICE_ON_GRID(SLICE_ON_GRID& s) 
-    {
-      cout << " COPY NON CONST " << endl;
-    }
-
+  // not implemented
+  SLICE_ON_GRID(SLICE_ON_GRID& s);
 
   inline void set_rho(int dim)
     {
@@ -753,7 +750,7 @@ GENERAL_CROSS* cross_;
 
 void  lumi_init( const SWITCHES& switches);
 
-void deltaVelocityFromFieldCIC(float xpart,float ypart, float energy,   PHI_FLOAT *phi, float pasDeTemps,float& ax, float& ay);
+//void deltaVelocityFromFieldCIC(float xpart,float ypart, float energy,   PHI_FLOAT *phi, float distance,float& ax, float& ay);
 
 inline float spread_energy(float ener, int which_spread, float spread, RNDM& rndm_generator) const 
 {
@@ -852,7 +849,8 @@ void apply_electric_field_on_pair(float step_2, float ex, float ey, float& vx,fl
       vy += step_2*ey*e_inv;
 }
 
-void scale_pair(float vold2, float& vx, float& vy, float& vz, float& vx0, float& vy0, float& vz0,float& eng, float& e_inv, float e_inv2 ) const
+/*
+void scale_pair(float vold2, float& vx, float& vy, float& vz, float& vx0, float& vy0, float& vz0,float& eng, float& e_inv, float& e_inv2 ) const
 {
 #ifdef SCALE_ENERGY
   float scal;
@@ -870,24 +868,7 @@ void scale_pair(float vold2, float& vx, float& vy, float& vz, float& vx0, float&
   e_inv2=e_inv*e_inv;
 #endif
 }
-/* void scale_pair(float vold2,float scal, float& vx0, float& vy0, float& vz0) const */
-/* { */
-/* #ifdef SCALE_ENERGY */
-/* /\*   float scal; *\/ */
-/* /\*   scal=sqrt((vold2*eng*eng + EMASS2)/((vx*vx+vy*vy+vz*vz)*eng*eng + EMASS2)); *\/ */
-/* /\*   vx*=scal; *\/ */
-/* /\*   vy*=scal; *\/ */
-/* /\*   vz*=scal; *\/ */
-/* #ifdef PAIR_SYN */
-/*   vx0 *= scal; */
-/*   vy0 *= scal; */
-/*   vz0 *= scal; */
-/* #endif */
-/* /\*   eng/=scal; *\/ */
-/* /\*   e_inv=1.0/eng; *\/ */
-/* /\*   e_inv2=e_inv*e_inv; *\/ */
-/* #endif */
-/* } */
+*/
 
 void apply_magnetic_field_on_pair(float fac_theta,float step_q, float e_inv2, float bx, float by, float& vx,float& vy, float& vz,float& theta) const;
 
@@ -944,7 +925,7 @@ void distribute_trident_particles_for_background(int i_slice1,
 
 TRIVECTOR electric_field_out_of_main_grid(const vector<GENERAL_GRID*>& grids,int beam,PHI_FLOAT x,PHI_FLOAT y, int extra_grids) const;
 
-//int field_coherent(const vector<GENERAL_GRID*>& grids,int beam,PHI_FLOAT x,PHI_FLOAT y,float ener, float pasDeTemps, float& deltaVx,float& deltaVy, int extra_grids);
+//int field_coherent(const vector<GENERAL_GRID*>& grids,int beam,PHI_FLOAT x,PHI_FLOAT y,float ener, float distance, float& deltaVx,float& deltaVy, int extra_grids);
 //void assignBeamSliceNGP(BEAM *beam, int i_slice, PHI_FLOAT *rho, float n_macro, DISTRIBUTE& distribute);
 void assignBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice, DISTRIBUTE& distribute);
 
@@ -984,12 +965,12 @@ inline TRIVECTOR EBfieldOnParticle(const PARTICLE* particle, const vector<GENERA
   return EBfield;
 }
 
-//float moveSingleParticle(PARTICLE* particle, TRIVECTOR EBfield, float dzOnRadius,bool rotateSpin, const vector<GENERAL_GRID*>& grids, BEAM& beam, int i_beam, int i_slice, PHI_FLOAT *phi, float pasDeTemps, int do_beamstrahlung, int sokolov, float emin,int do_prod, int extra_grids, float charge_sign);
+//float moveSingleParticle(PARTICLE* particle, TRIVECTOR EBfield, float dzOnRadius,bool rotateSpin, const vector<GENERAL_GRID*>& grids, BEAM& beam, int i_beam, int i_slice, PHI_FLOAT *phi, float distance, int do_beamstrahlung, int sokolov, float emin,int do_prod, int extra_grids, float charge_sign);
 
 //void particleBeamstrahlung(PARTICLE* particle, TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius,  float emin, vector<float>& photonEnergies);
 //void particleBeamstrahlungSokolov(PARTICLE_WITH_SPIN* particle, TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius, float emin, float charge_sign, vector<float>& photonEnergies);
 
-void beamstrahlungSingleCoherentParticle(PARTICLE* particle, TRIVECTOR EBfield, float dzOnRadius, const vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, const PHI_FLOAT *phi, float pasDeTemps, float emin,int do_prod, int extra_grids, float charge_sign);
+void beamstrahlungSingleCoherentParticle(PARTICLE* particle, TRIVECTOR EBfield, float dzOnRadius, const vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, const PHI_FLOAT *phi, float /*distance*/, float emin,int do_prod, int extra_grids, float charge_sign);
 
 //void advanceCoherentParticlesNGP();
 //void advanceCoherentParticlesCIC(PARTICLE& particle, const vector<GENERAL_GRID*>& grids, PHI_FLOAT *phi, int i_beam, float emin, int do_prod, int extra_grids, float scal_step, RNDM& rndm_generator);

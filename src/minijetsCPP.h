@@ -117,7 +117,7 @@ class ABSTRACT_MINIJETS : public ABSTRACT_IO_CLASS
  ABSTRACT_MINIJETS()  {;}
 
 
- ABSTRACT_MINIJETS(float s,float ptmin,int iparam, int jet_select, string jetfileName) : jetfile_(NULL)
+ ABSTRACT_MINIJETS(float s,float ptmin,int iparam, int /*jet_select*/, string jetfileName) : jetfile_(NULL)
     {
       set();
       init_jet_file(s,ptmin,jetfileName);
@@ -349,7 +349,7 @@ virtual  void store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT eph
 
 SPLINE jet_spline0_,jet_spline1_,jet_spline2_;
 
-  void initPythia(float s, float ptmin);
+  void initPythia();
 
  MINIJETS_PYTHIA()  : ABSTRACT_MINIJETS() {;}
 
@@ -359,7 +359,7 @@ SPLINE jet_spline0_,jet_spline1_,jet_spline2_;
 
  MINIJETS_PYTHIA(float s,float ptmin,int iparam, int jet_select, string jetfileName) : ABSTRACT_MINIJETS(s, ptmin, iparam, jet_select, jetfileName)
 {
-  initPythia(s, ptmin);
+  initPythia();
 }
  void mkjll_(const PAIR_PARAMETER& pair_parameter,float e1,float e2, float flum, SWITCHES& switches, RNDM& rndm_generator);
 
@@ -377,7 +377,7 @@ inline void make_jet(int index, float e1,float e2,float q2_1,float q2_2,float fl
   float sigma;
   if (!deltaSigma(e1, e2, q2_1, q2_2, flum,jet_spline, sigma)) return;
   jet_results_.increment_sigma(index,sigma);
-  stockageJet( e1, e2, sigma, jet_ratio,rndm_generator, optionStoreJet);
+  storeJet( e1, e2, sigma, jet_ratio,rndm_generator, optionStoreJet);
 }
 
 
@@ -394,7 +394,7 @@ void mkj_pythia1(const PAIR_PARAMETER& pair_parameter, int spectrum, float rphot
     bool deltaSigma(float e1,float e2,float q2_1,float q2_2, float flum, const SPLINE& jet_spline, float& delta) const;
 
 
-    void stockageJet( float e1,float e2,float sigma, float jet_ratio, RNDM& rndm_generator, int optionStoreJet) const;
+    void storeJet( float e1,float e2,float sigma, float jet_ratio, RNDM& rndm_generator, int optionStoreJet) const;
 
 };
 

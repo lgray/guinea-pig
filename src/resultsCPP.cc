@@ -283,7 +283,7 @@ void PAIRS_RESULTS::store_full_pair(int composante, double e1,double px1,double 
     }
 } /* store_full_pair */
 
-void PAIRS_RESULTS::update_contribution(int composante, double ener,double px,double py,double pz, double wgt)
+void PAIRS_RESULTS::update_contribution(int /*composante*/, double ener,double px,double py,double pz, double wgt)
 {
   double pt;
   pt=sqrt(px*px+py*py);
@@ -367,7 +367,7 @@ COMPT_RESULTS::COMPT_RESULTS()
 
 
 // 'composante' is old 'scdn1+scdn2'
-int COMPT_RESULTS::store_compt(int composante, double e,double px,double py,double pz,double wgt,RNDM& rndm_generator)
+int COMPT_RESULTS::store_compt(int composante, double e,double /*px*/,double /*py*/,double pz,double wgt,RNDM& rndm_generator)
 {
     if(pz>0.0)
       {
