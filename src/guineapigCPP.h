@@ -571,9 +571,11 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 #ifdef FFT_LOCAL
 	  << " FFT LOCAL (consider compiling with FFTW2 or FFTW3 to get cpu speedup) " << endl;
 #elif defined USE_FFTW2
-	  << " FFTW2 " << endl;
+          << " FFTW2 " << endl;
 #elif defined USE_FFTW3
 	  << " FFTW3 " << endl;
+#else
+          << " UNKNOWN " << endl;
 #endif
       out <<  "**************************************************** " << endl;
 

@@ -470,14 +470,14 @@ void set_named_variable(char name[],VALUE val)
 void set_named_variable_string(char name[],char cont[], MEMORY_ACCOUNT* m_account)
 {
   char buffer[1000],*point;//    char buffer[1000],*point,*end;
-  int is_simple;
+  //  int is_simple;
   VARIABLE *var;
   
   strncpy(buffer,name,1000);
   point=buffer;
   while(isalnum(*point)||*point=='_') point++;
   if (*point=='\0') {
-    is_simple=1;
+    //is_simple=1;
   }
   else{
     fprintf(stderr,"Variable <%s> is not of type string",name);
@@ -575,7 +575,7 @@ TOKEN read_token0(VALUE *val)
 {
   int letter,n=1000,tmp;//int letter,i=0,n=1000,tmp;
   char buffer[1000];
-  TOKEN token;
+  //TOKEN token;
   
   read_skip();
   letter=GETCH;
@@ -585,7 +585,8 @@ TOKEN read_token0(VALUE *val)
   }
   if (isalpha(letter)){
     UNGETCH(letter);
-    token=read_name(buffer,n);
+    /*token=*/
+    read_name(buffer,n);
     tmp=get_named_variable(buffer,val);
     if(tmp) return ERROR;
     return VAL;
