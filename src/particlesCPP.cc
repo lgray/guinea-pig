@@ -1,5 +1,8 @@
 #include "particlesCPP.h"
 
+#include <iostream>
+
+using namespace std;
 
 void PARTICLE_WITH_SPIN::rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float charge_sign, float dt) 
 {

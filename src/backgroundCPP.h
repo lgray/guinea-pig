@@ -18,11 +18,6 @@
 #include "minijetsCPP.h"
 #include "mathematicalTools.h"
 
-using namespace std;
-
-
-class COMPT;
-
 class COMPT : public ABSTRACT_IO_CLASS
 {
   
@@ -140,8 +135,8 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
   
   int number_of_energies_;
   int number_of_cross_sections_per_energy_;
-  vector<float> energies_;
-  vector< vector<float> > cross_sections_;
+  std::vector<float> energies_;
+  std::vector< std::vector<float> > cross_sections_;
   
   public :
     
@@ -154,8 +149,8 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
   virtual  ~CROSS_DATA() {;}
   
   
-  inline const vector<float>& energies() { return energies_;}
-  inline const vector< vector<float> >& cross_sections() { return cross_sections_;}
+  inline const std::vector<float>& energies() { return energies_;}
+  inline const std::vector< std::vector<float> >& cross_sections() { return cross_sections_;}
   
   virtual inline void resize(int n, int nval)
     {
@@ -171,7 +166,7 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
       
       int k;
       energies_.push_back(ener);
-      cross_sections_.push_back(vector<float>(number_of_cross_sections_per_energy_));
+      cross_sections_.push_back(std::vector<float>(number_of_cross_sections_per_energy_));
       for (k=0; k< number_of_cross_sections_per_energy_; k++) 
 	{
 	  cross_sections_.back()[k] = data[k];
@@ -229,7 +224,7 @@ class mCROSS  : public GENERAL_CROSS
  protected:
   
   MSPLINE mspline_;
-  vector<double> sum_, sum2_;
+  std::vector<double> sum_, sum2_;
   int ncross_per_ener_;
   
   mCROSS() 
@@ -263,8 +258,8 @@ class mCROSS  : public GENERAL_CROSS
       int logx = 0;
       int logy = 0;
       CROSS_DATA cr_data(crossIniFile);
-      const vector<float>& energ = cr_data.energies();
-      const vector< vector<float> >& cross_val = cr_data.cross_sections();
+      const std::vector<float>& energ = cr_data.energies();
+      const std::vector< std::vector<float> >& cross_val = cr_data.cross_sections();
       nb_ener_ = (int) energ.size();
       if ( nb_ener_ <= 0)
 	{
@@ -340,7 +335,7 @@ class maverCROSS : public mCROSS
 {
   
   MSPLINE mspline_aver_;
-  vector<double> cross_aver_;
+  std::vector<double> cross_aver_;
   
   public :
     
@@ -418,8 +413,8 @@ class CROSS  : public GENERAL_CROSS
      int logx = 0;
      int logy = 0;
      CROSS_DATA cr_data(crossIniFile);
-     const vector<float>& energ = cr_data.energies();
-     const vector< vector<float> >& cross_val = cr_data.cross_sections();
+     const std::vector<float>& energ = cr_data.energies();
+     const std::vector< std::vector<float> >& cross_val = cr_data.cross_sections();
      nb_ener_ = energ.size();
      if ( nb_ener_ <= 0)
        {

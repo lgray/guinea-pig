@@ -15,8 +15,6 @@
 #include "fileInputOutput.h"
 #include "meshCPP.h"
 #include "physicalTools.h"
-using namespace std;
-
 
 class PAIR_TRACK
 {
@@ -93,8 +91,8 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
 {
   
   list<PAIR_PARTICLE> reserve_;
-  vector< vector<PAIR_PARTICLE> > active_pairs_;
-  vector<PAIR_PARTICLE> pairs0_;
+  std::vector< std::vector<PAIR_PARTICLE> > active_pairs_;
+  std::vector<PAIR_PARTICLE> pairs0_;
 
   PAIR_TRACK pair_track_;
   PAIR_PARAMETER pair_parameter_;
@@ -169,7 +167,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   
   inline void resize(int n_cell_z)
     {
-      active_pairs_ =  vector< vector<PAIR_PARTICLE> >(n_cell_z);
+      active_pairs_ =  std::vector< std::vector<PAIR_PARTICLE> >(n_cell_z);
       count_pairs_=0;
     }
   
@@ -185,7 +183,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   
   inline int numberOfParticles(int slice) const {return active_pairs_[slice].size();}
   
-  inline vector<PAIR_PARTICLE>& get_pairs(int slice) { return active_pairs_[slice];}
+  inline std::vector<PAIR_PARTICLE>& get_pairs(int slice) { return active_pairs_[slice];}
   
   // active pairs are pairs which are in currently overlaping slices
   // once a step has been made and pairs moved, active pairs have to
@@ -266,7 +264,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
       FILE_IN_OUT filout;
       filout.open_file(nameOfOutputFile, "w");
       
-      list<PAIR_PARTICLE>::const_iterator point = reserve_.begin();
+      std::list<PAIR_PARTICLE>::const_iterator point = reserve_.begin();
       for ( point = reserve_.begin(); point != reserve_.end(); point++)
 		{
 		  //      filout.save_pair_particle(*point);
@@ -293,7 +291,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
       FILE_IN_OUT filout;
       filout.open_file(nameOfOutputFile, "w");
       cout << "Saving tracked Bhabha particles in " << nameOfOutputFile << endl;
-      list<PAIR_PARTICLE>::const_iterator point = reserve_.begin();
+      std::list<PAIR_PARTICLE>::const_iterator point = reserve_.begin();
       for ( point = reserve_.begin(); point != reserve_.end(); point++)
 		{
 		  //      filout.save_pair_particle(*point);

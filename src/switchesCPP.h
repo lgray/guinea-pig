@@ -1,17 +1,13 @@
 #ifndef SWITCHES_SEEN
 #define SWITCHES_SEEN
-#include <cstdio>
-#include <vector>
+
+#include <string>
 
 #include "typeDefs.h"
-#include "LesDefines.h"
+#include "define.h"
 //#include "readData.h"
 #include "abstractParticle.h"
 #include "parametersCPP.h"
-
-
-
-using namespace std;
 
 class SWITCHES : public ABSTRACT_IO_CLASS
 {
@@ -97,7 +93,7 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   void lectureTWOBEAM(const PARAMETERS& param);
   void lectureCharge_sign_2(const PARAMETERS& param);
 
-  virtual  string output_flow() const;
+  virtual  std::string output_flow() const;
 
   inline int getTWOBEAM() const {return twobeam;};
   inline int get_rndm_load() const {return rndm_load;};
@@ -200,8 +196,4 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   inline double get_n_b() const {return n_b;}
 };
 
-
-
 #endif
-
-

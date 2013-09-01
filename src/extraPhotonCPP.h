@@ -1,11 +1,5 @@
 #ifndef EXTRAPHOTON_SEEN
 #define EXTRAPHOTON_SEEN
-#include <vector>
-#include <list>
-#include <iostream>
-
-using namespace std;
-
 
 class  EXTRA
 {
@@ -47,37 +41,4 @@ class  EXTRA
     }
 };
 
-
-/* class EXTRA_PHOTON */
-
-/* { */
-
-
-/*  vector< list<EXTRA> > cell_; */
-
-/*  public: */
-
-/*   EXTRA_PHOTON() {;}; */
-/* ~EXTRA_PHOTON() */
-/*   {;}; */
-
-
-/* inline void clear_extra_photons() */
-/* { */
-/*   unsigned int j; */
-/*       for (j=0; j < cell_.size(); j++)    cell_[j].clear(); */
-/* } */
-/* inline void init_extra_photons(int number) */
-/* { */
-/*   cell_ = vector< list<EXTRA> >(number); */
-/* } */
-
-/* inline void store_vir_photon(float energy,float vx,float vy, */
-/* 		      float q2,float eorg,float weight,int j) */
-/* { */
-/*  cell_[j].push_front(EXTRA(energy, vx, vy, q2, eorg, weight)); */
-/* } */
-
-/*  inline const list<EXTRA>& get_cell(int j) const {return cell_[j];} */
-/* }; */
 #endif

@@ -1,5 +1,5 @@
-#ifndef LESDEFINES_SEEN
-#define LESDEFINES_SEEN
+#ifndef DEFINE_SEEN
+#define DEFINE_SEEN
 
 
 #ifndef SHORTCUT_FFT
@@ -18,10 +18,5 @@ const int ZPOS=1;
 
 const int MCROSS = 1;
 const int AVERCROSS = 0;
-
-#ifndef MOD 
-#define MOD %
-#endif
-
 
 #endif

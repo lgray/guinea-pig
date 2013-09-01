@@ -2,15 +2,13 @@
 #define PARTICLES_SEEN
 #include <iostream>
 #include <cmath>
-#include "LesDefines.h"
+#include "define.h"
 #include "typeDefs.h"
 #include "abstractIOclass.h"
 #include "abstractParticle.h"
 #include "physicalTools.h"
 #include "mathematicalEntities.h"
 #include "tridentCPP.h"
-
-using namespace std;
 
 class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
 {
@@ -94,7 +92,7 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
     {
       if (energy_ < emin)
 	{
-	  cout << "PARTICLE:: e_low2: " << energy_ << endl;
+	  std::cout << "PARTICLE:: e_low2: " << energy_ << std::endl;
 	  energy_ = emin;
 	}
     };
@@ -122,7 +120,7 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   
   virtual inline const TRIDVECTOR& getSpin() const
     {
-      cerr << " PARTICLE::get_spin : a PARTICLE has no spin, use PARTICLE_WITH_SPIN " << endl;
+      std::cerr << " PARTICLE::get_spin : a PARTICLE has no spin, use PARTICLE_WITH_SPIN " << std::endl;
       exit(0);
 /*       const TRIDVECTOR tv(0.0,0.0,0.0); */
 /*       return tv; */
@@ -131,38 +129,38 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
 
   virtual inline void rotateBMT(TRIDVECTOR /*Efield*/, TRIDVECTOR /*Bfield*/, float /*charge_sign*/, float /*dt*/) {;}
   
-  inline void beamstrahlung(TRIDVECTOR /*Efield*/, TRIDVECTOR /*Bfield*/, float dzOnRadius,  float emin, vector<float>& photonEnergies, RNDM& rndm_generator)
+  inline void beamstrahlung(TRIDVECTOR /*Efield*/, TRIDVECTOR /*Bfield*/, float dzOnRadius,  float emin, std::vector<float>& photonEnergies, RNDM& rndm_generator)
     {
       energy_ = PHYSTOOLS::synrad_no_spin_flip(ups_, energy_, dzOnRadius ,photonEnergies, rndm_generator);
       adjustEnergyToMinimum(emin);
     }
     
-  inline void createTridents(double dz,vector<float>* electrons,vector<float>* positrons,vector<float>* virt,RNDM& rndm_generator)
+  inline void createTridents(double dz,std::vector<float>* electrons,std::vector<float>* positrons,std::vector<float>* virt,RNDM& rndm_generator)
     {
       trident_.createTridents(&energy_,ups_,dz,electrons,positrons,virt,rndm_generator);
     }
 
-  inline void createTridents(double dz,vector<float>* electrons,vector<float>* positrons,RNDM& rndm_generator)
+  inline void createTridents(double dz,std::vector<float>* electrons,std::vector<float>* positrons,RNDM& rndm_generator)
     {
       trident_.createTridents(&energy_,ups_,dz,electrons,positrons,rndm_generator);
     }
   
-  virtual inline void beamstrahlungSokolov(TRIDVECTOR /*Efield*/, TRIDVECTOR /*Bfield*/, float /*dzOnRadius*/,  float /*emin*/, float /*charge_sign*/, vector<float>& /*photonEnergies*/, RNDM& /*rndm_generator*/)
+  virtual inline void beamstrahlungSokolov(TRIDVECTOR /*Efield*/, TRIDVECTOR /*Bfield*/, float /*dzOnRadius*/,  float /*emin*/, float /*charge_sign*/, std::vector<float>& /*photonEnergies*/, RNDM& /*rndm_generator*/)
     {
-      cerr << " illegal call of PARTICLE::beamstrahlungSokolov " << endl;
+      std::cerr << " illegal call of PARTICLE::beamstrahlungSokolov " << std::endl;
       exit(0);
     }
   
 
-  virtual string  output_flow() const
+  virtual std::string  output_flow() const
     {
-      cerr << "  output_flow not programmed for class PARTICLE " << endl;
-      return string(" ");
+      std::cerr << "  output_flow not programmed for class PARTICLE " << std::endl;
+      return std::string(" ");
     }
 
-  virtual string persistent_flow() const
+  virtual std::string persistent_flow() const
     {
-      ostringstream out;
+      std::ostringstream out;
       out <<  energy_ << " " << xpos_*1e-3 << " " << ypos_*1e-3 << " " << zpos_*1e-3 << " " << vx_*1e6 << " " << vy_*1e6;
       return out.str();
     }
@@ -222,14 +220,14 @@ class PARTICLE_WITH_SPIN : public PARTICLE
   
   inline void setSpin(TRIDVECTOR sp)
     {
-      //      cout << " appel setSpin " << endl;
+      //      std::cout << " appel setSpin " << std::endl;
       spin_ = sp;
     }
 
 
   virtual  inline void init_from_input_file(float /*energy*/, float /*xpos*/, float /*ypos*/, float /*zpos*/, float /*vx*/, float /*vy*/) 
     {
-      cerr << " reading from input file not programmed for PARTICLE_WITH_SPIN " << endl;
+      std::cerr << " reading from input file not programmed for PARTICLE_WITH_SPIN " << std::endl;
       exit(0);
       
     }
@@ -237,7 +235,7 @@ class PARTICLE_WITH_SPIN : public PARTICLE
   virtual void rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float charge_sign, float dt);
   
   
-  virtual inline void beamstrahlungSokolov(TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius,  float emin, float charge_sign, vector<float>& photonEnergies, RNDM& rndm_generator)
+  virtual inline void beamstrahlungSokolov(TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius,  float emin, float charge_sign, std::vector<float>& photonEnergies, RNDM& rndm_generator)
     {
       TRIDVECTOR ev1, ev2, ev3; 
       PHYSTOOLS::referenceSpin((double)vx_, (double)vy_, ev1, ev2, ev3, Efield, Bfield, charge_sign);
@@ -246,9 +244,9 @@ class PARTICLE_WITH_SPIN : public PARTICLE
     }
   
   
-  virtual string persistent_flow() const
+  virtual std::string persistent_flow() const
     {
-      ostringstream out;
+      std::ostringstream out;
       out <<  PARTICLE::persistent_flow() << " " << spin_(0) << " " << spin_(1) << " " << spin_(2);
       return out.str();
     }
@@ -294,17 +292,17 @@ class PHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
       no_ = no;
     }
   
-  virtual string  output_flow() const
+  virtual std::string  output_flow() const
     {
-      cerr << "  output_flow not programmed for class PHOTON " << endl;
-      return string(" ");
+      std::cerr << "  output_flow not programmed for class PHOTON " << std::endl;
+      return std::string(" ");
     }
 
-  virtual string persistent_flow() const
+  virtual std::string persistent_flow() const
     {
-      ostringstream out;
+      std::ostringstream out;
       /*   out <<  energy_ << " " << xpos_*1e-3 << " " << ypos_*1e-3 << " " << zpos_*1e-3 << " " << vx_*1e6 << " " << vy_*1e6 << " " << helicity_ << " " << no_; */
-      // out d'origine, a modifier eventuellement
+      // from original, to be modified perhaps
       out <<  energy_ << " " <<  vx_ << " " << vy_<< " ";
       
       return out.str();
@@ -313,7 +311,7 @@ class PHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   virtual  inline void init_from_input_file(float energy, float xpos, float ypos, float zpos, float vx, float vy) 
     {
       set(energy, xpos, ypos,zpos,vx,vy);
-      cerr << " reading from input file to be checked for photons " << endl;
+      std::cerr << " reading from input file to be checked for photons " << std::endl;
       exit(0);
     } 
   
@@ -323,13 +321,13 @@ class PHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
       PHOTON::init_from_input_file(energy, xpos, ypos, zpos, vx, vy);
       helicity_ = hel;
       //  no_ = 0;
-      cerr << " reading from input file to be checked for photons " << endl;
+      std::cerr << " reading from input file to be checked for photons " << std::endl;
       exit(0);
     } 
   
   virtual inline const TRIDVECTOR& getSpin() const 
     { 
-      cerr << " PHOTON::getSpin : not programmed " << endl;
+      std::cerr << " PHOTON::getSpin : not programmed " << std::endl;
       exit(0);
 /*       const TRIDVECTOR tv(0.0,0.0,0.0); */
 /*       return tv; */
@@ -390,22 +388,22 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   
   virtual const TRIDVECTOR& getSpin() const
   {
-    cerr << " PARTICLE::get_spin : a PAIR_PARTICLE has no spin, use PARTICLE_WITH_SPIN " << endl;
+    std::cerr << " PARTICLE::get_spin : a PAIR_PARTICLE has no spin, use PARTICLE_WITH_SPIN " << std::endl;
     exit(0);
 /*     const TRIDVECTOR tv(0.0,0.0,0.0); */
 /*     return tv; */
   }
     
-  virtual string  output_flow() const
+  virtual std::string  output_flow() const
     {
-      cerr << "  output_flow not programmed for class PAIR_PARTICLE " << endl;
-      return string(" ");
+      std::cerr << "  output_flow not programmed for class PAIR_PARTICLE " << std::endl;
+      return std::string(" ");
     }
   
   
-  virtual string persistent_flow() const
+  virtual std::string persistent_flow() const
   {
-    ostringstream out;
+    std::ostringstream out;
     float ener;
     if ( icharge_) ener = -energy_;
     else ener = energy_;
@@ -464,7 +462,7 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
     }
 
 
-  void synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, vector<float>* photon_e, RNDM& rndm_generator);
+  void synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, std::vector<float>* photon_e, RNDM& rndm_generator);
 
   void synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, RNDM& rndm_generator);
  
@@ -472,11 +470,11 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
 
   float apply_final_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, float thetamx, RNDM& rndm_generator);
 
-  float apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& rndm_generator);
+  float apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, std::vector<float>* photon_e, RNDM& rndm_generator);
 
   float apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& rndm_generator);
  
-  float apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& rndm_generator); 
+  float apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, std::vector<float>* photon_e, RNDM& rndm_generator); 
 
   float apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& rndm_generator); 
 
@@ -518,7 +516,7 @@ class  PHOTON_DATA
 
   inline float get_scal2() const 
     {
-      cout << "PHOTON_DATA : scal2 " << endl; 
+      std::cout << "PHOTON_DATA : scal2 " << std::endl; 
       return scal2_;
     }
 
@@ -588,17 +586,17 @@ class TERTPHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
       energy_ = energy;
     }
   
-  virtual string  output_flow() const
+  virtual std::string  output_flow() const
     {
-      cerr << "  output_flow not programmed for class TERTPHOTON " << endl;
-      return string(" ");
+      std::cerr << "  output_flow not programmed for class TERTPHOTON " << std::endl;
+      return std::string(" ");
     }
 
-  virtual string persistent_flow() const
+  virtual std::string persistent_flow() const
     {
-      ostringstream out;
+      std::ostringstream out;
       /*   out <<  energy_ << " " << xpos_*1e-3 << " " << ypos_*1e-3 << " " << zpos_*1e-3 << " " << vx_*1e6 << " " << vy_*1e6 << " " << helicity_ << " " << no_; */
-      // out d'origine, a modifier eventuellement
+      // from original, to be modified perhaps
       out <<  energy_ << " " <<  vx_ << " " << vy_<< " " << vz_ << " "<<  xpos_ << " " << ypos_<< " " << zpos_ << " ";
       
       return out.str();
@@ -606,7 +604,7 @@ class TERTPHOTON : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   
   virtual inline const TRIDVECTOR& getSpin() const 
     { 
-      cerr << " PHOTON::getSpin : not programmed " << endl;
+      std::cerr << " PHOTON::getSpin : not programmed " << std::endl;
       exit(0);
 /*       const TRIDVECTOR tv(0.0,0.0,0.0); */
 /*       return tv; */

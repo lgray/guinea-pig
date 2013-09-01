@@ -1,7 +1,6 @@
 #ifndef RUN_SEEN
 #define RUN_SEEN
 
-
 #include <iostream>
 #include <algorithm>
 #include "rndmCPP.h"

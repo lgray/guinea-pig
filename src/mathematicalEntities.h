@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
+#include <vector>
 #include "mathematicalTools.h"
 //#include "physicalTools.h"
 #include "abstractIOclass.h"
@@ -96,7 +98,7 @@ class TRIVECTOR
   
   inline void print()
     {
-      cout << " x comp. = " << vec_[0] << " y comp. = " << vec_[1] << " z comp. = " << vec_[2] << endl;
+      std::cout << " x comp. = " << vec_[0] << " y comp. = " << vec_[1] << " z comp. = " << vec_[2] << std::endl;
     }
 };
 
@@ -205,24 +207,24 @@ class TRIDVECTOR
   
   inline void print()
     {
-      cout << " x comp. = " << vec_[0] << " y comp. = " << vec_[1] << " z comp. = " << vec_[2] << endl;
+      std::cout << " x comp. = " << vec_[0] << " y comp. = " << vec_[1] << " z comp. = " << vec_[2] << std::endl;
     }
 };
 
 
 class named_int_vector : public ABSTRACT_IO_CLASS
 {
-  vector<int> vector_;
-  string name_;
+  std::vector<int> vector_;
+  std::string name_;
 
  public :
 
   named_int_vector() {;}
 
-  inline void put_name(string nom) {name_ = nom;}
+  inline void put_name(std::string nom) {name_ = nom;}
   inline void clear()
   {
-    name_ = string (" ");
+    name_ = std::string (" ");
     vector_.clear();
   }
   inline void  add_component(int comp) 
@@ -231,16 +233,16 @@ class named_int_vector : public ABSTRACT_IO_CLASS
   }
   ~named_int_vector() {;}
 
-  virtual string output_flow() const 
+  virtual std::string output_flow() const 
   {
-    ostringstream out;
-    string start = string("vector").append(name_);
+    std::ostringstream out;
+    std::string start = std::string("vector").append(name_);
     out << title(start);
-    out << " vector " << name_ << endl;
+    out << " vector " << name_ << std::endl;
     int k;
     for (k=0; k < (int)vector_.size(); k++)
       {
-	out << name_ << " k = " << k << " :" << vector_[k] << endl;
+	out << name_ << " k = " << k << " :" << vector_[k] << std::endl;
       }
     return out.str();  
   }

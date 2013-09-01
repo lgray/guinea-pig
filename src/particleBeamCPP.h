@@ -47,7 +47,7 @@ class ABSTRACT_PARTICLE_BEAM
 class BEAM_FROM_FILE : public ABSTRACT_PARTICLE_BEAM
 {
   
-  vector<PARTICLE_INTERFACE> particles_;
+  std::vector<PARTICLE_INTERFACE> particles_;
   
   BEAM_FROM_FILE() {;}
   
@@ -126,9 +126,9 @@ class BEAM_FROM_FILE : public ABSTRACT_PARTICLE_BEAM
 class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 {
 
-  vector< vector<PARTICLE*> > particle_;
-  vector< vector<PARTICLE*> > coherent_;
-  vector< vector<PARTICLE*> > trident_;
+  std::vector< std::vector<PARTICLE*> > particle_;
+  std::vector< std::vector<PARTICLE*> > coherent_;
+  std::vector< std::vector<PARTICLE*> > trident_;
   unsigned long int initial_number_of_particles_;
   unsigned long int number_of_particles_dispatched_in_slices_;
   float r_macro,zmin,dz;
@@ -471,26 +471,26 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   PARTICLE_BEAM(int nb_slices,int bmt_rotate,TRIDVECTOR polar, RNDM* rndm_generator) : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM()
     {
       set(bmt_rotate, polar);
-      particle_ = vector< vector<PARTICLE*> >(nb_slices);
-      coherent_ = vector< vector<PARTICLE*> >(nb_slices);
-      trident_ = vector< vector<PARTICLE*> >(nb_slices);
+      particle_ = std::vector< std::vector<PARTICLE*> >(nb_slices);
+      coherent_ = std::vector< std::vector<PARTICLE*> >(nb_slices);
+      trident_ = std::vector< std::vector<PARTICLE*> >(nb_slices);
       rndm_generator_ = rndm_generator;
     }
   
-  inline  vector<PARTICLE*>& getParticleVector(int slice)  { return particle_[slice];}
+  inline  std::vector<PARTICLE*>& getParticleVector(int slice)  { return particle_[slice];}
   
-  inline const vector<PARTICLE*>& getParticleVector(int slice) const 
+  inline const std::vector<PARTICLE*>& getParticleVector(int slice) const 
     {
       return particle_[slice];
     }
 
-  inline  vector<PARTICLE*>& getCoherentVector(int slice) {return coherent_[slice];}
+  inline  std::vector<PARTICLE*>& getCoherentVector(int slice) {return coherent_[slice];}
 
-  inline  vector<PARTICLE*>& getTridentVector(int slice) {return trident_[slice];}
+  inline  std::vector<PARTICLE*>& getTridentVector(int slice) {return trident_[slice];}
   
-  inline const vector<PARTICLE*>& getCoherentVector(int slice) const {return coherent_[slice];}
+  inline const std::vector<PARTICLE*>& getCoherentVector(int slice) const {return coherent_[slice];}
 
-  inline const vector<PARTICLE*>& getTridentVector(int slice) const {return trident_[slice];}
+  inline const std::vector<PARTICLE*>& getTridentVector(int slice) const {return trident_[slice];}
     
   inline void newCoherent(int slice,float x,float y, float vx,float vy, float energy)
     {
@@ -606,7 +606,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   
   void transverseRms(int slice,double& xmin,double& xmax,double& xmean,double&  ymin,double& ymax,double& ymean,double&  sigmaxRms,double& sigmayRms) const; 
 
-  void ang_dis(unsigned int n_bin, vector< vector<float> >& bin ) const;
+  void ang_dis(unsigned int n_bin, std::vector< std::vector<float> >& bin ) const;
   
   virtual string output_flow() const; 
   int store_beam(string name) const;
@@ -623,8 +623,8 @@ class  PHOTON_BEAM
  private:
 
   int n_slice_;
-  vector< vector<PHOTON> > slice_photon_vector_;
-  list<PHOTON>::iterator end_;
+  std::vector< std::vector<PHOTON> > slice_photon_vector_;
+  std::list<PHOTON>::iterator end_;
   
   PHOTON_COUNTER photon_count_;
 
@@ -664,9 +664,9 @@ class  PHOTON_BEAM
   ~PHOTON_BEAM();
   
   
-  inline vector<PHOTON>& getPhotonVector(int slice) { return slice_photon_vector_[slice];}
+  inline std::vector<PHOTON>& getPhotonVector(int slice) { return slice_photon_vector_[slice];}
   
-  inline const vector<PHOTON>& getPhotonVector(int slice) const { return slice_photon_vector_[slice];}
+  inline const std::vector<PHOTON>& getPhotonVector(int slice) const { return slice_photon_vector_[slice];}
   
   inline const PHOTON_COUNTER& get_photon_counter() const { return photon_count_;}
   
@@ -709,6 +709,5 @@ class  PHOTON_BEAM
   void dump_photons(string name,int istep, int every_particle,int timestep, float step, float max_z, int  sign_label);
   
 };
-
 
 #endif

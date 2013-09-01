@@ -1,7 +1,9 @@
 #include "fourierCPP.h"
 #include <cmath>
+#include <iostream>
+#include <string>
 
-
+using namespace std;
 
 #ifdef USE_FFTW2
 

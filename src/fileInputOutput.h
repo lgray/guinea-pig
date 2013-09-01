@@ -5,7 +5,7 @@
 #include "fileInputOutputAscii.h"
 #include <string>
 #include <vector>
-#include <cstdio>
+//#include <cstdio>
 
 class FILE_IN_OUT
 {
@@ -25,14 +25,14 @@ class FILE_IN_OUT
       if (out_to_file_ != NULL) delete out_to_file_;
     }
 
-  virtual inline void open_file(string name, const char* mode)
+  virtual inline void open_file(std::string name, const char* mode)
     { 
-//	  cout << "Opening file " << name << endl;
+//	  std::cout << "Opening file " << name << std::endl;
       out_to_file_->open_file(name, mode);
     }
 
 
-  virtual inline void set_header(string head)
+  virtual inline void set_header(std::string head)
     { 
       out_to_file_->set_header(head);
     }
@@ -69,14 +69,14 @@ class FILE_IN_OUT
       return  out_to_file_->read_particle(part);
     }
   
-  virtual inline  bool  read_line(string& ligne) 
+  virtual inline  bool  read_line(std::string& line) 
     {
-      return  out_to_file_->read_line(ligne);
+      return  out_to_file_->read_line(line);
     }
   
-  virtual inline  void  write_line(string& ligne) 
+  virtual inline  void  write_line(std::string& line) 
     {
-      return  out_to_file_->write_line(ligne);
+      return  out_to_file_->write_line(line);
     }
   
   virtual inline void save_bhabhasamples(const ABSTRACT_BHABHASAMPLES* const bhabhas) 
@@ -99,7 +99,7 @@ class FILE_IN_OUT
       return  out_to_file_->read_bhabhaPhotonsamples( bhabhasPhoton);
     }
   
-  virtual int read_pythia_file(int& logx, int& logy, vector<double>& x, vector<double>& y)
+  virtual int read_pythia_file(int& logx, int& logy, std::vector<double>& x, std::vector<double>& y)
     {
       return  out_to_file_->read_pythia_file(logx, logy, x, y);
     }

@@ -3,8 +3,6 @@
 
 #include <cmath>
 
-using namespace std;
-
 /* Common Block Declarations */
 
 class GRVPAR 
@@ -23,11 +21,11 @@ inline double fl(double x,double s)
 /* * S = log( log(Q**2/.232^2) / log(.25/.232^2) ) (LO),            * */
 /* * S = log( log(Q**2/.248^2) / log(.3/.248^2) )  (HO).            * */
 /* ****************************************************************** */
-
-    return (pow(x,a_) * (ba_ + bb_ * sqrt(x) 
-	    + c_ * pow(x,b_)) + pow(s,alp_) 
-	    * exp(-e_ + sqrt(-ep_ * pow(s,bet_) *
-	     log(x)))) * pow(1.0-x,d_) / x;
+  
+  return (std::pow(x,a_) * (ba_ + bb_ * std::sqrt(x) + c_ * std::pow(x,b_))
+	  + std::pow(s,alp_) * 
+	  std::exp(-e_ + std::sqrt(-ep_ * std::pow(s,bet_) *
+				   std::log(x)))) * std::pow(1.0-x,d_) / x;
 } 
 
 inline double fh(double x,double s)
@@ -36,20 +34,18 @@ inline double fh(double x,double s)
 
   // Builtin functions 
 
-/* ************************************************* */
-/* * Same as FL, but for the heavy s, c, b quarks. * */
-/* ************************************************* */
-    if (s - sp_ < 0.0) {
-	return 0.0;
-    }
-    return ((s - sp_) * pow(x,a_) * (ba_ + 
-	    bb_ * sqrt(x) + c_ * pow(x,b_)) + 
-	    pow(s-sp_,alp_) * exp(-e_ + sqrt(
-	    -ep_ * pow(s,bet_) * log(x)))) *
-	    pow(1.0-x,d_) / x;
-} 
-
-
+  /* ************************************************* */
+  /* * Same as FL, but for the heavy s, c, b quarks. * */
+  /* ************************************************* */
+  if (s - sp_ < 0.0) {
+    return 0.0;
+  }
+  return ((s - sp_) * std::pow(x,a_) * 
+	  (ba_ + bb_ * std::sqrt(x) + c_ * std::pow(x,b_)) + 
+	  std::pow(s-sp_,alp_) * 
+	  std::exp(-e_ + std::sqrt(-ep_ * std::pow(s,bet_) * std::log(x)))) *
+    std::pow(1.0-x,d_) / x;
+}
 
 double grvuh(double x,double q2);
 

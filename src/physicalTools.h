@@ -1,6 +1,7 @@
 #ifndef PHYSICALTOOLS_SEEN
 #define  PHYSICALTOOLS_SEEN
 #include <iostream>
+#include <vector>
 #include "besselCPP.h"
 #include "typeDefs.h"
 #include "rndmCPP.h"
@@ -248,9 +249,9 @@ class PHYSTOOLS
   static double fradu0(double ups);
   static double fradsp(double ups);
   
-  static float synrad_spin_flip (float upsilonSingleP, float eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3,TRIDVECTOR& polar, float dzOnRadius,vector<float>& photon, RNDM& rndm_generator);
-  static float synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius, vector<float>&  photon, RNDM& rndm_generator); 
-  static float synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOnRadius,vector<float>& photon, RNDM& rndm_generator);
+  static float synrad_spin_flip (float upsilonSingleP, float eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3,TRIDVECTOR& polar, float dzOnRadius,std::vector<float>& photon, RNDM& rndm_generator);
+  static float synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius, std::vector<float>&  photon, RNDM& rndm_generator); 
+  static float synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOnRadius,std::vector<float>& photon, RNDM& rndm_generator);
   
   static int synrad_0_no_spin_flip (float upsilonSingleP,float eng,float dzOnRadius,float* x, RNDM& rndm_generator);
   static int synrad_0_spin_flip (float upsilonSingleP,float eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius,float* x, RNDM& rndm_generator);
@@ -597,7 +598,7 @@ inline void boost_cecile(float e1, float e2, float beta_x, float beta_y)
    {
      if (v4_ == 0.0) 
        {
-	 cout << " mathematicalEntities::momentumToVelocity : null energy! " << endl;
+	 std::cout << " mathematicalEntities::momentumToVelocity : null energy! " << std::endl;
 	 return;
        }
      float factor = 1.0/fabs(v4_);

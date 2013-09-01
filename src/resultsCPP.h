@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <algorithm>
 
-#include "LesDefines.h"
+#include "define.h"
 #include "physconst.h"
 #include "mathconst.h"
 //#include "hitCPP.h"
@@ -15,9 +15,6 @@
 #include "beamCPP.h"
 #include "switchesCPP.h"
 #include "abstractParticle.h"
-
-using namespace std;
-
 
 /* Definition of variables to store the results */
 
@@ -202,8 +199,8 @@ class  RESULTS : public ABSTRACT_IO_CLASS
   void bpm_signal_coherent(const BEAM& beam) ;
 
   
-  void output_flow(ostringstream& out ) const ;
-  virtual string  output_flow() const ;
+  void output_flow(std::ostringstream& out ) const ;
+  virtual std::string  output_flow() const ;
 
 };
 
@@ -213,7 +210,7 @@ class PAIRS_RESULTS : public ABSTRACT_IO_CLASS
   double energy_;
   double eproc_[3],nproc_[3];
   double b1_,b2_,n1_,n2_;
-  string name_;
+  std::string name_;
 
   double highptsum_, highpteng_;
 
@@ -229,7 +226,7 @@ class PAIRS_RESULTS : public ABSTRACT_IO_CLASS
  //  PAIRS_RESULTS() : secondaries_pointer_(NULL) {set();}
  //  PAIRS_RESULTS(PAIR_BEAM* secondaries) {secondaries_pointer_ = secondaries; set();}
 
- inline void set_name(string name){name_=name;}
+ inline void set_name(std::string name){name_=name;}
  inline int number() const {return number_;}
  inline double energy() const {return energy_;}
  
@@ -247,7 +244,7 @@ class PAIRS_RESULTS : public ABSTRACT_IO_CLASS
        }
    } /* storep_ */
  
- virtual string output_flow() const ;
+ virtual std::string output_flow() const ;
  
  
 };
@@ -266,14 +263,14 @@ class COMPT_RESULTS : public ABSTRACT_IO_CLASS
   
   int store_compt(int composante,double e,double px,double py,double pz,double wgt,RNDM& rndm_generator);
 
-  virtual  inline string output_flow() const 
+  virtual  inline std::string output_flow() const 
     {
-      ostringstream out;
-      out << title(string("Compton results"));
-      out << "compt_npart_0 = " << nproc_[0] << " compt_epart_0 = " << eproc_[0] << endl;
-      out << "compt_npart_1 = " << nproc_[1] << " compt_epart_1 = " << eproc_[1] << endl;
-      out << "compt_n.1 = " << n1_ << " compt_b.1 = " << b1_ << endl;
-      out << "compt_n.2 = " << n2_ << " compt_b.2 = " << b2_ << endl;
+      std::ostringstream out;
+      out << title(std::string("Compton results"));
+      out << "compt_npart_0 = " << nproc_[0] << " compt_epart_0 = " << eproc_[0] << std::endl;
+      out << "compt_npart_1 = " << nproc_[1] << " compt_epart_1 = " << eproc_[1] << std::endl;
+      out << "compt_n.1 = " << n1_ << " compt_b.1 = " << b1_ << std::endl;
+      out << "compt_n.2 = " << n2_ << " compt_b.2 = " << b2_ << std::endl;
       return out.str();
     }
 };
@@ -287,15 +284,15 @@ class COMPT_RESULTS : public ABSTRACT_IO_CLASS
   
   MUON_RESULTS();
   
-  inline string output_flow() const 
+  inline std::string output_flow() const 
   {
-  ostringstream out;
-  out << title(string("Muons results"));
-  out << "muon_n.0 = " << nproc[0] << " muon_e.0 = " << eproc[0] << endl;
-  out << "muon_n.1 = " << nproc[1] << " muon_e.1 = " << eproc[1] << endl;
-  out << "muon_n.2 = " << nproc[2] << " muon_e.2 = " << eproc[2] << endl;
+  std::ostringstream out;
+  out << title(std::string("Muons results"));
+  out << "muon_n.0 = " << nproc[0] << " muon_e.0 = " << eproc[0] << std::endl;
+  out << "muon_n.1 = " << nproc[1] << " muon_e.1 = " << eproc[1] << std::endl;
+  out << "muon_n.2 = " << nproc[2] << " muon_e.2 = " << eproc[2] << std::endl;
   
-  out << "muon_n_sum = " << nproc[0] + nproc[1]+nproc[2] <<  " muon_e_sum = " << eproc[0]+eproc[1] + eproc[2] << endl;
+  out << "muon_n_sum = " << nproc[0] + nproc[1]+nproc[2] <<  " muon_e_sum = " << eproc[0]+eproc[1] + eproc[2] << std::endl;
   
   return out.str();
   }
@@ -320,13 +317,13 @@ class JET_RESULTS : public ABSTRACT_IO_CLASS
      sigma_[index] += x;
     }
   
-  virtual inline string output_flow() const 
+  virtual inline std::string output_flow() const 
     {
-      ostringstream out;
-      out << title(string("jets results"));
-      out << " nb of minijet evts per bx due to the direct process : jets0 = " << sigma_[0] << endl;
-      out << "nb of minijet evts per bx due to the once resolved process : jets1 = " << sigma_[1] << endl;
-      out << "nb of minijet evts per bx due to the twice resolved process : jets2 = " << sigma_[2] << endl;
+      std::ostringstream out;
+      out << title(std::string("jets results"));
+      out << " nb of minijet evts per bx due to the direct process : jets0 = " << sigma_[0] << std::endl;
+      out << "nb of minijet evts per bx due to the once resolved process : jets1 = " << sigma_[1] << std::endl;
+      out << "nb of minijet evts per bx due to the twice resolved process : jets2 = " << sigma_[2] << std::endl;
       return out.str();
     }
 };
@@ -349,11 +346,11 @@ class JET_RESULTS : public ABSTRACT_IO_CLASS
 /* 	number_[nbeam-1]++; */
 /* 	energy_[nbeam-1]+=energy; */
 /*       }; */
-/*  inline string output_flow() const  */
+/*  inline std::string output_flow() const  */
 /* { */
-/*   ostringstream out; */
-/*   out << title(string("photons results")); */
-/*   out << "e_phot.1 = " << energy_[0]/max(double(1.0),double(number_[0])) << " e_phot.2 = " << energy_[1]/max(double(1.0),double(number_[1])) << endl; */
+/*   std::ostringstream out; */
+/*   out << title(std::string("photons results")); */
+/*   out << "e_phot.1 = " << energy_[0]/max(double(1.0),double(number_[0])) << " e_phot.2 = " << energy_[1]/max(double(1.0),double(number_[1])) << std::endl; */
 /*   return out.str(); */
 /* } */
 /* }; */
@@ -406,7 +403,7 @@ class COHERENT_RESULTS : public ABSTRACT_IO_CLASS
       upsmax_ = max(upsmax_, double(ups));
     }
   
-  virtual string output_flow() const ;
+  virtual std::string output_flow() const ;
   
 };
 
@@ -443,7 +440,7 @@ class TRIDENT_RESULTS : public ABSTRACT_IO_CLASS
       total_energy_ += fabs(ener);
     }
   
-  virtual string output_flow() const ;
+  virtual std::string output_flow() const ;
   
 };
 #endif

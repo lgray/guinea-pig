@@ -1,13 +1,13 @@
 #ifndef FIELD_CPP_SEEN
 #define FIELD_CPP_SEEN
+#include <cmath>
 #include <iostream>
-#include "stdio.h"
-#include "stdlib.h"
+#include <cstdio>
+#include <cstdlib>
 #include "typeDefs.h"
-#include "LesDefines.h"
+#include "define.h"
 #include "mathconst.h"
 #include "fourierCPP.h"
-#include <cmath>
 #include "typeDefs.h"
 
 class FIELD
@@ -31,7 +31,7 @@ class FIELD
     //    int k;
     if (fourier == NULL) 
       {
-	cerr << " FIELD::init_fourier_tools : you must give a fourier server with integration_method = 2 " << endl;
+	std::cerr << " FIELD::init_fourier_tools : you must give a fourier server with integration_method = 2 " << std::endl;
 	exit(0); 
       }
     //int size = nb_cells_x_*nb_cells_y_*8;
@@ -39,8 +39,8 @@ class FIELD
     //  for (k=0; k<size; k++) temp_[k] = 0.0;
     nn[0]=2*nb_cells_y_;
     nn[1]=2*nb_cells_x_;
-    fourier_transform_forward_ = fourier->new_fft(string("for3"),nn);
-    fourier_transform_backward_ = fourier->new_fft(string("back3"),nn);
+    fourier_transform_forward_ = fourier->new_fft(std::string("for3"),nn);
+    fourier_transform_backward_ = fourier->new_fft(std::string("back3"),nn);
   }
 
     void set (int nx, int ny, int integration) 
@@ -154,7 +154,7 @@ class FIELD
       if (index == 2) return phi2_;
       else 
 	{
-	  cerr << " FIELD::get_phi() : ERROR index = " << index << endl;
+	  std::cerr << " FIELD::get_phi() : ERROR index = " << index << std::endl;
 	  exit(0);
 	}
   }
@@ -200,10 +200,6 @@ inline  void foldfronts (const PHI_FLOAT *rho1,const PHI_FLOAT *rho2, PHI_FLOAT 
 	  sor2(rho1, phi1_, nb_cells_x_, nb_cells_y_,parameter, charge_sign);
 	  sor2(rho2, phi2_, nb_cells_x_, nb_cells_y_,parameter, charge_sign);
 }
-
-
-
-
 
 };
 

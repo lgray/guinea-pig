@@ -1,7 +1,11 @@
 #include "tridentCPP.h"
 
+#include <iostream>
+
 #define CVELOCITY 3e+17 /* nm/s */
 #define COMPTON HBAR*CVELOCITY/EMASS
+
+using namespace std;
 
 /* Contact Jakob Esberg, Barbara Dalena or Daniel Schulte */
 

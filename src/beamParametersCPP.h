@@ -5,11 +5,9 @@
 #include <cstdio>
 #include <sstream>
 #include <string>
-#include <vector>
 #include "abstractParticle.h"
 #include "parametersCPP.h"
 #include "mathematicalEntities.h"
-using namespace std;
 
 class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
 {
@@ -45,11 +43,11 @@ class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
 
   void set_polar(double compx, double compy, double compz);
 
-  void former_nom(char* name, string param);
+  void former_nom(char* name, std::string param);
 
-  inline string param_with_entension(string param) const
+  inline std::string param_with_entension(std::string param) const
     {
-      return param.append(string(extension_));
+      return param.append(std::string(extension_));
     }
   
   
@@ -59,12 +57,12 @@ class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
   
   BEAM_PARAMETERS();
   
-  virtual string output_flow() const;
+  virtual std::string output_flow() const;
   
   inline int label() const 
     {
-      istringstream stream1;
-      stream1.str(string(&extension_[1]));
+      std::istringstream stream1;
+      stream1.str(std::string(&extension_[1]));
       int lab;
       stream1 >> lab;
       return lab;

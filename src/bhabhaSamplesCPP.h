@@ -12,13 +12,11 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
 class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
 {
 
-  vector<QUADRIVECTOR> bhabha_photons_;
-  vector<int> numero_bhabha_;
+  std::vector<QUADRIVECTOR> bhabha_photons_;
+  std::vector<int> numero_bhabha_;
   int label_;
   unsigned int next_;
   public :
@@ -105,7 +103,7 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
     int nbphot;
   } BHABHA_INI;
   
-  vector<BHABHA_INI> bhabha_;
+  std::vector<BHABHA_INI> bhabha_;
   unsigned long next_;
   unsigned long prod_info_;
   

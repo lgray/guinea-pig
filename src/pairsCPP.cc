@@ -310,7 +310,7 @@ void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, i
 void PAIR_BEAM::load_events(int time_counter,float ratio, int tracking, RNDM& rndm_generator)
 {
   float e,x,y,z,vx,vy,vz;
-  string ligne;
+  string line;
   int  t;
   if (file_of_events_ == NULL) return;
        
@@ -332,13 +332,13 @@ void PAIR_BEAM::load_events(int time_counter,float ratio, int tracking, RNDM& rn
 	}
       else return;
     }
-  while (file_of_events_->read_line(ligne)) 
+  while (file_of_events_->read_line(line)) 
     {
-      istringstream ss(ligne);
+      istringstream ss(line);
       ss >> t;
       if (t > time_counter)
 	{
-	  event_to_store_ = ligne;
+	  event_to_store_ = line;
 	  break;
 	}
       else 

@@ -3,13 +3,10 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <vector>
 
 #include "typeDefs.h"
 #include "abstractIOclass.h"
 #include "mathematicalEntities.h"
-
-using namespace std;
 
 class ABSTRACT_BEAM
 {
@@ -155,7 +152,7 @@ class ABSTRACT_PARTICLE
       
       z = zpos_;
       dz = max_z-istep*dz0;
-      //  cout << " set_z_for_dump istep= " << istep <<  " dz= " << dz << endl;
+      //  std::cout << " set_z_for_dump istep= " << istep <<  " dz= " << dz << std::endl;
       z += dz;
       zpos_ = sign*(z + dz0);
     }
@@ -225,10 +222,10 @@ class ABSTRACT_LUMI_HEAP : public ABSTRACT_IO_CLASS
   virtual  int nb_pairs() const = 0;
   virtual  void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z) const = 0;
   virtual  void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2,int& t)  const = 0;
-  virtual string output_flow() const 
+  virtual std::string output_flow() const 
     {
-      ostringstream out;
-      out << " ABSTRACT_LUMI_HEAP:: no data for output file in abstract class " << endl;
+      std::ostringstream out;
+      out << " ABSTRACT_LUMI_HEAP:: no data for output file in abstract class " << std::endl;
       return out.str();
     }
 };

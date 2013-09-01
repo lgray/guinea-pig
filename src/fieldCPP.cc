@@ -1,5 +1,6 @@
 #include "fieldCPP.h"
 
+using namespace std;
 
 /**********************************************/
 /* Routines for the calculation of the fields */
@@ -242,7 +243,7 @@ void FIELD::sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT 
 	{
 	  for (i2=1;i2<n_y-1;i2++)
 	    {
-	      if (((i1+i2) MOD 2)==(n MOD 2))
+	      if (((i1+i2) % 2)==(n % 2))
 		{
 		  j=i1*n_y+i2;
 		  resid=a*phi[j+n_y]+b*phi[j-n_y]+c*phi[j+1]

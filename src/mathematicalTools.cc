@@ -1,5 +1,7 @@
 #include "mathematicalTools.h"
 
+#include <iostream>
+
 void TOOLS::rotmat(double angle, double axis[3], double r[3][3])
   // from CAIN
 {
@@ -30,7 +32,7 @@ double TOOLS::K13(double x)
   double x13, x2,y;
   if ( x <= 0.0 ) 
     {
-      cerr << " mathematicalTools::K13 : invalid arguments : x = " << x << endl;
+      std::cerr << " mathematicalTools::K13 : invalid arguments : x = " << x << std::endl;
       return 0.0;
     }
   if ( x <= x0 ) 
@@ -61,7 +63,7 @@ double TOOLS::Ki13(double x)
   double resu = 0.0;
   if ( x < 0.0 ) 
     {
-      cerr << " mathematicalTools::Ki13 : invalid arguments : x = " << x << endl;
+      std::cerr << " mathematicalTools::Ki13 : invalid arguments : x = " << x << std::endl;
       return 0.0;
     }
   if ( x < x0 ) 

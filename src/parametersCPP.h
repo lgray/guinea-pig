@@ -3,16 +3,13 @@
 
 #include <iostream>
 
-//#include "readData.h"
 #include <string>
 extern "C"
 {
-#include "lectureDonnees.h"
+#include "readData.h"
 }
 
 #include "option_args.h"
-
-using namespace std;
 
 class PARAMETERS
 {
@@ -21,20 +18,20 @@ class PARAMETERS
   DATEI datei_;
 
 
-  inline int readIntegerValue(string nom) const
+  inline int readIntegerValue(std::string nom) const
   {
     VALUE value;
     get_named_variable( const_cast<char*>(nom.c_str()), &value);
     return (int)CONTENTS(value);
   }
-  inline float readFloatValue(string nom) const
+  inline float readFloatValue(std::string nom) const
   {
     VALUE value;
     get_named_variable( const_cast<char*>(nom.c_str()), &value);
     return (float)CONTENTS(value);
   }
 
-  inline double readDoubleValue(string nom) const
+  inline double readDoubleValue(std::string nom) const
   {
     VALUE value;
     get_named_variable( const_cast<char*>(nom.c_str()), &value);
@@ -42,23 +39,23 @@ class PARAMETERS
   }
 
 
-  inline int fileOpen(DATEI *datei,string name, string type) const
+  inline int fileOpen(DATEI *datei,std::string name, std::string type) const
   {
     return  file_open(datei,const_cast<char*>(name.c_str()),const_cast<char*>(type.c_str()));
   }
 
 
-  inline int fileFindWord(DATEI *datei, string word) const
+  inline int fileFindWord(DATEI *datei, std::string word) const
   {
     return  file_find_word(datei,   const_cast<char*>(word.c_str()));
   }
 
-  inline int fileNextWord(DATEI *datei, string word) const
+  inline int fileNextWord(DATEI *datei, std::string word) const
   {
     return  file_next_word(datei, const_cast<char*>(word.c_str()));
   }
 
-  inline int fileReadBraces(DATEI *datei,string begin, string end, char* buff,int n_max) const
+  inline int fileReadBraces(DATEI *datei,std::string begin, std::string end, char* buff,int n_max) const
   {
     return file_read_braces(datei,const_cast<char*>(begin.c_str()),const_cast<char*>(end.c_str()),buff,n_max);
     //  return file_read_braces(datei,begin, end,buff,n_max);
@@ -79,7 +76,7 @@ class PARAMETERS
 	  {
 	    if (fileFindWord(&datei_,"$ACCELERATOR::")==0) 
 	      {
-		cerr << "Error: Accelerator not found with name "<< name << endl;
+		std::cerr << "Error: Accelerator not found with name "<< name << std::endl;
 		return;
 	      }
 	  }
@@ -100,7 +97,7 @@ class PARAMETERS
 	  {
 	    if (fileFindWord(&datei_,"$PARAMETERS::")==0) 
 	      {
-		cerr << "Error: Parameters  not found with name " << par << endl;
+		std::cerr << "Error: Parameters  not found with name " << par << std::endl;
 		return;
 	      }
 	  }
@@ -121,7 +118,7 @@ class PARAMETERS
   
       if (!testFile) 
 	{
-	  cerr << " PARAMETERS:: error in opening file acc.dat " << endl;
+	  std::cerr << " PARAMETERS:: error in opening file acc.dat " << std::endl;
 	  exit(0);
 	}
       init_named_variable(200, &m_account_);
@@ -130,7 +127,7 @@ class PARAMETERS
   ~PARAMETERS() {  file_close(&datei_);}
 
 
-  void setDoubleValue(string nom, double d) const
+  void setDoubleValue(std::string nom, double d) const
   {
     VALUE value;
     double_to_value(d,&value);
@@ -138,17 +135,17 @@ class PARAMETERS
   }
 
 
-  inline double readDValue(string nom) const
+  inline double readDValue(std::string nom) const
   {
     return readDoubleValue(nom);
   }
 
-  inline float readFValue(string nom) const
+  inline float readFValue(std::string nom) const
   {
     return readFloatValue(nom);
   }
 
-  inline int readIValue(string nom) const
+  inline int readIValue(std::string nom) const
   {
     return readIntegerValue(nom);
   }

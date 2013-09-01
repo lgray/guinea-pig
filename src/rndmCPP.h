@@ -1,16 +1,14 @@
 #ifndef RNDM_SEEN
 #define RNDM_SEEN
 
-#include "LesDefines.h"
-#include "stdio.h"   //   exit function 
-#include "stdlib.h"  //   exit function
+#include <cstdio>   //   exit function 
+#include <cstdlib>  //   exit function
+
+#include "define.h"
 
 #define RNDM_EPS 6e-8
 
 #include <vector>
-using namespace std;
-
-
 
 class RNDM
 {
@@ -125,7 +123,7 @@ int rndm_load();
 
 float rndm_sincos(float *c);
 
-void getShuffledIntegerSequence(int maxInt, vector<unsigned long int>& vect);
+void getShuffledIntegerSequence(int maxInt, std::vector<unsigned long int>& vect);
 
 inline float rndm() {return rndm7();}
 inline float rndm_hadron(){return rndm7();}

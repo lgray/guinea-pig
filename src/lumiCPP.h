@@ -1,5 +1,8 @@
 #ifndef LUMI_SEEN
 #define LUMI_SEEN
+
+#include <sstream>
+#include <string>
 #include <vector>
 //#include "pairsCPP.h"
 #include "rndmCPP.h"
@@ -8,8 +11,6 @@
 #include "fileInputOutput.h"
 #include "mathematicalEntities.h"
 #include "abstractIOclass.h"
-using namespace std;
-
 
 class LUMI_PAIR : public ABSTRACT_IO_CLASS
 {
@@ -20,7 +21,7 @@ class LUMI_PAIR : public ABSTRACT_IO_CLASS
   
   public :
     
-    LUMI_PAIR() {;}
+  LUMI_PAIR() {;}
   
   LUMI_PAIR(float energy1, float energy2)
     {
@@ -30,25 +31,24 @@ class LUMI_PAIR : public ABSTRACT_IO_CLASS
   
   ~LUMI_PAIR() {;}
   
-  
   inline void random_position(const MESH& mesh, int cellx, int celly,float min_z, RNDM& rndm_generator)
     {
       mesh.guess_position_in_cell(cellx, celly,min_z, x_, y_, z_, rndm_generator);
     }
    
-  virtual string output_flow() const 
+  virtual std::string output_flow() const 
     {
-      ostringstream out;
-      out << " LUMI_PAIR:: no data for output file " << endl;
+      std::ostringstream out;
+      out << " LUMI_PAIR:: no data for output file " << std::endl;
       return out.str();
     }
   
-  virtual string persistent_flow() const
-    {
-      ostringstream out;
-      out << e1_ << " " << e2_ << " " << x_ << " " << y_ << " " << z_*1e-3 << " " ;
-      return out.str();
-    }
+  virtual std::string persistent_flow() const
+  {
+    std::ostringstream out;
+    out << e1_ << " " << e2_ << " " << x_ << " " << y_ << " " << z_*1e-3 << " " ;
+    return out.str();
+  }
   
   inline void get_parameters_for_output(float& e1,float& e2,float& x,float& y,float& z) const
     {
@@ -118,9 +118,9 @@ protected :
       t = t_;
     }
   
-  virtual string persistent_flow() const
+  virtual std::string persistent_flow() const
     {
-      ostringstream out;
+      std::ostringstream out;
       
       out << LUMI_PAIR::persistent_flow();
       out << " " << t_ << " " << vx1_ << " " << vy1_ << " " << vx2_ << " " << vy2_ << " " <<  spin1_(0) << " " << spin1_(1) << " " << spin1_(2) << " " << spin2_(0) << " " << spin2_(1) << " " <<  spin2_(2) << " ";
@@ -169,7 +169,7 @@ class GENERAL_LUMI_HEAP : public ABSTRACT_LUMI_HEAP
       return nstore;
     }
   
-  int stack_vector(int nstore, vector<int>& selected_indices);
+  int stack_vector(int nstore, std::vector<int>& selected_indices);
   
   
 };
@@ -178,7 +178,7 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
 {
   protected :
     
-    vector<LUMI_PAIR> data_;
+    std::vector<LUMI_PAIR> data_;
   
  public:
   
@@ -202,32 +202,32 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
   
   virtual inline void get_parameters_for_output(unsigned int /*numero*/, float& /*e1*/,float& /*e2*/,float& /*x*/,float& /*y*/,float& /*z*/, float& /*vx1*/,float& /*vy1*/,float& /*vx2*/,float& /*vy2*/, float& /*sx1*/, float& /*sy1*/, float& /*sz1*/, float& /*sx2*/, float& /*sy2*/, float& /*sz2*/, int& /*t*/) const {;}
   
-  virtual string persistent_flow() const
+  virtual std::string persistent_flow() const
     {
       //unsigned long int k;
       int k;
-      ostringstream out;
-      vector<unsigned long int> order;
+      std::ostringstream out;
+      std::vector<unsigned long int> order;
       //unsigned long int npairs  =  data_.size();
       int npairs = (int) data_.size();
       // check 
       if ( npairs != nb_pairs_) 
 	{
-	  cerr << " LUMI_HEAP_EE problem with the number of pairs: npairs = " << npairs << " nb_pairs_ = " << nb_pairs_ << endl;
+	  std::cerr << " LUMI_HEAP_EE problem with the number of pairs: npairs = " << npairs << " nb_pairs_ = " << nb_pairs_ << std::endl;
 	  exit(0);
 	}
       
       rndm_generator_->getShuffledIntegerSequence(npairs, order);
       for (k = 0; k < npairs; k++)
 	{
-	  out << data_[order[k] - 1 ].persistent_flow() << " " << order[k] << endl;
+	  out << data_[order[k] - 1 ].persistent_flow() << " " << order[k] << std::endl;
 	}
       return out.str();
     }
   
   
   
-  inline void saveLumi(string nameOfOutputFile) const
+  inline void saveLumi(std::string nameOfOutputFile) const
     {
       FILE_IN_OUT filout;
       filout.open_file(nameOfOutputFile, "w");
@@ -244,7 +244,7 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
 {
  protected: 
   
-  vector<LUMI_PAIR_EE> data_;
+  std::vector<LUMI_PAIR_EE> data_;
   
   public :
     
@@ -263,36 +263,36 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
       data_[numero].get_parameters_for_output(e1,e2,x,y,z);
       data_[numero].get_impulsion_parameters(vx1,vy1,vx2,vy2,t);
       data_[numero].get_spins(sx1, sy1, sz1, sx2, sy2, sz2);
-      /*      cout << " get_parameters_for_output, the spins :  " << endl; */
-      /*      cout << sx1 << " " << sy1 << " " << sz1 << endl; */
-      /*      cout << sx2 << " " << sy2 << " " << sz2 << endl; */
+      /*      cout << " get_parameters_for_output, the spins :  " << std::endl; */
+      /*      cout << sx1 << " " << sy1 << " " << sz1 << std::endl; */
+      /*      cout << sx2 << " " << sy2 << " " << sz2 << std::endl; */
     }
   
-  virtual string persistent_flow() const
+  virtual std::string persistent_flow() const
     {
       //unsigned long int k;
       int k;
-      ostringstream out;
-      vector<unsigned long int> order;
+      std::ostringstream out;
+      std::vector<unsigned long int> order;
       //unsigned long int npairs  =  data_.size();
       int npairs = (int) data_.size();
       
       // check 
       if ( npairs != nb_pairs_) 
 	{
-	  cerr << " LUMI_HEAP_EE problem with the number of pairs: npairs = " << npairs << " nb_pairs_ = " << nb_pairs_ << endl;
+	  std::cerr << " LUMI_HEAP_EE problem with the number of pairs: npairs = " << npairs << " nb_pairs_ = " << nb_pairs_ << std::endl;
 	  exit(0);
 	}
       rndm_generator_->getShuffledIntegerSequence(npairs, order);
       for (k = 0; k < npairs; k++)
 	{
-	  out << data_[ order[k] - 1 ].persistent_flow() << " " << order[k] << endl;
+	  out << data_[ order[k] - 1 ].persistent_flow() << " " << order[k] << std::endl;
 	}
       return out.str();
     }
   
   
-  inline void saveLumi(string nameOfOutputFile) const
+  inline void saveLumi(std::string nameOfOutputFile) const
     {
       FILE_IN_OUT filout;
       filout.open_file(nameOfOutputFile, "w");
@@ -300,7 +300,6 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
       filout.save_lumi_heap(this);
       filout.close();
     }
-  
   
   void lumi_store_ee(const MESH& mesh, int cellx, int celly,float min_z, float energy1, float p1Vx, float p1Vy, float energy2, float p2Vx, float p2Vy,float weight,int time_counter);
   
@@ -310,7 +309,5 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
   
   
 };
-
-
 
 #endif

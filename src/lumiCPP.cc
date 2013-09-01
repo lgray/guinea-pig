@@ -1,5 +1,7 @@
 #include "lumiCPP.h"
 
+using namespace std;
+
 int GENERAL_LUMI_HEAP::stack_vector(int nstore, vector<int>& selected_indices)
   {
      int k;

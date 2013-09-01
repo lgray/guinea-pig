@@ -7,8 +7,6 @@
 #include <string>
 #define SPLINE_NMAX 1000
 
-using namespace std;
-
 class SPLINE
 
 {
@@ -38,8 +36,8 @@ spline_tab_entry *tab_;
    return *this;
  } 
 
- void spline_init(string pythiaFile);
- void spline_init(const vector<double>& x,int xscald, const vector<double>&,int yscald,int nd);
+ void spline_init(std::string pythiaFile);
+ void spline_init(const std::vector<double>& x,int xscald, const std::vector<double>&,int yscald,int nd);
 void spline_init(const double* x,int xscald,const double* y,int yscald,int n);
 double spline_int(double x) const;
 
@@ -114,12 +112,8 @@ void mspline_init(const double* x,int xscal,const double* y,int yscal,int n,int 
          
  }
 
-
 void mspline_int(double x,double y[]);
 
-
-
 };
-
 
 #endif

@@ -1,6 +1,9 @@
 #ifndef IFILEINPUTOUTPUT_SEEN
 #define IFILEINPUTOUTPUT_SEEN
 
+#include <string>
+#include <vector>
+
 #include "abstractParticle.h"
 
 class IFILE_IN_OUT
@@ -11,8 +14,8 @@ class IFILE_IN_OUT
   IFILE_IN_OUT() {;}
   virtual ~IFILE_IN_OUT() {;}
 
-  virtual  void open_file(string name, const char* mode) =0;
-  virtual  void set_header(string head) =0;
+  virtual  void open_file(std::string name, const char* mode) =0;
+  virtual  void set_header(std::string head) =0;
   virtual  void close() = 0;
 
   virtual void set_jet_header(float ptmin, float sqrt_s) = 0;
@@ -26,8 +29,8 @@ class IFILE_IN_OUT
   //  virtual  void  save_particle(const ABSTRACT_PARTICLE& part)  = 0;
   virtual bool  read_particle(PARTICLE_INTERFACE& part)  = 0;
 
-  virtual bool read_line(string& ligne)  = 0;
-  virtual void write_line(string& ligne)  = 0;
+  virtual bool read_line(std::string& line)  = 0;
+  virtual void write_line(std::string& line)  = 0;
 
 
   //  virtual void save_pair_particle(const ABSTRACT_PAIR_PARTICLE& pair_part)  = 0;
@@ -38,7 +41,7 @@ class IFILE_IN_OUT
 
 
   virtual bool read_bhabhaPhotonsamples(ABSTRACT_BHABHA_PHOTON_SAMPLES* const bhabhasPhoton) = 0;
-  virtual int read_pythia_file(int& logx, int& logy, vector<double>& x, vector<double>& y) = 0;
+  virtual int read_pythia_file(int& logx, int& logy, std::vector<double>& x, std::vector<double>& y) = 0;
  
   virtual bool read_cross(ABSTRACT_CROSS_DATA* const crossIni) = 0;
   virtual void save_lumi_heap(const ABSTRACT_LUMI_HEAP* const lumi_heap)  =0;
