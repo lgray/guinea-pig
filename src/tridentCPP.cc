@@ -9,7 +9,7 @@ using namespace std;
 
 /* Contact Jakob Esberg, Barbara Dalena or Daniel Schulte */
 
-TRIDENT::TRIDENT()
+TRIDENT::TRIDENT() : help(0.0),e_phot(0.0),q2(0.0)
 {
   i_equiv=2; //10: virtual photon spectrum up to m*m with spin correction 2: same without spin correction
   s4=0;

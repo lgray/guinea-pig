@@ -437,7 +437,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   public : 
 
 
-  PARTICLE_BEAM() : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM()
+ PARTICLE_BEAM() : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM(), initial_number_of_particles_(0),number_of_particles_dispatched_in_slices_(0),r_macro(0.0),zmin(0.0),dz(0.0),typOfParticle_(0),sigmax_(0.0),sigmay_(0.0),sigmaz_(0.0)
     {
       rndm_generator_ = NULL;
     }
@@ -657,7 +657,7 @@ class  PHOTON_BEAM
 
   public :
     
-    PHOTON_BEAM() : end_(NULL) {;}
+ PHOTON_BEAM() : n_slice_(0),end_(NULL) {;}
   
   PHOTON_BEAM(int n_sliceDATA);
   

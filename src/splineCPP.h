@@ -21,7 +21,7 @@ spline_tab_entry *tab_;
 
  public :
 
- SPLINE() :  tab_(NULL) {;}
+ SPLINE() : n_(0),xscal_(0),yscal_(0),tab_(NULL) {;}
 
  SPLINE(const SPLINE& spl) : tab_(NULL)
   {
@@ -61,17 +61,15 @@ class MSPLINE
 
 {
   int n_,xscal_,yscal_,nval_;
-  double*x_;
+  double* x_;
   double* y_;
   double* y2_;
-
-
-
+  
  public : 
 
-MSPLINE() {;}
+ MSPLINE():n_(0),xscal_(0),yscal_(0),nval_(0),x_(NULL),y_(NULL),y2_(NULL)  {;}
 
-void mspline_init(const double* x,int xscal,const double* y,int yscal,int n,int nval);
+  void mspline_init(const double* x,int xscal,const double* y,int yscal,int n,int nval);
 
 
  MSPLINE(const MSPLINE& spl) : x_(NULL), y_(NULL), y2_(NULL)

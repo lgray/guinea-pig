@@ -1,6 +1,10 @@
 #include "resultsCPP.h"
 
-RESULTS::RESULTS() : switches_(NULL)
+RESULTS::RESULTS() : switches_(NULL),minijets(0.0),eloss_1(0.0),eloss_2(0.0),
+		     ephot_1(0.0),ephot_2(0.0),c_vx_1(0.0),sig_vx_1(0.0),
+		     c_vy_1(0.0),sig_vy_1(0.0),c_vx_2(0.0),sig_vx_2(0.0),
+		     c_vy_2(0.0),sig_vy_2(0.0),c_vx_1_coh(0.0),c_vx_2_coh(0.0),
+		     c_vy_1_coh(0.0),c_vy_2_coh(0.0)
 {
   int i,j;
   for (i=0;i<3;i++){

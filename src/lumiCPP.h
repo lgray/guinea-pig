@@ -18,12 +18,11 @@ class LUMI_PAIR : public ABSTRACT_IO_CLASS
   
   float e1_,e2_,x_,y_,z_;
   
-  
-  public :
+ public :
     
-  LUMI_PAIR() {;}
+ LUMI_PAIR() : e1_(0.0),e2_(0.0),x_(0.0),y_(0.0),z_(0.0) {;}
   
-  LUMI_PAIR(float energy1, float energy2)
+ LUMI_PAIR(float energy1, float energy2) : x_(0.0),y_(0.0),z_(0.0)
     {
       e1_ = energy1; 
       e2_ = energy2; 
@@ -78,7 +77,7 @@ protected :
  public:
   
   
-  LUMI_PAIR_EE() {;}
+ LUMI_PAIR_EE() : vx1_(0.0),vy1_(0.0),vx2_(0.0),vy2_(0.0),t_(0) {;}
   
   LUMI_PAIR_EE(float energy1, float energy2, float p1Vx, float p1Vy, float p2Vx, float p2Vy,int time_counter) : LUMI_PAIR(energy1, energy2)
     {
@@ -140,7 +139,7 @@ class GENERAL_LUMI_HEAP : public ABSTRACT_LUMI_HEAP
   float p_;
   
   public : 
-    GENERAL_LUMI_HEAP()  { rndm_generator_ = NULL;}
+ GENERAL_LUMI_HEAP() : nmax_(0),nb_pairs_(0),p_(0.0) { rndm_generator_ = NULL;}
   
   
   GENERAL_LUMI_HEAP(int nmax, float p, RNDM* rndm_generator)

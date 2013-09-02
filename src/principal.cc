@@ -2,9 +2,6 @@
 #include "particleBeamCPP.h"
 #include "option_args.h"
 
-VAR_HEAP var_heap;
-INPUT_MAISON input;
-
 int mainGuineapig(std::vector<std::string> input_arguments)
 {
   // There is probably a nicer way to do this...

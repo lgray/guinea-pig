@@ -543,9 +543,7 @@ class QUADRIVECTOR
 
   public : 
 
-QUADRIVECTOR() {;}
-
-
+ QUADRIVECTOR() : v1_(0.0),v2_(0.0),v3_(0.0),v4_(0.0)  {;}
 
 QUADRIVECTOR(float vx,float vy,float vz, float energy) 
     {

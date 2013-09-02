@@ -18,7 +18,7 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
   
  public:
 
-  BEAM() : beam_parameters_(NULL), sign_label_(0), size_log_file_(NULL) {;};
+ BEAM() : beam_parameters_(NULL), beam_label_(0), sign_label_(0), size_log_file_(NULL) {;};
 
   ~BEAM()
     {

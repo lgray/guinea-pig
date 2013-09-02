@@ -31,7 +31,7 @@ class NEWTON
 
  public : 
 
-  NEWTON() {;}
+ NEWTON():f_(NULL),df_(NULL) {;}
 
   ~NEWTON() {;}
 
@@ -108,10 +108,9 @@ class ABSTRACT_MINIJETS : public ABSTRACT_IO_CLASS
   std::vector<JET_FLOAT> c_;
 
 
-  ABSTRACT_MINIJETS()  {;}
+  ABSTRACT_MINIJETS() : jetfile_(NULL)  {;}
 
-
- ABSTRACT_MINIJETS(float s,float ptmin,int iparam, int /*jet_select*/, string jetfileName) : jetfile_(NULL)
+  ABSTRACT_MINIJETS(float s,float ptmin,int iparam, int /*jet_select*/, string jetfileName) : jetfile_(NULL)
     {
       set();
       init_jet_file(s,ptmin,jetfileName);

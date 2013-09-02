@@ -429,7 +429,7 @@ class TRIDENT_RESULTS : public ABSTRACT_IO_CLASS
       //      engreal_      = 0.0;
       count_        = 0;
       total_energy_ = 0.0;
-      //      do_coherent_ = 0;
+      do_trident_ = 0;
     }
 
   inline void init() { do_trident_ = 1;}

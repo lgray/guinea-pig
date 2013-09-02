@@ -15,7 +15,9 @@ class JET_PARAMETER
 
  public:
 
-  JET_PARAMETER()  {;};
+ JET_PARAMETER(): ebeam_(0.0),ptmin_(0.0),lns4_(0.0),pstar2_(0.0),q2_1_(0.0),
+		  q2_2_(0.0),lambda3_2_(0.0),lambda4_2_(0.0),lambda5_2_(0.0),
+		  d_spectrum_(0),r_spectrum_(0),iparam_(0){;}
 
   void init(float s,float ptmin,int iparam);
 

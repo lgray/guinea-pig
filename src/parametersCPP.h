@@ -4,10 +4,7 @@
 #include <iostream>
 
 #include <string>
-extern "C"
-{
 #include "readData.h"
-}
 
 #include "option_args.h"
 

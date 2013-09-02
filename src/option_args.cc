@@ -1,8 +1,8 @@
 
 #include "option_args.h"
 #include <getopt.h>
+#include <cstdlib>
 #include <iostream>
-#include <stdlib.h>
 
 std::string electron_input_file; // = "electron.ini";
 std::string positron_input_file; // = "positron.ini";

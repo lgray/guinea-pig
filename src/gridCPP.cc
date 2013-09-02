@@ -204,6 +204,7 @@ GRID::GRID() : GENERAL_GRID()
   photon_file_ = NULL;
   hadron_file_ = NULL;
   minijets_ = NULL;
+  cross_ = NULL;
   rndm_generator_ = NULL;
 }
 

@@ -580,8 +580,8 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 
       return out.str();
     }
-  
-  GUINEA() {;}
+  // private default constructor - not implemented
+  GUINEA();
  public:
   
   GUINEA(char *name);
@@ -589,7 +589,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     {
       unsigned int k;
       for (k=1; k < gridsPtr_.size(); k++) delete gridsPtr_[k];
-      if (cross_ != NULL) delete cross_;
+      delete cross_;
     };
   void run(char *par,char *prot);
   //  void close();

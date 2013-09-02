@@ -47,7 +47,7 @@ class PAIR_PARAMETER
   
  public:
   
-  PAIR_PARAMETER() {;}
+ PAIR_PARAMETER():d_eps_1_(0.0),d_eps_2_(0.0),mass_(0.0),s4(0.0),lns4(0.0),ecut(0.0) {;}
   
   void  init(BEAM& beam1, BEAM& beam2, int massflag, float pair_ecut, float pair_step, float step, int timestep);
   

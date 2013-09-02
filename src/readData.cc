@@ -1,8 +1,9 @@
 #include "readData.h"
-#include <ctype.h>
+#include <algorithm>
+#include <cctype>
 
-extern  VAR_HEAP var_heap;
-extern INPUT_MAISON input;
+VAR_HEAP var_heap;
+INPUT_HOME input;
 
 int get_char()
 {
@@ -11,15 +12,15 @@ int get_char()
   input.buffer++;
   return (int)tmp;
 }
+
 void
-unget_char(char a)
+unget_char(char /*a*/)
 {
   input.buffer--;
 }
 
-
 void
-store_buffer(char *buffer)
+store_buffer(const char *buffer)
 {
   input.buffer=buffer;
 }
@@ -55,7 +56,7 @@ void double_to_value(double d,VALUE *val)
 	(val->value).d=d;
 }
 
-void read_error(char error[])
+void read_error(const char* error)
 {
     fprintf(stderr,"Error:\n%s\n",error);
 }
@@ -378,7 +379,7 @@ void print_variable(VARIABLE *var)
     }
 }
 
-VARIABLE* find_named_variable(char name[])
+VARIABLE* find_named_variable(const char* name)
 {
     int i;
     for (i=0;i<var_heap.number;i++){
@@ -389,11 +390,11 @@ VARIABLE* find_named_variable(char name[])
     return NULL;
 }
 
-void def_named_variable(char name[],VAR_TYPE type)
+void def_named_variable(const char* name,VAR_TYPE type)
 {
     if (find_named_variable(name)==NULL){
 	if (var_heap.max_number-var_heap.number>0){
-	    strncpy((var_heap.heap[var_heap.number]).name,name,32);
+	    strncpy((var_heap.heap[var_heap.number]).name,name,std::min(strlen(name),(size_t)31));
 	    (var_heap.heap[var_heap.number]).type=type;
 	    var_heap.number++;
 	}
@@ -435,7 +436,7 @@ void set_named_variable(char name[],VALUE val)
     INDEX index;
     VARIABLE *var;
 
-    strncpy(buffer,name,1000);
+    strncpy(buffer,name,std::min(strlen(name)+1,(size_t)999));
     point=buffer;
     while(isalnum(*point)||*point=='_') point++;
     if (*point=='\0') {
@@ -473,7 +474,7 @@ void set_named_variable_string(char name[],char cont[], MEMORY_ACCOUNT* m_accoun
   //  int is_simple;
   VARIABLE *var;
   
-  strncpy(buffer,name,1000);
+  strncpy(buffer,name,std::min(strlen(name)+1,(size_t)999));
   point=buffer;
   while(isalnum(*point)||*point=='_') point++;
   if (*point=='\0') {
@@ -504,7 +505,7 @@ int get_named_variable(char name[],VALUE *val)
   INDEX index;
   VARIABLE *var;
   
-  strncpy(buffer,name,1000);
+  strncpy(buffer,name,std::min(strlen(name)+1,(size_t)999));
   point=buffer;
   while(isalnum(*point)||*point=='_') point++;
   if (*point=='\0') {
@@ -914,7 +915,7 @@ TOKEN read_command(MEMORY_ACCOUNT* m_account)
   return ASSIGN;
 }
 
-void define_values(char *line, MEMORY_ACCOUNT* m_account)
+void define_values(const char *line, MEMORY_ACCOUNT* m_account)
 {
   TOKEN token;
   VALUE value;

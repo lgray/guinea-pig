@@ -205,16 +205,16 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
 class GENERAL_CROSS : public ABSTRACT_IO_CLASS
 {
   
-  protected : 
-    int nb_ener_;
+ protected : 
+  int nb_ener_;
   long int cross_call_;
   
  public :
    
-   GENERAL_CROSS() : nb_ener_(0), cross_call_(0) {;}
- virtual  ~GENERAL_CROSS() {;}
- virtual  void cross_add(float e1,float e2,float flum) = 0;
- 
+ GENERAL_CROSS() : nb_ener_(0), cross_call_(0) {;}
+  virtual  ~GENERAL_CROSS() {;}
+  virtual  void cross_add(float e1,float e2,float flum) = 0;
+  
 };
 
 
@@ -260,13 +260,13 @@ class mCROSS  : public GENERAL_CROSS
       CROSS_DATA cr_data(crossIniFile);
       const std::vector<float>& energ = cr_data.energies();
       const std::vector< std::vector<float> >& cross_val = cr_data.cross_sections();
+      ncross_per_ener_ = cross_val[0].size();
       nb_ener_ = (int) energ.size();
       if ( nb_ener_ <= 0)
 	{
 	  cerr << " mCROSS:: WARNING no cross data " << endl;
 	  return;
 	}
-      ncross_per_ener_ = cross_val[0].size();
       xx = new double[nb_ener_];
       yy = new double[ nb_ener_*ncross_per_ener_];
       for (k=0; k< nb_ener_; k++)
@@ -291,7 +291,6 @@ class mCROSS  : public GENERAL_CROSS
 	  sum_[j]=0.0;
 	  sum2_[j]=0.0;
 	}
-      cross_call_ = 0;
       delete[] xx;
       delete[] yy;
     } 
@@ -396,16 +395,14 @@ class maverCROSS : public mCROSS
 class CROSS  : public GENERAL_CROSS
 {
 
-  protected : 
-    SPLINE spline_;
+ protected : 
+  SPLINE spline_;
   double sum_,sum2_;
   
  public: 
   CROSS() {sum_ = 0.0; sum2_ = 0.0;}
   
-  
-  
- CROSS(string crossIniFile)
+ CROSS(string crossIniFile) : sum_(0.0),sum2_(0.0)       
    {
      int k;
      double* xx;
@@ -437,9 +434,6 @@ class CROSS  : public GENERAL_CROSS
        }
      
      spline_.spline_init(xx,logx,yy,logy,nb_ener_);
-     sum_=0.0;
-     sum2_=0.0;       
-     cross_call_ = 0;
      delete[] xx;
      delete[] yy;
    }

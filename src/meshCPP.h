@@ -10,7 +10,7 @@ class MESH
 
  public:
 
-  MESH() {;}
+ MESH() : delta_x_(0.0),delta_y_(0.0),delta_z_(0.0),offset_x_(0.0),offset_y_(0.0) {;}
   ~MESH() {;}
 MESH(float delta_x, float delta_y, float delta_z, float offset_x, float offset_y) 
 {

@@ -1,11 +1,13 @@
 #ifndef LECTUREDONNEE_SEEN
 #define LECTUREDONNEE_SEEN
 
+extern "C" {
 #include "memory.h"
+}
 #include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #define max_buffer 512
 #define max_buffer2 10000
@@ -24,7 +26,7 @@ typedef struct
 
 #define CONTENTS(a) (((a).type==T_DOUBLE)?(a).value.d:(a).value.i)
 
-typedef struct {char *buffer;}INPUT_MAISON;
+typedef struct {const char *buffer;}INPUT_HOME;
 
 typedef enum {T_DOUBLE,T_INT,T_STRING,T_DOUBLE_ARRAY,T_INT_ARRAY,
 	      T_DOUBLE_MIRROR,T_INT_MIRROR,T_DOUBLE_2,T_INT_2} VAR_TYPE;
@@ -56,7 +58,7 @@ typedef struct{int number,max_number; VARIABLE *heap;}VAR_HEAP;
 
 int get_char();
 void unget_char(char a);
-void store_buffer(char *buffer);
+void store_buffer(const char *buffer);
 
 
 int value_to_int(VALUE *val);
@@ -68,7 +70,7 @@ void int_to_value(int i,VALUE *val);
 void double_to_value(double d,VALUE *val);
 
 
-void read_error(char error[]);
+void read_error(const char* error);
 
 void read_value_unit(char *buffer);
 
@@ -94,9 +96,9 @@ void read_skip();
 
 void print_variable(VARIABLE *var);
 
-VARIABLE* find_named_variable(char name[]);
+VARIABLE* find_named_variable(const char* name);
 
-void def_named_variable(char name[],VAR_TYPE type);
+void def_named_variable(const char* name,VAR_TYPE type);
 
 void print_named_variable(char name[]);
 

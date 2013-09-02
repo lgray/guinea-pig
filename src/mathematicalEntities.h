@@ -80,7 +80,7 @@ class TRIVECTOR
     }
   inline float norm() const
     {
-      return sqrt(abs(norm2()));
+      return std::sqrt(std::abs(norm2()));
     }
   
   inline void renormalize()
@@ -189,7 +189,7 @@ class TRIDVECTOR
     }
   inline double norm() const
     {
-      return sqrt(abs(norm2()));
+      return std::sqrt(std::abs(norm2()));
     }
   
   inline void renormalize()
