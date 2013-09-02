@@ -3,7 +3,7 @@
 using namespace std;
 
 
-GUINEA::GUINEA(char *name):cross_(NULL)
+GUINEA::GUINEA(char *name):cross_(NULL),number_of_stored_particles1_(0),number_of_stored_particles2_(0)
 {
   time_counter_ = 0;
   cout << header();

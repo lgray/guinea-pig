@@ -31,7 +31,7 @@ class NEWTON
 
  public : 
 
- NEWTON():f_(NULL),df_(NULL) {;}
+ NEWTON():f_(NULL),df_(NULL),ymin_(0.0),dy_i_(0.0),n_(0) {;}
 
   ~NEWTON() {;}
 

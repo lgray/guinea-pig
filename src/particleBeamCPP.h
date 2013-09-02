@@ -437,7 +437,9 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   public : 
 
 
- PARTICLE_BEAM() : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM(), initial_number_of_particles_(0),number_of_particles_dispatched_in_slices_(0),r_macro(0.0),zmin(0.0),dz(0.0),typOfParticle_(0),sigmax_(0.0),sigmay_(0.0),sigmaz_(0.0)
+ PARTICLE_BEAM() : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM(),
+    initial_number_of_particles_(0),number_of_particles_dispatched_in_slices_(0),
+    r_macro(0.0),zmin(0.0),dz(0.0),typOfParticle_(0),sigmax_(0.0),sigmay_(0.0),sigmaz_(0.0)
     {
       rndm_generator_ = NULL;
     }
@@ -468,7 +470,10 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
 
-  PARTICLE_BEAM(int nb_slices,int bmt_rotate,TRIDVECTOR polar, RNDM* rndm_generator) : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM()
+ PARTICLE_BEAM(int nb_slices,int bmt_rotate,TRIDVECTOR polar, RNDM* rndm_generator) : ABSTRACT_IO_CLASS(), ABSTRACT_PARTICLE_BEAM(),
+    initial_number_of_particles_(0),number_of_particles_dispatched_in_slices_(0),
+    r_macro(0.0),zmin(0.0),dz(0.0),typOfParticle_(0),sigmax_(0.0),sigmay_(0.0),sigmaz_(0.0)
+
     {
       set(bmt_rotate, polar);
       particle_ = std::vector< std::vector<PARTICLE*> >(nb_slices);
