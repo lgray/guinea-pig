@@ -328,7 +328,7 @@ void  PHYSTOOLS::synradKi53andK23(double x, double& Ki53, double& K23)
            ( ( ( x - 0.6524469236 ) * x + 6.1800441958 ) * x - 0.4915880600 );
        }
      else
-       if ( x <= 1.65 )
+       if ( x <= 165.0 )
 	 {
 	   double c = exp(-x) / sqrt(x);
 	   Ki53 = c * ( 2.187014852 + 1.253535946 * x ) / ( 0.9949036186 + x );
