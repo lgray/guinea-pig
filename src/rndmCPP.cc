@@ -263,7 +263,7 @@ void RNDM::rndmst7(unsigned long i)
   c_coeff = 1013904223L;
   if ( rndm_test7(a_coeff , c_coeff, test7) )
     {
-            cout << " random generator successfull test : 32-bits computer " << endl;      
+            cout << " random generator successful test : 32-bits computer " << endl;      
       // following factor is 1/(2.exp(32))
       rndm7_modulo_dividing_factor_ = 0.232830643654e-9;
     }
@@ -290,7 +290,7 @@ void RNDM::rndmst7(unsigned long i)
   c_coeff = 1L;
   if ( rndm_test7(a_coeff , c_coeff, test7) )
     {
-            cout << " random generator successfull test : 64-bits computer " << endl;
+            cout << " random generator successful test : 64-bits computer " << endl;
       // following factor is 1/(2.exp(64))
       rndm7_modulo_dividing_factor_ = 0.54210108624e-19;
     }
