@@ -7,8 +7,6 @@ switchesCPP.cc splineCPP.cc rndmCPP.cc resultsCPP.cc
 principal.cc physicalTools.cc particlesCPP.cc particleBeamCPP.cc 
 readData.cc memory.c tridentCPP.cc option_args.cc)
 
-set(WARN_FLAGS "-Wall -Wundef -Wextra")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffast-math -finline -fPIC ${WARN_FLAGS}")
 # Set up header macro generations
 include(guinea_config)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
