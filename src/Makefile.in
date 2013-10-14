@@ -172,7 +172,7 @@ particleBeamCPP.o: particleBeamCPP.cc particleBeamCPP.h particlesCPP.h \
   abstractIOclass.h physicalTools.h mathconst.h fileInputOutput.h \
   fileInputOutputAscii.h IfileInputOutput.h
 
-reaData.o: readData.c readData.h
+reaData.o: readData.cc readData.h
 
 memory.o: memory.c memory.h
 
