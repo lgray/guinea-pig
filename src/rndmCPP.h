@@ -10,6 +10,12 @@
 
 #include <vector>
 
+/** 
+    Random number generator class
+    Implements several random number generators.
+    Currently number 7 is used in all cases
+ */
+
 class RNDM
 {
 
@@ -33,104 +39,111 @@ class RNDM
   int iset_;
   float v1_,v2_;
 
+  /** counter to count how often rndm7 is called */ 
   int counterRndm7_;
   unsigned long rndm7_a_coeff_, rndm7_c_coeff_;
   float rndm7_modulo_dividing_factor_;
 
-struct
-{
-  int i;
-} rndm0_store;
+  struct
+  {
+    int i;
+  } rndm0_store;
+  
+  struct
+  {
+    long i,p,is[32];
+  } rndm1_store;
+  
+  struct
+  {
+    int i1,i2,p,is[32];
+  } rndm2_store;
+  
+  struct
+  {
+    int in1,in2,is[55];
+  } rndm3_store;
+  
+  struct
+  {
+    float u[97],c,cd,cm;
+    int i,j;
+  } rndm5_store;
+  
+  struct
+  {
+    int i;
+  } rndm6_store;
+  
+  struct
+  {
+    //  unsigned int i;
+    unsigned long i;
+    float scal;
+    unsigned int n;
+  } rndm7_store;
+  
+  struct
+  {
+    int i;
+    float r[97];
+    int ix1,ix2,ix3;
+  } rndm8_store;
+  
+  
+  /** random number generators
+      only rndm7 is used at the moment
+   */  
+  void rndmst0(int i);
+  float rndm0();
+  void rndmst1(int i);
+  float rndm1();
+  void rndmst2(int i);
+  float rndm2();
+  void rndmst3(int i);
+  float rndm3();
+  void rndmst5(int na1,int na2,int na3, int nb1);
+  float rndm5();
+  void rndmst6(int i);
+  float rndm6();
 
-struct
-{
-  long i,p,is[32];
-} rndm1_store;
+  void rndmst7(unsigned long i);
+  bool rndm_test7(unsigned long a_coeff, unsigned long c_coeff, const unsigned long* test_values);
+  float rndm7();
 
- struct
-{
-  int i1,i2,p,is[32];
-} rndm2_store;
-
- struct
-{
-  int in1,in2,is[55];
-} rndm3_store;
-
- struct
-{
-  float u[97],c,cd,cm;
-  int i,j;
-} rndm5_store;
-
- struct
-{
-  int i;
-} rndm6_store;
-
- struct
-{
-  //  unsigned int i;
-  unsigned long i;
-  float scal;
-  unsigned int n;
-} rndm7_store;
-
- struct
-{
-  int i;
-  float r[97];
-  int ix1,ix2,ix3;
-} rndm8_store;
-
-
-
-
-void rndmst0(int i);
-float rndm0();
-void rndmst1(int i);
-float rndm1();
-void rndmst2(int i);
-float rndm2();
-void rndmst3(int i);
-float rndm3();
-void rndmst5(int na1,int na2,int na3, int nb1);
-float rndm5();
-void rndmst6(int i);
-float rndm6();
-//void rndmst7(int i);
-void rndmst7(unsigned long i);
-bool rndm_test7(unsigned long a_coeff, unsigned long c_coeff, const unsigned long* test_values);
-
-float rndm7();
-void rndmst8(int idummy);
-float rndm8();
-float expdev();
-float exp_dev();
-
-
-
-/* choice of random number generators 5 and 7 are good */
-public:
-
-//void rndmst();
-RNDM(unsigned long seed = 1);
+  void rndmst8(int idummy);
+  float rndm8();
+  float expdev();
+  float exp_dev();
+  
 
 
-float gasdev();
-int rndm_save();
-int rndm_load();
+  /* choice of random number generators 5 and 7 are good */
+ public:
+  /** constructor with seed for random number generator 7 */
+  RNDM(unsigned long seed = 1);
+  
+  /** gaussian distributed random number*/
+  float gasdev();
+  /** save random number status */
+  int rndm_save();
+  /** load random number status from file rndm.save */
+  int rndm_load();
+  
+  /** method draws random number theta between [0,2*Pi] and return value is sin(theta), and *c is cos(theta)  */
+  float rndm_sincos(float *c);
 
-float rndm_sincos(float *c);
-
-void getShuffledIntegerSequence(int maxInt, std::vector<unsigned long int>& vect);
-
-inline float rndm() {return rndm7();}
-inline float rndm_hadron(){return rndm7();}
-inline float rndm_synrad() {return rndm7();}
-inline float rndm_equiv() {return rndm7();}
-inline float rndm_jet() {return rndm7();}
-inline float rndm_pairs() {return rndm7();}
-
+  /** get a vector containing the sequence of integers from 1 to maxInt 
+      randomly shuffled */
+  void getShuffledIntegerSequence(int maxInt, std::vector<unsigned long int>& vect);
+  
+  /** public random number generators */
+  inline float rndm() {return rndm7();}
+  inline float rndm_hadron(){return rndm7();}
+  inline float rndm_synrad() {return rndm7();}
+  inline float rndm_equiv() {return rndm7();}
+  inline float rndm_jet() {return rndm7();}
+  inline float rndm_pairs() {return rndm7();}
+  
 };
 #endif

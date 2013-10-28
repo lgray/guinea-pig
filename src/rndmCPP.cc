@@ -6,10 +6,9 @@
 
 using namespace std;
 
-
 RNDM::RNDM(unsigned long seed)
 {
- rndmst0(1);
+  rndmst0(1);
   rndmst1(1);
   rndmst2(1);
   rndmst3(1);
@@ -19,6 +18,7 @@ RNDM::RNDM(unsigned long seed)
   rndmst8(1);
   iset_ = 0;
   counterRndm7_ = 0;
+  cout << "  RNDM::RNDM : the seed is : " << rndm7_store.i << endl;
 }
 
 void  RNDM::rndmst0(int i)
@@ -263,7 +263,7 @@ void RNDM::rndmst7(unsigned long i)
   c_coeff = 1013904223L;
   if ( rndm_test7(a_coeff , c_coeff, test7) )
     {
-            cout << " random generator successful test : 32-bits computer " << endl;      
+      cout << " random generator successful test : 32-bits computer " << endl;      
       // following factor is 1/(2.exp(32))
       rndm7_modulo_dividing_factor_ = 0.232830643654e-9;
     }
@@ -290,7 +290,7 @@ void RNDM::rndmst7(unsigned long i)
   c_coeff = 1L;
   if ( rndm_test7(a_coeff , c_coeff, test7) )
     {
-            cout << " random generator successful test : 64-bits computer " << endl;
+      cout << " random generator successful test : 64-bits computer " << endl;
       // following factor is 1/(2.exp(64))
       rndm7_modulo_dividing_factor_ = 0.54210108624e-19;
     }
@@ -301,7 +301,7 @@ void RNDM::rndmst7(unsigned long i)
     }
 #endif
 
-  rndm7_a_coeff_ =  a_coeff;
+  rndm7_a_coeff_ = a_coeff;
   rndm7_c_coeff_ = c_coeff;
   rndm7_store.i=i;
 }
@@ -384,7 +384,12 @@ float RNDM::rndm8()
 
 float RNDM::expdev()
 {
-    return -log(1.0-rndm());
+  return -log(1.0-rndm());
+}
+
+float RNDM::exp_dev()
+{
+    return -log(1.0-rndm2());
 }
 
 float RNDM::gasdev()
@@ -416,7 +421,6 @@ float RNDM::gasdev()
     }
 }
 
-
 float RNDM::rndm_sincos(float *c)
 {
     const float twopi=2.0*PI;
@@ -427,13 +431,6 @@ float RNDM::rndm_sincos(float *c)
 	return sqrt(1.0- *c * *c);
     else
 	return -sqrt(1.0- *c * *c);
-}
-
-
-
-float RNDM::exp_dev()
-{
-    return -log(1.0-rndm2());
 }
 
 // get a vector containing the sequence of integers from 1 to maxInt 
@@ -488,10 +485,10 @@ int RNDM::rndm_load()
         fread(&rndm7_store,sizeof(rndm7_store),1,file);
         fread(&rndm8_store,sizeof(rndm8_store),1,file);
         fclose(file);
-		cout << "  RNDM::rndm_load : the seed is now : " << rndm7_store.i << endl;
+	cout << "  RNDM::rndm_load : the seed is now : " << rndm7_store.i << endl;
 	return 1;
-    }
-    	cout << "  RNDM::rndm_load : no rndm_load file, the seed is : " << rndm7_store.i << endl;
+      }
+    cout << "  RNDM::rndm_load : no rndm_load file, the seed is : " << rndm7_store.i << endl;
     return 0;
 }
 
