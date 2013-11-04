@@ -61,11 +61,6 @@ class RNDM
   
   struct
   {
-    int in1,in2,is[55];
-  } rndm3_store;
-  
-  struct
-  {
     float u[97],c,cd,cm;
     int i,j;
   } rndm5_store;
@@ -77,15 +72,11 @@ class RNDM
   
   struct
   {
-    //  unsigned int i;
     unsigned long i;
-    float scal;
-    unsigned int n;
   } rndm7_store;
   
   struct
   {
-    int i;
     float r[97];
     int ix1,ix2,ix3;
   } rndm8_store;
@@ -100,8 +91,6 @@ class RNDM
   float rndm1();
   void rndmst2(int i);
   float rndm2();
-  void rndmst3(int i);
-  float rndm3();
   void rndmst5(int na1,int na2,int na3, int nb1);
   float rndm5();
   void rndmst6(int i);

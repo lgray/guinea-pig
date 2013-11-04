@@ -10,8 +10,8 @@ int mainGuineapig(std::vector<std::string> input_arguments)
    std::string arg3 = input_arguments[2];
 
    GUINEA guinee((char*)(arg1.c_str()));
-      guinee.run((char*)(arg2.c_str()),(char*)(arg3.c_str()));
-    return 0;
+   guinee.run((char*)(arg2.c_str()),(char*)(arg3.c_str()));
+   return 0;
 }
 
            

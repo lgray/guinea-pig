@@ -44,6 +44,7 @@ void GUINEA::run( char *par,char *prot)
   beam2_.connect_parameters(&beam_parameters2_);
   grid_.connect_beams(&beam1_, &beam2_);
   generator_ = RNDM(switches.get_rndm_seed());
+  cout << "  the random number seed is : " << switches.get_rndm_seed() << endl;
   grid_.connect_random_generator(&generator_);
   if ( !check_parameters() ) exit(1);
   simulate();

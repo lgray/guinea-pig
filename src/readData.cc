@@ -978,7 +978,7 @@ void def_acc(MEMORY_ACCOUNT* m_account)
     def_named_variable("twobeam",T_INT);
     def_named_variable("particles_2",T_DOUBLE_2);
     def_named_variable("energy_2",T_DOUBLE_2);
-    def_named_variable("charge_sign_2",T_DOUBLE);
+    //    def_named_variable("charge_sign_2",T_DOUBLE);
     def_named_variable("sigma_x_2",T_DOUBLE_2);
     def_named_variable("sigma_y_2",T_DOUBLE_2);
     def_named_variable("sigma_z_2",T_DOUBLE_2);
@@ -1022,13 +1022,14 @@ void def_acc(MEMORY_ACCOUNT* m_account)
     define_values("{beta_x_2=-1.0;beta_y_2=-1.0;}", m_account);
     define_values("{sigma_x_2=-1.0;sigma_y_2=-1.0;}", m_account);
     define_values("{emitt_x_2=-1.0;emitt_y_2=-1.0;}", m_account);
-    define_values("{charge_sign_2=-1;espread_2=1e-3;which_espread_2=1;}", m_account);
+    //    define_values("{charge_sign_2=-1;}", m_account);
+    define_values("{espread_2=1e-3;which_espread_2=1;}", m_account);
 #endif
 }
 
 void def_param(MEMORY_ACCOUNT* m_account)
 {
-  def_named_variable("silent",T_INT);
+  //  def_named_variable("silent",T_INT);
   def_named_variable("n_x",T_INT);
   def_named_variable("n_y",T_INT);
   def_named_variable("n_z",T_INT);
@@ -1110,35 +1111,35 @@ void def_param(MEMORY_ACCOUNT* m_account)
 
   def_named_variable("load_events",T_INT);
 
-  def_named_variable("do_lumi_ee_2",T_INT);
+  // def_named_variable("do_lumi_ee_2",T_INT);
   def_named_variable("hist_ee_bins",T_INT);
   def_named_variable("hist_ee_min",T_DOUBLE);
   def_named_variable("hist_ee_max",T_DOUBLE);
   def_named_variable("hist_espec_bins",T_INT);
   def_named_variable("hist_espec_min",T_DOUBLE);
   def_named_variable("hist_espec_max",T_DOUBLE);
-  def_named_variable("lumi_ee_2_n",T_INT);
-  def_named_variable("lumi_ee_2_min",T_DOUBLE);
-  def_named_variable("lumi_ee_2_max",T_DOUBLE);
-  def_named_variable("do_lumi_eg_2",T_INT);
-  def_named_variable("lumi_eg_2_n",T_INT);
-  def_named_variable("lumi_eg_2_min",T_DOUBLE);
-  def_named_variable("lumi_eg_2_max",T_DOUBLE);
-  def_named_variable("do_lumi_ge_2",T_INT);
-  def_named_variable("lumi_ge_2_n",T_INT);
-  def_named_variable("lumi_ge_2_min",T_DOUBLE);
-  def_named_variable("lumi_ge_2_max",T_DOUBLE);
-  def_named_variable("do_lumi_gg_2",T_INT);
-  def_named_variable("lumi_gg_2_n",T_INT);
-  def_named_variable("lumi_gg_2_min",T_DOUBLE);
-  def_named_variable("lumi_gg_2_max",T_DOUBLE);
+  // def_named_variable("lumi_ee_2_n",T_INT);
+  // def_named_variable("lumi_ee_2_min",T_DOUBLE);
+  // def_named_variable("lumi_ee_2_max",T_DOUBLE);
+  // def_named_variable("do_lumi_eg_2",T_INT);
+  // def_named_variable("lumi_eg_2_n",T_INT);
+  // def_named_variable("lumi_eg_2_min",T_DOUBLE);
+  // def_named_variable("lumi_eg_2_max",T_DOUBLE);
+  // def_named_variable("do_lumi_ge_2",T_INT);
+  // def_named_variable("lumi_ge_2_n",T_INT);
+  // def_named_variable("lumi_ge_2_min",T_DOUBLE);
+  // def_named_variable("lumi_ge_2_max",T_DOUBLE);
+  // def_named_variable("do_lumi_gg_2",T_INT);
+  // def_named_variable("lumi_gg_2_n",T_INT);
+  // def_named_variable("lumi_gg_2_min",T_DOUBLE);
+  // def_named_variable("lumi_gg_2_max",T_DOUBLE);
 
-  def_named_variable("beam_vx_min",T_DOUBLE);
-  def_named_variable("beam_vx_max",T_DOUBLE);
-  def_named_variable("beam_vx_interval",T_INT);
-  def_named_variable("beam_vy_min",T_DOUBLE);
-  def_named_variable("beam_vy_max",T_DOUBLE);
-  def_named_variable("beam_vy_interval",T_INT);
+  // def_named_variable("beam_vx_min",T_DOUBLE);
+  // def_named_variable("beam_vx_max",T_DOUBLE);
+  // def_named_variable("beam_vx_interval",T_INT);
+  // def_named_variable("beam_vy_min",T_DOUBLE);
+  // def_named_variable("beam_vy_max",T_DOUBLE);
+  // def_named_variable("beam_vy_interval",T_INT);
 
   def_named_variable("do_cross",T_INT);
   def_named_variable("do_compt",T_INT);
@@ -1174,8 +1175,8 @@ void def_param(MEMORY_ACCOUNT* m_account)
   def_named_variable("n2_m",T_INT_2);
 #endif
 
-  /*  define_values("{silent=1;integration_method=2;rndm_save=1;rndm_load=1;}", m_account); */
-  define_values("{silent=1;integration_method=2;rndm_save=1;rndm_load=1;rndm_seed=1;}", m_account);
+  /*  define_values("{silent=1;}", m_account); */
+  define_values("{integration_method=2;rndm_save=1;rndm_load=1;rndm_seed=1;}", m_account);
   define_values("{do_eloss=1;do_isr=0;do_espread=0;do_cross=0;}", m_account);
   define_values("{do_prod=0;prod_e=0.0;prod_scal=1e-29;load_events=0;}", m_account);
   define_values("{load_beam=0;store_beam=0;load_photons=0;store_photons=0;}", m_account);
@@ -1201,21 +1202,23 @@ void def_param(MEMORY_ACCOUNT* m_account)
   define_values("{hist_ee_bins=200;hist_ee_min=0.0;hist_ee_max=-1.0;}", m_account);
   define_values("{hist_espec_bins=-1;hist_espec_min=0.0;}", m_account);
   define_values("{hist_espec_max=500.001;}", m_account);
-  define_values("{do_lumi_ee_2=0;num_lumi=0;do_size_log=0;}", m_account);
-  define_values("{lumi_ee_2_n=100;lumi_ee_2_min=0.0;lumi_ee_2_max=1.0;}", m_account);
-  define_values("{do_lumi_eg_2=0;}", m_account);
-  define_values("{lumi_eg_2_n=100;lumi_eg_2_min=0.0;lumi_eg_2_max=1.0;}", m_account);
-  define_values("{do_lumi_ge_2=0;}", m_account);
-  define_values("{lumi_ge_2_n=100;lumi_ge_2_min=0.0;lumi_ge_2_max=1.0;}", m_account);
-  define_values("{do_lumi_gg_2=0;}", m_account);
+  //  define_values("{do_lumi_ee_2=0;}", m_account);
+  define_values("{do_size_log=0;}", m_account);
+  // define_values("{lumi_ee_2_n=100;lumi_ee_2_min=0.0;lumi_ee_2_max=1.0;}", m_account);
+  // define_values("{do_lumi_eg_2=0;}", m_account);
+  // define_values("{lumi_eg_2_n=100;lumi_eg_2_min=0.0;lumi_eg_2_max=1.0;}", m_account);
+  // define_values("{do_lumi_ge_2=0;}", m_account);
+  // define_values("{lumi_ge_2_n=100;lumi_ge_2_min=0.0;lumi_ge_2_max=1.0;}", m_account);
+  // define_values("{do_lumi_gg_2=0;}", m_account);
   define_values("{do_lumi=0;num_lumi=100000;lumi_p=1e-29;}", m_account);
-  define_values("{lumi_gg_2_n=100;lumi_gg_2_min=0.0;lumi_gg_2_max=1.0;}", m_account);
+  define_values("{lumi_p_eg=1e-29;lumi_p_gg=1e-29;}", m_account);
+  // define_values("{lumi_gg_2_n=100;lumi_gg_2_min=0.0;lumi_gg_2_max=1.0;}", m_account);
   define_values("{do_bhabhas=0; bhabha_ratio=1.0;bhabha_scal=1.e-29; bhabha_ecmload = 500.; ecm_min=0.0;ecm_min_gg=0.0;}", m_account);
   define_values("{cut_x=-1.0;cut_y=-1.0;cut_z=-1.0;}", m_account);
   define_values("{cut_x_factor=-1.0;cut_y_factor=-1.0;cut_z_factor=-1.0;}", m_account);
   define_values("{jet_pythia=0;}", m_account);
-  define_values("{beam_vx_min=-1e-3;beam_vx_max=1e-3;beam_vx_interval=200;}", m_account);
-  define_values("{beam_vy_min=-1e-3;beam_vy_max=1e-3;beam_vy_interval=200;}", m_account);
+  // define_values("{beam_vx_min=-1e-3;beam_vx_max=1e-3;beam_vx_interval=200;}", m_account);
+  // define_values("{beam_vy_min=-1e-3;beam_vy_max=1e-3;beam_vy_interval=200;}", m_account);
   define_values("{do_dump=0;dump_step=1;dump_particle=1;}", m_account);
 }
 

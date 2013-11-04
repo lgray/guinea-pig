@@ -11,9 +11,9 @@ SWITCHES::SWITCHES()
   //    electron_distribution_scatter=1;
   electron_ratio=1.0;
   do_lumi=0;
-  num_lumi=100000;
+  num_lumi=100000; num_lumi_eg=100000; num_lumi_gg=100000;
   do_cross=0;
-  lumi_p=1e-29;
+  lumi_p=1e-29; lumi_p_eg=1e-29; lumi_p_gg=1e-29;
   do_photons_[0]=0;
   do_photons_[1]=0;
   write_photons=0; //=store_photons
@@ -31,6 +31,8 @@ SWITCHES::SWITCHES()
   //track_secondaries=0;
   track_pairs=0;
   track_muons=0;
+  store_pairs=0;
+  store_muons=0;
   do_tertphot=0;
   pair_ratio=1.0;
   muon_ratio=1.0;
@@ -55,21 +57,53 @@ SWITCHES::SWITCHES()
   ST_spin_flip_ = 0;
   automatic_grid_sizing = 0;
   emin=1.0;
-  charge_sign=-1.0;
+  charge_sign=-1.0; charge_sign_0=-1.0;
   do_beamstrahlung_=1;
   store_beam=0;
   do_cross_gg=0;
   force_symmetric=0;
   do_isr=0;
   do_espread=0;
+  espread1=0.0; espread2=0.0; which_espread1=0; which_espread2=0;
   do_coherent=0;
   do_trident=0;
   gg_smin=4.0*150.0*150.0;
   twobeam=0;
+
+  // default values from readData.cc
+  beam_pair=0;
+  do_bhabhas=0;
+  bhabha_ecmload=500;
+  bhabha_scal=1.e-29;
+
+  charge_symmetric=0; // to be checked
+
+  do_compt=0;
+  do_compt_phot=0;
+  compt_emax=100;
+  compt_scale=1.0;
+  compt_x_min=1.0;
+  
+  do_dump=0;
+  do_muons=0;
+  // do_prod is not implemented
+  do_prod=0; prod_e=0.0; prod_scal=1e-29;
+  do_size_log=0;
+
+  dump_particle=1;
+  dump_step=1;
+  ecm_min=0.0;
+  ext_field=0;
+  pair_step=1.0;
+  // CLIC defaults:
+  f_rep = 50; n_b=312;
+
+  rndm_load=1; rndm_save=1; 
+  rndm_seed=1;
 }
 
 
-// void SWITCHES::lectureFirstBeamParameters(const PARAMETERS& param)
+// void SWITCHES::readFirstBeamParameters(const PARAMETERS& param)
 // {
 //    n_b= param.readDValue("n_b");
 //    f_rep=param.readDValue("f_rep");
@@ -100,7 +134,7 @@ void SWITCHES::read(const PARAMETERS& param)
 
 
   integration_method = param.readIValue("integration_method");
-  silent= param.readIValue("silent");
+  //  silent= param.readIValue("silent");
 
 
   extra_grids = param.readIValue("grids")-1;
@@ -175,39 +209,39 @@ void SWITCHES::read(const PARAMETERS& param)
 
   rndm_seed = param.readIValue("rndm_seed");
 
-  do_lumi_ee_2 = param.readIValue("do_lumi_ee_2");
+  // do_lumi_ee_2 = param.readIValue("do_lumi_ee_2");
 
   do_size_log = param.readIValue("do_size_log");
 
-  lumi_ee_2_n = param.readIValue("lumi_ee_2_n");
+  // lumi_ee_2_n = param.readIValue("lumi_ee_2_n");
 
-  lumi_ee_2_xmin=param.readFValue("lumi_ee_2_min"); 
+  // lumi_ee_2_xmin=param.readFValue("lumi_ee_2_min"); 
 
-  lumi_ee_2_xmax=param.readFValue("lumi_ee_2_max"); 
+  // lumi_ee_2_xmax=param.readFValue("lumi_ee_2_max"); 
 
-  do_lumi_eg_2=param.readIValue("do_lumi_eg_2");
+  // do_lumi_eg_2=param.readIValue("do_lumi_eg_2");
 
-  lumi_eg_2_n=param.readIValue("lumi_eg_2_n");
+  // lumi_eg_2_n=param.readIValue("lumi_eg_2_n");
 
-  lumi_eg_2_xmin=param.readFValue("lumi_eg_2_min"); 
+  // lumi_eg_2_xmin=param.readFValue("lumi_eg_2_min"); 
 
-  lumi_eg_2_xmax=param.readFValue("lumi_eg_2_max"); 
+  // lumi_eg_2_xmax=param.readFValue("lumi_eg_2_max"); 
 
-  do_lumi_ge_2=param.readIValue("do_lumi_ge_2");
+  // do_lumi_ge_2=param.readIValue("do_lumi_ge_2");
 
-  lumi_ge_2_n=param.readIValue("lumi_ge_2_n");
+  // lumi_ge_2_n=param.readIValue("lumi_ge_2_n");
 
-  lumi_ge_2_xmin=param.readFValue("lumi_ge_2_min"); 
+  // lumi_ge_2_xmin=param.readFValue("lumi_ge_2_min"); 
 
-  lumi_ge_2_xmax=param.readFValue("lumi_ge_2_max"); 
+  // lumi_ge_2_xmax=param.readFValue("lumi_ge_2_max"); 
 
-  do_lumi_gg_2=param.readIValue("do_lumi_gg_2");
+  // do_lumi_gg_2=param.readIValue("do_lumi_gg_2");
 
-  lumi_gg_2_n=param.readIValue("lumi_gg_2_n");
+  // lumi_gg_2_n=param.readIValue("lumi_gg_2_n");
 
-  lumi_gg_2_xmin=param.readFValue("lumi_gg_2_min"); 
+  // lumi_gg_2_xmin=param.readFValue("lumi_gg_2_min"); 
 
-  lumi_gg_2_xmax=param.readFValue("lumi_gg_2_max"); 
+  // lumi_gg_2_xmax=param.readFValue("lumi_gg_2_max"); 
 
   do_cross=param.readIValue("do_cross");
 
@@ -307,17 +341,17 @@ void SWITCHES::read(const PARAMETERS& param)
 
   charge_symmetric=param.readIValue("charge_symmetric");
 
-  beam_vx_min=param.readFValue("beam_vx_min");
+  // beam_vx_min=param.readFValue("beam_vx_min");
 
-  beam_vx_max=param.readFValue("beam_vx_max");
+  // beam_vx_max=param.readFValue("beam_vx_max");
 
-  beam_vx_interval=param.readIValue("beam_vx_interval");
+  // beam_vx_interval=param.readIValue("beam_vx_interval");
 
-  beam_vy_min=param.readFValue("beam_vy_min");
+  // beam_vy_min=param.readFValue("beam_vy_min");
 
-  beam_vy_max=param.readFValue("beam_vy_max");
+  // beam_vy_max=param.readFValue("beam_vy_max");
 
-  beam_vy_interval=param.readIValue("beam_vy_interval");
+  // beam_vy_interval=param.readIValue("beam_vy_interval");
 
   do_dump=param.readIValue("do_dump");
 
@@ -382,21 +416,21 @@ void SWITCHES::check_consistency() const
     }
 }
 
-void SWITCHES::lectureTWOBEAM(const PARAMETERS& param)
+void SWITCHES::readTWOBEAM(const PARAMETERS& param)
 {
   //  VALUE value;
-  //  recuperer_variable("twobeam",&value);
+  //  load_variable("twobeam",&value);
   //  twobeam=CONTENTS(value);
   twobeam=param.readIValue("twobeam");
 }
 
-void SWITCHES::lectureCharge_sign_2(const PARAMETERS& param)
-{
-  //  VALUE value;
-  //  recuperer_variable("charge_sign_2",&value);
-  //  charge_sign_2=CONTENTS(value);
-  charge_sign_2=param.readFValue("charge_sign_2");
-}
+// void SWITCHES::readCharge_sign_2(const PARAMETERS& param)
+// {
+//   //  VALUE value;
+//   //  load_variable("charge_sign_2",&value);
+//   //  charge_sign_2=CONTENTS(value);
+//   charge_sign_2=param.readFValue("charge_sign_2");
+// }
 
 string SWITCHES::output_flow() const 
 {

@@ -22,7 +22,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
   {  
     switch (mode[0])
       {
-	// lecture 
+	// read 
       case 'r':
 	infile_.open(name.c_str(), std::ios::in);
 	if (!infile_) 
@@ -31,7 +31,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
 	    exit(0);
 	  }
 	break;
-	// ecriture
+	// write
       case 'w':
 	      
 	outfile_.open(name.c_str(), std::ios::out);

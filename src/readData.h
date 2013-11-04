@@ -1,5 +1,5 @@
-#ifndef LECTUREDONNEE_SEEN
-#define LECTUREDONNEE_SEEN
+#ifndef READDATA_SEEN
+#define READDATA_SEEN
 
 extern "C" {
 #include "memory.h"

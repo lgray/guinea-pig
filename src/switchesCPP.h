@@ -3,15 +3,18 @@
 
 #include <string>
 
-#include "typeDefs.h"
 #include "define.h"
-//#include "readData.h"
-#include "abstractParticle.h"
+#include "abstractIOclass.h"
 #include "parametersCPP.h"
+
+/** 
+ * class that holds global parameters
+ * most parameters are explained in the manual
+ */
 
 class SWITCHES : public ABSTRACT_IO_CLASS
 {
-  int silent;
+  //  int silent;
   int electron_distribution_rho;
   //   int electron_distribution_scatter;
   int do_lumi,num_lumi,num_lumi_eg,num_lumi_gg;
@@ -35,12 +38,15 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   float muon_ratio,muon_scale,muon_ecut;
   float pair_ratio;
   float bhabha_ratio;
+  /// pair_ecut: minimal energy in GeV the particles from pair creation need to have to be stored
+  /// pair_step: scaling factor for the step size of the pairs; if the value is increased the step size is decreased
   float pair_ecut,pair_step;
-  int integration_method; /*!< integration method in transverse plane 1=direct, 2= fast Fourier (default), 3 = ierative */
+  int integration_method; /*!< integration method in transverse plane 1=direct, 2= fast Fourier (default), 3 = iterative */
   int extra_grids;
   int time_order;
   int interpolation;
   int adjust;
+  /// ext_field, if not 0 the program takes into account the effect of the magnetic field for the equivalent photon approximation
   int geom,ext_field,beam_pair;
   int twobeam;
   float r_scal;
@@ -51,35 +57,45 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   int bmt_precession_;
   int ST_spin_flip_;
   int automatic_grid_sizing;
-  float emin,charge_sign,charge_sign_2,charge_sign_0;
+  /// charge_sign is the relative sign of the charge of the two beams -1 is for e+e- and +1 for e-e-. If set to 0 no beam-beam force is assumed
+  float emin,charge_sign,charge_sign_0;
+  // float charge_sign_2;
   int store_beam;
   int do_cross,do_cross_gg,do_isr,do_espread,do_prod;
+  /// RMS value of energy spread of beam 1 and 2, distribution set with which_espread
   float espread1,espread2;
+  /// energy spreading method, used in gridCPP.h
+  /// 0: no energy spread 1: flat distribution 2: two peaks 3: Gaussian
   int which_espread1,which_espread2;
+  /// if force_symmetric is not equal to 0, the beams are assumed to be up-down and left-right symmetric
   int force_symmetric,charge_symmetric;
   int do_coherent,do_compt,do_compt_phot,do_trident;
+  /// load and save random number generator state
   int rndm_load,rndm_save;
-  unsigned long  rndm_seed;
+  /// initial random seed
+  unsigned long rndm_seed;
   float gg_smin,compt_x_min,compt_emax;
-  int do_lumi_ee_2,lumi_ee_2_n;
-  float lumi_ee_2_xmin,lumi_ee_2_xmax;
-  int do_lumi_eg_2,lumi_eg_2_n;
-  float lumi_eg_2_xmin,lumi_eg_2_xmax;
-  int do_lumi_ge_2,lumi_ge_2_n;
-  float lumi_ge_2_xmin,lumi_ge_2_xmax;
-  int do_lumi_gg_2,lumi_gg_2_n;
-  float lumi_gg_2_xmin,lumi_gg_2_xmax;
+  /* int do_lumi_ee_2,lumi_ee_2_n; */
+  /* float lumi_ee_2_xmin,lumi_ee_2_xmax; */
+  /* int do_lumi_eg_2,lumi_eg_2_n; */
+  /* float lumi_eg_2_xmin,lumi_eg_2_xmax; */
+  /* int do_lumi_ge_2,lumi_ge_2_n; */
+  /* float lumi_ge_2_xmin,lumi_ge_2_xmax; */
+  /* int do_lumi_gg_2,lumi_gg_2_n; */
+  /* float lumi_gg_2_xmin,lumi_gg_2_xmax; */
   int do_bhabhas;
   float bhabha_scal, bhabha_ecmload,ecm_min;
+  /// values related to do_prod, not implemented
   float prod_e,prod_scal;
   float compt_scale;
   //  int hist_ee_bins,hist_espec_bins;
   //  float hist_ee_min,hist_ee_max,hist_espec_min,hist_espec_max;
   int do_size_log;
-  float beam_vx_min,beam_vx_max,beam_vy_min,beam_vy_max;
+  //  float beam_vx_min,beam_vx_max,beam_vy_min,beam_vy_max;
+  /// rep rate and number of bunches (only used in some output results)
   double f_rep,n_b;
   int do_dump,dump_step,dump_particle;
-  int beam_vx_interval,beam_vy_interval;
+  //  int beam_vx_interval,beam_vy_interval;
 
   void check_consistency() const;
 
@@ -87,11 +103,11 @@ class SWITCHES : public ABSTRACT_IO_CLASS
 
   SWITCHES();
 
-  //  void lectureFirstBeamParameters(const PARAMETERS& param);
-  // void lectureBeamParametersContinued(const PARAMETERS& param);
+  //  void readFirstBeamParameters(const PARAMETERS& param);
+  // void readBeamParametersContinued(const PARAMETERS& param);
   void read(const PARAMETERS& param);
-  void lectureTWOBEAM(const PARAMETERS& param);
-  void lectureCharge_sign_2(const PARAMETERS& param);
+  void readTWOBEAM(const PARAMETERS& param);
+  //  void readCharge_sign_2(const PARAMETERS& param);
 
   virtual  std::string output_flow() const;
 
@@ -101,13 +117,13 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   inline unsigned long   get_rndm_seed() const {return rndm_seed;};
   inline int get_write_photons() const {return write_photons;};
   inline int get_do_lumi() const {return do_lumi;};
-  inline int get_do_lumi_ee_2() const {return do_lumi_ee_2;};
-  inline int get_do_lumi_ge_2() const {return do_lumi_ge_2;};
+  /* inline int get_do_lumi_ee_2() const {return do_lumi_ee_2;}; */
+  /* inline int get_do_lumi_ge_2() const {return do_lumi_ge_2;}; */
 
   inline int get_do_bhabhas() const {return do_bhabhas;};
 
 
-  inline int get_do_lumi_eg_2() const {return do_lumi_eg_2;};
+  /* inline int get_do_lumi_eg_2() const {return do_lumi_eg_2;}; */
   inline int get_num_lumi() const {return num_lumi;};
   inline int get_num_lumi_eg() const {return num_lumi_eg;};
   inline int get_num_lumi_gg() const {return num_lumi_gg;};
@@ -156,7 +172,7 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   //  inline int get_store_secondaries() const {return store_secondaries;}
   inline int get_store_pairs() const {return store_pairs;}
   inline int get_store_muons() const {return store_muons;}
-  inline int get_do_lumi_gg_2() const {return do_lumi_gg_2;}
+  /* inline int get_do_lumi_gg_2() const {return do_lumi_gg_2;} */
   inline int get_store_hadrons() const {return store_hadrons;}
   inline int get_pair_q2() const {return pair_q2;}
   inline int get_beam_pair() const {return beam_pair;}

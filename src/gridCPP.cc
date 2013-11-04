@@ -1024,7 +1024,7 @@ void GRID::collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POIN
   if (switches.get_do_prod()==1)
     {
 
-      cerr << " GRID::collide_ee : do_prod non programme " << endl;
+      cerr << " GRID::collide_ee : do_prod not implemented! " << endl;
       exit(0);
     }  
 }

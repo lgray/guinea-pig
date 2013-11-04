@@ -75,8 +75,6 @@ string ABSTRACT_MINIJETS::output_flow() const
   return out.str();
 }
 
-MINIJETS::MINIJETS() {;}
-
 MINIJETS::~MINIJETS() {;}
 
 MINIJETS::MINIJETS(float s,float ptmin,int iparam,int jet_select, string jetfileName) : ABSTRACT_MINIJETS(s, ptmin, iparam, jet_select, jetfileName)

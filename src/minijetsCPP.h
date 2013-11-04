@@ -303,6 +303,8 @@ class MINIJETS : public ABSTRACT_MINIJETS
 
   void initNewton(float s, float ptmin);
 
+ private:
+  /// no default constructor (not implemented)
   MINIJETS();
 
  public:

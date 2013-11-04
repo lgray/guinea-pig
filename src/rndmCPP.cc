@@ -11,14 +11,13 @@ RNDM::RNDM(unsigned long seed)
   rndmst0(1);
   rndmst1(1);
   rndmst2(1);
-  rndmst3(1);
+  //  rndmst3(1);
   rndmst5(12,34,56,78);
   rndmst6(1);
   rndmst7(seed);
   rndmst8(1);
   iset_ = 0;
   counterRndm7_ = 0;
-  cout << "  RNDM::RNDM : the seed is : " << rndm7_store.i << endl;
 }
 
 void  RNDM::rndmst0(int i)
@@ -42,7 +41,7 @@ void RNDM::rndmst1(int i)
 {
   //    const long m=2147483647,m1=m-1,a=16807,q=127773,r=2836,n=32,nd=1+m1/n;
   //   const float m_inv=(1.0-RNDM_EPS)/(float)m;
-    const long m=2147483647, a=16807,q=127773,r=2836,n=32;
+  const long m=2147483647, a=16807,q=127773,r=2836,n=32;
   int k,j;
 
   for (j=n+7;j>=0;j--)
@@ -110,51 +109,6 @@ float RNDM::rndm2()
 /*  return rndm2_store.p<m1_1?m_inv*rndm2_store.p:m_inv*m1_1;*/
 /*  return m_inv*min(rndm2_store.p,m1_1);*/
 }
-
-
-void RNDM::rndmst3(int i)
-{
-  const int big=1000000000,seed=161803398,z=0;
-  //  const float fact=1.0/(float)big*(1.0-RNDM_EPS);
-  int j,ii,k;
-
-  j=(seed-abs(i)) % big;
-  rndm3_store.is[54]=j;
-  k=1;
-  for (i=1;i<=54;i++)
-    {
-      ii=(21*(i+1)) % 54;
-      rndm3_store.is[ii-1]=k;
-      if((k=j-k)<z) k+=big;
-      j=rndm3_store.is[ii];
-    }
-  for (k=0;k<4;k++)
-    {
-      for(i=1;i<=55;i++)
-	{
-	  if((rndm3_store.is[i-1]-=rndm3_store.is[(i+30)%55])<z)
-	                                         rndm3_store.is[i-1]+=big;
-	}
-      }
-  rndm3_store.in1=-1;
-  rndm3_store.in2=30;
-}
-
-float RNDM::rndm3()
-{
-  //  const int big=1000000000,seed=161803398,z=0;
-  const int big=1000000000,z=0;
-  const float fact=1.0/(float)big*(1.0-RNDM_EPS);
-  int j;
-
-  if (++rndm3_store.in1==55) rndm3_store.in1=0;
-  if (++rndm3_store.in2==55) rndm3_store.in2=0;
-  if((j=rndm3_store.is[rndm3_store.in1]-rndm3_store.is[rndm3_store.in2])<z)
-      j+=big;
-  rndm3_store.is[rndm3_store.in1]=j;
-  return j*fact;
-}
-
 
 void RNDM::rndmst5(int na1,int na2,int na3, int nb1)
 {
@@ -462,7 +416,6 @@ int RNDM::rndm_save()
     fwrite(&rndm0_store,sizeof(rndm0_store),1,file);
     fwrite(&rndm1_store,sizeof(rndm1_store),1,file);
     fwrite(&rndm2_store,sizeof(rndm2_store),1,file);
-    fwrite(&rndm3_store,sizeof(rndm3_store),1,file);
     fwrite(&rndm5_store,sizeof(rndm5_store),1,file);
     fwrite(&rndm6_store,sizeof(rndm6_store),1,file);
     fwrite(&rndm7_store,sizeof(rndm7_store),1,file);
@@ -479,7 +432,6 @@ int RNDM::rndm_load()
         if( !fread(&rndm0_store,sizeof(rndm0_store),1,file)) {fclose(file); return 0;}
         fread(&rndm1_store,sizeof(rndm1_store),1,file);
         fread(&rndm2_store,sizeof(rndm2_store),1,file);
-        fread(&rndm3_store,sizeof(rndm3_store),1,file);
         fread(&rndm5_store,sizeof(rndm5_store),1,file);
         fread(&rndm6_store,sizeof(rndm6_store),1,file);
         fread(&rndm7_store,sizeof(rndm7_store),1,file);
