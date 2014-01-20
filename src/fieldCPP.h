@@ -16,7 +16,7 @@ class FIELD
   int nb_cells_x_, nb_cells_y_;
   int dist_size_;
   int integration_method_;
-    PHI_FLOAT *dist_;
+  PHI_FLOAT *dist_;
 
   PHI_FLOAT *phi1_;
   PHI_FLOAT *phi2_;
@@ -123,9 +123,9 @@ class FIELD
 
   ~FIELD() 
     {
-      if (dist_ != NULL)  delete [] dist_;
-      if (phi1_ != NULL)  delete [] phi1_;
-      if (phi2_ != NULL)  delete [] phi2_;
+      delete [] dist_;
+      delete [] phi1_;
+      delete [] phi2_;
     }
 
   inline const FIELD& operator = (const FIELD& f)
@@ -133,9 +133,9 @@ class FIELD
       if (this == &f) return *this; // protect against self-assignment
       int k;
       // delete old memory:
-      if (dist_ != NULL)  delete [] dist_;
-      if (phi1_ != NULL)  delete [] phi1_;
-      if (phi2_ != NULL)  delete [] phi2_;
+      delete [] dist_;
+      delete [] phi1_;
+      delete [] phi2_;
       // assign new memory:
       set (f.nb_cells_x_, f.nb_cells_y_, f.integration_method_); 
       if (integration_method_ == 2)
@@ -159,50 +159,49 @@ class FIELD
 	}
   }
 
+  void fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT *dist,PHI_FLOAT *phi1,
+		PHI_FLOAT *phi2,int n_x,int n_y, float charge_sign,   ABSTRACT_FOURIER* fourier_forward, ABSTRACT_FOURIER* fourier_backward);
 
-void fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT *dist,PHI_FLOAT *phi1,
-	      PHI_FLOAT *phi2,int n_x,int n_y, float charge_sign,   ABSTRACT_FOURIER* fourier_forward, ABSTRACT_FOURIER* fourier_backward);
+  void foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *phi,int n_x,int n_y, float charge_sign);
+  
+  void sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT *parameter, float charge_sign);
+  
 
- void foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *phi,int n_x,int n_y, float charge_sign);
+  /*! This routine is a subroutine for init_grid. 
 
- void sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT *parameter, float charge_sign);
-
- // thesis p. 20 : F(x,y) function multiplied by 4.pi.eps0
-inline double f_potential(double x,double y)
-{
-  return x*y*(log(x*x+y*y)-3.0)
+    calculate the function F(x,y) of the thesis p. 20 (integral of the 2D Green function of the Poisson equation
+  */
+  // thesis p. 20 : F(x,y) function multiplied by 4.pi.eps0
+  inline double f_potential(double x,double y)
+  {
+    return x*y*(log(x*x+y*y)-3.0)
       +x*x*atan(y/x)+y*y*atan(x/y);
-}
+  }
 
+  double f_potential_2(double x0,double y0,double dx,double dy);
 
- double f_potential_2(double x0,double y0,double dx,double dy);
+  void foldfields (const PHI_FLOAT *rho, const PHI_FLOAT *dist,PHI_FLOAT *phi,int n_x,int n_y, float charge_sign);
+  
+  void dist_init(PHI_FLOAT factor, float deltax, float deltay,   FFT_SERVER* fourier);
 
- void foldfields (const PHI_FLOAT *rho, const PHI_FLOAT *dist,PHI_FLOAT *phi,int n_x,int n_y, float charge_sign);
+  inline void foldfields (const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,float charge_sign)
+  {
+    foldfields(rho1,dist_,phi1_, nb_cells_x_, nb_cells_y_, charge_sign);
+    foldfields(rho2,dist_,phi2_, nb_cells_x_, nb_cells_y_, charge_sign);
+  }
 
- void dist_init(PHI_FLOAT factor, float deltax, float deltay,   FFT_SERVER* fourier);
+  inline void fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,float charge_sign)
+  {
+    fold_fft(rho1, rho2, dist_, phi1_, phi2_, nb_cells_x_, nb_cells_y_, charge_sign, fourier_transform_forward_, fourier_transform_backward_);
+  }
 
-
-inline void foldfields (const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,float charge_sign)
-{
-  foldfields(rho1,dist_,phi1_, nb_cells_x_, nb_cells_y_, charge_sign);
-  foldfields(rho2,dist_,phi2_, nb_cells_x_, nb_cells_y_, charge_sign);
-}
-
-inline void fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,float charge_sign)
-{
-fold_fft(rho1, rho2, dist_, phi1_, phi2_, nb_cells_x_, nb_cells_y_, charge_sign, fourier_transform_forward_, fourier_transform_backward_);
-}
-
-inline  void foldfronts (const PHI_FLOAT *rho1,const PHI_FLOAT *rho2, PHI_FLOAT *parameter, float charge_sign)
-{
-	  foldfronts(rho1, dist_, phi1_, nb_cells_x_, nb_cells_y_, charge_sign);
-	  foldfronts(rho2, dist_, phi2_, nb_cells_x_, nb_cells_y_, charge_sign);
-	  sor2(rho1, phi1_, nb_cells_x_, nb_cells_y_,parameter, charge_sign);
-	  sor2(rho2, phi2_, nb_cells_x_, nb_cells_y_,parameter, charge_sign);
-}
-
+  inline  void foldfronts (const PHI_FLOAT *rho1,const PHI_FLOAT *rho2, PHI_FLOAT *parameter, float charge_sign)
+  {
+    foldfronts(rho1, dist_, phi1_, nb_cells_x_, nb_cells_y_, charge_sign);
+    foldfronts(rho2, dist_, phi2_, nb_cells_x_, nb_cells_y_, charge_sign);
+    sor2(rho1, phi1_, nb_cells_x_, nb_cells_y_,parameter, charge_sign);
+    sor2(rho2, phi2_, nb_cells_x_, nb_cells_y_,parameter, charge_sign);
+  }
 };
 
 #endif
-
-

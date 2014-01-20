@@ -95,7 +95,7 @@ class COMPT : public ABSTRACT_IO_CLASS
   
   ~COMPT() 
     {
-      if ( compton_phot_file_ != NULL ) delete  compton_phot_file_; 
+      delete compton_phot_file_; 
     }
   
   inline void connect_compt_phot_file(string name)

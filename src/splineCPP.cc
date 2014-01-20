@@ -5,8 +5,7 @@
 using namespace std;
 SPLINE::~SPLINE()
 {
-    if (tab_!= NULL) delete [] tab_;
-    tab_=NULL;
+  delete [] tab_;
 }
 
 void SPLINE::spline_init(string pythiaFile)
@@ -24,8 +23,8 @@ void SPLINE::spline_init(string pythiaFile)
 
 void SPLINE::compute_tab()
 {
-    int i;
-    double u[SPLINE_NMAX],sig,p;
+  int i;
+  double u[SPLINE_NMAX],sig,p;
   u[0]=0.0;
   for (i=1;i < n_-1 ;i++)
     {
@@ -187,14 +186,10 @@ double SPLINE::spline_int(double x) const
 
 MSPLINE::~MSPLINE()
 {
-    if (x_ != NULL) delete [] x_;
-    if (y_ != NULL) delete [] y_;
-    if (y2_ != NULL) delete [] y2_;
-    //    x=NULL;
-    //    y=NULL;
-    //    y2=NULL;
+  delete [] x_;
+  delete [] y_;
+  delete [] y2_;
 }
-
 
 void MSPLINE::mspline_init(const double* xd,int xscald,const double* yd,int yscald,int nd,int nvald)
 {

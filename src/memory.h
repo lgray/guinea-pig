@@ -1,5 +1,5 @@
 #ifndef MEMORY_SEEN
-#define  MEMORY_SEEN
+#define MEMORY_SEEN
 
 struct memory_pointer
 {

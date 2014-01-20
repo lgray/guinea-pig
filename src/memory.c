@@ -30,7 +30,7 @@ void* get_memory(MEMORY_ACCOUNT *account,int size)
       printf(" get_memory : account->amount = %ld\n", account->amount);
       if (account->size < account->amount+size)
 	{
-	  fprintf(stderr,"error: accout exceeded\n");
+	  fprintf(stderr,"error: account exceeded\n");
 	  fflush(stderr);
 	  exit(10);
 	}

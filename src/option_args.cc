@@ -44,8 +44,8 @@ void print_usage(char *program_name) {
                     "OPTIONS [defaults]:\n"
                     "  --help             Display this help\n"
                     "  --el_file          electron distribution [electron.ini]\n"
-                    "  --pos_file         positron distribution [positron.ini].\n"
-                    "  --acc_file         parameters            [acc.dat].\n\n";
+                    "  --pos_file         positron distribution [positron.ini]\n"
+                    "  --acc_file         parameters            [acc.dat]\n\n";
 }
   
 std::vector< std::string > read_args(int argc, char* argv[]) {

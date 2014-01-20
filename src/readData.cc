@@ -198,17 +198,18 @@ void set_variable(VARIABLE *var,VALUE val)
 
 void set_variable_string(VARIABLE *var,char cont[], MEMORY_ACCOUNT* m_account)
 {
-  int n=0; //int n=0,i;
+  //  int n=0;
   if (var->type!=T_STRING){
     fprintf(stderr,"Variable is not of type string\n");
     exit(1);
   }
   
-  while(cont[n++]!='\0') ;
+  // while(cont[n++]!='\0') ;
+  // var->value.string=(char*)get_memory(m_account,sizeof(char)*n);
+
+  var->value.string=(char*)get_memory(m_account,sizeof(cont));
   
-  var->value.string=(char*)get_memory(m_account,sizeof(char)*n);
-  
-  strcpy(var->value.string,cont);
+  strncpy(var->value.string,cont,sizeof(cont));
 }
 
 void get_variable(VARIABLE *var,VALUE *val)
@@ -310,7 +311,7 @@ void set_variable_element(VARIABLE *var,INDEX index,VALUE val)
 		var->value.dm[1]=CONTENTS(val);
 	    }
 	    else{
-                sprintf(msg,"Error: Variable <%s> contains only elements 1 \
+                snprintf(msg,200,"Error: Variable <%s> contains only elements 1 \
 and 2\n",var->name);
                 read_error(msg);
         	fprintf(stderr,"Error occured in set_variable_element\n");
@@ -328,7 +329,7 @@ and 2\n",var->name);
 		var->value.im[1]=CONTENTS(val);
 	    }
 	    else{
-                sprintf(msg,"Error: Variable <%s> contains only elements 1 \
+                snprintf(msg,200,"Error: Variable <%s> contains only elements 1 \
 and 2\n",var->name);
                 read_error(msg);
         	fprintf(stderr,"Error occured in set_variable_element\n");
@@ -733,13 +734,11 @@ TOKEN read_token_name(char buffer[],int n)
 TOKEN read_lvalue(char name[],int n)
 {
     TOKEN token;
-/*printf("[1");*/
     token=read_token_name(name,n);
     if (token==END_INPUT) 
       { 
 	return END_INPUT;
       }
-/*printf("]2");*/
     if (token!=VAR_NAME) return ERROR;
 /*    printf ("<%s>\n",name);*/
     return VAR_NAME;
@@ -811,7 +810,6 @@ TOKEN read_primitive(VALUE *val)
 {
     TOKEN token;
     VALUE val1;
-/*printf("!1");*/
     token=read_token(val);
     switch(token){
     case VAL:
@@ -819,7 +817,6 @@ TOKEN read_primitive(VALUE *val)
     case MINUS:
 	token=read_primitive(val);
 	invert_value(val);
-/*printf("!3");*/
 	return token;
     case LB:
 	token=read_expression(val);
@@ -829,7 +826,6 @@ TOKEN read_primitive(VALUE *val)
     default:
 	return ERROR;
     }
-/*printf("!2");*/
     return read_token(&val1);
 }
 
@@ -837,7 +833,6 @@ TOKEN read_summand(VALUE *val)
 {
     TOKEN token;
     VALUE val1;
-/*printf("(");*/
     token=read_primitive(val);
     while((token==MULT)||(token==DIV)){
 	switch(token){
@@ -849,20 +844,18 @@ TOKEN read_summand(VALUE *val)
 	    token=read_primitive(&val1);
 	    div_value(val,&val1,val);
 	    break;
+	// unnecessary but default statement to prevent compiler warnings
 	default:
 	    break;
 	}
     }
-/*printf(")");*/
     return token;
 }
 
 TOKEN read_expression(VALUE *val)
 {
-  /*   char buffer[1000]; supprime par GLM */ 
     VALUE val1;
     TOKEN token;
-/*printf("[");*/
     token=read_summand(val);
     if ((token==MINUS)||(token==PLUS)){
 	if (token==MINUS){
@@ -876,7 +869,6 @@ TOKEN read_expression(VALUE *val)
 	    add_value(val,&val1,val);
 	}
     }
-/*printf("]");*/
     return token;
 }
 
@@ -925,15 +917,12 @@ void define_values(const char *line, MEMORY_ACCOUNT* m_account)
 	exit(1);
   }
   while((token=read_command(m_account))!=END_INPUT) {
-/*	printf("{");
-	print_token(token);
-	printf("}");*/
-	if (token==ERROR) {
-          printf("error in define_values\n");
-	  exit(1);
-        }
+    //	print_token(token);
+    if (token==ERROR) {
+      printf("error in define_values\n");
+      exit(1);
+    }
   }
-/*printf("{END_INPUT}");*/
 }
 
 void def_acc(MEMORY_ACCOUNT* m_account)
@@ -1318,7 +1307,7 @@ int file_skip_space(DATEI *datei)
 
 int file_next_word(DATEI *datei,char *word)
 {
-  file_skip_space(datei);
+  if(!file_skip_space(datei)) return 0;
   if (strncmp(datei->point,word,strlen(word))!=0) return 0;
   datei->point+=strlen(word);
   return 1;
@@ -1375,7 +1364,7 @@ int file_read_until(DATEI *datei,char *end,char *buff,int n_max)
 
 int file_read_braces(DATEI *datei,char *begin,char *end,char *buff,int n_max)
 {
-  if(file_skip_space(datei)==0) return 0;
+  if(!file_skip_space(datei)) return 0;
   if(strncmp(datei->point,begin,strlen(begin))!=0) return 0;
   file_read_until(datei,end,buff,n_max);
   return 1;

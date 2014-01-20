@@ -150,8 +150,8 @@ void GENERAL_GRID::computeFields(int integrationMethod, float charge_sign, PHI_F
 
 GENERAL_GRID::~GENERAL_GRID()
 {
-  //  if (rho1_ != NULL) delete [] rho1_;
-  //  if (rho2_ != NULL) delete [] rho2_;
+  //  delete [] rho1_;
+  //  delete [] rho2_;
 }
 
 
@@ -220,7 +220,7 @@ GRID::~GRID()
       hadron_file_->close();
       delete hadron_file_;
     }
-  if (minijets_ != NULL) delete minijets_;
+  delete minijets_;
 }
 
 

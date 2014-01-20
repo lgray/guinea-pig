@@ -35,7 +35,7 @@ class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
   float phi_angle_;
   float x_angle_,y_angle_;
   float L_0_,L_;
-  int   what_distribution_;
+  //  int   what_distribution_;
   int bunches_per_train_;
   float frep_;
   int trav_focus_;
@@ -43,9 +43,9 @@ class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
 
   void set_polar(double compx, double compy, double compz);
 
-  void former_nom(char* name, std::string param);
+  void create_name(char* name, std::string param);
 
-  inline std::string param_with_entension(std::string param) const
+  inline std::string param_with_extension(std::string param) const
     {
       return param.append(std::string(extension_));
     }
@@ -104,7 +104,6 @@ class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
   inline float y_angle() const {return y_angle_;}
   inline float L_0() const {return L_0_;}
   inline float L() const {return L_;}
-  inline int what_distribution() const {return what_distribution_;}
   inline int bunches_per_train() const {return bunches_per_train_;}
   inline float frep() const {return frep_;}
   inline int trav_focus() const  {return trav_focus_;}

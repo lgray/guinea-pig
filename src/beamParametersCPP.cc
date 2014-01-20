@@ -7,7 +7,7 @@
 using namespace std;
 
 
-BEAM_PARAMETERS::BEAM_PARAMETERS()
+BEAM_PARAMETERS::BEAM_PARAMETERS():ebeam_(0.0),n_particles_(0.0),gamma_beam_(0.0),waist_x_(0.0),waist_y_(0.0),L_0_(0.0),L_(0.0),bunches_per_train_(0),frep_(0.0)
 {
   sigma_x_=0.0;
   sigma_y_=0.0;
@@ -18,6 +18,7 @@ BEAM_PARAMETERS::BEAM_PARAMETERS()
   beta_y_=0.0;
   offset_x_=0.0;
   offset_y_=0.0;
+  offset_z_=0.0;
   phi_angle_=0.0;
   x_angle_=0.0;
   y_angle_=0.0;
@@ -25,6 +26,8 @@ BEAM_PARAMETERS::BEAM_PARAMETERS()
   //  dist_y=0;
   dist_z_=0;
   trav_focus_=0;
+  // initialise extension
+  setLabel('0');
 }
 
 bool BEAM_PARAMETERS::acc_test(float& emitt,float& beta,float& sigma)
@@ -77,7 +80,7 @@ void BEAM_PARAMETERS::setLabel(char label)
 }
 
 
-void BEAM_PARAMETERS::former_nom(char* name, string param)
+void BEAM_PARAMETERS::create_name(char* name, string param)
 {
   strcpy(name, param.c_str());
   strcat(name, extension_);
@@ -89,65 +92,65 @@ void BEAM_PARAMETERS::read(const PARAMETERS& param)
   char name[32]; 
   float compx, compy, compz;
 
-  former_nom(name, string("energy"));
+  create_name(name, string("energy"));
   ebeam_ = param.readFValue(name);
   gamma_beam_ = ebeam_/EMASS;
-  former_nom(name, "particles");
+  create_name(name, "particles");
   n_particles_ = param.readFValue(name)*1e10;
 
-  former_nom(name, "emitt_x");
+  create_name(name, "emitt_x");
   em_x_ = param.readFValue(name)*1e-6;
-  former_nom(name, "emitt_y");
+  create_name(name, "emitt_y");
   em_y_ = param.readFValue(name)*1e-6;
   
-  former_nom(name, "beta_x");
+  create_name(name, "beta_x");
   beta_x_ = param.readFValue(name)*1e-3;
-  former_nom(name, "beta_y");
+  create_name(name, "beta_y");
   beta_y_ = param.readFValue(name)*1e-3;
 
-  former_nom(name, "sigma_x");
+  create_name(name, "sigma_x");
   sigma_x_ = param.readFValue(name);
 
-  former_nom(name, "sigma_y");
+  create_name(name, "sigma_y");
   sigma_y_ = param.readFValue(name);
 
-  former_nom(name, "sigma_z");
+  create_name(name, "sigma_z");
   sigma_z_ = param.readFValue(name)*1e3;
 
-  former_nom(name, "dist_z");
+  create_name(name, "dist_z");
   dist_z_ = param.readIValue(name); 
 
-  former_nom(name, "dist_x");
+  create_name(name, "dist_x");
   dist_x_ = param.readIValue(name); 
 
-  //  former_nom(name, "dist_y");
+  //  create_name(name, "dist_y");
   //  dist_y = readIValue(name); 
 
-  former_nom(name, "trav_focus");
+  create_name(name, "trav_focus");
   trav_focus_ = param.readIValue(name); 
 
-  former_nom(name, "offset_x");
+  create_name(name, "offset_x");
   offset_x_ = param.readFValue(name);
 
-  former_nom(name, "offset_y");
+  create_name(name, "offset_y");
   offset_y_ = param.readFValue(name);
 
-  former_nom(name, "offset_z");
+  create_name(name, "offset_z");
   offset_z_ = param.readFValue(name)*1e3;
 
-  former_nom(name, "waist_x");
+  create_name(name, "waist_x");
   waist_x_=param.readFValue(name)*1e3;
 
-  former_nom(name, "waist_y");
+  create_name(name, "waist_y");
   waist_y_=param.readFValue(name)*1e3;
 
-  former_nom(name, "angle_phi");
+  create_name(name, "angle_phi");
   phi_angle_=param.readFValue(name);
 
-  former_nom(name, "angle_x");
+  create_name(name, "angle_x");
   x_angle_=param.readFValue(name);
 
-  former_nom(name, "angle_y");
+  create_name(name, "angle_y");
   y_angle_=param.readFValue(name);
 
   bunches_per_train_=param.readIValue("n_b");
@@ -157,32 +160,32 @@ void BEAM_PARAMETERS::read(const PARAMETERS& param)
   if ( !acc_test(em_x_, beta_x_, sigma_x_) ) sigma_x_ = 0.0;
 
   // emmittance in mm.mrad
-  former_nom(name, "emitt_x");
+  create_name(name, "emitt_x");
   param.setDoubleValue(name, em_x_*1e6);
 
   beta_x_ *= 1e3;
 
-  former_nom(name, "beta_x");
+  create_name(name, "beta_x");
   param.setDoubleValue(name, beta_x_);
-  former_nom(name, "sigma_x");
+  create_name(name, "sigma_x");
   param.setDoubleValue(name, sigma_x_);
   if ( !acc_test(em_y_, beta_y_, sigma_y_) ) sigma_y_ = 0.0;
 
   // emmittance in mm.mrad
-  former_nom(name, "emitt_y");
+  create_name(name, "emitt_y");
   param.setDoubleValue(name, em_y_*1e6);
 
   beta_y_ *= 1e3;
-  former_nom(name, "beta_y");
+  create_name(name, "beta_y");
   param.setDoubleValue(name, beta_y_);
-  former_nom(name, "sigma_y");
+  create_name(name, "sigma_y");
   param.setDoubleValue(name, sigma_y_);
   // polarization 
-  former_nom(name, "polar_x");
+  create_name(name, "polar_x");
   compx = param.readFValue(name);
-  former_nom(name, "polar_y");
+  create_name(name, "polar_y");
   compy = param.readFValue(name);
-  former_nom(name, "polar_z");
+  create_name(name, "polar_z");
   compz = param.readFValue(name);
   set_polar((double)compx, (double)compy, (double)compz);
 }

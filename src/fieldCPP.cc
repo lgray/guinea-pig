@@ -203,8 +203,6 @@ void FIELD::foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
     }
 }
 
-
-
 /*! Routine to calculate the potentials with an iterative method */
 
 void FIELD::sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT *parameter, float charge_sign)
@@ -272,17 +270,7 @@ void FIELD::sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT 
 
 /*! This routine is a subroutine for init_grid. 
 
-calculate the function F(x,y) of the thesis p. 20 (integral of the 2D Green function of the Poisson equation
-
-
-*/
-
-
-
-/*! This routine is a subroutine for init_grid. 
-
 calculate the expression $\Phi$i0,j0 of the thesis p. 20 
-
 
 */
 
