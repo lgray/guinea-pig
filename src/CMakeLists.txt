@@ -5,7 +5,7 @@ jetParameterCPP.cc guineapigCPP.cc grvCPP.cc gridCPP.cc
 fourierCPP.cc fieldCPP.cc bhabhaSamplesCPP.cc timerCPP.cc 
 switchesCPP.cc splineCPP.cc rndmCPP.cc resultsCPP.cc 
 principal.cc physicalTools.cc particlesCPP.cc particleBeamCPP.cc 
-readData.cc memory.c tridentCPP.cc option_args.cc)
+readData.cc memory.cc tridentCPP.cc option_args.cc)
 
 # Set up header macro generations
 include(guinea_config)

@@ -4,26 +4,29 @@
 struct memory_pointer
 {
   void *memory;
- struct memory_pointer  *next;
+  struct memory_pointer  *next;
 };
 typedef struct memory_pointer MEMORY_POINTER;
 
+/** 
+ * Storage and routines for the memory requirements 
+ *
+ * A linked list of MEMORY POINTERS is created
+ */
 
-typedef struct
+class MEMORY_ACCOUNT
 {
-  long amount,calls,size;
+ public:
+  MEMORY_ACCOUNT();
+  ~MEMORY_ACCOUNT();
+  void* get_memory(int);
+  long get_amount()const;
+  long get_calls()const;
+  
+ private:
+  /** current allocated amount and number of calls*/
+  long amount,calls;
   MEMORY_POINTER *first;
-}MEMORY_ACCOUNT;
-
-
-/* extern int store_memory_monitor[10]; */
-
-void init_memory_account(MEMORY_ACCOUNT*,long);
-void* get_memory(MEMORY_ACCOUNT*,int);
-void clear_memory_account(MEMORY_ACCOUNT*);
-long memory_account_amount(MEMORY_ACCOUNT*);
-long memory_account_size(MEMORY_ACCOUNT*);
-long memory_account_calls(MEMORY_ACCOUNT*);
-
+};
 
 #endif

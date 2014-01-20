@@ -109,7 +109,6 @@ class PARAMETERS
 
   PARAMETERS() 
     {
-      init_memory_account(&m_account_,0);
       int testFile =0;
       testFile = fileOpen(&datei_,get_acc_filename(),"r");
   

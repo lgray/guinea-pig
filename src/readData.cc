@@ -207,7 +207,7 @@ void set_variable_string(VARIABLE *var,char cont[], MEMORY_ACCOUNT* m_account)
   // while(cont[n++]!='\0') ;
   // var->value.string=(char*)get_memory(m_account,sizeof(char)*n);
 
-  var->value.string=(char*)get_memory(m_account,sizeof(cont));
+  var->value.string=(char*)m_account->get_memory(sizeof(cont));
   
   strncpy(var->value.string,cont,sizeof(cont));
 }
@@ -427,7 +427,7 @@ void init_named_variable(int max_entry, MEMORY_ACCOUNT* m_account)
 {
     var_heap.number=0;
     var_heap.max_number=max_entry;
-    var_heap.heap=(VARIABLE*)get_memory(m_account,sizeof(VARIABLE)*max_entry);
+    var_heap.heap=(VARIABLE*)m_account->get_memory(sizeof(VARIABLE)*max_entry);
 }
 
 void set_named_variable(char name[],VALUE val)

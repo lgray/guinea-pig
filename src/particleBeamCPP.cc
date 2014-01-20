@@ -260,13 +260,13 @@ unsigned int PARTICLE_BEAM::load_particles(BEAM_FROM_FILE*& bff, float /*emin*/,
   
   while( bff->not_empty() )
     {
-      const PARTICLE_INTERFACE& partaux = bff->pick_last();
-      ztest = partaux.z();
+      const PARTICLE_INTERFACE& particle = bff->pick_last();
+      ztest = particle.z();
       
       k=(int)floor((ztest-zmin)/deltaz)+1;
       if((k>0) && (k <= nSlices))
 	{
-	  set_new_particle_in_slice(k-1, partaux);
+	  set_new_particle_in_slice(k-1, particle);
 	  count++;
 	}
       bff->erase_last_particle();
@@ -863,11 +863,11 @@ void PHOTON_BEAM::load_photons(string filename, int type_of_beam, float delta_z,
   int slice;
   FILE_IN_OUT filin;
   filin.open_file(filename, "r");
-  PARTICLE_INTERFACE partaux;
-  while(filin.read_particle(partaux))
+  PARTICLE_INTERFACE particle;
+  while(filin.read_particle(particle))
     {
-      partaux.get_parameters(ener,x ,y , z,vx ,vy);
-      hel = partaux.get_helicity();
+      particle.get_parameters(ener,x ,y , z,vx ,vy);
+      hel = particle.get_helicity();
       z *= 1.0e3;
       slice=(int)floor(z/delta_z+0.5*(float)n_cell_z);
       xt= x-0.5*vx*(max_z+z);
