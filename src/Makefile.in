@@ -174,7 +174,7 @@ particleBeamCPP.o: particleBeamCPP.cc particleBeamCPP.h particlesCPP.h \
 
 readData.o: readData.cc readData.h
 
-memory.o: memory.c memory.h
+memory.o: memory.cc memory.h
 
 tridentCPP.o: tridentCPP.cc tridentCPP.h physicalTools.h rndmCPP.h \
   gridCPP.h \
