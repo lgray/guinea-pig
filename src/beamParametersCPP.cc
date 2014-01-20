@@ -80,19 +80,19 @@ void BEAM_PARAMETERS::setLabel(char label)
 }
 
 
-void BEAM_PARAMETERS::create_name(char* name, string param)
+void BEAM_PARAMETERS::create_name(std::string& name, std::string param)
 {
-  strcpy(name, param.c_str());
-  strcat(name, extension_);
+  name.assign(param);
+  name.append(extension_);
 }
 
 
 void BEAM_PARAMETERS::read(const PARAMETERS& param)
 {
-  char name[32]; 
+  std::string name;
   float compx, compy, compz;
 
-  create_name(name, string("energy"));
+  create_name(name, "energy");
   ebeam_ = param.readFValue(name);
   gamma_beam_ = ebeam_/EMASS;
   create_name(name, "particles");

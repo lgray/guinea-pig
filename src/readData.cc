@@ -198,18 +198,16 @@ void set_variable(VARIABLE *var,VALUE val)
 
 void set_variable_string(VARIABLE *var,char cont[], MEMORY_ACCOUNT* m_account)
 {
-  //  int n=0;
+  int n=0;
   if (var->type!=T_STRING){
     fprintf(stderr,"Variable is not of type string\n");
     exit(1);
   }
   
-  // while(cont[n++]!='\0') ;
-  // var->value.string=(char*)get_memory(m_account,sizeof(char)*n);
+  while(cont[n++]!='\0') ;
+  var->value.string=(char*)m_account->get_memory(sizeof(char)*n);
 
-  var->value.string=(char*)m_account->get_memory(sizeof(cont));
-  
-  strncpy(var->value.string,cont,sizeof(cont));
+  strncpy(var->value.string,cont,sizeof(char)*n);
 }
 
 void get_variable(VARIABLE *var,VALUE *val)

@@ -43,11 +43,11 @@ class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
 
   void set_polar(double compx, double compy, double compz);
 
-  void create_name(char* name, std::string param);
+  void create_name(std::string& name, std::string param);
 
   inline std::string param_with_extension(std::string param) const
     {
-      return param.append(std::string(extension_));
+      return param.append(extension_);
     }
   
   
