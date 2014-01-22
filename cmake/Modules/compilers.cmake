@@ -9,7 +9,7 @@ foreach(LANG CXX C)
 
   # only for intel compilers:
   if(CMAKE_${LANG}_COMPILER_ID STREQUAL "Intel")
-    set(CMAKE_${LANG}_FLAGS "${CMAKE_${LANG}_FLAGS} -static-intel -mavx")
+    set(CMAKE_${LANG}_FLAGS "${CMAKE_${LANG}_FLAGS} -static-intel")
   endif()
 
   # only for GNU compilers:
