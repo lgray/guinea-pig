@@ -723,8 +723,6 @@ void MINIJETS::lorent_jet(JET_FLOAT e1,JET_FLOAT e2,JET_FLOAT& e,JET_FLOAT& pz)
 
 void MINIJETS::hadrons_grv(JET_FLOAT x1,JET_FLOAT x2,JET_FLOAT q2,int flavours, JET_FLOAT *parton1,JET_FLOAT *parton2,JET_FLOAT& alphas)
 {
-    double twelve_pi=12.0*PI;
-
     parton1[0] = ALPHA_EM*grvpar_1_.grvgl(x1,q2);
     parton1[1] = ALPHA_EM*grvpar_1_.grvdl(x1,q2);
     parton1[2] = ALPHA_EM*grvpar_1_.grvul(x1,q2);
@@ -741,13 +739,13 @@ void MINIJETS::hadrons_grv(JET_FLOAT x1,JET_FLOAT x2,JET_FLOAT q2,int flavours, 
     parton2[6] = 0.0;
     switch(flavours){
     case 3:
-    alphas=twelve_pi/((33.0-2.0*flavours)*log(q2/jet_parameter_.get_lambda3_2()));
+    alphas=TWELVE_PI/((33.0-2.0*flavours)*log(q2/jet_parameter_.get_lambda3_2()));
     break;
     case 4:
-    alphas=twelve_pi/((33.0-2.0*flavours)*log(q2/jet_parameter_.get_lambda4_2()));
+    alphas=TWELVE_PI/((33.0-2.0*flavours)*log(q2/jet_parameter_.get_lambda4_2()));
     break;
     case 5:
-    alphas=twelve_pi/((33.0-2.0*flavours)*log(q2/jet_parameter_.get_lambda5_2()));
+    alphas=TWELVE_PI/((33.0-2.0*flavours)*log(q2/jet_parameter_.get_lambda5_2()));
     break;
     }
 }
@@ -762,25 +760,25 @@ JET_FLOAT alpha=ALPHA_EM;
 
 
   tau=log(q2*LAMBDA2_i);
-/*  *alphas=twelve_pi/((33.0-2.0*flavours)*tau);*/
+/*  *alphas=TWELVE_PI/((33.0-2.0*flavours)*tau);*/
   tau=log(tau);
   switch(flavours-2)
     {
     case 1:
       alphas=TWELVE_PI/((33.0-2.0*flavours)*log(q2/jet_parameter_.get_lambda3_2()));
-      ans= jenesaipasekesafai(tau, ANS1);
-      bns= jenesaipasekesafai(tau, BNS1);
-      cns= jenesaipasekesafai(tau, CNS1);
-      dns= jenesaipasekesafai(tau, DNS1);
-      ens= jenesaipasekesafai(tau, ENS1);
-      as=  jenesaipasekesafai(tau, AS1);
-      bs=  jenesaipasekesafai(tau, BS1);
-      cs=  jenesaipasekesafai(tau, CS1);
-      ds=  jenesaipasekesafai(tau, DS1);
-      es=  jenesaipasekesafai(tau, ES1);
-      ag=  jenesaipasekesafai(tau, AG1);
-      bg=  jenesaipasekesafai(tau, BG1);
-      cg=  jenesaipasekesafai(tau, CG1);
+      ans= helper_function(tau, ANS1);
+      bns= helper_function(tau, BNS1);
+      cns= helper_function(tau, CNS1);
+      dns= helper_function(tau, DNS1);
+      ens= helper_function(tau, ENS1);
+      as=  helper_function(tau, AS1);
+      bs=  helper_function(tau, BS1);
+      cs=  helper_function(tau, CS1);
+      ds=  helper_function(tau, DS1);
+      es=  helper_function(tau, ES1);
+      ag=  helper_function(tau, AG1);
+      bg=  helper_function(tau, BG1);
+      cg=  helper_function(tau, CG1);
 
       xp=1.0-x1;
       if (xp<=0.0){
@@ -838,19 +836,19 @@ JET_FLOAT alpha=ALPHA_EM;
     case 2:
       alphas=TWELVE_PI/((33.0-2.0*flavours)*log(q2/jet_parameter_.get_lambda4_2()));
 
-      ans= jenesaipasekesafai(tau, ANS2);
-      bns= jenesaipasekesafai(tau, BNS2);
-      cns= jenesaipasekesafai(tau, CNS2);
-      dns= jenesaipasekesafai(tau, DNS2);
-      ens= jenesaipasekesafai(tau, ENS2);
-      as=  jenesaipasekesafai(tau, AS2);
-      bs=  jenesaipasekesafai(tau, BS2);
-      cs=  jenesaipasekesafai(tau, CS2);
-      ds=  jenesaipasekesafai(tau, DS2);
-      es=  jenesaipasekesafai(tau, ES2);
-      ag=  jenesaipasekesafai(tau, AG2);
-      bg=  jenesaipasekesafai(tau, BG2);
-      cg=  jenesaipasekesafai(tau, CG2);
+      ans= helper_function(tau, ANS2);
+      bns= helper_function(tau, BNS2);
+      cns= helper_function(tau, CNS2);
+      dns= helper_function(tau, DNS2);
+      ens= helper_function(tau, ENS2);
+      as=  helper_function(tau, AS2);
+      bs=  helper_function(tau, BS2);
+      cs=  helper_function(tau, CS2);
+      ds=  helper_function(tau, DS2);
+      es=  helper_function(tau, ES2);
+      ag=  helper_function(tau, AG2);
+      bg=  helper_function(tau, BG2);
+      cg=  helper_function(tau, CG2);
 
       xp=1.0-x1;
       if (xp<=0.0){
@@ -908,22 +906,19 @@ JET_FLOAT alpha=ALPHA_EM;
     case 3:
       alphas=TWELVE_PI/((33.0-2.0*flavours)*log(q2/jet_parameter_.get_lambda5_2()));
 
-
-      ans= jenesaipasekesafai(tau, ANS3);
-      bns= jenesaipasekesafai(tau, BNS3);
-      cns= jenesaipasekesafai(tau, CNS3);
-      dns= jenesaipasekesafai(tau, DNS3);
-      ens= jenesaipasekesafai(tau, ENS3);
-      as=  jenesaipasekesafai(tau, AS3);
-      bs=  jenesaipasekesafai(tau, BS3);
-      cs=  jenesaipasekesafai(tau, CS3);
-      ds=  jenesaipasekesafai(tau, DS3);
-      es=  jenesaipasekesafai(tau, ES3);
-      ag=  jenesaipasekesafai(tau, AG3);
-      bg=  jenesaipasekesafai(tau, BG3);
-      cg=  jenesaipasekesafai(tau, CG3);
-
-
+      ans= helper_function(tau, ANS3);
+      bns= helper_function(tau, BNS3);
+      cns= helper_function(tau, CNS3);
+      dns= helper_function(tau, DNS3);
+      ens= helper_function(tau, ENS3);
+      as=  helper_function(tau, AS3);
+      bs=  helper_function(tau, BS3);
+      cs=  helper_function(tau, CS3);
+      ds=  helper_function(tau, DS3);
+      es=  helper_function(tau, ES3);
+      ag=  helper_function(tau, AG3);
+      bg=  helper_function(tau, BG3);
+      cg=  helper_function(tau, CG3);
 
       xp=1.0-x1;
       if (xp<=0.0){

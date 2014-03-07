@@ -273,7 +273,7 @@ class MINIJETS : public ABSTRACT_MINIJETS
       }
   }
 
-  inline double jenesaipasekesafai(double tau, const double tab[4]) const
+  inline double helper_function(double tau, const double tab[4]) const
   {
     return tab[0]*exp(tau*tab[1])+tab[2]*exp(tau*-tab[3]);
   }

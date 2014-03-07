@@ -151,7 +151,7 @@ class  RESULTS : public ABSTRACT_IO_CLASS
   
   inline void updateUpsmax(float x) { upsmax=max(upsmax,(double)x);};
   
-  // cette methode n'est pas terrible, voir qui s'en sert et comment l'eviter
+  // this method isn't great, see how useful it is and how to avoid
   inline void cumulate_hadrons_ee(double temp[3])
     {
       cumulate3array(temp, hadrons_ee);
@@ -160,7 +160,7 @@ class  RESULTS : public ABSTRACT_IO_CLASS
       //  hadrons_ee[2] = temp_3; 
     }
   
-  // cette methode n'est pas terrible, voir qui s'en sert et comment l'eviter
+  // this method isn't terrific, see how useful it is and how to avoid
   inline void cumulate_hadrons_ge(double temp[3])
     {
       cumulate3array(temp, hadrons_ge);
@@ -169,7 +169,7 @@ class  RESULTS : public ABSTRACT_IO_CLASS
       //  hadrons_ge[2] = temp_3; 
     }
   
-  // cette methode n'est pas terrible, voir qui s'en sert et comment l'eviter
+  // this method isn't terrific, see how useful it is and how to avoid
   inline void  cumulate_hadrons_eg(double temp[3])
     {
       cumulate3array(temp, hadrons_eg);
@@ -178,7 +178,7 @@ class  RESULTS : public ABSTRACT_IO_CLASS
       //  hadrons_eg[2] = temp_3; 
     }
   
-  // cette methode n'est pas terrible, voir qui s'en sert et comment l'eviter
+  // this method isn't terrific, see how useful it is and how to avoid
   inline void  cumulate_hadrons_gg(double temp[3])
     {
       cumulate3array(temp, hadrons_gg);
