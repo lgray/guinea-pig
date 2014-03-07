@@ -18,6 +18,5 @@ add_subdirectory(src)
 if(CMAKE_VERSION GREATER 2.7)
   enable_testing()
   include(CTest)
+  add_subdirectory(testing)
 endif()
-
-add_subdirectory(testing)
