@@ -107,6 +107,11 @@ class FIELD
 	    fourier_transform_forward_ = f.fourier_transform_forward_;
 	    fourier_transform_backward_ = f.fourier_transform_backward_;
 	  }
+	else 
+	  {
+	    fourier_transform_forward_ = NULL;
+	    fourier_transform_backward_ = NULL;
+	  }
       }
 
     FIELD( FIELD& f)
@@ -118,6 +123,11 @@ class FIELD
 	  {
 	    fourier_transform_forward_ = f.fourier_transform_forward_;
 	    fourier_transform_backward_ = f.fourier_transform_backward_;
+	  }
+	else 
+	  {
+	    fourier_transform_forward_ = NULL;
+	    fourier_transform_backward_ = NULL;
 	  }
       }
 

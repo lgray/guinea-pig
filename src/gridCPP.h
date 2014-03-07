@@ -117,7 +117,6 @@ class SLICE_ON_GRID
     {
       if (this == &s) return *this; // protect against self-assignment
       int k;
-      setZero();
       beam_ = s.beam_;
       nb_part_per_macro_ =  s.nb_part_per_macro_;
       scal_step_ = s.scal_step_ ;
