@@ -113,7 +113,7 @@ class SLICE_ON_GRID
       delete [] rho_;
     }
   
-  inline const SLICE_ON_GRID& operator = (const SLICE_ON_GRID& s)
+  inline SLICE_ON_GRID& operator = (const SLICE_ON_GRID& s)
     {
       if (this == &s) return *this; // protect against self-assignment
       int k;

@@ -27,10 +27,10 @@ spline_tab_entry *tab_;
   {
     recop(spl);
   }
- const SPLINE& operator = (const SPLINE& spl) { 
+ SPLINE& operator = (const SPLINE& spl) { 
    if (this == &spl) return *this; // protect against self-assignment
    // delete old memory:
-   if (tab_!= NULL) delete [] tab_;
+   delete [] tab_;
    // assign new memory:
    recop(spl); 
    return *this;
@@ -79,12 +79,12 @@ class MSPLINE
 
  ~MSPLINE();
 
- const MSPLINE& operator = (const MSPLINE& spl) {
+ MSPLINE& operator = (const MSPLINE& spl) {
    if (this == &spl) return *this; // protect against self-assignment
    // delete old memory:
-   if (x_ != NULL) delete [] x_;
-   if (y_ != NULL) delete [] y_;
-   if (y2_ != NULL) delete [] y2_;
+   delete [] x_;
+   delete [] y_;
+   delete [] y2_;
    // assign new memory:
    recop(spl); 
    return *this;

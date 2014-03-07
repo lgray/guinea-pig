@@ -128,7 +128,7 @@ class FIELD
       delete [] phi2_;
     }
 
-  inline const FIELD& operator = (const FIELD& f)
+  inline FIELD& operator = (const FIELD& f)
     {
       if (this == &f) return *this; // protect against self-assignment
       int k;
