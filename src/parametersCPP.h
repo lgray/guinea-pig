@@ -15,23 +15,23 @@ class PARAMETERS
   DATEI datei_;
 
 
-  inline int readIntegerValue(std::string nom) const
+  inline int readIntegerValue(std::string name) const
   {
     VALUE value;
-    get_named_variable( const_cast<char*>(nom.c_str()), &value);
+    get_named_variable( const_cast<char*>(name.c_str()), &value);
     return (int)CONTENTS(value);
   }
-  inline float readFloatValue(std::string nom) const
+  inline float readFloatValue(std::string name) const
   {
     VALUE value;
-    get_named_variable( const_cast<char*>(nom.c_str()), &value);
+    get_named_variable( const_cast<char*>(name.c_str()), &value);
     return (float)CONTENTS(value);
   }
 
-  inline double readDoubleValue(std::string nom) const
+  inline double readDoubleValue(std::string name) const
   {
     VALUE value;
-    get_named_variable( const_cast<char*>(nom.c_str()), &value);
+    get_named_variable( const_cast<char*>(name.c_str()), &value);
     return (double)CONTENTS(value);
   }
 
@@ -123,27 +123,27 @@ class PARAMETERS
   ~PARAMETERS() {  file_close(&datei_);}
 
 
-  void setDoubleValue(std::string nom, double d) const
+  void setDoubleValue(std::string name, double d) const
   {
     VALUE value;
     double_to_value(d,&value);
-    set_named_variable( const_cast<char*>(nom.c_str()), value);  
+    set_named_variable( const_cast<char*>(name.c_str()), value);  
   }
 
 
-  inline double readDValue(std::string nom) const
+  inline double readDValue(std::string name) const
   {
-    return readDoubleValue(nom);
+    return readDoubleValue(name);
   }
 
-  inline float readFValue(std::string nom) const
+  inline float readFValue(std::string name) const
   {
-    return readFloatValue(nom);
+    return readFloatValue(name);
   }
 
-  inline int readIValue(std::string nom) const
+  inline int readIValue(std::string name) const
   {
-    return readIntegerValue(nom);
+    return readIntegerValue(name);
   }
 
 

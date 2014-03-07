@@ -11,6 +11,10 @@ class FILE_IN_OUT
 {
 
   IFILE_IN_OUT* out_to_file_;
+
+  /// assignment and copy constructor not implemented nor used
+  FILE_IN_OUT& operator=(const FILE_IN_OUT&);
+  FILE_IN_OUT(FILE_IN_OUT&);
  
  public: 
 
@@ -22,7 +26,7 @@ class FILE_IN_OUT
 
   virtual ~FILE_IN_OUT() 
     {
-      if (out_to_file_ != NULL) delete out_to_file_;
+      delete out_to_file_;
     }
 
   virtual inline void open_file(std::string name, const char* mode)

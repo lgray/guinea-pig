@@ -110,7 +110,7 @@ class SLICE_ON_GRID
   
   ~SLICE_ON_GRID()
     {
-      if (rho_ != NULL) delete [] rho_;
+      delete [] rho_;
     }
   
   inline const SLICE_ON_GRID& operator = (const SLICE_ON_GRID& s)
@@ -656,14 +656,18 @@ class BEAM_PHOTON_POINTER : public PHOTON_POINTER
 class EXTRA_PHOTON_POINTER : public PHOTON_POINTER
 {
   EXTRA* extra_phot_;
-  
+
+  /// assignment and copy constructor not implemented nor used
+  //EXTRA_PHOTON_POINTER& operator=(const EXTRA_PHOTON_POINTER&); -> used! need to be written
+  EXTRA_PHOTON_POINTER(EXTRA_PHOTON_POINTER&);
+
   public :
     
   EXTRA_PHOTON_POINTER() : extra_phot_(NULL) {;}
   ~EXTRA_PHOTON_POINTER()
     {
       //  cout << " destructor EXTRA_PHOTON_POINTER() pointer = "<< extra_phot_ << endl;
-      if (extra_phot_ != NULL) delete extra_phot_;
+      delete extra_phot_;
     }
 
   EXTRA_PHOTON_POINTER(const EXTRA_PHOTON_POINTER& pt) : PHOTON_POINTER(pt)
@@ -1228,11 +1232,11 @@ class EXTRA_GRID : public GENERAL_GRID
   void assignTridentBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice);
   void assignTridentBeamSliceCIC(SLICE_ON_GRID& sog, int i_slice);
   
-  public : 
-    EXTRA_GRID(const GENERAL_GRID& grid) : GENERAL_GRID(grid) {;}
+ public : 
+  EXTRA_GRID(const GENERAL_GRID& grid) : GENERAL_GRID(grid) {;}
   ~EXTRA_GRID();
   
-  // ancien nom : void distribute_particles0_n(BEAM *beam1, int i_slice1,
+  // old name : void distribute_particles0_n(BEAM *beam1, int i_slice1,
   virtual void distribute_particles(int i_slice1,
 				    int i_slice2,
 				    int electron_distribution_rho, 

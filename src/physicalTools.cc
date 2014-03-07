@@ -231,7 +231,7 @@ int PHYSTOOLS::synrad_0_no_spin_flip (float upsilonSingleP, float eng, float dzO
   double gamma = eng/EMASS;
   double factor =  pow ( (1.0 + 0.5 * upsilon_bar ), 0.33333333333);
   p0 = CONST1 * dzOnRadius * gamma / factor ; 
-  //  cout << " p0 = " << p0 << " a l'ancienne " << synrad_p0(eng,radius_i,dz) << endl;
+  //  cout << " p0 = " << p0 << " previously " << synrad_p0(eng,radius_i,dz) << endl;
   if (rndm_generator.rndm_synrad()>p0) return 0;
   p1=rndm_generator.rndm_synrad();
   while((v1=rndm_generator.rndm_synrad())==0.0) ; /* v1!= 0.0 */

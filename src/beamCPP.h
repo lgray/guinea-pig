@@ -117,20 +117,20 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
   inline int sign_label() const { return sign_label_;}
   inline void write_size_init(string filename)
     {
-      ostringstream nom;
+      ostringstream name;
       int label = beam_parameters_->label();
-      nom << filename << label << ".dat" << ends;
-      string nomfic = nom.str();
+      name << filename << label << ".dat" << ends;
+      string namefile = name.str();
       if (size_log_file_ != NULL)
 	{
 	  cerr << " BEAM::write_size_init : WARNING : only one output beamsize.dat file is allowed " << endl;
 	  exit(0);
 	}
       size_log_file_ = new FILE_IN_OUT();
-      size_log_file_->open_file(nomfic, "w");
-      nom.seekp(0);
-      nom << string("#slice x_rms y_rms xmin xmax xmean ymin ymax ymean") << endl;
-      string out = nom.str();
+      size_log_file_->open_file(namefile, "w");
+      name.seekp(0);
+      name << string("#slice x_rms y_rms xmin xmax xmean ymin ymax ymean") << endl;
+      string out = name.str();
       size_log_file_->write_line(out);
     }
 

@@ -221,7 +221,7 @@ class named_int_vector : public ABSTRACT_IO_CLASS
 
   named_int_vector() {;}
 
-  inline void put_name(std::string nom) {name_ = nom;}
+  inline void put_name(std::string name) {name_ = name;}
   inline void clear()
   {
     name_ = std::string (" ");

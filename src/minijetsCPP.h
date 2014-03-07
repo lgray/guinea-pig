@@ -156,10 +156,10 @@ class ABSTRACT_MINIJETS : public ABSTRACT_IO_CLASS
 
   virtual  void store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT eph2, JET_FLOAT pt,JET_FLOAT h,int event, SWITCHES& switches, RNDM& rndm_generator) = 0;
 
-
-
-
- 
+ private:
+  /// assignment and copy constructor not implemented nor used
+  ABSTRACT_MINIJETS& operator=(const ABSTRACT_MINIJETS&);
+  ABSTRACT_MINIJETS(ABSTRACT_MINIJETS&);
 
  public :
 

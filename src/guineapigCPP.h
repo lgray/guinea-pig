@@ -529,28 +529,28 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       
       //   if (timestep%every_step==0) 
       //     {
-      ostringstream nom;
-      string nomfic;
+      ostringstream name;
+      string filename;
       int extension = timestep/every_step;
       //
-      nom << string("bp1.") << extension << ends;
-      nomfic = nom.str();
-      beam1_.dump_photons(nomfic,timestep,every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
-      nom.seekp(0);
-      nom << string("bp2.") << extension << ends;
-      nomfic = nom.str();
-      beam2_.dump_photons(nomfic,timestep, every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
-      nom.seekp(0);
+      name << string("bp1.") << extension << ends;
+      filename = name.str();
+      beam1_.dump_photons(filename,timestep,every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
+      name.seekp(0);
+      name << string("bp2.") << extension << ends;
+      filename = name.str();
+      beam2_.dump_photons(filename,timestep, every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
+      name.seekp(0);
       //	
-      nom << string("b1.") << extension << ends;
-      nomfic = nom.str();
+      name << string("b1.") << extension << ends;
+      filename = name.str();
       
-      beam1_.dump_beam(nomfic, timestep, every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
-      nom.seekp(0);
-      nom << string("b2.") << extension << ends;
-      nomfic = nom.str();
+      beam1_.dump_beam(filename, timestep, every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
+      name.seekp(0);
+      name << string("b2.") << extension << ends;
+      filename = name.str();
       
-      beam2_.dump_beam(nomfic, timestep, every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
+      beam2_.dump_beam(filename, timestep, every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
       //     }
     }
   

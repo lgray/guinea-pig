@@ -40,6 +40,9 @@ class LOCAL_FOURIER : public ABSTRACT_FOURIER
  LOCAL_FOURIER() : in_(NULL) {;}
 
  private :
+  /// assignment and copy constructor not implemented nor used
+  LOCAL_FOURIER& operator=(const LOCAL_FOURIER&);
+  LOCAL_FOURIER(LOCAL_FOURIER&);
 
   void fourtrans (double* data,int nn[],int isign);
 
@@ -48,7 +51,7 @@ class LOCAL_FOURIER : public ABSTRACT_FOURIER
   
   LOCAL_FOURIER(std::string prep,int nn[2]); 
 
-  virtual  ~LOCAL_FOURIER() {  if (in_ != NULL) delete [] in_;}
+  virtual  ~LOCAL_FOURIER() { delete [] in_;}
 
   virtual inline  double* data_vector() {   return in_;}
 
