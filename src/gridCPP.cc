@@ -43,50 +43,6 @@ GENERAL_GRID::GENERAL_GRID()
 
 }
 
- GENERAL_GRID::GENERAL_GRID(const GENERAL_GRID& grid)
-{
-  n_cell_x_ = grid.n_cell_x_;
-  n_cell_y_ = grid.n_cell_y_;
-  n_cell_z_ = grid.n_cell_z_;
-  timestep_ = grid.timestep_;
-  mesh_ = grid.mesh_;
-  min_x_ = grid.min_x_;
-  max_x_ = grid.max_x_; 
-  min_y_ = grid.min_y_;
-  max_y_ = grid.max_y_;
-  min_z_ = grid.min_z_;
-  max_z_ = grid.max_z_;
-
-  cut_x_ = grid.cut_x_;
-  cut_y_ = grid.cut_y_;
-  cut_z_ = grid.cut_z_;
-  
-
-
-  integration_method_ = grid.integration_method_;
-  step_ = grid.step_;
-  
-  
-  rho_x_1_ = grid.rho_x_1_;
-  rho_y_1_ = grid.rho_y_1_;
-  rho_sum_1_ = grid.rho_sum_1_;
-  rho_x_2_ = grid.rho_x_2_;
-  rho_y_2_ = grid.rho_y_2_;
-  rho_sum_2_ = grid.rho_sum_2_;
-  
-  delta_x_inverse_ = grid.delta_x_inverse_;
-  delta_y_inverse_ = grid.delta_y_inverse_;
-  
-  rho_factor_ = grid.rho_factor_;
-  
-  slice_of_beam_[0] = SLICE_ON_GRID(grid.slice_of_beam_[0]);
-  slice_of_beam_[1] = SLICE_ON_GRID(grid.slice_of_beam_[1]);
-
-  
-  champ_ = grid.champ_;
-  
-}
-
 void GENERAL_GRID::interpolePotential(float xpart,float ypart, PHI_FLOAT& h_x, PHI_FLOAT& h_y, PHI_FLOAT& phi1_x, PHI_FLOAT& phi2_x, PHI_FLOAT& phi3_x, PHI_FLOAT& phi1_y,PHI_FLOAT& phi2_y, PHI_FLOAT& phi3_y, const PHI_FLOAT *phi) const
 {
   int i1, i2;

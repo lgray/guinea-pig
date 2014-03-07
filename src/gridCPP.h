@@ -289,8 +289,6 @@ class GENERAL_GRID
 
   public :
 
- GENERAL_GRID(const GENERAL_GRID& grid);
-
   virtual ~GENERAL_GRID();
 
   inline void connect_beams(BEAM* b1, BEAM* b2)
@@ -543,7 +541,6 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
   public :
 
     PARTICLE_POINTER() {;}
-    PARTICLE_POINTER(const PARTICLE_POINTER& pt) {weight_ = pt.weight_;}
     PARTICLE_POINTER(float weight) {weight_ = weight;}
 
 
@@ -606,7 +603,6 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
   public : 
     
     PHOTON_POINTER() {;}
-    PHOTON_POINTER(const PHOTON_POINTER& phptr) : PARTICLE_POINTER(phptr) {;}
     PHOTON_POINTER(float weight) : PARTICLE_POINTER(weight) {;}
     virtual ~PHOTON_POINTER() {;}
  
@@ -657,10 +653,6 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
   {
     EXTRA* extra_phot_;
     
-    /// assignment and copy constructor not implemented nor used
-    //EXTRA_PHOTON_POINTER& operator=(const EXTRA_PHOTON_POINTER&); -> used! need to be written
-    EXTRA_PHOTON_POINTER(EXTRA_PHOTON_POINTER&);
-    
   public :
     
     EXTRA_PHOTON_POINTER() : extra_phot_(NULL) {;}
@@ -670,14 +662,30 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
 	delete extra_phot_;
       }
     
-  EXTRA_PHOTON_POINTER(const EXTRA_PHOTON_POINTER& pt) : PHOTON_POINTER(pt)
+    EXTRA_PHOTON_POINTER& operator=(const EXTRA_PHOTON_POINTER& pt)
+      {
+	if (this == &pt) return *this; // Gracefully handle self assignment
+	
+	// call base class assignment operator
+	PHOTON_POINTER::operator=(pt);
+	
+	float energy,vx,vy, q2, eorg;
+	pt.extra_phot_->get_parameters(energy,vx,vy,q2,eorg);
+	EXTRA* tmp = new EXTRA(energy, vx, vy, q2, eorg);
+	delete extra_phot_;
+	extra_phot_ = tmp;
+	
+	return *this;
+      }
+
+    EXTRA_PHOTON_POINTER(const EXTRA_PHOTON_POINTER& pt) : PHOTON_POINTER(pt)
     {
       float energy,vx,vy, q2, eorg;
       pt.extra_phot_->get_parameters(energy,vx,vy,q2,eorg);
       extra_phot_ = new EXTRA(energy, vx, vy,q2,eorg);
     }
     
-  EXTRA_PHOTON_POINTER(float energy,float vx,float vy,float q2,float eorg,float weight) : PHOTON_POINTER(weight)
+    EXTRA_PHOTON_POINTER(float energy,float vx,float vy,float q2,float eorg,float weight) : PHOTON_POINTER(weight)
     {
       extra_phot_ = new EXTRA(energy, vx, vy,q2,eorg);
     }

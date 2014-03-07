@@ -79,11 +79,6 @@ class ABSTRACT_PARTICLE
       set(0.0, 0.0, 0.0, 0.0, 0.0, 0.0); 
     }
   
-  ABSTRACT_PARTICLE (const ABSTRACT_PARTICLE& part) 
-    {
-      set (part.energy_, part.xpos_, part.ypos_, part.zpos_, part.vx_, part.vy_);
-    }
-  
   virtual ~ABSTRACT_PARTICLE () {;}
   
   inline float z() const {return zpos_;}

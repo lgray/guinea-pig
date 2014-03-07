@@ -2,8 +2,10 @@
 
 #include <iostream>
 
-#define CVELOCITY 3e+17 /* nm/s */
-#define COMPTON HBAR*CVELOCITY/EMASS
+namespace {
+  const double CVELOCITY = 3e+17; /* nm/s */
+  const double COMPTON = HBAR*CVELOCITY/EMASS;
+}
 
 using namespace std;
 

@@ -24,15 +24,8 @@ class PARTICLE : public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
      
  public:
 
- PARTICLE() : ABSTRACT_PARTICLE(),ABSTRACT_IO_CLASS(),ups_(0.0) {;}
+  PARTICLE() : ABSTRACT_PARTICLE(),ABSTRACT_IO_CLASS(),ups_(0.0) {;}
 
-  PARTICLE(const PARTICLE& part):ABSTRACT_PARTICLE(part),ABSTRACT_IO_CLASS()
-   {
-     ups_ = part.ups_;
-     // should trident also be copied? yes/no? - JS
-     // trident_ = part.trident_;
-   }
-  
   // return the quantity dz/radius
   inline float advanceDueToEBfield(TRIVECTOR EBfield, float distance, float scal_step_local)
     {
@@ -193,11 +186,7 @@ class PARTICLE_WITH_SPIN : public PARTICLE
   
   PARTICLE_WITH_SPIN() : PARTICLE() {;}
   
-  PARTICLE_WITH_SPIN(const PARTICLE_WITH_SPIN& part) : PARTICLE(part)
-    {
-      spin_ = part.spin_ ;
-    }
-  
+ 
   virtual inline const TRIDVECTOR& getSpin() const
     {
       return spin_;
