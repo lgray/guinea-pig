@@ -14,7 +14,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 add_subdirectory(src)
 
-enable_testing()
-include(CTest)
+# Some commands in testing require cmake 2.8
+if(CMAKE_VERSION GREATER 2.7)
+  enable_testing()
+  include(CTest)
+endif()
 
 add_subdirectory(testing)
