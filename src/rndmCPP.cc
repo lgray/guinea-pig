@@ -17,6 +17,7 @@ RNDM::RNDM(unsigned long seed)
   rndmst7(seed);
   rndmst8(1);
   iset_ = 0;
+  v1_ = 0.0, v2_ = 0.0;
   counterRndm7_ = 0;
 }
 

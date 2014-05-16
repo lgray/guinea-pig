@@ -872,7 +872,7 @@ TOKEN read_expression(VALUE *val)
 
 TOKEN read_command(MEMORY_ACCOUNT* m_account)
 {
-  char lval[1000],rval[1000];//char lval[1000],rval[1000],dummy[2];
+  char lval[1000],rval[1000];
   VALUE val;
   VARIABLE *tmp;
   TOKEN token;
