@@ -5,6 +5,7 @@
 #include <list>
 #include <cmath>
 #include <algorithm>
+#include <string>
 
 #include "resultsCPP.h" 
 #include "mathconst.h"
@@ -90,7 +91,7 @@ class PAIR_PARAMETER
 class  PAIR_BEAM : public ABSTRACT_IO_CLASS
 {
   
-  list<PAIR_PARTICLE> reserve_;
+  std::list<PAIR_PARTICLE> reserve_;
   std::vector< std::vector<PAIR_PARTICLE> > active_pairs_;
   std::vector<PAIR_PARTICLE> pairs0_;
 
@@ -99,7 +100,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   PAIRS_RESULTS pairs_results_;
   
   FILE_IN_OUT* file_of_events_;
-  string event_to_store_;
+  std::string event_to_store_;
   int count_pairs_;
   
   
@@ -124,8 +125,8 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
       // store particles for tracking? 
       if (!tracking ) return;
       count_pairs_++;
-      PAIR_PARTICLE pair_aux = PAIR_PARTICLE(count_pairs_, index_of_process,x,y,z,vx,vy,vz, e);
-      reserve_.push_back(pair_aux);
+      PAIR_PARTICLE pair_temp = PAIR_PARTICLE(count_pairs_, index_of_process,x,y,z,vx,vy,vz, e);
+      reserve_.push_back(pair_temp);
     }
   
  public:
@@ -141,7 +142,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
     {
       pair_track_.addStep(n_pair_steps);
     }
-    inline void set_name(string name){pairs_results_.set_name((string)name);}
+    inline void set_name(std::string name){pairs_results_.set_name((std::string)name);}
   inline void set_pair_parameters(BEAM& beam1, BEAM& beam2, int massflag,float pair_ecut, float pair_step, float step, int timestep)
     {
       /* massflag: 0 for electrons, 1 for muons */
@@ -152,11 +153,11 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
 
   inline const PAIRS_RESULTS* get_results() const {return &pairs_results_;} 
   
-  inline void set_load_file(string filename) 
+  inline void set_load_file(std::string filename) 
     {
       if ( file_of_events_ != NULL)
 	{
-	  cerr << " PAIR_BEAM::set_load_file: only one file is actually allowed for load events " << endl;
+	  std::cerr << " PAIR_BEAM::set_load_file: only one file is actually allowed for load events " << std::endl;
 	  exit(0);
 	}
       file_of_events_ = new FILE_IN_OUT();
@@ -212,7 +213,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   
   void load_events(int time_counter,float ratio, int tracking, RNDM& rndm_generator);
   
-  string output_flow() const ;
+  std::string output_flow() const ;
   
   void book_keeping(const MESH& mesh, int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& rndm_generator )
     {
@@ -259,7 +260,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   void new_pair(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator );
   void new_pair(const unsigned index, const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator);
  
-  inline void save_pairs_on_file(string nameOfOutputFile) const
+  inline void save_pairs_on_file(std::string nameOfOutputFile) const
     {
       FILE_IN_OUT filout;
       filout.open_file(nameOfOutputFile, "w");
@@ -273,7 +274,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
       filout.close();
     }
 
-  inline void save_pairs0_on_file(string nameOfOutputFile)
+  inline void save_pairs0_on_file(std::string nameOfOutputFile)
     {
       unsigned int k;
       FILE_IN_OUT filout;
@@ -286,11 +287,11 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
       filout.close();
     }
 
-  inline void save_bhabhas_on_file(string nameOfOutputFile) const
+  inline void save_bhabhas_on_file(std::string nameOfOutputFile) const
     {
       FILE_IN_OUT filout;
       filout.open_file(nameOfOutputFile, "w");
-      cout << "Saving tracked Bhabha particles in " << nameOfOutputFile << endl;
+      std::cout << "Saving tracked Bhabha particles in " << nameOfOutputFile << std::endl;
       std::list<PAIR_PARTICLE>::const_iterator point = reserve_.begin();
       for ( point = reserve_.begin(); point != reserve_.end(); point++)
 		{
@@ -300,12 +301,12 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
       filout.close();
     }
   
-  inline void save_bhabhas0_on_file(string nameOfOutputFile)
+  inline void save_bhabhas0_on_file(std::string nameOfOutputFile)
     {
       unsigned int k;
       FILE_IN_OUT filout;
       filout.open_file(nameOfOutputFile, "w");
-      cout << "Saving boosted Bhabha particles in " << nameOfOutputFile << endl;
+      std::cout << "Saving boosted Bhabha particles in " << nameOfOutputFile << std::endl;
       for (k=0; k < pairs0_.size(); k++)
 		{
 		  //     filout.save_pair_particle(pairs0_[k]);

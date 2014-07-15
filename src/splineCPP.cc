@@ -2,16 +2,15 @@
 #include <cstdio>
 #include "fileInputOutput.h"
 
-using namespace std;
 SPLINE::~SPLINE()
 {
   delete [] tab_;
 }
 
-void SPLINE::spline_init(string pythiaFile)
+void SPLINE::spline_init(std::string pythiaFile)
 {
   int logx, logy, nentries;
-  vector<double> x, y;
+  std::vector<double> x, y;
   FILE_IN_OUT filin;
   filin.open_file(pythiaFile,"r");
   nentries = filin.read_pythia_file(logx,logy, x, y);
@@ -52,7 +51,7 @@ void SPLINE::spline_init(const double* x,int xscald,const double* y,int yscald,i
 
     if (nd>SPLINE_NMAX)
       {
-	cerr << " SPLINE::spline_init Error: to many values in spline_init\n" << endl;
+	std::cerr << " SPLINE::spline_init Error: to many values in spline_init\n" << std::endl;
 	exit(1);
       }
     //
@@ -85,19 +84,19 @@ void SPLINE::spline_init(const double* x,int xscald,const double* y,int yscald,i
    compute_tab();
 }
 
-void SPLINE::spline_init(const vector<double>& x,int xscald, const vector<double>& y,int yscald,int nd)
+void SPLINE::spline_init(const std::vector<double>& x,int xscald, const std::vector<double>& y,int yscald,int nd)
 {
      int i;
 //     double u[SPLINE_NMAX],sig,p;
 
      if (nd != (int) x.size() || nd != (int) y.size() )
        {
-	 cerr << " SPLINE::spline_init ERROR : x and y vectoes have not the same size " << endl;
+	 std::cerr << " SPLINE::spline_init ERROR : x and y vectoes have not the same size " << std::endl;
 	 exit(0);
        }
     if (nd>SPLINE_NMAX)
       {
-	cerr << " SPLINE::spline_init Error: to many values in spline_init\n" << endl;
+	std::cerr << " SPLINE::spline_init Error: to many values in spline_init\n" << std::endl;
 	exit(1);
       }
     //

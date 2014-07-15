@@ -7,8 +7,6 @@ namespace {
   const double COMPTON = HBAR*CVELOCITY/EMASS;
 }
 
-using namespace std;
-
 /* Contact Jakob Esberg, Barbara Dalena or Daniel Schulte */
 
 TRIDENT::TRIDENT() : help(0.0),e_phot(0.0),q2(0.0)
@@ -41,18 +39,18 @@ bool TRIDENT::makeVirtualPhoton(float* Emother,float* e_phot,float* q2,RNDM& rnd
 
 /* Decides whether to create pairs from the virtual photons */
 /* Modifies the energy of the particle Emother */
-void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vector<float>* tridents , float ups, double dz,RNDM& rndm_generator_)
+void TRIDENT::convertVirtualPhotons(float* Emother,std::vector<float> energies, std::vector<float>* tridents , float ups, double dz,RNDM& rndm_generator_)
 {
   double p;
   float kap;
-  if(energies.size()>1) cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple photons" << endl;
+  if(energies.size()>1) std::cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple photons" << std::endl;
   for(unsigned int i=0;i<energies.size();i++)
     {
       kap=kappa(ups,energies[i],fabs(*Emother));    
       p=PHYSTOOLS::u(kap)*ALPHA_EM*EMASS*dz/(energies[i]*COMPTON);
       if(p>1)
 	{
-	  cout << "WARNING, TRIDENT::convertVirtualPhotons. Probability exceeding 1" << endl;
+	  std::cout << "WARNING, TRIDENT::convertVirtualPhotons. Probability exceeding 1" << std::endl;
 	}
       //      else{
       if(p<0.01)
@@ -86,7 +84,7 @@ void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vecto
     }
 } //jakob
 
-// void TRIDENT::convertVirtualPhotons(float* Emother,vector<float> energies, vector<float>* tridents , float ups, double dz,RNDM& rndm_generator_)
+// void TRIDENT::convertVirtualPhotons(float* Emother,std::vector<float> energies, std::vector<float>* tridents , float ups, double dz,RNDM& rndm_generator_)
 // {
 //   double p;
 //   for(unsigned int i=0;i<energies.size();i++)
@@ -149,9 +147,9 @@ bool TRIDENT::pick_trident_energy(float kappa,float& energy, RNDM& rndm_generato
   }
 }
 
-void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* electrons, vector<float>* positrons,vector<float>* virt, RNDM& rndm_generator) //dz is in nm
+void TRIDENT::createTridents(float* Emother,float ups,double dz,std::vector<float>* electrons, std::vector<float>* positrons,std::vector<float>* virt, RNDM& rndm_generator) //dz is in nm
 {  
-  vector<float> energies;
+  std::vector<float> energies;
   float kap;
   e_phot=0;
   q2=0;
@@ -161,8 +159,8 @@ void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* e
       energies.push_back(e_phot); 
     }
   convertVirtualPhotons(Emother,energies,electrons,ups,dz,rndm_generator);
-  if (energies.size()>1) cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple photons"<<endl;
-  if (electrons->size()>1) cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple electrons"<<endl;
+  if (energies.size()>1) std::cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple photons"<<std::endl;
+  if (electrons->size()>1) std::cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple electrons"<<std::endl;
   for(unsigned int i=0;i<electrons->size();i++)
     {
       help=(*electrons)[i];
@@ -178,9 +176,9 @@ void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* e
   //  bottom: ; //to be removed
 }
 
-void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* electrons, vector<float>* positrons, RNDM& rndm_generator) //dz is in nm
+void TRIDENT::createTridents(float* Emother,float ups,double dz,std::vector<float>* electrons, std::vector<float>* positrons, RNDM& rndm_generator) //dz is in nm
 {  
-  vector<float> energies;
+  std::vector<float> energies;
   float kap;
   e_phot=0;
   q2=0;
@@ -190,7 +188,7 @@ void TRIDENT::createTridents(float* Emother,float ups,double dz,vector<float>* e
       energies.push_back(e_phot); 
     }
   convertVirtualPhotons(Emother,energies,electrons,ups,dz,rndm_generator);
-  if (electrons->size()>1) cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple electrons"<<endl;
+  if (electrons->size()>1) std::cout << "TRIDENT::createTridents. Error, tridents not able to cope with multiple electrons"<<std::endl;
   for(unsigned int i=0;i<electrons->size();i++)
     {
       help=(*electrons)[i];

@@ -101,11 +101,11 @@ class SLICE_ON_GRID
       nb_cells_y_ = s.nb_cells_y_;
       dim_rho_ = s.dim_rho_;
       set_rho( dim_rho_);
-      /*       cout << " SLICE_ON_GRID : copy constructor " << endl; */
-      /*       cout << " old address " << s.rho_ << " new address " << rho_ << endl; */
-      /*       cout << " nb_macroparticles_ " <<  nb_macroparticles_ << endl; */
-      /*       cout << " nb_part_per_macro_ " << nb_part_per_macro_ << " scal_step_ " << scal_step_ << " nb_cells_y_ " << nb_cells_y_ << " dim_rho_ " << dim_rho_ << endl; */
-      /*       cout << " *********************************************** " << endl; */
+      /*       std::cout << " SLICE_ON_GRID : copy constructor " << std::endl; */
+      /*       std::cout << " old address " << s.rho_ << " new address " << rho_ << std::endl; */
+      /*       std::cout << " nb_macroparticles_ " <<  nb_macroparticles_ << std::endl; */
+      /*       std::cout << " nb_part_per_macro_ " << nb_part_per_macro_ << " scal_step_ " << scal_step_ << " nb_cells_y_ " << nb_cells_y_ << " dim_rho_ " << dim_rho_ << std::endl; */
+      /*       std::cout << " *********************************************** " << std::endl; */
     }
   
   ~SLICE_ON_GRID()
@@ -587,7 +587,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
     
     /*  inline float get_spin(int nc) const   */
     /*  {  */
-    /*    //  cout << " BEAM_PARTICLE_POINTER:: get_spin() " << endl; */
+    /*    //  std::cout << " BEAM_PARTICLE_POINTER:: get_spin() " << std::endl; */
     /*    return partic_->get_spin()(nc-1); */
     /*  } */
     
@@ -657,7 +657,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
     EXTRA_PHOTON_POINTER() : extra_phot_(NULL) {;}
     ~EXTRA_PHOTON_POINTER()
       {
-	//  cout << " destructor EXTRA_PHOTON_POINTER() pointer = "<< extra_phot_ << endl;
+	//  std::cout << " destructor EXTRA_PHOTON_POINTER() pointer = "<< extra_phot_ << endl;
 	delete extra_phot_;
       }
     
@@ -841,7 +841,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
   inline void store_trident_particle(BEAM& beam,float energy,float vx,float vy, float x,float y,int slice)
   {
     beam.newTrident(slice, x,y,vx,vy,energy);
-    //  cout << "GRID::create trident : vel "<< energy << " "  << x << " " << y << " " << vx << " " << vy << endl;	    
+    //  std::cout << "GRID::create trident : vel "<< energy << " "  << x << " " << y << " " << vx << " " << vy << std::endl;	    
     trident_results_.addCountEnergy(energy);
   }
 
@@ -1047,7 +1047,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
 
   void read(const PARAMETERS& param, int automatic);
 
-  inline void generalInit(const SWITCHES& switches, string photon_file,   string hadron_file, string c_phot_name, string bhabha_samples_file, string bhabha_photon_samples_file, GENERAL_CROSS* cross)
+  inline void generalInit(const SWITCHES& switches, std::string photon_file,   std::string hadron_file, std::string c_phot_name, std::string bhabha_samples_file, std::string bhabha_photon_samples_file, GENERAL_CROSS* cross)
   {
     results_.connect_switches(&switches);
     if (switches.get_do_coherent()) coherent_results_.init();
@@ -1098,7 +1098,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
     /*      extra_photons2_.clear_extra_photons(); */
   }
 
-  inline void init_jet(float s,float ptmin,int iparam,int jet_pythia, int jet_select, string jetfileName)
+  inline void init_jet(float s,float ptmin,int iparam,int jet_pythia, int jet_select, std::string jetfileName)
   {
     if (!jet_pythia)
       {
@@ -1133,9 +1133,9 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
 
   void check_distribute(int what);
 
-  void save_lumi_on_files(SWITCHES& switches, string lumi_ee_out, string lumi_eg_out, string lumi_ge_out, string lumi_gg_out);
+  void save_lumi_on_files(SWITCHES& switches, std::string lumi_ee_out, std::string lumi_eg_out, std::string lumi_ge_out, std::string lumi_gg_out);
 
-  void save_tertphot_on_file(string tertphot);
+  void save_tertphot_on_file(std::string tertphot);
 
   inline void clear_extra_photons()
   {
@@ -1167,7 +1167,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
     move_particles(grids, 1, i_slice1,interpolation, do_beamstrahlung,do_trident,sokolov,  emin, do_prod, extra_grids, charge_sign,bmt_rotate);
     move_coherent_particles(grids, 1, i_slice1, interpolation, do_beamstrahlung, emin, do_prod, extra_grids, charge_sign);
   
-    //  cout << " advance the second beam.... " << endl;
+    //  std::cout << " advance the second beam.... " << std::endl;
     move_particles(grids, 2, i_slice2,interpolation, do_beamstrahlung,do_trident,sokolov,  emin, do_prod, extra_grids, charge_sign,bmt_rotate);
     move_coherent_particles(grids, 2, i_slice2, interpolation, do_beamstrahlung, emin, do_prod, extra_grids, charge_sign);
     if(do_trident)
@@ -1205,7 +1205,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
 
   }
 
-  virtual string output_flow() const;
+  virtual std::string output_flow() const;
 
 };
 

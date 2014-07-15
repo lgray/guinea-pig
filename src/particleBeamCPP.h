@@ -1,11 +1,12 @@
 #ifndef PARTICLEBEAM_SEEN
 #define PARTICLEBEAM_SEEN
+#include <cstdio>
 #include <iostream>
 #include <sstream>
 #include <cmath>
-#include <vector>
 #include <list>
-#include <cstdio>
+#include <string>
+#include <vector>
 #include "particlesCPP.h"
 #include "rndmCPP.h"
 #include "physconst.h"
@@ -14,10 +15,6 @@
 
 #include "fileInputOutput.h"
 #include "abstractParticle.h"
-
-
-using namespace std;
-
 
 class ABSTRACT_PARTICLE_BEAM
 {
@@ -56,25 +53,25 @@ class BEAM_FROM_FILE : public ABSTRACT_PARTICLE_BEAM
     virtual ~BEAM_FROM_FILE() {;}
 
   
-  BEAM_FROM_FILE(string filename)
+  BEAM_FROM_FILE(std::string filename)
     {
       FILE_IN_OUT filin;
-      PARTICLE_INTERFACE partaux;
+      PARTICLE_INTERFACE parttemp;
       filin.open_file(filename, "r");
       
       unsigned int counter = 0;
       
-      while(filin.read_particle(partaux))
+      while(filin.read_particle(parttemp))
 	{
 	  counter++;
-	  partaux.transform_to_internal_units(1e3, 1e-6);
-	  if (partaux.good() )
+	  parttemp.transform_to_internal_units(1e3, 1e-6);
+	  if (parttemp.good() )
 	    {
-	      particles_.push_back(partaux);
+	      particles_.push_back(parttemp);
 	    }
 	  else 
 	    {
-	      cerr << " BEAM_FROM_FILE:: error reading file " << filename << " line " << counter << " : skipped " << endl;
+	      std::cerr << " BEAM_FROM_FILE:: error reading file " << filename << " line " << counter << " : skipped " << std::endl;
 	    }
 	}
       filin.close();
@@ -275,10 +272,10 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   
   void assign_symmetric_xyz_normal_distribution(int dist_z,float delta_z,float sigma_x,float sigma_y,float sigmaz, float sigma_x_prime,float sigma_y_prime, float energy);
   
-  inline void dispatch_random_particle_in_slices(float zaux, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
+  inline void dispatch_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
     {
-      float xaux, yaux, vxaux, vyaux;
-      int j=(int)floor(zaux/delta_z+0.5* nSlices+1);
+      float xtemp, ytemp, vxtemp, vytemp;
+      int j=(int)floor(ztemp/delta_z+0.5* nSlices+1);
       TRIDVECTOR polar;
       if (typOfParticle_ == 3)
 	{
@@ -287,15 +284,15 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
       else polar = 0.;
       if ((j>0)&&(j<= nSlices))
 	{
-	  get_rndm_xy_particle(sigma_x, sigma_y, sigma_x_prime, sigma_y_prime, xaux, yaux, vxaux, vyaux);
-	  set_new_particle_in_slice(j-1,xaux, yaux,zaux, vxaux, vyaux,energy, polar);
+	  get_rndm_xy_particle(sigma_x, sigma_y, sigma_x_prime, sigma_y_prime, xtemp, ytemp, vxtemp, vytemp);
+	  set_new_particle_in_slice(j-1,xtemp, ytemp,ztemp, vxtemp, vytemp,energy, polar);
 	}
     }
   
 
-  inline void dispatch_symmetric_random_particle_in_slices(float zaux, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
+  inline void dispatch_symmetric_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
     {
-      float xaux, yaux, vxaux, vyaux;
+      float xtemp, ytemp, vxtemp, vytemp;
       double polx, poly, polz;
       TRIDVECTOR polar;
       if (typOfParticle_ == 3)
@@ -309,19 +306,19 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	  poly = 0.0;
 	  polz = 0.0;
 	}
-      int j=(int)floor(zaux/delta_z+0.5* nSlices+1);
+      int j=(int)floor(ztemp/delta_z+0.5* nSlices+1);
       if ((j>0)&&(j<= nSlices))
 	{
-	  get_rndm_xy_particle(sigma_x, sigma_y, sigma_x_prime, sigma_y_prime, xaux, yaux, vxaux, vyaux);
+	  get_rndm_xy_particle(sigma_x, sigma_y, sigma_x_prime, sigma_y_prime, xtemp, ytemp, vxtemp, vytemp);
 	  j--;
 	  polar.setComponents(polx, poly, polz);
-	  set_new_particle_in_slice(j, xaux, yaux, zaux, vxaux, vyaux, energy, polar);
+	  set_new_particle_in_slice(j, xtemp, ytemp, ztemp, vxtemp, vytemp, energy, polar);
 	  polar.setComponents(-polx, poly, polz);
-	  set_new_particle_in_slice(j, -xaux, yaux, zaux, -vxaux, vyaux, energy, polar);
+	  set_new_particle_in_slice(j, -xtemp, ytemp, ztemp, -vxtemp, vytemp, energy, polar);
 	  polar.setComponents(-polx, -poly, polz);
-	  set_new_particle_in_slice(j, -xaux, -yaux, zaux, -vxaux, -vyaux, energy, polar);
+	  set_new_particle_in_slice(j, -xtemp, -ytemp, ztemp, -vxtemp, -vytemp, energy, polar);
 	  polar.setComponents(polx, -poly, polz);
-	  set_new_particle_in_slice(j, xaux, -yaux, zaux, vxaux, -vyaux, energy, polar);	
+	  set_new_particle_in_slice(j, xtemp, -ytemp, ztemp, vxtemp, -vytemp, energy, polar);	
 	  
 	}
     }
@@ -360,7 +357,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	 newp =  new PARTICLE_WITH_SPIN(dynamic_cast<const PARTICLE_WITH_SPIN&>(part) ); 
 	 break; 
        default:
-	 cerr << " PARTICLE_BEAM::newPart(const PARTICLE* part) : unknown type of particle " << endl;
+	 std::cerr << " PARTICLE_BEAM::newPart(const PARTICLE* part) : unknown type of particle " << std::endl;
 	 newp = NULL;
 	 exit(0);
 	} 
@@ -382,7 +379,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	  newp =  new PARTICLE_WITH_SPIN(); 
 	  break; 
 	default:
-	  cerr << " PARTICLE_BEAM::newPart() : unknown type of particle " << endl;
+	  std::cerr << " PARTICLE_BEAM::newPart() : unknown type of particle " << std::endl;
 	  newp = NULL;
 	  exit(0);
 	} 
@@ -404,7 +401,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	  for (k=0; k<number; k++) particle_[slice].push_back(new PARTICLE_WITH_SPIN());
 	  break;
 	default:
-	  cerr << " PARTICLE_BEAM::make : unknown type of particle " << endl;
+	  std::cerr << " PARTICLE_BEAM::make : unknown type of particle " << std::endl;
 	  exit(0);
 	}
     }
@@ -511,7 +508,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	  coherent_[slice].insert(coherent_[slice].begin(), new PARTICLE_WITH_SPIN());
 	  break;
 	default:
-	  cerr << " PARTICLE_BEAM::newCoherent : unknown type of particle " << endl;
+	  std::cerr << " PARTICLE_BEAM::newCoherent : unknown type of particle " << std::endl;
 	  exit(0);
 	}   
       
@@ -530,7 +527,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	  trident_[slice].insert(trident_[slice].begin(), new PARTICLE_WITH_SPIN());
 	  break;
 	default:
-	  cerr << " PARTICLE_BEAM::newTrident : unknown type of particle " << endl;
+	  std::cerr << " PARTICLE_BEAM::newTrident : unknown type of particle " << std::endl;
 	  exit(0);
 	}   
       trident_[slice][0]->setParticle(x,y,0.0,vx,vy,energy);  
@@ -584,16 +581,16 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
       sigy = sigmay_;
     }
 
-  inline void index_slice(int numero, int& index, int& slice) const
+  inline void index_slice(int number, int& index, int& slice) const
   {
     slice = -1;
     do
       {
 	slice++;
-	numero -= (int) particle_[slice].size();
+	number -= (int) particle_[slice].size();
       }
-    while (numero >= 0);
-    index = numero + (int) particle_[slice].size();
+    while (number >= 0);
+    index = number + (int) particle_[slice].size();
   }
 
   void meanPositionOfSlice(int slice, float& x,float& y) const;
@@ -613,11 +610,11 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 
   void ang_dis(unsigned int n_bin, std::vector< std::vector<float> >& bin ) const;
   
-  virtual string output_flow() const; 
-  int store_beam(string name) const;
-  void dump_beam(string name, int istep, int every_particle, int timestep, float step, float max_z, int  sign_label);
-  void store_coherent_beam(string name) const;
-  void store_trident_beam(string name) const;
+  virtual std::string output_flow() const; 
+  int store_beam(std::string name) const;
+  void dump_beam(std::string name, int istep, int every_particle, int timestep, float step, float max_z, int  sign_label);
+  void store_coherent_beam(std::string name) const;
+  void store_trident_beam(std::string name) const;
 
 };
 
@@ -675,11 +672,11 @@ class  PHOTON_BEAM
   
   inline const PHOTON_COUNTER& get_photon_counter() const { return photon_count_;}
   
-  void load_photons(string filename, int type_of_beam, float delta_z, float max_z, int n_cell_z);
+  void load_photons(std::string filename, int type_of_beam, float delta_z, float max_z, int n_cell_z);
   
   inline int sizeOfSlice(int slice) const  {return (int) slice_photon_vector_[slice].size();}
   
-  //int store_photon(string name) const;
+  //int store_photon(std::string name) const;
 
   inline const PHOTON& new_photon(float energy, PARTICLE& particle,  int slice)
     {
@@ -711,7 +708,7 @@ class  PHOTON_BEAM
 	}
     }
   
-  void dump_photons(string name,int istep, int every_particle,int timestep, float step, float max_z, int  sign_label);
+  void dump_photons(std::string name,int istep, int every_particle,int timestep, float step, float max_z, int  sign_label);
   
 };
 

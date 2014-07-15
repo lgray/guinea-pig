@@ -1,9 +1,10 @@
 #include "pairsCPP.h"
 #include <cmath>
+#include <list>
 #include <sstream>
-#include "physconst.h"
+#include <string>
 
-using namespace std;
+#include "physconst.h"
 
 
 void PAIR_BEAM::distribute_pairs(float delta_z,unsigned int n)
@@ -14,14 +15,14 @@ void PAIR_BEAM::distribute_pairs(float delta_z,unsigned int n)
   delta_i=1.0/delta_z;
   if ( n > active_pairs_.size())
     {
-      cout << " PAIR_BEAM::distribute_pairs vector too small " << endl;
+      std::cout << " PAIR_BEAM::distribute_pairs vector too small " << std::endl;
       exit(0);
     }
   for(k=0;k<n;k++) 
     {
       active_pairs_[k].clear();
     }
-  list<PAIR_PARTICLE>::iterator itr = reserve_.begin();
+  std::list<PAIR_PARTICLE>::iterator itr = reserve_.begin();
   int m;
   while(itr != reserve_.end())
     {
@@ -40,7 +41,7 @@ void PAIR_BEAM::distribute_pairs(float delta_z,unsigned int n)
 
 void PAIR_BEAM::move_unactive_pairs(float step)
 {
-  list<PAIR_PARTICLE>::iterator itr = reserve_.begin();
+  std::list<PAIR_PARTICLE>::iterator itr = reserve_.begin();
   while(itr != reserve_.end())
     {
       itr->advancePosition(step);
@@ -75,16 +76,16 @@ void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int
   vzz=pz/fabs(energy);
 
   count_pairs_++;
-  PAIR_PARTICLE pair_aux = PAIR_PARTICLE(count_pairs_, index_of_process,xx,yy,zz,vxx,vyy,vzz, energy);
+  PAIR_PARTICLE pair_temp = PAIR_PARTICLE(count_pairs_, index_of_process,xx,yy,zz,vxx,vyy,vzz, energy);
   // if (store_pairs>1) store particles at production time for comparison
   if (saving > 1)
     {
-      pairs0_.push_back(pair_aux);
+      pairs0_.push_back(pair_temp);
     }
 
   if (tracking)
     {
-      reserve_.push_back(pair_aux);
+      reserve_.push_back(pair_temp);
     }
 }
 
@@ -114,16 +115,16 @@ void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cell
   vzz=pz/fabs(energy);
   
   count_pairs_++;
-  PAIR_PARTICLE pair_aux = PAIR_PARTICLE(evtIndex, index_of_process,xx,yy,zz,vxx,vyy,vzz, energy);
+  PAIR_PARTICLE pair_temp = PAIR_PARTICLE(evtIndex, index_of_process,xx,yy,zz,vxx,vyy,vzz, energy);
   // if (store_pairs>1) store particles at production time for comparison 
   if (saving > 1)
     {
-      pairs0_.push_back(pair_aux);
+      pairs0_.push_back(pair_temp);
     }
  
   if (tracking) 
     {
-      reserve_.push_back(pair_aux);
+      reserve_.push_back(pair_temp);
     }
 }
 
@@ -310,13 +311,13 @@ void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, i
 void PAIR_BEAM::load_events(int time_counter,float ratio, int tracking, RNDM& rndm_generator)
 {
   float e,x,y,z,vx,vy,vz;
-  string line;
+  std::string line;
   int  t;
   if (file_of_events_ == NULL) return;
        
   if (!event_to_store_.empty())
     {
-      istringstream tt(event_to_store_);
+      std::istringstream tt(event_to_store_);
       tt >> t;
       if (t<=time_counter)
 	{
@@ -326,15 +327,15 @@ void PAIR_BEAM::load_events(int time_counter,float ratio, int tracking, RNDM& rn
 	    }
 	  else 
 	    {
-	      cerr << " PAIR_BEAM::load_events: error reading load event on file " << endl;
-	      cerr <<  " e= " << e << " x = " << x << " y= " << y << " z= " << z << " vx = " << vx << " vy= " << vy << " vz= " << vz << endl; 
+	      std::cerr << " PAIR_BEAM::load_events: error reading load event on file " << std::endl;
+	      std::cerr <<  " e= " << e << " x = " << x << " y= " << y << " z= " << z << " vx = " << vx << " vy= " << vy << " vz= " << vz << std::endl; 
 	    }
 	}
       else return;
     }
   while (file_of_events_->read_line(line)) 
     {
-      istringstream ss(line);
+      std::istringstream ss(line);
       ss >> t;
       if (t > time_counter)
 	{
@@ -347,31 +348,31 @@ void PAIR_BEAM::load_events(int time_counter,float ratio, int tracking, RNDM& rn
 	      new_event(e, x, y, z, vx, vy, vz, ratio, tracking, rndm_generator);
 	  else
 	    {
-	      cerr << " PAIR_BEAM::load_events: error reading load event on file " << endl;
-	      cerr <<  " e= " << e << " x = " << x << " y= " << y << " z= " << z << " vx = " << vx << " vy= " << vy << " vz= " << vz << endl; 
+	      std::cerr << " PAIR_BEAM::load_events: error reading load event on file " << std::endl;
+	      std::cerr <<  " e= " << e << " x = " << x << " y= " << y << " z= " << z << " vx = " << vx << " vy= " << vy << " vz= " << vz << std::endl; 
 	    }
 	}
     }
 }
 
-string PAIR_BEAM::output_flow() const 
+std::string PAIR_BEAM::output_flow() const 
 {
   // unused method : concerns only particular pairs (see 
   // PAIR_BEAM::compute_pairs_calls)
   double e1,e2;
   long int n1,n2;
-  ostringstream out;
-  out << title(string("pair beams"));
+  std::ostringstream out;
+  out << title(std::string("pair beams"));
   compute_pairs_calls(n1, e1, n2, e2); 
-  out << "pairs_ncal.1 = " << n1 << " energy (GeV) : pairs_cal.1 = " << e1 << endl;
-  out << "pairs_ncal.2 = " << n2 << " energy (GeV) : pairs_cal.2 = " << e2 << endl;
-  out << "mstp: " << count_pairs_ << " " << pair_track_.call() << " " <<  (float)pair_track_.step()/ max( (float)pair_track_.call(),float(1.0)) << endl;
+  out << "pairs_ncal.1 = " << n1 << " energy (GeV) : pairs_cal.1 = " << e1 << std::endl;
+  out << "pairs_ncal.2 = " << n2 << " energy (GeV) : pairs_cal.2 = " << e2 << std::endl;
+  out << "mstp: " << count_pairs_ << " " << pair_track_.call() << " " <<  (float)pair_track_.step()/ std::max( (float)pair_track_.call(),float(1.0)) << std::endl;
   return out.str();
 }
 
 void PAIR_BEAM::compute_pairs_calls(long int& n1, double& e1, long int& n2, double& e2) const
 {
-  list<PAIR_PARTICLE>::const_iterator point;
+  std::list<PAIR_PARTICLE>::const_iterator point;
   float vx, vy,vz, energy, abs_energy;
   float z,r,b;
   float pt,pz,r0,phi;
@@ -455,7 +456,7 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
       wgt=-0.5*(1.0+(help*help)) / (eph*log(xmin))
 	   *log(q2max/q2min)
 	   /lns4*(1.0-xmin);
-      wgt=max(float(0.0),wgt);
+      wgt=std::max(float(0.0),wgt);
       q2= q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
       eph *= e;
       return;
@@ -464,7 +465,7 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
       help=1.0 - eph;
       q2min=emass2;
       wgt=-0.5*(1.0+(help*help)) / (eph*log(xmin))*(1.0-xmin);
-      wgt=max(float(0.0),wgt);
+      wgt=std::max(float(0.0),wgt);
       q2= q2min*pow(e*e/q2min,rndm_generator.rndm_equiv());
       eph *= e;
       return;
@@ -483,7 +484,7 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
       wgt=-0.5*(1.0+(help*help)) / (eph*log(xmin))
 	   *log(q2max/q2min)
 	   /lns4*(1.0-xmin);
-      wgt=max(float(0.0),wgt);
+      wgt=std::max(float(0.0),wgt);
       q2= q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
       eph *= e;
       return;
@@ -501,7 +502,7 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
       wgt=-0.5*(1.0+(help*help)) / (eph*log(xmin))
 	   *(lns4-log(qxmin))
 	   /lns4*(1.0-xmin);
-      wgt=max(float(0.0),wgt);
+      wgt=std::max(float(0.0),wgt);
       q2= q2min*pow(e*e/q2min,rndm_generator.rndm_equiv());
       eph*=e;
       return;

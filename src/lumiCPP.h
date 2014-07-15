@@ -194,12 +194,12 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
   
   
   
-  virtual inline void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z) const
+  virtual inline void get_parameters_for_output(unsigned int number, float& e1,float& e2,float& x,float& y,float& z) const
    {
-     data_[numero].get_parameters_for_output(e1,e2,x,y,z);
+     data_[number].get_parameters_for_output(e1,e2,x,y,z);
    }
   
-  virtual inline void get_parameters_for_output(unsigned int /*numero*/, float& /*e1*/,float& /*e2*/,float& /*x*/,float& /*y*/,float& /*z*/, float& /*vx1*/,float& /*vy1*/,float& /*vx2*/,float& /*vy2*/, float& /*sx1*/, float& /*sy1*/, float& /*sz1*/, float& /*sx2*/, float& /*sy2*/, float& /*sz2*/, int& /*t*/) const {;}
+  virtual inline void get_parameters_for_output(unsigned int /*number*/, float& /*e1*/,float& /*e2*/,float& /*x*/,float& /*y*/,float& /*z*/, float& /*vx1*/,float& /*vy1*/,float& /*vx2*/,float& /*vy2*/, float& /*sx1*/, float& /*sy1*/, float& /*sz1*/, float& /*sx2*/, float& /*sy2*/, float& /*sz2*/, int& /*t*/) const {;}
   
   virtual std::string persistent_flow() const
     {
@@ -255,16 +255,16 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
     }
   
   
-  virtual inline void get_parameters_for_output(unsigned int /*numero*/, float& /*e1*/,float& /*e2*/,float& /*x*/,float& /*y*/,float& /*z*/) const {;}
+  virtual inline void get_parameters_for_output(unsigned int /*number*/, float& /*e1*/,float& /*e2*/,float& /*x*/,float& /*y*/,float& /*z*/) const {;}
   
-  virtual inline void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2,int& t) const
+  virtual inline void get_parameters_for_output(unsigned int number, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2,int& t) const
     {
-      data_[numero].get_parameters_for_output(e1,e2,x,y,z);
-      data_[numero].get_impulsion_parameters(vx1,vy1,vx2,vy2,t);
-      data_[numero].get_spins(sx1, sy1, sz1, sx2, sy2, sz2);
-      /*      cout << " get_parameters_for_output, the spins :  " << std::endl; */
-      /*      cout << sx1 << " " << sy1 << " " << sz1 << std::endl; */
-      /*      cout << sx2 << " " << sy2 << " " << sz2 << std::endl; */
+      data_[number].get_parameters_for_output(e1,e2,x,y,z);
+      data_[number].get_impulsion_parameters(vx1,vy1,vx2,vy2,t);
+      data_[number].get_spins(sx1, sy1, sz1, sx2, sy2, sz2);
+      /*      std::cout << " get_parameters_for_output, the spins :  " << std::endl; */
+      /*      std::cout << sx1 << " " << sy1 << " " << sz1 << std::endl; */
+      /*      std::cout << sx2 << " " << sy2 << " " << sz2 << std::endl; */
     }
   
   virtual std::string persistent_flow() const

@@ -1,7 +1,6 @@
 #ifndef BHABHASAMPLES_SEEN
 #define BHABHASAMPLES_SEEN
 
-
 #include "particlesCPP.h"
 #include "pairsCPP.h"
 #include "mathematicalEntities.h"
@@ -10,13 +9,14 @@
 #include "fileInputOutput.h"
 
 #include <iostream>
+#include <string>
 #include <vector>
 
 class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
 {
 
   std::vector<QUADRIVECTOR> bhabha_photons_;
-  std::vector<int> numero_bhabha_;
+  std::vector<int> number_bhabha_;
   int label_;
   unsigned int next_;
   public :
@@ -36,37 +36,37 @@ class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
     }
   
   
-  virtual inline void get_parameters_for_output(unsigned int numero, int& numero_bhabha, float& en,float& vx,float& vy, float& vz) const
+  virtual inline void get_parameters_for_output(unsigned int number, int& number_bhabha, float& en,float& vx,float& vy, float& vz) const
     {
-      bhabha_photons_[numero].trivector(vx, vy, vz);
-      en = bhabha_photons_[numero].composante4();
-      numero_bhabha = numero_bhabha_[numero];
+      bhabha_photons_[number].trivector(vx, vy, vz);
+      en = bhabha_photons_[number].energy();
+      number_bhabha = number_bhabha_[number];
     }
   
   virtual inline void add_bhabha_photon(int nbhabha, float px, float py, float pz, float en)
     {
       QUADRIVECTOR bhab_phot = QUADRIVECTOR(px,py,pz,en);
-      numero_bhabha_.push_back(nbhabha);
+      number_bhabha_.push_back(nbhabha);
       bhabha_photons_.push_back(bhab_phot);
     }
   
   
   inline void set_label(int label)  {label_ = label;}
   
-/*  inline void create_bhabha_photon(int numero_bhabha, float px, float py, float pz, float en)
+/*  inline void create_bhabha_photon(int number_bhabha, float px, float py, float pz, float en)
     {
       QUADRIVECTOR bhab_phot = QUADRIVECTOR(px,py,pz,en);
       bhabha_photons_.push_back(bhab_phot);
-      numero_bhabha_.push_back(numero_bhabha);
+      number_bhabha_.push_back(number_bhabha);
     }
 */
 /* This function shouldn't exist - no changing the number of bhabha after loading
-    inline void set_numero_bhabha(int index, int num)
+    inline void set_number_bhabha(int index, int num)
     {
-      numero_bhabha_[index] = num;
+      number_bhabha_[index] = num;
     }
 */
-  inline  int load(string bhabhaPhotonFIleIni)
+  inline  int load(std::string bhabhaPhotonFIleIni)
     {
       FILE_IN_OUT filin;
       filin.open_file(bhabhaPhotonFIleIni,"r");
@@ -77,13 +77,13 @@ class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
   
   bool pick_next(float ecmratio, float& en,float& px,float& py,float& pz, int& found)  ; 
   
-/*  inline  void set(int index, float en,float px,float py,float pz, int numero_bhabha)
+/*  inline  void set(int index, float en,float px,float py,float pz, int number_bhabha)
     {
       bhabha_photons_[index].set(px, py, pz, en);
-      numero_bhabha_[index] = numero_bhabha;
+      number_bhabha_[index] = number_bhabha;
     }
 */
-  inline void save_on_file(string nameOfOutputFile) const 
+  inline void save_on_file(std::string nameOfOutputFile) const 
     {
       FILE_IN_OUT filout;
       filout.open_file(nameOfOutputFile, "w");
@@ -114,42 +114,42 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
   virtual  ~BHABHASAMPLES() {;}
   
   
-  virtual inline void get_parameters_for_output(unsigned int numero, unsigned int& evtIdx, float& eCM, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const
+  virtual inline void get_parameters_for_output(unsigned int number, unsigned int& evtIdx, float& eCM, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const
     {
       float px, py, pz;
       
-      if (numero >= next_)
+      if (number >= next_)
 		{
-		  cerr << " WARNING : BHABHASAMPLES::get_parameters_for_output: numero of bhabha_prod to save is out of range numero = " << numero << " next_= " << next_  << endl;
+		  std::cerr << " WARNING : BHABHASAMPLES::get_parameters_for_output: number of bhabha_prod to save is out of range number = " << number << " next_= " << next_  << std::endl;
 		  return;
 		}
-      evtIdx = bhabha_[numero].evtIndex;
-      eCM = bhabha_[numero].eCM;
-      mother1_en = bhabha_[numero].mother1;
-      mother2_en = bhabha_[numero].mother2;
+      evtIdx = bhabha_[number].evtIndex;
+      eCM = bhabha_[number].eCM;
+      mother1_en = bhabha_[number].mother1;
+      mother2_en = bhabha_[number].mother2;
       
-      e1 = bhabha_[numero].p1.composante4();
+      e1 = bhabha_[number].p1.energy();
       
-      bhabha_[numero].p1.trivector(px, py, pz);
+      bhabha_[number].p1.trivector(px, py, pz);
       vx1=px/abs(e1);
       vy1=py/abs(e1);
       vz1=pz/abs(e1);
       
-      e2=bhabha_[numero].p2.composante4();
-      bhabha_[numero].p2.trivector(px, py, pz);
+      e2=bhabha_[number].p2.energy();
+      bhabha_[number].p2.trivector(px, py, pz);
       vx2=px/abs(e2);
       vy2=py/abs(e2);
       vz2=pz/abs(e2); 
-      nbphot = bhabha_[numero].nbphot;
+      nbphot = bhabha_[number].nbphot;
     }
  
   virtual inline unsigned int nb_samples() const {return next_;}
   
 
-  bool pick_next_bhabha(float e1, float e2, float ecmratio, float eCM, float& px1,float& py1,float& pz1, float& en1,float& px2,float& py2,float& pz2,float& en2, int& nbphot, unsigned int& numero_bhabha);
+  bool pick_next_bhabha(float e1, float e2, float ecmratio, float eCM, float& px1,float& py1,float& pz1, float& en1,float& px2,float& py2,float& pz2,float& en2, int& nbphot, unsigned int& number_bhabha);
   
   
-  inline void save_on_file(string nameOfOutputFile) const 
+  inline void save_on_file(std::string nameOfOutputFile) const 
     {
       FILE_IN_OUT filout;
       filout.open_file(nameOfOutputFile, "w");
@@ -167,7 +167,7 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
       bhabha_.push_back(bhab);
     }
   
-  inline  int load_bhabha(string bhabhaFIleIni)
+  inline  int load_bhabha(std::string bhabhaFIleIni)
     {
       FILE_IN_OUT filin;
       filin.open_file(bhabhaFIleIni,"r");
@@ -299,20 +299,20 @@ class BHABHA
       bhabha_rotation(theta,phi,pxin,pyin,pzin);
     }
 */
-  void boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float part2Vy,float e1, float e2, float& px1in,float& py1in,float& pz1in,float& e1in,float& px2in,float& py2in,float& pz2in,float& e2in, int nphot, float ecmratio,  int do_bhabha, int numero_bhabha);
+  void boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float part2Vy,float e1, float e2, float& px1in,float& py1in,float& pz1in,float& e1in,float& px2in,float& py2in,float& pz2in,float& e2in, int nphot, float ecmratio,  int do_bhabha, int number_bhabha);
   
  public:
   
   BHABHA() : nbhabha_ini_(0),nbhabha_photon_ini_(0) {;}
   ~BHABHA() {;}
   
-  inline void load_samples(int do_bhabhas, string bhabha_samples, string bhabha_photon_samples)
+  inline void load_samples(int do_bhabhas, std::string bhabha_samples, std::string bhabha_photon_samples)
     {
-	  cout << "Loading Bhabha samples\n";
+	  std::cout << "Loading Bhabha samples\n";
       nbhabha_ini_ = bhabhaReserve_.load_bhabha(bhabha_samples);
       if (do_bhabhas > 1) 
 		{
-    	  cout << "Loading Bhabha photons\n";
+    	  std::cout << "Loading Bhabha photons\n";
 		  nbhabha_photon_ini_ =  bhabhaPhotonReserve_.load(bhabha_photon_samples);
 		}
     }
@@ -341,16 +341,16 @@ class BHABHA
       nbhabha_ini = nbhabha_ini_;
       nbhabha_photon_ini = nbhabha_photon_ini_;
     }
-  inline void save_on_files(int do_bhabhas, string bhabha_prod, string bhphoton_prod, string bhphotons) const
+  inline void save_on_files(int do_bhabhas, std::string bhabha_prod, std::string bhphoton_prod, std::string bhphotons) const
     {
-	  cout << "Saving Bhabha samples in " << bhabha_prod << endl;
+	  std::cout << "Saving Bhabha samples in " << bhabha_prod << std::endl;
       bhabhaReserve_.save_on_file(bhabha_prod);
-      //     bhabhaSamples_.save_on_file_pour_C(string("bhabhaIniPourC"));
+      //     bhabhaSamples_.save_on_file_pour_C(std::string("bhabhaIniPourC"));
       if (do_bhabhas == 2)
 		{
-    	  cout << "Saving Bhabha photon samples in " << bhphoton_prod << endl;
+    	  std::cout << "Saving Bhabha photon samples in " << bhphoton_prod << std::endl;
 		  bhabhaPhotonReserve_.save_on_file(bhphoton_prod);
-    	  cout << "Saving boosted Bhabha photons in " << bhphotons << endl;
+    	  std::cout << "Saving boosted Bhabha photons in " << bhphotons << std::endl;
 		  boostedBhabhaPhotons_.save_on_file(bhphotons);
 		}
     }

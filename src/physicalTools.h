@@ -573,11 +573,7 @@ inline void quadrivector(float& vx,float& vy,float& vz, float& energy) const
     energy =  v4_;
   }
 
-
- inline float composante4() const {return v4_;}
- inline float composante3() const {return v3_;}
-
- inline void switchComp4Sign() {v4_ = -v4_;}
+ inline float energy() const {return v4_;}
 
  inline QUADRIVECTOR& operator *= (const float& fac)
    {

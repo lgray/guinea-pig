@@ -1,7 +1,7 @@
 #include "minijetsCPP.h" 
 #include <sstream>
 
-void ABSTRACT_MINIJETS::init_jet_file(float s,float ptmin, string jetfileName)
+void ABSTRACT_MINIJETS::init_jet_file(float s,float ptmin, std::string jetfileName)
 {
   if ( !jetfileName.empty() ) 
     {
@@ -12,7 +12,7 @@ void ABSTRACT_MINIJETS::init_jet_file(float s,float ptmin, string jetfileName)
   else 
     {
       jetfile_ = NULL;
-      cerr << " MINIJETS::init_jet_file : ERROR : a jetfile must be defined " << endl;
+      std::cerr << " MINIJETS::init_jet_file : ERROR : a jetfile must be defined " << std::endl;
     }
 }
 
@@ -53,15 +53,15 @@ void ABSTRACT_MINIJETS::update_statistics_arrays(JET_FLOAT pz1,JET_FLOAT pz2,JET
 
 
 
-string ABSTRACT_MINIJETS::output_flow() const 
+std::string ABSTRACT_MINIJETS::output_flow() const 
 {
-  ostringstream out;
+  std::ostringstream out;
   // int i_c,i_pt;
   //int n_pt = pt_.size();
   //int n_c = c_.size();
   out << jet_results_.output_flow();
   // do not delete the following statements
-  //   out << title(string("jets storage data"));
+  //   out << title(std::string("jets storage data"));
   //   out << "jet_storage=(";
   //   for (i_pt=0;i_pt< n_pt;i_pt++)
   //     {
@@ -69,15 +69,15 @@ string ABSTRACT_MINIJETS::output_flow() const
   // 	{
   // 	  out << v_[i_c+n_c*i_pt];
   // 	}
-  //       out << endl;
+  //       out << std::endl;
   //     }
-  //   out << ")" << endl;
+  //   out << ")" << std::endl;
   return out.str();
 }
 
 MINIJETS::~MINIJETS() {;}
 
-MINIJETS::MINIJETS(float s,float ptmin,int iparam,int jet_select, string jetfileName) : ABSTRACT_MINIJETS(s, ptmin, iparam, jet_select, jetfileName)
+MINIJETS::MINIJETS(float s,float ptmin,int iparam,int jet_select, std::string jetfileName) : ABSTRACT_MINIJETS(s, ptmin, iparam, jet_select, jetfileName)
 {
   jet_select_x_ = jet_select;
   initNewton(s, ptmin);
@@ -514,8 +514,8 @@ void MINIJETS::make_jet_1b(float eph1,float q2_1,float eph2,float q2_2,float flu
     eph2 -= eph2p;
     //    
 /* Computing MAX */
-    d__1 = 1., d__2 = min(s4,9999.);
-    q2 = max(d__1,d__2);
+    d__1 = 1., d__2 = std::min(s4,9999.);
+    q2 = std::max(d__1,d__2);
     
     nf = 4;
     if (q2 < jet_parameter_.get_q2_1())
@@ -703,7 +703,7 @@ JET_FLOAT MINIJETS::hadcross(JET_FLOAT eph1,JET_FLOAT q2_1,JET_FLOAT eph2,JET_FL
 
     tmp=(s[0]+s[1]+s[2]+s[3]+s[4]+s[5]+s[6]+s[7])/switches.get_jet_ratio();
     if(tmp>1.0){
-      cerr << "MINIJETS:: " << x1 << " " << x2 << " " << lnx << " " << tmp  << endl;
+      std::cerr << "MINIJETS:: " << x1 << " " << x2 << " " << lnx << " " << tmp  << std::endl;
     }
     return tmp;
 }
@@ -998,9 +998,9 @@ void MINIJETS::store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT ep
 
 void MINIJETS_PYTHIA::initPythia()
 {
-  jet_spline0_.spline_init( string("pythia0.ini") );
-  jet_spline1_.spline_init( string("pythia1.ini") );
-  jet_spline2_.spline_init( string("pythia2.ini") );
+  jet_spline0_.spline_init( std::string("pythia0.ini") );
+  jet_spline1_.spline_init( std::string("pythia1.ini") );
+  jet_spline2_.spline_init( std::string("pythia2.ini") );
 }
 
 
@@ -1163,7 +1163,7 @@ void MINIJETS_PYTHIA::storeJet( float e1,float e2,float sigma, float jet_ratio, 
     n = (int)floor(sigma);
     sigma -= (float)n;
     // why do this call?
-    cout << " MINIJETS::storeJet : look if the call to rndm_generator is useful??? " << endl;
+    std::cout << " MINIJETS::storeJet : look if the call to rndm_generator is useful??? " << std::endl;
     if (rndm_generator.rndm_jet()<sigma) n++;
     jetfile_->save_jet(e1,e2,optionStoreJet);
    }

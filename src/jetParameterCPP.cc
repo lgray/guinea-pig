@@ -2,9 +2,6 @@
 #include "physconst.h"
 #include <cmath>
 
-
-using namespace std;
-
 // this method is part of the old init_jet
 void JET_PARAMETER::init(float s,float ptmin,int iparam)
 {

@@ -1,7 +1,5 @@
 #include "fieldCPP.h"
 
-using namespace std;
-
 /**********************************************/
 /* Routines for the calculation of the fields */
 /**********************************************/
@@ -111,7 +109,7 @@ void FIELD::fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT
     }
   else
     {
-      cerr << " No charge in slice flag1 = " << flag1 << " flag2= " << flag2 << endl;
+      std::cerr << " No charge in slice flag1 = " << flag1 << " flag2= " << flag2 << std::endl;
     }
 #endif
   m=0;
@@ -404,7 +402,7 @@ void FIELD::dist_init(PHI_FLOAT factor, float deltax, float deltay,   FFT_SERVER
       nn[0]=2*nb_cells_y_;
       nn[1]=2*nb_cells_x_;
 
-      ABSTRACT_FOURIER* fourier_transform = fourier->new_fft(string("for2"),nn);
+      ABSTRACT_FOURIER* fourier_transform = fourier->new_fft(std::string("for2"),nn);
       double* temp = fourier_transform->data_vector(); 
       for (i1=0;i1<dist_size_;i1++) temp[i1]=0.0;
 

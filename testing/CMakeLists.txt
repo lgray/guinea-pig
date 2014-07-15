@@ -4,6 +4,11 @@ file(COPY acc.dat electron.ini.gz result.ref result.cfg DESTINATION ${CMAKE_CURR
 find_program(GUNZIP NAMES gunzip)
 execute_process(COMMAND ${GUNZIP} -f electron.ini.gz WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
+# Suppress policy CMP0026 warning (as of cmake 3.0.0)
+if (${CMAKE_MAJOR_VERSION} GREATER 2)
+    cmake_policy(SET CMP0026 OLD)
+endif()
+
 get_target_property(binaryname guinea LOCATION)
 find_program(NDIFF NAMES numdiff ndiff)
 

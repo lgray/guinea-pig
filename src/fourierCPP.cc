@@ -3,40 +3,38 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 #ifdef USE_FFTW2
 
-FOUR_FFTW2_ONE::FOUR_FFTW2_ONE(string prep, int nn[2]) : in_(NULL), out_(NULL) 
+FOUR_FFTW2_ONE::FOUR_FFTW2_ONE(std::string prep, int nn[2]) : in_(NULL), out_(NULL) 
 {
   plan_ = NULL;
   size_of_data_ = nn[0]*nn[1];
   in_ = (fftw_complex*) new double[size_of_data_*2];
   fftw_direction direction;
-  if (prep == string("for2")) 
+  if (prep == std::string("for2")) 
     {
       direction = FFTW_FORWARD;
     }
-  else if (prep == string("back2")) 
+  else if (prep == std::string("back2")) 
     {
       direction = FFTW_BACKWARD;
     }
   else
     {
-      cerr << " FOUR_FFTW2_ONE:: ERROR unknown type of fft preparation = " << prep << endl;
+      std::cerr << " FOUR_FFTW2_ONE:: ERROR unknown type of fft preparation = " << prep << std::endl;
       exit(0);
     }
   plan_ = fftw2d_create_plan_specific(nn[1],nn[0],direction, FFTW_ESTIMATE | FFTW_IN_PLACE, in_,1,out_,1);
 }
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-FOUR_FFTW2_MANY::FOUR_FFTW2_MANY(string prep, int nn[2]) 
+FOUR_FFTW2_MANY::FOUR_FFTW2_MANY(std::string prep, int nn[2]) 
 {
   plan_a_ = NULL;
   plan_b_ = NULL;
   size_of_data_ = nn[0]*nn[1];
   in_ = (fftw_complex*) new double[size_of_data_*2];
       	
-  if (prep == string("for3"))
+  if (prep == std::string("for3"))
     {
       howmanya_ = nn[0]/2;
       howmanyb_ = nn[1];
@@ -50,7 +48,7 @@ FOUR_FFTW2_MANY::FOUR_FFTW2_MANY(string prep, int nn[2])
       plan_a_ = fftw_create_plan_specific(nn[1],FFTW_FORWARD,FFTW_ESTIMATE | FFTW_IN_PLACE,in_,nn[0],out_,1);
       plan_b_ = fftw_create_plan_specific(nn[0],FFTW_FORWARD,FFTW_ESTIMATE | FFTW_IN_PLACE,in_,1,out_,1);
     }
-  else if (prep ==  string("back3"))
+  else if (prep ==  std::string("back3"))
     {
       howmanya_ = nn[1];
       howmanyb_ = nn[0]/2;
@@ -66,7 +64,7 @@ FOUR_FFTW2_MANY::FOUR_FFTW2_MANY(string prep, int nn[2])
     }
   else
     {
-      cerr << " FOUR_FFTW2_MANY:: ERROR unknown type of fft preparation = " << prep << endl;
+      std::cerr << " FOUR_FFTW2_MANY:: ERROR unknown type of fft preparation = " << prep << std::endl;
       exit(0);
     }
 }
@@ -74,7 +72,7 @@ FOUR_FFTW2_MANY::FOUR_FFTW2_MANY(string prep, int nn[2])
 
 #ifdef USE_FFTW3
 
-FOUR_FFTW3_ONE::FOUR_FFTW3_ONE(string prep, int nn[2]) 
+FOUR_FFTW3_ONE::FOUR_FFTW3_ONE(std::string prep, int nn[2]) 
 {
   plan_ = NULL;
   
@@ -83,22 +81,22 @@ FOUR_FFTW3_ONE::FOUR_FFTW3_ONE(string prep, int nn[2])
   out_ = in_;
   
    
-  if (prep == string("for2")) 
+  if (prep == std::string("for2")) 
     {
       plan_ = fftw_plan_dft_2d(nn[1],nn[0],in_, out_, FFTW_FORWARD, FFTW_ESTIMATE);
     }
-  else if (prep == string("back2")) 
+  else if (prep == std::string("back2")) 
     {
       plan_ = fftw_plan_dft_2d(nn[1],nn[0],in_, out_, FFTW_BACKWARD,FFTW_ESTIMATE);
     }
   else
     {
-      cerr << " FOUR_FFTW3:: ERROR unknown type of fft preparation = " << prep << endl;
+      std::cerr << " FOUR_FFTW3:: ERROR unknown type of fft preparation = " << prep << std::endl;
       exit(0);
     }  
 }
 
-FOUR_FFTW3_MANY::FOUR_FFTW3_MANY(string prep, int nn[2])
+FOUR_FFTW3_MANY::FOUR_FFTW3_MANY(std::string prep, int nn[2])
 {
   plan_a_ = NULL;
   plan_a_ = NULL;
@@ -107,12 +105,12 @@ FOUR_FFTW3_MANY::FOUR_FFTW3_MANY(string prep, int nn[2])
   in_ = (fftw_complex*) fftw_malloc(sizeof(fftw_complex)*size_of_data_);
   out_ = in_;
 
-  if (prep == string("for3"))
+  if (prep == std::string("for3"))
     {
       plan_a_ = fftw_plan_many_dft( 1, &nn[1],nn[0]/2,in_, NULL,nn[0],1, out_, NULL,nn[0],1, FFTW_FORWARD,FFTW_ESTIMATE);
       plan_b_ = fftw_plan_many_dft( 1, &nn[0],nn[1],in_, NULL,1,nn[0], out_, NULL,1,nn[0], FFTW_FORWARD,FFTW_ESTIMATE);
     }
-  else if (prep ==  string("back3"))
+  else if (prep ==  std::string("back3"))
     {
       plan_a_ = fftw_plan_many_dft( 1, &nn[0],nn[1],in_, NULL,1, nn[0], out_, NULL,1,nn[0], FFTW_BACKWARD,FFTW_ESTIMATE);
 
@@ -120,7 +118,7 @@ FOUR_FFTW3_MANY::FOUR_FFTW3_MANY(string prep, int nn[2])
     }
   else
     {
-      cerr << " FOUR_FFTW3_MANY:: ERROR unknown type of fft preparation = " << prep << endl;
+      std::cerr << " FOUR_FFTW3_MANY:: ERROR unknown type of fft preparation = " << prep << std::endl;
       exit(0);
     }
 }
@@ -132,18 +130,18 @@ FOUR_FFTW3_MANY::FOUR_FFTW3_MANY(string prep, int nn[2])
 #ifdef USE_FFT_LOCAL
 
 
-LOCAL_FOURIER::LOCAL_FOURIER(string prep,int nn[2]) 
+LOCAL_FOURIER::LOCAL_FOURIER(std::string prep,int nn[2]) 
     {
       int k;
       size_of_data_ = nn[0]*nn[1];
       in_ = new double[size_of_data_*2];
       for (k=0; k<size_of_data_*2; k++) in_[k] = 0.0;
-      if (prep == string("for2") || prep == string("for3")) direction_ = 1;
+      if (prep == std::string("for2") || prep == std::string("for3")) direction_ = 1;
       else 
-	if (prep == string("back2") || prep == string("back3")) direction_ = -1;
+	if (prep == std::string("back2") || prep == std::string("back3")) direction_ = -1;
 	else 
 	  {
-	    cerr << " LOCAL_FOURIER:: ERROR unknown type of fft preparation = " << prep << endl;
+	    std::cerr << " LOCAL_FOURIER:: ERROR unknown type of fft preparation = " << prep << std::endl;
 	    exit(0);
 	  }
 

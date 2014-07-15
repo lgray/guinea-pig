@@ -1,6 +1,9 @@
 #ifndef BEAM_SEEN
 #define BEAM_SEEN
 
+#include <iostream>
+#include <string>
+#include <vector>
 
 #include "beamParametersCPP.h"
 #include "particleBeamCPP.h"
@@ -29,54 +32,54 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
 	}
     }
 
-  inline virtual string output_flow() const
+  inline virtual std::string output_flow() const
     {
-      ostringstream out;
+      std::ostringstream out;
       double esum;
       double sumphot;
       int numphot;
-      ostringstream aux;
-      aux <<  beam_label_ ;
-      string start("beam");
-      start.append(aux.str());
+      std::ostringstream temp;
+      temp <<  beam_label_ ;
+      std::string start("beam");
+      start.append(temp.str());
       out << title(start);
       out << particle_beam_.output_flow();
       esum = particle_beam_.meanLostEnergy(beam_parameters_->ebeam());
-      out << "average energy loss of the beam particles (GeV) : de = " <<  esum << endl;
+      out << "average energy loss of the beam particles (GeV) : de = " <<  esum << std::endl;
 
-      out << " ---photon statistics : " << endl;
-      out << " initial : " << endl;
+      out << " ---photon statistics : " << std::endl;
+      out << " initial : " << std::endl;
       double  nb_part = (double)particle_beam_.numberOfParticles();
       PHOTON_COUNTER pc = photon_beam_.get_photon_counter();
-      string photstat;
+      std::string photstat;
       photstat+=" initial average photon energy (GeV) phot-e";
-      photstat+=aux.str();
+      photstat+=temp.str();
       photstat+=" : ";
-      out << photstat <<  pc.getSum()/max(1,pc.getNumber()) << endl;
+      out << photstat <<  pc.getSum()/std::max(1,pc.getNumber()) << std::endl;
       photstat.erase();
       photstat+=" initial number of phot. per tracked macropart.";
-      photstat+=aux.str();
+      photstat+=temp.str();
       photstat+=" : ";
-      out << photstat << pc.getNumber()/nb_part << endl;
-      out << " final : " << endl;
+      out << photstat << pc.getNumber()/nb_part << std::endl;
+      out << " final : " << std::endl;
       photon_beam_.photon_info(sumphot,numphot);
       photstat.erase();
       photstat+=" final average photon energy (GeV) phot-e";
-      photstat+=aux.str();
+      photstat+=temp.str();
       photstat+=" : ";
-      out << photstat << sumphot/max(1,numphot) <<endl;
+      out << photstat << sumphot/std::max(1,numphot) <<std::endl;
       photstat.erase();
       photstat+=" final number of phot. per tracked macropart.";
-      photstat+=aux.str();
+      photstat+=temp.str();
       photstat+=" : ";
-      out <<  photstat << numphot/nb_part << endl << endl;
+      out <<  photstat << numphot/nb_part << std::endl << std::endl;
       // final quantities for post processing
       if ( beam_label_ == 1) {
-	out << "phot-e1=" << sumphot/max(1,numphot) << ";n_phot1=" <<  numphot/nb_part << ";" << endl;
-	out << "de1=" << esum <<  ";" << endl;
+	out << "phot-e1=" << sumphot/std::max(1,numphot) << ";n_phot1=" <<  numphot/nb_part << ";" << std::endl;
+	out << "de1=" << esum <<  ";" << std::endl;
       } else if ( beam_label_ == 2 ) {
-	out << "phot-e2=" << sumphot/max(1,numphot) << ";n_phot2=" <<  numphot/nb_part << ";" << endl;
-	out << "de2=" << esum <<  ";" << endl;
+	out << "phot-e2=" << sumphot/std::max(1,numphot) << ";n_phot2=" <<  numphot/nb_part << ";" << std::endl;
+	out << "de2=" << esum <<  ";" << std::endl;
       }
       return out.str();
     } 
@@ -92,7 +95,7 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
       else if (beam_label_ == 2) sign_label_ = -1;
       else
 	{
-	  cerr << " BEAM:: connect_parameters WARNING : bad beam label = " << beam_label_ << endl;
+	  std::cerr << " BEAM:: connect_parameters WARNING : bad beam label = " << beam_label_ << std::endl;
 	}
     }
 
@@ -108,29 +111,29 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
       else if (dir == 'z') return beam_parameters_->sigma_z();
       else 
 	{
-	  cerr << "BEAM::sigma_xyz : ERROR unknown direction for sigma : " << dir << endl;
+	  std::cerr << "BEAM::sigma_xyz : ERROR unknown direction for sigma : " << dir << std::endl;
 	  exit(0);
 	}
     }
   
   inline int label() const { return beam_label_;}
   inline int sign_label() const { return sign_label_;}
-  inline void write_size_init(string filename)
+  inline void write_size_init(std::string filename)
     {
-      ostringstream name;
+      std::ostringstream name;
       int label = beam_parameters_->label();
-      name << filename << label << ".dat" << ends;
-      string namefile = name.str();
+      name << filename << label << ".dat" << std::ends;
+      std::string namefile = name.str();
       if (size_log_file_ != NULL)
 	{
-	  cerr << " BEAM::write_size_init : WARNING : only one output beamsize.dat file is allowed " << endl;
+	  std::cerr << " BEAM::write_size_init : WARNING : only one output beamsize.dat file is allowed " << std::endl;
 	  exit(0);
 	}
       size_log_file_ = new FILE_IN_OUT();
       size_log_file_->open_file(namefile, "w");
       name.seekp(0);
-      name << string("#slice x_rms y_rms xmin xmax xmean ymin ymax ymean") << endl;
-      string out = name.str();
+      name << std::string("#slice x_rms y_rms xmin xmax xmean ymin ymax ymean") << std::endl;
+      std::string out = name.str();
       size_log_file_->write_line(out);
     }
 
@@ -198,7 +201,7 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
     }
   
   
-  inline void load_photons(string filename, int type_of_beam, float delta_z, float max_z, int n_cell_z)
+  inline void load_photons(std::string filename, int type_of_beam, float delta_z, float max_z, int n_cell_z)
     {
       photon_beam_.load_photons(filename, type_of_beam, delta_z, max_z, n_cell_z);
     }
@@ -220,12 +223,12 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
   
   inline float get_ebeam() const { return beam_parameters_->ebeam();};
   
-  inline void dump_beam(string name, int istep, int every_particle, int timestep, float step, float max_z)
+  inline void dump_beam(std::string name, int istep, int every_particle, int timestep, float step, float max_z)
     {
       particle_beam_.dump_beam(name, istep, every_particle, timestep, step, max_z,  sign_label_);
     }
   
-  inline void dump_photons(string name,int istep, int every_particle,int timestep, float step, float max_z)
+  inline void dump_photons(std::string name,int istep, int every_particle,int timestep, float step, float max_z)
   {
     photon_beam_.dump_photons(name, istep,every_particle, timestep, step, max_z,sign_label_);
   }
@@ -254,7 +257,7 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
   
   virtual inline int numberOfParticlesOfSlice(int slice) const {return particle_beam_.numberOfParticlesOfSlice(slice);};
 
-  inline void get_named_slices_vector(named_int_vector& vec, string name) const 
+  inline void get_named_slices_vector(named_int_vector& vec, std::string name) const 
     {
       int k;
       vec.clear();
@@ -266,13 +269,13 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
       
     }
   
-  inline  vector<PARTICLE*>& getCoherentVector(int slice) {return  particle_beam_.getCoherentVector(slice);}
-  inline  vector<PARTICLE*>& getTridentVector(int slice) {return  particle_beam_.getTridentVector(slice);}
-  inline  const vector<PARTICLE*>& getCoherentVector(int slice) const {return  particle_beam_.getCoherentVector(slice);}
-  inline  const vector<PARTICLE*>& getTridentVector(int slice) const {return  particle_beam_.getTridentVector(slice);}
+  inline  std::vector<PARTICLE*>& getCoherentVector(int slice) {return  particle_beam_.getCoherentVector(slice);}
+  inline  std::vector<PARTICLE*>& getTridentVector(int slice) {return  particle_beam_.getTridentVector(slice);}
+  inline  const std::vector<PARTICLE*>& getCoherentVector(int slice) const {return  particle_beam_.getCoherentVector(slice);}
+  inline  const std::vector<PARTICLE*>& getTridentVector(int slice) const {return  particle_beam_.getTridentVector(slice);}
  
-  inline const vector<PARTICLE*>& getParticleVector(int slice) const {return particle_beam_.getParticleVector(slice);}
-  inline  vector<PARTICLE*>& getParticleVector(int slice)  {return particle_beam_.getParticleVector(slice);}
+  inline const std::vector<PARTICLE*>& getParticleVector(int slice) const {return particle_beam_.getParticleVector(slice);}
+  inline  std::vector<PARTICLE*>& getParticleVector(int slice)  {return particle_beam_.getParticleVector(slice);}
   
   inline int number_of_coherent_vectors() const {return particle_beam_.number_of_coherent_vectors();}
   virtual   inline int number_of_slices() const { return particle_beam_.number_of_slices();}
@@ -282,25 +285,25 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
       return photon_beam_.sizeOfSlice(slice);
     }
   
-  inline vector<PHOTON>& getPhotonVector(int slice) { return photon_beam_.getPhotonVector(slice);}
-  inline const vector<PHOTON>& getPhotonVector(int slice) const { return photon_beam_.getPhotonVector(slice);}
+  inline std::vector<PHOTON>& getPhotonVector(int slice) { return photon_beam_.getPhotonVector(slice);}
+  inline const std::vector<PHOTON>& getPhotonVector(int slice) const { return photon_beam_.getPhotonVector(slice);}
   
   
-  inline int store_beam(string name) const 
+  inline int store_beam(std::string name) const 
     {
       return particle_beam_.store_beam(name);
     }
-  inline void store_coherent_beam(string name) const 
+  inline void store_coherent_beam(std::string name) const 
     {
       particle_beam_.store_coherent_beam(name);
     }
-  inline void store_trident_beam(string name) const 
+  inline void store_trident_beam(std::string name) const 
     {
       particle_beam_.store_trident_beam(name);
     }
 
 
-  inline void ang_dis(unsigned int n_bin, vector< vector<float> >& bin ) const {particle_beam_.ang_dis(n_bin, bin);} 
+  inline void ang_dis(unsigned int n_bin, std::vector< std::vector<float> >& bin ) const {particle_beam_.ang_dis(n_bin, bin);} 
   
   inline const PARTICLE_BEAM& particle_beam() { return particle_beam_;}
   

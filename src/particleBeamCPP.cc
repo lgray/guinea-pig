@@ -1,7 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #include "particleBeamCPP.h"
-using namespace std;
 
 // emittances in mm.mrad
 void BEAM_FROM_FILE::emittances(float& emittx, float& emitty) const
@@ -161,7 +160,7 @@ void PARTICLE_BEAM::fill_beam(int dist_x, int dist_z, float delta_z, float sigma
       assign_xyz_normal_distribution(dist_z, delta_z, sigma_x,sigma_y,sigma_z, sigma_x_prime,sigma_y_prime, energy);
       break;
     default:
-      cerr << " PARTICLE_BEAM::fill_beam :: unknown x distribution dist_x = " << dist_x << endl;
+      std::cerr << " PARTICLE_BEAM::fill_beam :: unknown x distribution dist_x = " << dist_x << std::endl;
       exit(0); 
     }
 }
@@ -174,7 +173,7 @@ void PARTICLE_BEAM::fill_symmetric_beam(int dist_x, int dist_z, float delta_z, f
       assign_symmetric_xyz_normal_distribution(dist_z, delta_z, sigma_x,sigma_y,sigma_z, sigma_x_prime,sigma_y_prime, energy);
       break;
     default:
-      cerr << " PARTICLE_BEAM::fill_symmetric_beam :: unknown x distribution dist_x = " << dist_x << endl;
+      std::cerr << " PARTICLE_BEAM::fill_symmetric_beam :: unknown x distribution dist_x = " << dist_x << std::endl;
       exit(0); 
     }
 
@@ -184,7 +183,7 @@ void PARTICLE_BEAM::fill_symmetric_beam(int dist_x, int dist_z, float delta_z, f
 void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy)
 {
   unsigned int k;
-  float zaux; //float xaux, yaux, zaux, vxaux, vyaux;
+  float ztemp; //float xtemp, ytemp, ztemp, vxtemp, vytemp;
   number_of_particles_dispatched_in_slices_ = 0;
   int nSlices = (int) particle_.size();
   switch(dist_z)
@@ -193,8 +192,8 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
     case 0:      
       for (k=0;k< initial_number_of_particles_;k++)
 	{
-	  zaux=rndm_generator_->gasdev()*sigma_z;
-	  dispatch_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
+	  ztemp=rndm_generator_->gasdev()*sigma_z;
+	  dispatch_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
 	}
       break;
       // constant distribution in z 
@@ -203,13 +202,13 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
 	float bunchlength=SQRT3*sigma_z;
 	for (k=0;k< initial_number_of_particles_;k++)
 	  {
-	    zaux =(2.0*rndm_generator_->rndm()-1.0)*bunchlength;
-	    dispatch_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
+	    ztemp =(2.0*rndm_generator_->rndm()-1.0)*bunchlength;
+	    dispatch_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
 	  }
       }
       break; 
     default:
-      cerr << " PARTICLE_BEAM::assign_xyz_normal_distribution :: unknown z distribution dist_z = " << dist_z << endl;
+      std::cerr << " PARTICLE_BEAM::assign_xyz_normal_distribution :: unknown z distribution dist_z = " << dist_z << std::endl;
       exit(0); 
     }
 }
@@ -217,7 +216,7 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
 void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float delta_z, float sigma_x,float sigma_y,float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy)
 {
   unsigned long int k;
-  float zaux;//float xaux, yaux,zaux, vxaux, vyaux;
+  float ztemp;//float xtemp, ytemp,ztemp, vxtemp, vytemp;
   number_of_particles_dispatched_in_slices_ = 0;
   unsigned int nSlices = particle_.size();
   switch(dist_z)
@@ -226,8 +225,8 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
     case 0:      
       for (k=0;k< initial_number_of_particles_/4;k++)
 	{
-	  zaux=rndm_generator_->gasdev()*sigma_z;
-	  dispatch_symmetric_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
+	  ztemp=rndm_generator_->gasdev()*sigma_z;
+	  dispatch_symmetric_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
 	}
       break;
       // constant distribution in z 
@@ -236,13 +235,13 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
 	float bunchlength=SQRT3*sigma_z;
 	for (k=0;k< initial_number_of_particles_;k++)
 	  {
-	    zaux =(2.0*rndm_generator_->rndm()-1.0)*bunchlength;
-	    dispatch_symmetric_random_particle_in_slices(zaux, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
+	    ztemp =(2.0*rndm_generator_->rndm()-1.0)*bunchlength;
+	    dispatch_symmetric_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
 	  }
       }
       break;
     default:
-      cerr << " PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution :: unknown z distribution dist_z = " << dist_z << endl;
+      std::cerr << " PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution :: unknown z distribution dist_z = " << dist_z << std::endl;
       exit(0); 
     }
 }
@@ -287,7 +286,7 @@ void PARTICLE_BEAM::meanPositionOfSlice(int slice, float& x,float& y) const
   n_particles= particle_[slice].size();
   if (n_particles==0)
     {
-      cerr << "PARTICLE_BEAM::warning:: rms_distribution : no particles in slice " << slice << endl;
+      std::cerr << "PARTICLE_BEAM::warning:: rms_distribution : no particles in slice " << slice << std::endl;
       x=0.0;
       y=0.0;
       return;
@@ -449,23 +448,23 @@ void PARTICLE_BEAM::transverseRms(int slice,double& xmin,double& xmax,double& xm
       particle_[slice][k]->XYposition(xpos, ypos);
       dx = (double)xpos;
       dy = (double)ypos;
-      xmn = min(xmn, dx);
-      xmx = max(xmx, dx);
+      xmn = std::min(xmn, dx);
+      xmx = std::max(xmx, dx);
       x0 += dx;
-      ymn = min(ymn,dy);
-      ymx = max(ymx,dy);
+      ymn = std::min(ymn,dy);
+      ymx = std::max(ymx,dy);
       y0 += dy;
       sigmax += dx*dx;
       sigmay += dy*dy;
     }
   n = (double)particle_[slice].size();
-  n = max(1.0,n);
+  n = std::max(1.0,n);
   x0 /= n;
   y0 /= n;
   sigmax /= n;
   sigmay /= n;
-  sigmaxRms=sqrt(max(0.0,sigmax-x0*x0));
-  sigmayRms=sqrt(max(0.0,sigmay-y0*y0));
+  sigmaxRms=sqrt(std::max(0.0,sigmax-x0*x0));
+  sigmayRms=sqrt(std::max(0.0,sigmay-y0*y0));
   xmean = x0;
   ymean = y0;
   xmin = xmn;
@@ -569,7 +568,7 @@ void PARTICLE_BEAM::backstep2 (int nbeam, float max_z, float step,  int timestep
       
 }
 
-int PARTICLE_BEAM::store_beam(string name) const
+int PARTICLE_BEAM::store_beam(std::string name) const
 {
   
   int number = 0;// it was unsigned long
@@ -579,7 +578,7 @@ int PARTICLE_BEAM::store_beam(string name) const
   int h;
   int k;
   int j;
-  vector<unsigned long int> order;
+  std::vector<unsigned long int> order;
   number = numberOfParticles();
   rndm_generator_->getShuffledIntegerSequence(number, order);
 
@@ -603,7 +602,7 @@ int PARTICLE_BEAM::store_beam(string name) const
 
 
 
-void PARTICLE_BEAM::store_coherent_beam(string name) const
+void PARTICLE_BEAM::store_coherent_beam(std::string name) const
 {
   //unsigned long int number;
   unsigned long int i,n;
@@ -621,7 +620,7 @@ void PARTICLE_BEAM::store_coherent_beam(string name) const
     filout.close();
 }
 
-void PARTICLE_BEAM::store_trident_beam(string name) const
+void PARTICLE_BEAM::store_trident_beam(std::string name) const
 {
   //unsigned long int number;
   unsigned long int i,n;
@@ -639,7 +638,7 @@ void PARTICLE_BEAM::store_trident_beam(string name) const
     filout.close();
 }
 
-void PARTICLE_BEAM::dump_beam(string name, int istep, int every_particle, int timestep, float step, float max_z, int  sign_label)
+void PARTICLE_BEAM::dump_beam(std::string name, int istep, int every_particle, int timestep, float step, float max_z, int  sign_label)
 {
   FILE_IN_OUT file;
   file.open_file(name,"w");
@@ -740,7 +739,7 @@ void PARTICLE_BEAM::dump_beam(string name, int istep, int every_particle, int ti
 }     
   
 
-void PARTICLE_BEAM::ang_dis(unsigned int n_bin, vector< vector<float> >& bin ) const
+void PARTICLE_BEAM::ang_dis(unsigned int n_bin, std::vector< std::vector<float> >& bin ) const
  {
    //FILE *datei;
    //   unsigned int n_bin=200;
@@ -794,31 +793,31 @@ void PARTICLE_BEAM::ang_dis(unsigned int n_bin, vector< vector<float> >& bin ) c
  }
 
 
-string PARTICLE_BEAM::output_flow() const
+std::string PARTICLE_BEAM::output_flow() const
 {
-  ostringstream out;
+  std::ostringstream out;
   int i,nslice,j, n_tot=0;
   unsigned int k;
   double esum,esum_tot=0.0;
-  out <<  " ---------- " << string("particle beam") << " : " << endl;
+  out <<  " ---------- " << std::string("particle beam") << " : " << std::endl;
 
   nslice = coherent_.size();
   for( j=0; j <nslice; j++){
     i=0;
     esum=0.0;
-    const   vector<PARTICLE*>& point = coherent_[j];
+    const   std::vector<PARTICLE*>& point = coherent_[j];
     for (k= 0; k < point.size() ; k++)
       {
 	i++;
 	esum += point[k]->energy();
       }
-    if (i) out << "slice " << j << " contains " << i << "  coherent particles with " << esum << " GeV " << endl;
+    if (i) out << "slice " << j << " contains " << i << "  coherent particles with " << esum << " GeV " << std::endl;
     esum_tot += esum;
     n_tot += i;
   }
-  out << " total number of coherent particles is " << n_tot << " with " << esum_tot << " GeV " << endl;
+  out << " total number of coherent particles is " << n_tot << " with " << esum_tot << " GeV " << std::endl;
 
-  out << " number of tracked macroparticles : " << number_of_particles_dispatched_in_slices_ << endl;
+  out << " number of tracked macroparticles : " << number_of_particles_dispatched_in_slices_ << std::endl;
 
   return out.str();
 }
@@ -848,7 +847,7 @@ double PARTICLE_BEAM::meanLostEnergy(float ebeam) const
 PHOTON_BEAM::PHOTON_BEAM(int n_sliceDATA) : end_(NULL) 
 {
   n_slice_=n_sliceDATA;
-  slice_photon_vector_ = vector< vector<PHOTON> > (n_slice_);
+  slice_photon_vector_ = std::vector< std::vector<PHOTON> > (n_slice_);
 }
 
 PHOTON_BEAM::~PHOTON_BEAM()
@@ -856,7 +855,7 @@ PHOTON_BEAM::~PHOTON_BEAM()
 
 }
 // This routine stores a photon into a photon beam. 
-void PHOTON_BEAM::load_photons(string filename, int type_of_beam, float delta_z, float max_z, int n_cell_z)
+void PHOTON_BEAM::load_photons(std::string filename, int type_of_beam, float delta_z, float max_z, int n_cell_z)
 {
   float ener,vx,vy,x,y,z,hel;//, dummy;
   float xt, yt;
@@ -893,7 +892,7 @@ void PHOTON_BEAM::load_photons(string filename, int type_of_beam, float delta_z,
 }
 
 
-void PHOTON_BEAM::dump_photons(string name,int istep,int every_particle, int timestep, float step, float max_z, int  sign_label)
+void PHOTON_BEAM::dump_photons(std::string name,int istep,int every_particle, int timestep, float step, float max_z, int  sign_label)
 {
   FILE_IN_OUT file;
   file.open_file(name,"w");
@@ -961,7 +960,7 @@ void PHOTON_BEAM::dump_photons(string name,int istep,int every_particle, int tim
   file.close();
 }
 
-// int PHOTON_BEAM::store_photon(string name) const
+// int PHOTON_BEAM::store_photon(std::string name) const
 // {
 
 //   int number = 0; //unsigned long int number = 0;
@@ -973,7 +972,7 @@ void PHOTON_BEAM::dump_photons(string name,int istep,int every_particle, int tim
 //   int h;
 //   int k;
 //   //int j;
-//   vector<unsigned long int> order;
+//   std::vector<unsigned long int> order;
 //   //photon_info(en_sum,number);
 //   //rndm_generator_->getShuffledIntegerSequence(number, order);
 //   //   for (h = 0; h < number; h++)

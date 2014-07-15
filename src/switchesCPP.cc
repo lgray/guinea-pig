@@ -4,7 +4,6 @@
 #include "switchesCPP.h"
 #include "physconst.h"
 
-using namespace std;
 SWITCHES::SWITCHES() 
 {
   electron_distribution_rho=2;
@@ -152,8 +151,8 @@ void SWITCHES::read(const PARAMETERS& param)
 
   ecm_min = param.readFValue("ecm_min"); 
 
-  float aux = param.readFValue("ecm_min_gg");
-  gg_smin=4*aux*aux;
+  float temp = param.readFValue("ecm_min_gg");
+  gg_smin=4*temp*temp;
 
   do_hadrons = param.readIValue("do_hadrons");
 
@@ -367,52 +366,52 @@ void SWITCHES::check_consistency() const
 {
   if ( do_bhabhas && do_pairs)
     {
-      cout << " do_pairs= " << do_pairs << " do_bhabhas = " << do_bhabhas << endl;
-      cout << " ERROR : it is not allowed to have do_bhabhas= 1 together with do_pairs = 1 " << endl;
+      std::cout << " do_pairs= " << do_pairs << " do_bhabhas = " << do_bhabhas << std::endl;
+      std::cout << " ERROR : it is not allowed to have do_bhabhas= 1 together with do_pairs = 1 " << std::endl;
       exit(0);
     } 
   if ( do_bhabhas && do_compt)
     {
-      cout << " do_pairs= " << do_pairs << " do_compt = " << do_compt << endl;
-      cout << " ERROR : it is not allowed to have do_bhabhas= 1 together with do_compt = 1 " << endl;
+      std::cout << " do_pairs= " << do_pairs << " do_compt = " << do_compt << std::endl;
+      std::cout << " ERROR : it is not allowed to have do_bhabhas= 1 together with do_compt = 1 " << std::endl;
       exit(0);
     } 
   //  if (store_secondaries && !track_secondaries)
   if (store_pairs==1 && !track_pairs)
     {
-      //cerr << " store_secondaries = " << store_secondaries << " track_secondaries = " << track_secondaries << endl;
-      //cerr << " WARNING : it is not very consistent to store secondaries without tracking them! " << endl;
-      cout << " store_pairs = " << store_pairs << " track_pairs = " << track_pairs << endl;
-      cout << " WARNING : it is not very consistent to store pairs without tracking them! " << endl;
+      //std::cerr << " store_secondaries = " << store_secondaries << " track_secondaries = " << track_secondaries << std::endl;
+      //std::cerr << " WARNING : it is not very consistent to store secondaries without tracking them! " << std::endl;
+      std::cout << " store_pairs = " << store_pairs << " track_pairs = " << track_pairs << std::endl;
+      std::cout << " WARNING : it is not very consistent to store pairs without tracking them! " << std::endl;
       exit(0);
     }
   if (do_muons==0 && (track_muons || store_muons))
     {
-      cout << " do_muons = " << do_muons << " store_muons = " << store_muons << " track_muons = " << track_muons << endl;
-      cout << " WARNING : it is not very consistent to track or store muons without generating them! " << endl;
+      std::cout << " do_muons = " << do_muons << " store_muons = " << store_muons << " track_muons = " << track_muons << std::endl;
+      std::cout << " WARNING : it is not very consistent to track or store muons without generating them! " << std::endl;
       exit(0);
     }
   if (store_muons==1 && !track_muons)
     {
-      cout << " store_muons = " << store_muons << " track_muons = " << track_muons << endl;
-      cout << " WARNING : it is not very consistent to store muons without tracking them! " << endl;
+      std::cout << " store_muons = " << store_muons << " track_muons = " << track_muons << std::endl;
+      std::cout << " WARNING : it is not very consistent to store muons without tracking them! " << std::endl;
       exit(0);
     }
   if (track_muons==1 && muon_ecut<10*MUMASS)
     {
-      cout << " track_muons = " << track_muons << " muon_ecut = "<< muon_ecut <<endl;
-      cout << " WARNING : Tracking for low energy muons not verified functional " << endl;
+      std::cout << " track_muons = " << track_muons << " muon_ecut = "<< muon_ecut <<std::endl;
+      std::cout << " WARNING : Tracking for low energy muons not verified functional " << std::endl;
 
     }
 
   if (cuts_from_loaded_beam > 0  && load_beam == 0) 
     {
-      cout << " WARNING : the switch cuts_from_loaded_beam is without effect with load_beam = 0 " << endl;
+      std::cout << " WARNING : the switch cuts_from_loaded_beam is without effect with load_beam = 0 " << std::endl;
     }
   if(do_tertphot && !(track_pairs || track_muons))
     {
-      cout << " do_tertphot = " << do_tertphot << " track_pairs = "<< track_pairs << " track_muons = " << track_muons << endl;
-      cout << " WARNING : Tertphots are produced by incoherent particles. They should be tracked." << endl;
+      std::cout << " do_tertphot = " << do_tertphot << " track_pairs = "<< track_pairs << " track_muons = " << track_muons << std::endl;
+      std::cout << " WARNING : Tertphots are produced by incoherent particles. They should be tracked." << std::endl;
     }
 }
 
@@ -432,50 +431,50 @@ void SWITCHES::readTWOBEAM(const PARAMETERS& param)
 //   charge_sign_2=param.readFValue("charge_sign_2");
 // }
 
-string SWITCHES::output_flow() const 
+std::string SWITCHES::output_flow() const 
 {
-  ostringstream out;
-  out << title(string("SWITCHES : "));
-  out << "charge_sign = " << charge_sign << endl;
-  out << "bmt_precession = " << bmt_precession_ << endl;
-  out << "ST_spin_flip = " << ST_spin_flip_ << endl;
-  out << "automatic_grid_sizing = " << automatic_grid_sizing << endl;
-  out << "integration_method = " << integration_method << " force_symmetric = " << force_symmetric << endl;
-  out <<  "rndm_load = " << rndm_load << "rndm_save = " << rndm_save << " rndm_seed = " << rndm_seed << endl;
-  out << "do_photons.1 = " << do_photons_[0] << " do_photons.2 = " << do_photons_[1] << endl;
-  out << "write_photons = " << write_photons << endl;
-  out << "do_comp = " << do_compt << " do_prod = " << do_prod << endl;
-  out << "electron_ratio = " << electron_ratio << endl;
-  out << "compt_x_min = " << compt_x_min << " compt_emax = " << compt_emax << " GeV ; compt_scale = " << compt_scale << endl;
-  out << "do_lumi = " << do_lumi << "num_lumi = " << num_lumi << " lumi_p = " << lumi_p << endl;
-  out << "do_cross = " << do_cross << " do_isr = "<< do_isr << " do_espread = " << do_espread << endl;
-  out << "photon_ratio = " << photon_ratio << endl;
-  out << "do_hadrons = " << do_hadrons << " store_hadrons = " << store_hadrons << " hadron_ratio = " << hadron_ratio << endl;
-  out << "do_jets = " << do_jets << " store_jets = " << jet_store << endl;
-  out << "do_pairs = " << do_pairs << " load_events = " << load_event << endl;
-  //out << "track_secondaries = " << track_secondaries << " pair_step = " << pair_step << endl;
-  //out << "store_secondaries = " << store_secondaries << endl;
-  out << "track_pairs = " << track_pairs << " pair_step = " << pair_step << endl;
-  out << "store_pairs = " << store_pairs << endl;
-  out << "bhabha_scal = " << bhabha_scal << " bhabha_ecmload = " << bhabha_ecmload << " GeV " <<  endl;
-  out << "do_muons = " << do_muons << " track_muons = " << track_muons << " store_muons = " << store_muons << endl;
-  out << "muon_ratio = " << muon_ratio << " muon_scale = " << muon_scale << " muon_ecut = " << muon_ecut <<endl;
-  out << "do_coherent = " << do_coherent << endl;
-  out << "do_trident = " << do_trident << endl;
-  out << "emin = " << emin << endl;
-  out << "grids = " << extra_grids+1 << endl;
-  out << "pair_ecut = " << pair_ecut << " GeV " << endl;
-  out << "pair_ratio = " << pair_ratio << endl;
-  out << "bhabha_ratio = " << bhabha_ratio << endl;
-  out << "pair_q2 = " << pair_q2 << endl;
-  out << "beam_pair = " << beam_pair << endl;
-  out << "jet_ratio = " << jet_ratio << endl;
-  out << "jet_ptmin = " << jet_pstar << endl;
-  out << "jet_pythia = " << jet_pythia << endl;
-  out << "jet_log = " << jet_select << endl;
-  out << "beam_size = " << geom << " beam_size_scale = " << r_scal << " ext_field = " << ext_field << endl;
-  out << "espread.1 = " << espread1 << " which_espread.1 = " << which_espread1 << " espread.2 = " << espread2 << " which_espread.2 = " << which_espread2 << endl;
-  out << "f_rep = " << f_rep << " n_b = " << n_b << endl;
+  std::ostringstream out;
+  out << title(std::string("SWITCHES : "));
+  out << "charge_sign = " << charge_sign << std::endl;
+  out << "bmt_precession = " << bmt_precession_ << std::endl;
+  out << "ST_spin_flip = " << ST_spin_flip_ << std::endl;
+  out << "automatic_grid_sizing = " << automatic_grid_sizing << std::endl;
+  out << "integration_method = " << integration_method << " force_symmetric = " << force_symmetric << std::endl;
+  out <<  "rndm_load = " << rndm_load << "rndm_save = " << rndm_save << " rndm_seed = " << rndm_seed << std::endl;
+  out << "do_photons.1 = " << do_photons_[0] << " do_photons.2 = " << do_photons_[1] << std::endl;
+  out << "write_photons = " << write_photons << std::endl;
+  out << "do_comp = " << do_compt << " do_prod = " << do_prod << std::endl;
+  out << "electron_ratio = " << electron_ratio << std::endl;
+  out << "compt_x_min = " << compt_x_min << " compt_emax = " << compt_emax << " GeV ; compt_scale = " << compt_scale << std::endl;
+  out << "do_lumi = " << do_lumi << "num_lumi = " << num_lumi << " lumi_p = " << lumi_p << std::endl;
+  out << "do_cross = " << do_cross << " do_isr = "<< do_isr << " do_espread = " << do_espread << std::endl;
+  out << "photon_ratio = " << photon_ratio << std::endl;
+  out << "do_hadrons = " << do_hadrons << " store_hadrons = " << store_hadrons << " hadron_ratio = " << hadron_ratio << std::endl;
+  out << "do_jets = " << do_jets << " store_jets = " << jet_store << std::endl;
+  out << "do_pairs = " << do_pairs << " load_events = " << load_event << std::endl;
+  //out << "track_secondaries = " << track_secondaries << " pair_step = " << pair_step << std::endl;
+  //out << "store_secondaries = " << store_secondaries << std::endl;
+  out << "track_pairs = " << track_pairs << " pair_step = " << pair_step << std::endl;
+  out << "store_pairs = " << store_pairs << std::endl;
+  out << "bhabha_scal = " << bhabha_scal << " bhabha_ecmload = " << bhabha_ecmload << " GeV " <<  std::endl;
+  out << "do_muons = " << do_muons << " track_muons = " << track_muons << " store_muons = " << store_muons << std::endl;
+  out << "muon_ratio = " << muon_ratio << " muon_scale = " << muon_scale << " muon_ecut = " << muon_ecut <<std::endl;
+  out << "do_coherent = " << do_coherent << std::endl;
+  out << "do_trident = " << do_trident << std::endl;
+  out << "emin = " << emin << std::endl;
+  out << "grids = " << extra_grids+1 << std::endl;
+  out << "pair_ecut = " << pair_ecut << " GeV " << std::endl;
+  out << "pair_ratio = " << pair_ratio << std::endl;
+  out << "bhabha_ratio = " << bhabha_ratio << std::endl;
+  out << "pair_q2 = " << pair_q2 << std::endl;
+  out << "beam_pair = " << beam_pair << std::endl;
+  out << "jet_ratio = " << jet_ratio << std::endl;
+  out << "jet_ptmin = " << jet_pstar << std::endl;
+  out << "jet_pythia = " << jet_pythia << std::endl;
+  out << "jet_log = " << jet_select << std::endl;
+  out << "beam_size = " << geom << " beam_size_scale = " << r_scal << " ext_field = " << ext_field << std::endl;
+  out << "espread.1 = " << espread1 << " which_espread.1 = " << which_espread1 << " espread.2 = " << espread2 << " which_espread.2 = " << which_espread2 << std::endl;
+  out << "f_rep = " << f_rep << " n_b = " << n_b << std::endl;
 
   return out.str();
 }

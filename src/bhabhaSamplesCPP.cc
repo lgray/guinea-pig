@@ -4,37 +4,37 @@ bool BHABHA_PHOTON_SAMPLES::pick_next(float ecmratio, float& en,float& px,float&
 {
   if (next_ >= bhabha_photons_.size() ) 
     {
-      cerr << " WARNING BHABHA_PHOTON_SAMPLES::pick_next() : the vector of bhabha photons samples is out  bhabha_photons_.size()= " <<  bhabha_photons_.size() << " next= " << next_ << endl;
+      std::cerr << " WARNING BHABHA_PHOTON_SAMPLES::pick_next() : the vector of bhabha photons samples is out  bhabha_photons_.size()= " <<  bhabha_photons_.size() << " next= " << next_ << std::endl;
       return false;
     }
   bhabha_photons_[next_].trivector(px, py, pz);
-  en = bhabha_photons_[next_].composante4();
+  en = bhabha_photons_[next_].energy();
   px *= ecmratio;
   py *= ecmratio;
   pz *= ecmratio;
   en *= ecmratio;
-  eventIndex = numero_bhabha_[next_];
+  eventIndex = number_bhabha_[next_];
   next_++;
   return true;
 }
 
-bool BHABHASAMPLES::pick_next_bhabha(float e1, float e2, float ecmratio, float eCM, float& px1,float& py1,float& pz1, float& en1,float& px2,float& py2,float& pz2,float& en2, int& nbphot, unsigned int& numero_bhabha)
+bool BHABHASAMPLES::pick_next_bhabha(float e1, float e2, float ecmratio, float eCM, float& px1,float& py1,float& pz1, float& en1,float& px2,float& py2,float& pz2,float& en2, int& nbphot, unsigned int& number_bhabha)
 {
   if (next_ >= bhabha_.size() ) 
     {
-      cerr << " WARNING BHABHASAMPLES::pick_next_bhabha: the vector of bhabha samples is out  bhabha_.size()= " <<  bhabha_.size() << "next= " << next_ << endl;
+      std::cerr << " WARNING BHABHASAMPLES::pick_next_bhabha: the vector of bhabha samples is out  bhabha_.size()= " <<  bhabha_.size() << "next= " << next_ << std::endl;
       return false;
     }
   if (prod_info_ == 50000)
     {
-      cout << " BHABHASAMPLES::pick_next_bhabha: bhabhas produced " <<  next_ << endl;
+      std::cout << " BHABHASAMPLES::pick_next_bhabha: bhabhas produced " <<  next_ << std::endl;
       prod_info_ = 0;
     }
   nbphot = bhabha_[next_].nbphot;
   bhabha_[next_].p1.trivector(px1, py1, pz1);
-  en1 = bhabha_[next_].p1.composante4();
+  en1 = bhabha_[next_].p1.energy();
   bhabha_[next_].p2.trivector(px2, py2, pz2);
-  en2 = bhabha_[next_].p2.composante4();
+  en2 = bhabha_[next_].p2.energy();
   px1 *= ecmratio;
   py1 *= ecmratio;
   pz1 *= ecmratio;
@@ -48,7 +48,7 @@ bool BHABHASAMPLES::pick_next_bhabha(float e1, float e2, float ecmratio, float e
   bhabha_[next_].mother1 = fabs(e1);
   bhabha_[next_].mother2 = fabs(e2);
   bhabha_[next_].eCM = eCM;
-  numero_bhabha = bhabha_[next_].evtIndex;
+  number_bhabha = bhabha_[next_].evtIndex;
   next_++;
   prod_info_++;
   return true;
@@ -81,7 +81,7 @@ void BHABHA::boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float par
   px2 = e2*part2Vx;
   py2 = e2*part2Vy;
   pz2 = -e2*sqrt(double(1. - part2Vx*part2Vx - part2Vy*part2Vy));
-  if(pz2*pz2in<0. && pz1*pz1in<0.) cout << "Bhabha nr. " << bhabha_event_index << " is turned backwards!\n";
+  if(pz2*pz2in<0. && pz1*pz1in<0.) std::cout << "Bhabha nr. " << bhabha_event_index << " is turned backwards!\n";
 // Velocity of the CM frame
   beta_x=(px1+px2)/(e1+e2);
   beta_y=(py1+py2)/(e1+e2);
@@ -90,13 +90,13 @@ void BHABHA::boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float par
 // Relative movement of the particles before the collision (in CM)
   if(fourboost(e1, px1, py1, pz1, beta_x, beta_y, beta_z))
   {
-	  cout << "Bhabha nr. " << bhabha_event_index << ": The initial electron has anomalous invariant mass!\n";
-	  cout << "Beta = (" << beta_x << ", " << beta_y << ", " << beta_z << ")\n";
+	  std::cout << "Bhabha nr. " << bhabha_event_index << ": The initial electron has anomalous invariant mass!\n";
+	  std::cout << "Beta = (" << beta_x << ", " << beta_y << ", " << beta_z << ")\n";
   }
   if(fourboost(e2, px2, py2, pz2, beta_x, beta_y, beta_z))
   {
-	  cout << "Bhabha nr. " << bhabha_event_index << ": The initial positron has anomalous invariant mass!\n";;
-	  cout << "Beta = (" << beta_x << ", " << beta_y << ", " << beta_z << ")\n";
+	  std::cout << "Bhabha nr. " << bhabha_event_index << ": The initial positron has anomalous invariant mass!\n";;
+	  std::cout << "Beta = (" << beta_x << ", " << beta_y << ", " << beta_z << ")\n";
   }
   prelx = px1-px2;
   prely = py1-py2;
@@ -123,13 +123,13 @@ void BHABHA::boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float par
 // Go back to the lab frame
   if(fourboost(e1in, px1in, py1in, pz1in, -beta_x, -beta_y, -beta_z))
   {
-	  cout << "Bhabha nr. " << bhabha_event_index << ": The final electron has anomalous invariant mass!\n";
-	  cout << "Beta = (" << beta_x << ", " << beta_y << ", " << beta_z << ")\n";
+	  std::cout << "Bhabha nr. " << bhabha_event_index << ": The final electron has anomalous invariant mass!\n";
+	  std::cout << "Beta = (" << beta_x << ", " << beta_y << ", " << beta_z << ")\n";
   }
   if(fourboost(e2in, px2in, py2in, pz2in, -beta_x, -beta_y, -beta_z))
   {
-	  cout << "Bhabha nr. " << bhabha_event_index << ": The final positron has anomalous invariant mass!\n";
-	  cout << "Beta = (" << beta_x << ", " << beta_y << ", " << beta_z << ")\n";
+	  std::cout << "Bhabha nr. " << bhabha_event_index << ": The final positron has anomalous invariant mass!\n";
+	  std::cout << "Beta = (" << beta_x << ", " << beta_y << ", " << beta_z << ")\n";
   }
 //  lorent_bhabha_transformation(e1, e2, pz1, pz2, beta_x, beta_y,theta,phi, px1in, py1in, pz1in, e1in);
 //  lorent_bhabha_transformation(e1, e2, pz1, pz2, beta_x, beta_y,theta,phi, px2in, py2in, pz2in, e2in);
@@ -146,22 +146,22 @@ void BHABHA::boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float par
 			{
 			  if(photon_event_index != bhabha_event_index)
 			  {
-				  cout << "Error in photon storage.\n";
-				  cout << "Bhabha event index: " << bhabha_event_index << endl;
-				  cout << "Photon event index: " << photon_event_index << endl;
+				  std::cout << "Error in photon storage.\n";
+				  std::cout << "Bhabha event index: " << bhabha_event_index << std::endl;
+				  std::cout << "Photon event index: " << photon_event_index << std::endl;
 				  if(abs(bhabha_event_index-photon_event_index)>10) exit(1);
 			  }
 			  bhabha_rotation(theta,phi,px,py,pz);
 			  if(fourboost(en, px, py, pz, -beta_x, -beta_y, -beta_z))
 			  {
-				  cout << "Bhabha nr. " << bhabha_event_index << ": The photon nr. " << k << " has anomalous invariant mass!";
-				  cout << "Beta = (" << beta_x << ", " << beta_y << ", " << beta_z << ")\n";
+				  std::cout << "Bhabha nr. " << bhabha_event_index << ": The photon nr. " << k << " has anomalous invariant mass!";
+				  std::cout << "Beta = (" << beta_x << ", " << beta_y << ", " << beta_z << ")\n";
 			  }
 			  boostedBhabhaPhotons_.add_bhabha_photon(bhabha_event_index, px, py, pz, en);
 			}
 		  else
 			{
-			  cerr << " GRID::boost_bhabha() : very strange, not enough photons in file, for the given number of bhabhas... " << endl;
+			  std::cerr << " GRID::boost_bhabha() : very strange, not enough photons in file, for the given number of bhabhas... " << std::endl;
 			  exit(0);
 			}
 		}

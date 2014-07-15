@@ -110,7 +110,7 @@ class ABSTRACT_MINIJETS : public ABSTRACT_IO_CLASS
 
   ABSTRACT_MINIJETS() : jetfile_(NULL)  {;}
 
-  ABSTRACT_MINIJETS(float s,float ptmin,int iparam, int /*jet_select*/, string jetfileName) : jetfile_(NULL)
+  ABSTRACT_MINIJETS(float s,float ptmin,int iparam, int /*jet_select*/, std::string jetfileName) : jetfile_(NULL)
     {
       set();
       init_jet_file(s,ptmin,jetfileName);
@@ -151,7 +151,7 @@ class ABSTRACT_MINIJETS : public ABSTRACT_IO_CLASS
     return niter;
   }
 
-  void init_jet_file(float s,float ptmin, string jetfileName);
+  void init_jet_file(float s,float ptmin, std::string jetfileName);
   void update_statistics_arrays(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT pt,JET_FLOAT h);
 
   virtual  void store_jet(JET_FLOAT pz1,JET_FLOAT pz2,JET_FLOAT eph1,JET_FLOAT eph2, JET_FLOAT pt,JET_FLOAT h,int event, SWITCHES& switches, RNDM& rndm_generator) = 0;
@@ -188,7 +188,7 @@ class ABSTRACT_MINIJETS : public ABSTRACT_IO_CLASS
   virtual void mkjbw_(float eph1,float eph2,float flum, SWITCHES& switches, RNDM& rndm_generator) =0;
 
 
-  virtual string output_flow() const ;
+  virtual std::string output_flow() const ;
 
 };
 
@@ -282,14 +282,14 @@ class MINIJETS : public ABSTRACT_MINIJETS
 
   void hadrons_dg(JET_FLOAT x1,JET_FLOAT x2,JET_FLOAT q2,int flavours, JET_FLOAT *parton1,JET_FLOAT *parton2,JET_FLOAT& alphas);
 
-  inline void prepareToStoreHadCross(int numero, JET_FLOAT* s, JET_FLOAT factor, JET_FLOAT cmax, JET_FLOAT e0, JET_FLOAT e1,JET_FLOAT  e2, JET_FLOAT& pz1, JET_FLOAT& pz2,JET_FLOAT& pt, RNDM& rndm_generator)
+  inline void prepareToStoreHadCross(int number, JET_FLOAT* s, JET_FLOAT factor, JET_FLOAT cmax, JET_FLOAT e0, JET_FLOAT e1,JET_FLOAT  e2, JET_FLOAT& pz1, JET_FLOAT& pz2,JET_FLOAT& pt, RNDM& rndm_generator)
   {
     JET_FLOAT ehad1,ehad2;
     JET_FLOAT xkekseksa;
-    JET_FLOAT aux;
-    newton_[numero].get_angle_sigma(cmax,xkekseksa,aux, rndm_generator);
-    // get_angle( numero,cmax,xkekseksa,aux, rndm_generator);
-    s[numero]=factor*aux;
+    JET_FLOAT temp;
+    newton_[number].get_angle_sigma(cmax,xkekseksa,temp, rndm_generator);
+    // get_angle( number,cmax,xkekseksa,temp, rndm_generator);
+    s[number]=factor*temp;
     ehad1=e0;
     ehad2=e0;
     pz1=e0*xkekseksa;
@@ -311,7 +311,7 @@ class MINIJETS : public ABSTRACT_MINIJETS
 
   virtual  ~MINIJETS();
 
-  MINIJETS(float s,float ptmin,int iparam,int jet_select, string jetfileName);
+  MINIJETS(float s,float ptmin,int iparam,int jet_select, std::string jetfileName);
 
   void make_the_newtons(double xmin,double xmax,int n);
 
@@ -341,7 +341,7 @@ class MINIJETS_PYTHIA : public  ABSTRACT_MINIJETS
 
   virtual  ~MINIJETS_PYTHIA()  {;}
 
- MINIJETS_PYTHIA(float s,float ptmin,int iparam, int jet_select, string jetfileName) : ABSTRACT_MINIJETS(s, ptmin, iparam, jet_select, jetfileName)
+ MINIJETS_PYTHIA(float s,float ptmin,int iparam, int jet_select, std::string jetfileName) : ABSTRACT_MINIJETS(s, ptmin, iparam, jet_select, jetfileName)
     {
       initPythia();
     }

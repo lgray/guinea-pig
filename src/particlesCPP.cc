@@ -2,15 +2,13 @@
 
 #include <iostream>
 
-using namespace std;
-
 void PARTICLE_WITH_SPIN::rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float charge_sign, float dt) 
 {
   // Efield : electric field (lab. frame) : GV/nm
   // Bfield : magnetic field X c (lab. frame) : GV/nm
   // dt : time step in nanometers (c.dt)
 
-  //  cout << " PARTICLE_WITH_SPIN::rotateBMT VERIFIER a " << endl;
+  //  std::cout << " PARTICLE_WITH_SPIN::rotateBMT VERIFIER a " << std::endl;
   int k;
   TRIDVECTOR Blong, Btrans, betaE, omega;
   
@@ -19,7 +17,7 @@ void PARTICLE_WITH_SPIN::rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float c
 
   //double beta2 = 1.0 - 1.0/gamma;  //unused!!!
   //   double betaz = sqrt(beta2 - (double)vx_*(double)vx_ - (double)vy_*(double)vy_);
-  //   cout << " betaz = " << betaz << endl;
+  //   std::cout << " betaz = " << betaz << std::endl;
 
   double vitx = (double)vx_;
   double vity = (double)vy_;
@@ -41,7 +39,7 @@ void PARTICLE_WITH_SPIN::rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float c
   double a1 = 1 + anom;
   double ga1 = 1 + gamma*anom;
   double ce1 = anom + 1./(1.0 + gamma);
-  //  cout << " a= " << anom << " ce1= " << ce1 << endl;
+  //  std::cout << " a= " << anom << " ce1= " << ce1 << std::endl;
 
   //  float ang = 0.0; // alternative 1
   for (k = 0; k< 3; k++)
@@ -53,25 +51,25 @@ void PARTICLE_WITH_SPIN::rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float c
     }
 
   // alternative 1
-  //   cout << " alternative 1 " << endl;
+  //   std::cout << " alternative 1 " << std::endl;
   //   ang = sqrt(ang);
   //   omega *= -1.0/ang;
   //   ang *= dt/energy_;
   //   double r[3][3];
-  //   double omegaux[3];
-  //   for (k= 0; k < 3; k++) omegaux[k] = omega(k);
+  //   double omegtemp[3];
+  //   for (k= 0; k < 3; k++) omegtemp[k] = omega(k);
   
-  //   TOOLS::rotmat(ang,omegaux, r );
-  //     double spinaux[3];
+  //   TOOLS::rotmat(ang,omegtemp, r );
+  //     double spintemp[3];
   //     double bidon;
-  //     for (k= 0; k < 3; k++) spinaux[k] = spin_(k);
+  //     for (k= 0; k < 3; k++) spintemp[k] = spin_(k);
   //     for (k = 0; k < 3; k++)
   //       {
   // 	   bidon = 0.0;
   //         for (j=0; j < 3; j++)
   //  	 {
-  // 	   bidon +=  r[k][j]*spinaux[j];
-  // 	   // 	   spin_[k] += r[k][j]*spinaux[j];
+  // 	   bidon +=  r[k][j]*spintemp[j];
+  // 	   // 	   spin_[k] += r[k][j]*spintemp[j];
   //  	 }
   // 	spin_.setComponent(k,bidon);
   //      }
@@ -90,13 +88,13 @@ void PARTICLE_WITH_SPIN::rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float c
   // the magnetic field is already multiplied by c, so : 
 
   // alternative 2
-  //  cout << " alternative 2 " << endl;
+  //  std::cout << " alternative 2 " << std::endl;
   omega *= (double)dt/(double)energy_;
-  TRIDVECTOR spinaux(spin_);
+  TRIDVECTOR spintemp(spin_);
   
-  spin_(0) += omega(1)*spinaux(2) - omega(2)*spinaux(1);
-  spin_(1) += omega(2)*spinaux(0) - omega(0)*spinaux(2);
-  spin_(2) += omega(0)*spinaux(1) - omega(1)*spinaux(0);
+  spin_(0) += omega(1)*spintemp(2) - omega(2)*spintemp(1);
+  spin_(1) += omega(2)*spintemp(0) - omega(0)*spintemp(2);
+  spin_(2) += omega(0)*spintemp(1) - omega(1)*spintemp(0);
   // end alternative 
   
   
@@ -129,7 +127,7 @@ float PAIR_PARTICLE::apply_magnetic_field_on_pair(float fac_theta, float step_q,
   
   // normalising B
   b_norm=sqrt(bx*bx+by*by);
-  b_norm_i=1.0/max(b_norm,eps);
+  b_norm_i=1.0/std::max(b_norm,eps);
   bx *= b_norm_i;
   by *= b_norm_i;
   
@@ -170,12 +168,12 @@ float  PAIR_PARTICLE::scale_pair(float vold2, double mass)
 #endif
 }
 
-void PAIR_PARTICLE::synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, vector<float>* photon_e, RNDM& rndm_generator) 
+void PAIR_PARTICLE::synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, std::vector<float>* photon_e, RNDM& rndm_generator) 
 {
 #ifdef PAIR_SYN
   unsigned int j;
   float eng0, scal;
-  vector<float> ph;
+  std::vector<float> ph;
   float dz = step*1e-9;
   float dzOnRadiusFrac = sqrt((vx_-vx0)*(vx_-vx0)+(vy_-vy0)*(vy_-vy0)+(velocityz_-vz0)*(velocityz_-vz0))/step_fraction;
   float radius_i = dzOnRadiusFrac/dz;
@@ -204,7 +202,7 @@ void PAIR_PARTICLE::synchrotron_radiation(float step, double mass, float step_fr
 #ifdef PAIR_SYN
   unsigned int j;
   float eng0, scal;
-  vector<float> ph;
+  std::vector<float> ph;
   float dz = step*1e-9;
   float dzOnRadiusFrac = sqrt((vx_-vx0)*(vx_-vx0)+(vy_-vy0)*(vy_-vy0)+(velocityz_-vz0)*(velocityz_-vz0))/step_fraction;
   float radius_i = dzOnRadiusFrac/dz;
@@ -240,7 +238,7 @@ float PAIR_PARTICLE::apply_final_half_step_fields(float step, double mass, float
   return theta;
 }
 
-float PAIR_PARTICLE::apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& rndm_generator)
+float PAIR_PARTICLE::apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, std::vector<float>* photon_e, RNDM& rndm_generator)
 {
   float vx0,vy0,vz0, vold2;
   float step_2, step_q, scal;
@@ -292,7 +290,7 @@ float PAIR_PARTICLE::apply_initial_half_step_fields(float step, double mass, flo
   synchrotron_radiation(step, mass, 0.5, vx0, vy0, vz0, rndm_generator);
   return theta;
 }
-float PAIR_PARTICLE::apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, vector<float>* photon_e, RNDM& rndm_generator) 
+float PAIR_PARTICLE::apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, std::vector<float>* photon_e, RNDM& rndm_generator) 
 {
   float vx0,vy0,vz0, vold2;
   float step_2, step_q, scal;
@@ -368,8 +366,8 @@ void PAIR_PARTICLE::update_energy(double mass)
   if (fabs(scal-1.0)>0.01)
     {
       last_rescaling_ok_ = false;
-      cerr << " PAIR_PARTICLE::scale_energy : scale should be 1 : " << endl;
-      cerr << " unsigned_energy_ " << energy_  <<  " module of velocity " << sqrt( velocity_q() ) << " scale " << scal << endl;
+      std::cerr << " PAIR_PARTICLE::scale_energy : scale should be 1 : " << std::endl;
+      std::cerr << " unsigned_energy_ " << energy_  <<  " module of velocity " << sqrt( velocity_q() ) << " scale " << scal << std::endl;
     }
   vx_ *= scal;
   vy_ *= scal;

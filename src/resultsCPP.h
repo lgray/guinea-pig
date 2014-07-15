@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cstdio>
 #include <algorithm>
+#include <vector>
 
 #include "define.h"
 #include "physconst.h"
@@ -34,7 +35,7 @@ class  RESULTS : public ABSTRACT_IO_CLASS
   double c_vx_2,sig_vx_2,c_vy_2,sig_vy_2;
   double c_vx_1_coh,c_vx_2_coh,c_vy_1_coh,c_vy_2_coh;
   double upsmax;
-  vector<double> lumi_ee_step, lumi_ee_high_step;
+  std::vector<double> lumi_ee_step, lumi_ee_high_step;
   double step_lumi[2];
   
  public:
@@ -149,7 +150,7 @@ class  RESULTS : public ABSTRACT_IO_CLASS
   double get_step_lumi_ee_high() { return step_lumi[1]; }
   
   
-  inline void updateUpsmax(float x) { upsmax=max(upsmax,(double)x);};
+  inline void updateUpsmax(float x) { upsmax=std::max(upsmax,(double)x);};
   
   // this method isn't great, see how useful it is and how to avoid
   inline void cumulate_hadrons_ee(double temp[3])
@@ -216,7 +217,7 @@ class PAIRS_RESULTS : public ABSTRACT_IO_CLASS
 
 
   void set();
-  void update_contribution(int composante, double ener,double px,double py,double pz, double wgt);
+  void update_contribution(double ener,double px,double py,double pz, double wgt);
   
   
  public: 
@@ -230,13 +231,13 @@ class PAIRS_RESULTS : public ABSTRACT_IO_CLASS
  inline int number() const {return number_;}
  inline double energy() const {return energy_;}
  
- void store_full_pair(int composante, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,  bool luckyPair );
+ void store_full_pair(int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,  bool luckyPair );
  
- inline void storep_(int composante, double e,double wgt, bool lucky)
+ inline void storep_(int index_of_process, double e,double wgt, bool lucky)
    {
-     update_contribution(composante, e,0.0,0.0,e, wgt);
-     eproc_[composante]+= fabs(e) * wgt;
-     nproc_[composante]+= wgt;
+     update_contribution(e,0.0,0.0,e, wgt);
+     eproc_[index_of_process]+= fabs(e) * wgt;
+     nproc_[index_of_process]+= wgt;
      if (lucky)
        {
 	 number_++;
@@ -261,7 +262,7 @@ class COMPT_RESULTS : public ABSTRACT_IO_CLASS
   
   COMPT_RESULTS();
   
-  int store_compt(int composante,double e,double px,double py,double pz,double wgt,RNDM& rndm_generator);
+  int store_compt(int index_of_process,double e,double px,double py,double pz,double wgt,RNDM& rndm_generator);
 
   virtual  inline std::string output_flow() const 
     {
@@ -350,7 +351,7 @@ class JET_RESULTS : public ABSTRACT_IO_CLASS
 /* { */
 /*   std::ostringstream out; */
 /*   out << title(std::string("photons results")); */
-/*   out << "e_phot.1 = " << energy_[0]/max(double(1.0),double(number_[0])) << " e_phot.2 = " << energy_[1]/max(double(1.0),double(number_[1])) << std::endl; */
+/*   out << "e_phot.1 = " << energy_[0]/std::max(double(1.0),double(number_[0])) << " e_phot.2 = " << energy_[1]/std::max(double(1.0),double(number_[1])) << std::endl; */
 /*   return out.str(); */
 /* } */
 /* }; */
@@ -383,7 +384,7 @@ class COHERENT_RESULTS : public ABSTRACT_IO_CLASS
   
   inline void updateProbmax(PHI_FLOAT tmp)
     {
-      probmax_ = max(probmax_,tmp);
+      probmax_ = std::max(probmax_,tmp);
     }
   inline void updateSumeng(float ener)
     {
@@ -400,7 +401,7 @@ class COHERENT_RESULTS : public ABSTRACT_IO_CLASS
       sum_ += wt;
       sum2_ += wt*wt;
       sumeng_ += wt*ener;
-      upsmax_ = max(upsmax_, double(ups));
+      upsmax_ = std::max(upsmax_, double(ups));
     }
   
   virtual std::string output_flow() const ;

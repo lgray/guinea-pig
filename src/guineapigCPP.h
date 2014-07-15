@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <algorithm>
+#include <string>
+#include <vector>
 #include "rndmCPP.h"
 #include "beamParametersCPP.h"
 #include "config.h"
@@ -16,8 +18,6 @@
 #include "physconst.h"
 #include "mathematicalTools.h"
 #include "parametersCPP.h"
-
-using namespace std;
 
 
 class GUINEA :  public ABSTRACT_IO_CLASS
@@ -33,7 +33,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   PHOTON_BEAM photon_vector_;
 
   GRID grid_;
-  vector<GENERAL_GRID*> gridsPtr_;
+  std::vector<GENERAL_GRID*> gridsPtr_;
 
   BEAM beam1_,beam2_;
   BEAM_PARAMETERS beam_parameters1_,beam_parameters2_;
@@ -44,36 +44,36 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   BESSEL bessel;
   int time_counter_;
 
-  string event_input_file_;
-  string cross_input_file_;
-  string photon_input_file_;
-  string bhabha_input_file_;
-  string bhabha_photon_input_file_;
+  std::string event_input_file_;
+  std::string cross_input_file_;
+  std::string photon_input_file_;
+  std::string bhabha_input_file_;
+  std::string bhabha_photon_input_file_;
 
-  string hadronfile_;
-  string photon_file_;
-  string compton_phot_file_;
-  string secondaries_file_;
-  string secondaries0_file_;
-  string muons_file_;
-  string muons0_file_;
-  string bhabha_prod_;
-  string bhphoton_prod_; // intial bhabhas photons
-  string bhphotons_; // boosted bhabhas photons
+  std::string hadronfile_;
+  std::string photon_file_;
+  std::string compton_phot_file_;
+  std::string secondaries_file_;
+  std::string secondaries0_file_;
+  std::string muons_file_;
+  std::string muons0_file_;
+  std::string bhabha_prod_;
+  std::string bhphoton_prod_; // intial bhabhas photons
+  std::string bhphotons_; // boosted bhabhas photons
 
 
-  string jet_file_;
-  string lumi_ee_file_;
-  string lumi_eg_file_;
-  string lumi_ge_file_;
-  string lumi_gg_file_;
-  string beam1_file_;
-  string beam2_file_;
-  string coh1_file_;
-  string coh2_file_;
-  string tri1_file_;
-  string tri2_file_;
-  string tertphot_file_;
+  std::string jet_file_;
+  std::string lumi_ee_file_;
+  std::string lumi_eg_file_;
+  std::string lumi_ge_file_;
+  std::string lumi_gg_file_;
+  std::string beam1_file_;
+  std::string beam2_file_;
+  std::string coh1_file_;
+  std::string coh2_file_;
+  std::string tri1_file_;
+  std::string tri2_file_;
+  std::string tertphot_file_;
 
  
 
@@ -87,56 +87,56 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 
   inline void init_input_file_names()
     {
-      event_input_file_ = string("event.ini");
-      cross_input_file_ = string("cross.ini");
-      photon_input_file_ = string("photon.ini");
-      bhabha_input_file_ = string("bhabha.ini");
-      bhabha_photon_input_file_ = string("bhabha_photon.ini");
+      event_input_file_ = std::string("event.ini");
+      cross_input_file_ = std::string("cross.ini");
+      photon_input_file_ = std::string("photon.ini");
+      bhabha_input_file_ = std::string("bhabha.ini");
+      bhabha_photon_input_file_ = std::string("bhabha_photon.ini");
       
     }
   
   inline void init_output_file_names()
     {
-      secondaries_file_ = string("pairs.dat");
-      secondaries0_file_ = string("pairs0.dat");
-      muons_file_ = string("muons.dat");
-      muons0_file_ = string("muons0.dat");
-      jet_file_ = string("minijet.dat");
+      secondaries_file_ = std::string("pairs.dat");
+      secondaries0_file_ = std::string("pairs0.dat");
+      muons_file_ = std::string("muons.dat");
+      muons0_file_ = std::string("muons0.dat");
+      jet_file_ = std::string("minijet.dat");
       
-      bhabha_prod_ = string("bhabha_prod.dat"); // initial bhabhas
-      bhphoton_prod_ = string("bhphoton_prod.dat"); // initial bhabhas photons
-      bhphotons_ = string("bhphotons.dat"); // boosted bhabhas photons
+      bhabha_prod_ = std::string("bhabha_prod.dat"); // initial bhabhas
+      bhphoton_prod_ = std::string("bhphoton_prod.dat"); // initial bhabhas photons
+      bhphotons_ = std::string("bhphotons.dat"); // boosted bhabhas photons
       
-      lumi_ee_file_ = string("lumi.ee.out");
-      lumi_eg_file_ = string("lumi.eg.out");
-      lumi_ge_file_ = string("lumi.ge.out");
-      lumi_gg_file_ = string("lumi.gg.out");
-      beam1_file_ = string("beam1.dat");
-      beam2_file_ = string("beam2.dat");
-      coh1_file_ = string("coh1.dat");
-      coh2_file_ = string("coh2.dat");
-      tri1_file_ = string("tri1.dat");
-      tri2_file_ = string("tri2.dat");
-      tertphot_file_ = string("tertphot.dat");
+      lumi_ee_file_ = std::string("lumi.ee.out");
+      lumi_eg_file_ = std::string("lumi.eg.out");
+      lumi_ge_file_ = std::string("lumi.ge.out");
+      lumi_gg_file_ = std::string("lumi.gg.out");
+      beam1_file_ = std::string("beam1.dat");
+      beam2_file_ = std::string("beam2.dat");
+      coh1_file_ = std::string("coh1.dat");
+      coh2_file_ = std::string("coh2.dat");
+      tri1_file_ = std::string("tri1.dat");
+      tri2_file_ = std::string("tri2.dat");
+      tertphot_file_ = std::string("tertphot.dat");
       if (switches.get_write_photons())
 	{
-	  photon_file_ = string("photon.dat");
+	  photon_file_ = std::string("photon.dat");
 	}
-      else photon_file_ = string("");
+      else photon_file_ = std::string("");
       
       if ( switches.get_do_compt_phot() )
 	{
-	  compton_phot_file_ = string("compton.photon");
+	  compton_phot_file_ = std::string("compton.photon");
 	}
-      else compton_phot_file_ = string("");
+      else compton_phot_file_ = std::string("");
       
       
       
       if (switches.get_store_hadrons())
 	{
-	  hadronfile_ = string("hadron.dat");
+	  hadronfile_ = std::string("hadron.dat");
 	}
-      else hadronfile_ = string("");
+      else hadronfile_ = std::string("");
     }
   
   
@@ -179,7 +179,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 	}
     }
   
-  inline  void init_grid_phys(float n_particles1, float n_particles2, const vector<float>& size_x, const vector<float>& size_y, float size_z, int n_cell_x, int n_cell_y)
+  inline  void init_grid_phys(float n_particles1, float n_particles2, const std::vector<float>& size_x, const std::vector<float>& size_y, float size_z, int n_cell_x, int n_cell_y)
     {
       int extra_grids;
       unsigned int i1;
@@ -188,7 +188,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       grid_.init_grid_phys(n_particles1, n_particles2,size_x[0],size_y[0],size_z, switches.get_charge_sign(), &fourier_server_);
       extra_grids = switches.get_extra_grids();
       if ( extra_grids < 0 ) extra_grids = 0;
-      gridsPtr_ = vector<GENERAL_GRID*>(extra_grids+1);
+      gridsPtr_ = std::vector<GENERAL_GRID*>(extra_grids+1);
       gridsPtr_[0] = &grid_;
       for (i1=1; i1 <  gridsPtr_.size() ;i1++)
 	{
@@ -210,7 +210,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       return TOOLS::nearest_power_of_2(8.0*rapp);
     }
   
-  void xycuts_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 , int nbgrids, vector<float>& size_x, vector<float>& size_y, int& updated_n_cell_x, int& updated_n_cell_y ) const;
+  void xycuts_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 , int nbgrids, std::vector<float>& size_x, std::vector<float>& size_y, int& updated_n_cell_x, int& updated_n_cell_y ) const;
   float zcut_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2) const;
   
   void main_grid_xycuts_from_loaded_beam(const BEAM_FROM_FILE& bff1,const BEAM_FROM_FILE& bff2, float& size_x, float& size_y ) const;
@@ -258,7 +258,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       // THETA = 0.5*DD*(sigma/sigmaz)*f_form
       // DELTA = f*0.5*DD*sigma*f_form
       // on choisit A = 1, c-a-d beta = 10^-6 sigmaz
-      ofstream out1, out2;
+      std::ofstream out1, out2;
       float delta, AA, DD, formfct, factor,  decalage;
       //float sigma, 
       float theta0;
@@ -267,28 +267,28 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       theta0 = 2.*npart*RE/(gamma*(sigmax+sigmay)*1.0e-9);
       DD = theta0*sigmaz/sigmax;
       AA = sigmaz/(betax*1.0e6);
-      //   cout << " ******** Dx = " << DD << " AA = " << AA << " ************ " << endl;
-      out1.open("disrupx.dat", ios::out);
+      //   std::cout << " ******** Dx = " << DD << " AA = " << AA << " ************ " << std::endl;
+      out1.open("disrupx.dat", std::ios::out);
       for (delta = 0.; delta <= 5. ; delta +=  0.01)
 	{
 	  formfct = form_function(AA, DD, delta);
 	  factor = offset_factor(0.5*delta);
 	  decalage = 0.5*formfct*DD*factor*sigmax;
-	  //	 cout << " delta = " << delta << " decal= " << decalage << " form factor : " << formfct << " factor: " << factor << endl;
-	  out1 << delta << " " << decalage << " " << factor << endl;
+	  //	 std::cout << " delta = " << delta << " decal= " << decalage << " form factor : " << formfct << " factor: " << factor << std::endl;
+	  out1 << delta << " " << decalage << " " << factor << std::endl;
 	}
       out1.close();
       DD = theta0*sigmaz/sigmay;
       AA = sigmaz/(betay*1.0e6);
-      //   cout << " ******** Dy = " << DD << " AA = " << AA << " ************ " << endl;
-      out2.open("disrupy.dat", ios::out);
+      //   std::cout << " ******** Dy = " << DD << " AA = " << AA << " ************ " << std::endl;
+      out2.open("disrupy.dat", std::ios::out);
       for (delta = 0.; delta <= 5. ; delta +=  0.01)
 	{
 	  formfct = form_function(AA, DD, delta);
 	  factor = offset_factor(0.5*delta);
 	  decalage = 0.5*formfct*DD*factor*sigmay;
-	  //	 cout << " delta = " << delta << " decal= " << decalage << " form factor : " << formfct << " factor: " << factor << endl;
-	  out2 << delta << " " << decalage << " " << factor << endl;
+	  //	 std::cout << " delta = " << delta << " decal= " << decalage << " form factor : " << formfct << " factor: " << factor << std::endl;
+	  out2 << delta << " " << decalage << " " << factor << std::endl;
 	}
       out2.close();
     }
@@ -356,11 +356,11 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       float decalage, hh;
       // beta is in mm, sigma in nanometres
       AA = sigmaz/(beta*1.0e6);
-      //  cout << " A= " << AA << " beta = " << beta << endl;
+      //  std::cout << " A= " << AA << " beta = " << beta << std::endl;
       hh = dxx/sigma;
       formfct = form_function(AA, DD, 2.*hh);
       factor = offset_factor(hh);
-      //  cout << " factor = " << factor << endl;
+      //  std::cout << " factor = " << factor << std::endl;
       decalage = 0.5*formfct*theta0*factor*sigmaz;
       return decalage;
     }
@@ -369,17 +369,17 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   inline float transverse_cut_from_data(char dir) const
     {
       float cut;
-      string cut_dir("cut_");
+      std::string cut_dir("cut_");
       cut_dir += dir;
       cut = params_.readFValue(cut_dir);
       if (cut <= 0.0) 
 	{ 
-	  cerr << " GUINEA::transverse_cut_from_data() : WARNING : non automatic grid sizing, but cut_x or cut_y is not given. default values will be computed from sigma's " << endl;
+	  std::cerr << " GUINEA::transverse_cut_from_data() : WARNING : non automatic grid sizing, but cut_x or cut_y is not given. default values will be computed from sigma's " << std::endl;
 	  cut = 3.0*sigma_for_cut_from_data(dir);
 	}
       if (cut <= 0.0) 
 	{
-	  cerr << " GUINEA::transverse_cut_from_data() : ERROR : no cut is given in data, and thera are missing data for beta, emittance, sigma in the direction " << dir << ". So the default value cut = 3*sigma is not available. You should complete these data, or use the automatic_grid_sizing option " << endl;
+	  std::cerr << " GUINEA::transverse_cut_from_data() : ERROR : no cut is given in data, and thera are missing data for beta, emittance, sigma in the direction " << dir << ". So the default value cut = 3*sigma is not available. You should complete these data, or use the automatic_grid_sizing option " << std::endl;
 	  exit(0);
 	}
       return cut;
@@ -399,13 +399,13 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 	  if(cutz>0.0) cutz *= 1e3;
 	  else 
 	    {
-	      cerr << " GUINEA::cut_z_from_data() : WARNING : cut_z is not given. default values will be computed from sigma_z " << endl;
+	      std::cerr << " GUINEA::cut_z_from_data() : WARNING : cut_z is not given. default values will be computed from sigma_z " << std::endl;
 	      cutz =  default_zcut(sigma_for_cut_from_data('z'));
 	    }
 	}
       if (cutz <= 0.0) 
 	{
-	  cerr << " GUINEA::cut_z_from_data() :either  cut_z is not given in data, or sigma_z " << endl;
+	  std::cerr << " GUINEA::cut_z_from_data() :either  cut_z is not given in data, or sigma_z " << std::endl;
 	  exit(0);
 	}
       return cutz;
@@ -440,7 +440,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   void set_beams_and_grids();
   void set_output_data_and_files();
   
-  void outputs(string nameOfProtokoll);
+  void outputs(std::string nameOfProtokoll);
   
   //void  lumi_init();
   void lumi_exit();
@@ -522,32 +522,32 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   
   void save_results_on_files();
   
-  void print_program_outputs(string nameOfProtokoll);
+  void print_program_outputs(std::string nameOfProtokoll);
   
   inline void dump_beams(int timestep,int every_step, int every_particle)
     {
       
       //   if (timestep%every_step==0) 
       //     {
-      ostringstream name;
-      string filename;
+      std::ostringstream name;
+      std::string filename;
       int extension = timestep/every_step;
       //
-      name << string("bp1.") << extension << ends;
+      name << std::string("bp1.") << extension << std::ends;
       filename = name.str();
       beam1_.dump_photons(filename,timestep,every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
       name.seekp(0);
-      name << string("bp2.") << extension << ends;
+      name << std::string("bp2.") << extension << std::ends;
       filename = name.str();
       beam2_.dump_photons(filename,timestep, every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
       name.seekp(0);
       //	
-      name << string("b1.") << extension << ends;
+      name << std::string("b1.") << extension << std::ends;
       filename = name.str();
       
       beam1_.dump_beam(filename, timestep, every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
       name.seekp(0);
-      name << string("b2.") << extension << ends;
+      name << std::string("b2.") << extension << std::ends;
       filename = name.str();
       
       beam2_.dump_beam(filename, timestep, every_particle, grid_.get_timestep(), grid_.get_step(), grid_.get_max_z());
@@ -556,27 +556,27 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   
   void printInitialBeam(const BEAM& beam);
   
-  string header() const 
+  std::string header() const 
     {
-      ostringstream out;
-      out <<  "****************************************************** " << endl;
-      out <<  "* guineapig++ Version " << PACKAGE_VERSION << endl;
-      out <<  "* Program written by Daniel Schulte at DESY and CERN " << endl;
-      out <<  "* object oriented by Guy Le Meur at LAL-Orsay " << endl;
-      out <<  "* contributions from C. Rimbault at LAL-Orsay " << endl;
-      out <<  "* B. Dalena, J. Esberg and J. Snuverink at CERN" << endl;
-      out <<  "*" << endl;
+      std::ostringstream out;
+      out <<  "****************************************************** " << std::endl;
+      out <<  "* guineapig++ Version " << PACKAGE_VERSION << std::endl;
+      out <<  "* Program written by Daniel Schulte at DESY and CERN " << std::endl;
+      out <<  "* object oriented by Guy Le Meur at LAL-Orsay " << std::endl;
+      out <<  "* contributions from C. Rimbault at LAL-Orsay " << std::endl;
+      out <<  "* B. Dalena, J. Esberg and J. Snuverink at CERN" << std::endl;
+      out <<  "*" << std::endl;
       out <<  "* Compiled with FFTW: " 
 #ifdef FFT_LOCAL
-	  << " FFT LOCAL (consider compiling with FFTW2 or FFTW3 to get cpu speedup) " << endl;
+	  << " FFT LOCAL (consider compiling with FFTW2 or FFTW3 to get cpu speedup) " << std::endl;
 #elif defined USE_FFTW2
-          << " FFTW2 " << endl;
+          << " FFTW2 " << std::endl;
 #elif defined USE_FFTW3
-	  << " FFTW3 " << endl;
+	  << " FFTW3 " << std::endl;
 #else
-          << " UNKNOWN " << endl;
+          << " UNKNOWN " << std::endl;
 #endif
-      out <<  "**************************************************** " << endl;
+      out <<  "**************************************************** " << std::endl;
 
       return out.str();
     }
@@ -594,7 +594,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   void run(char *par,char *prot);
   //  void close();
   
-  virtual string output_flow() const; 
+  virtual std::string output_flow() const; 
   
 };
 

@@ -4,9 +4,6 @@
 #include <cstring>
 #include "beamParametersCPP.h"
 
-using namespace std;
-
-
 BEAM_PARAMETERS::BEAM_PARAMETERS():ebeam_(0.0),n_particles_(0.0),gamma_beam_(0.0),waist_x_(0.0),waist_y_(0.0),L_0_(0.0),L_(0.0),bunches_per_train_(0),frep_(0.0)
 {
   sigma_x_=0.0;
@@ -196,21 +193,21 @@ void BEAM_PARAMETERS::set_polar(double compx, double compy, double compz)
   if (polar_.norm() >1.0) polar_.renormalize();
 }
 
-string BEAM_PARAMETERS::output_flow() const
+std::string BEAM_PARAMETERS::output_flow() const
 {
-  ostringstream out;
-  string start(" beam parameter ");
-  start.append(string(&extension_[1]));
+  std::ostringstream out;
+  std::string start(" beam parameter ");
+  start.append(std::string(&extension_[1]));
   out << title(start);
-  out << " energy : " << ebeam_ << " GeV ; particles : " << n_particles_ << endl;
-  out << "  sigma_x  : "  << sigma_x_ << " nm ;  sigma_y : " << sigma_y_ << " nm ; sigma_z : " << sigma_z_*1e-3 << " micrometers " <<  endl;
-  out << " emitt_x : " << em_x_*1.e6 <<  " emitt_y : " << em_y_*1.e6 << "  (mm.mrad) " << endl;
-  out << " beta_x : " << beta_x_*1e3 <<  " beta_y : " << beta_y_*1e3 << " (micrometers) " << endl;
-  out << " offset_x : "  << offset_x_ << " nm ; offset_y : " << offset_y_ << " nm ; offset_z : " << offset_z_*1.e-3 << " micrometers " << endl;
-  out << " waist_x : " << waist_x_*1.e-3 <<  " waist_y : " << waist_y_*1.e-3 << " (micrometers) " << endl;
-  out << " angle_x : "  << x_angle_ << " angle_y : " << y_angle_ << " angle_phi : " << phi_angle_ << " (radians) " << endl;
-  out << " type of distribution charge :  dist_x : " << dist_x_ <<  " dist_z : " << dist_z_ << endl;
-  out << " initial polarization (ONLY FOR bmt_precession = 1 and internally generated beam) : polar_x = " << polar_.getComponent(0) << " polar_y = " << polar_.getComponent(0) << " polar_z = " << polar_.getComponent(2) << endl;
+  out << " energy : " << ebeam_ << " GeV ; particles : " << n_particles_ << std::endl;
+  out << "  sigma_x  : "  << sigma_x_ << " nm ;  sigma_y : " << sigma_y_ << " nm ; sigma_z : " << sigma_z_*1e-3 << " micrometers " <<  std::endl;
+  out << " emitt_x : " << em_x_*1.e6 <<  " emitt_y : " << em_y_*1.e6 << "  (mm.mrad) " << std::endl;
+  out << " beta_x : " << beta_x_*1e3 <<  " beta_y : " << beta_y_*1e3 << " (micrometers) " << std::endl;
+  out << " offset_x : "  << offset_x_ << " nm ; offset_y : " << offset_y_ << " nm ; offset_z : " << offset_z_*1.e-3 << " micrometers " << std::endl;
+  out << " waist_x : " << waist_x_*1.e-3 <<  " waist_y : " << waist_y_*1.e-3 << " (micrometers) " << std::endl;
+  out << " angle_x : "  << x_angle_ << " angle_y : " << y_angle_ << " angle_phi : " << phi_angle_ << " (radians) " << std::endl;
+  out << " type of distribution charge :  dist_x : " << dist_x_ <<  " dist_z : " << dist_z_ << std::endl;
+  out << " initial polarization (ONLY FOR bmt_precession = 1 and internally generated beam) : polar_x = " << polar_.getComponent(0) << " polar_y = " << polar_.getComponent(0) << " polar_z = " << polar_.getComponent(2) << std::endl;
   return out.str();
 }
 

@@ -4,8 +4,6 @@
 #include "rndmCPP.h"
 #include "mathconst.h"
 
-using namespace std;
-
 RNDM::RNDM(unsigned long seed)
 {
   rndmst0(1);
@@ -192,7 +190,7 @@ float RNDM::rndm6()
 
 void RNDM::rndmst7(unsigned long i)
 {
-  //  cout << " test of the random generator rndm7 " << endl;
+  //  std::cout << " test of the random generator rndm7 " << std::endl;
 
   rndm7_store.i= 0L;
   unsigned long a_coeff;
@@ -218,13 +216,13 @@ void RNDM::rndmst7(unsigned long i)
   c_coeff = 1013904223L;
   if ( rndm_test7(a_coeff , c_coeff, test7) )
     {
-      cout << " random generator successful test : 32-bits computer " << endl;      
+      std::cout << " random generator successful test : 32-bits computer " << std::endl;      
       // following factor is 1/(2.exp(32))
       rndm7_modulo_dividing_factor_ = 0.232830643654e-9;
     }
   else
     {
-      cerr << " RNDM::rndmst7 : test for random generator failed, are we really working on a  32-bits computer ? " << endl;
+      std::cerr << " RNDM::rndmst7 : test for random generator failed, are we really working on a  32-bits computer ? " << std::endl;
       exit(0);
     }
 #else
@@ -245,13 +243,13 @@ void RNDM::rndmst7(unsigned long i)
   c_coeff = 1L;
   if ( rndm_test7(a_coeff , c_coeff, test7) )
     {
-      cout << " random generator successful test : 64-bits computer " << endl;
+      std::cout << " random generator successful test : 64-bits computer " << std::endl;
       // following factor is 1/(2.exp(64))
       rndm7_modulo_dividing_factor_ = 0.54210108624e-19;
     }
   else
     {
-      cerr << " RNDM::rndmst7 : test for random generator failed, are we really working on a  64-bits computer ? maybe you should desactive the define COMPUTER64b (CMT requirements) " << endl;
+      std::cerr << " RNDM::rndmst7 : test for random generator failed, are we really working on a  64-bits computer ? maybe you should desactive the define COMPUTER64b (CMT requirements) " << std::endl;
       exit(0);
     }
 #endif
@@ -390,10 +388,10 @@ float RNDM::rndm_sincos(float *c)
 
 // get a vector containing the sequence of integers from 1 to maxInt 
 // randomly shuffled 
-void RNDM::getShuffledIntegerSequence(int maxInt, vector<unsigned long int>& vec)
+void RNDM::getShuffledIntegerSequence(int maxInt, std::vector<unsigned long int>& vec)
 {
   int k, j;
-  unsigned long int iaux;
+  unsigned long int itemp;
   float u;
   vec.clear();
   vec.resize(maxInt);
@@ -403,9 +401,9 @@ void RNDM::getShuffledIntegerSequence(int maxInt, vector<unsigned long int>& vec
     {
       u = rndm();
       k = (int)floor(j*u) +1;
-      iaux = vec[k-1];
+      itemp = vec[k-1];
       vec[k-1] = vec[j-1];
-      vec[j-1] = iaux;
+      vec[j-1] = itemp;
       j--;
     }
 }
@@ -438,10 +436,10 @@ int RNDM::rndm_load()
         fread(&rndm7_store,sizeof(rndm7_store),1,file);
         fread(&rndm8_store,sizeof(rndm8_store),1,file);
         fclose(file);
-	cout << "  RNDM::rndm_load : the seed is now : " << rndm7_store.i << endl;
+	std::cout << "  RNDM::rndm_load : the seed is now : " << rndm7_store.i << std::endl;
 	return 1;
       }
-    cout << "  RNDM::rndm_load : no rndm_load file, the seed is : " << rndm7_store.i << endl;
+    std::cout << "  RNDM::rndm_load : no rndm_load file, the seed is : " << rndm7_store.i << std::endl;
     return 0;
 }
 

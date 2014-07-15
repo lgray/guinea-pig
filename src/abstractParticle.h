@@ -173,7 +173,7 @@ class ABSTRACT_BHABHA_PHOTON_SAMPLES
  virtual  int get_label() const = 0;
  virtual  unsigned int nb_samples() const = 0;
  
- virtual  void get_parameters_for_output(unsigned int numero, int& numero_bhabha, float& en,float& vx,float& vy, float&vz) const = 0;
+ virtual  void get_parameters_for_output(unsigned int number, int& number_bhabha, float& en,float& vx,float& vy, float&vz) const = 0;
  
  virtual  void add_bhabha_photon(int nbhabha, float px, float py, float pz, float en) = 0;
 // virtual  void create_bhabha_photon(int nbhabha, float px, float py, float pz, float en) = 0;
@@ -188,7 +188,7 @@ class ABSTRACT_BHABHASAMPLES
   virtual ~ABSTRACT_BHABHASAMPLES() {;}
   virtual unsigned int nb_samples() const = 0;
   
-  virtual  void get_parameters_for_output(unsigned int numero, unsigned int& evtIdx, float& eCM, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const = 0;
+  virtual  void get_parameters_for_output(unsigned int number, unsigned int& evtIdx, float& eCM, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const = 0;
   
   virtual  void add_bhabha(unsigned int evtIdx, float px1, float py1, float pz1, float e1, float px2, float py2, float pz2, float e2, int nbphot) = 0;
   
@@ -215,8 +215,8 @@ class ABSTRACT_LUMI_HEAP : public ABSTRACT_IO_CLASS
   virtual ~ABSTRACT_LUMI_HEAP() {;}
 
   virtual  int nb_pairs() const = 0;
-  virtual  void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z) const = 0;
-  virtual  void get_parameters_for_output(unsigned int numero, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2,int& t)  const = 0;
+  virtual  void get_parameters_for_output(unsigned int number, float& e1,float& e2,float& x,float& y,float& z) const = 0;
+  virtual  void get_parameters_for_output(unsigned int number, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2,int& t)  const = 0;
   virtual std::string output_flow() const 
     {
       std::ostringstream out;

@@ -120,11 +120,11 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
       {
 	bool goodline = false;
 	std::istringstream ss(slu);
-	float aux;
-	while ( ss >> aux && number < 9) 
+	float temp;
+	while ( ss >> temp && number < 9) 
 	  {
 	    goodline = true;
-	    readValue[number] = aux;
+	    readValue[number] = temp;
 	    number++;
 	  }
 	part.init_from_input_file(readValue[0],readValue[1],readValue[2],readValue[3], readValue[4], readValue[5], readValue[6], readValue[7], readValue[8] );

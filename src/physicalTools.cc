@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 BESSEL PHYSTOOLS::bessel_ = BESSEL();
 
 void PHYSTOOLS::mkit(double gam2i,double& c, RNDM& rndm_generator)
@@ -27,7 +25,7 @@ void PHYSTOOLS::mkit(double gam2i,double& c, RNDM& rndm_generator)
     c= x/beta;
 }
 
-float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius, vector<float>&  photon, RNDM& rndm_generator) 
+float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius, std::vector<float>&  photon, RNDM& rndm_generator) 
 {
   int n,i,j=0;
   float tmp;
@@ -41,17 +39,17 @@ float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
   TRIDVECTOR stokes;
   for (i=0;i<n;i++)
     {
-      //      int aux = synrad_0(eng,e2, e3, polar, sokolov, radius_i,dz,photon+j, rndm_generator);
-      int aux;
+      //      int temp = synrad_0(eng,e2, e3, polar, sokolov, radius_i,dz,photon+j, rndm_generator);
+      int temp;
 
-      aux = synrad_0_spin_flip( upsilonSingleP,eng,e1, e2, e3, polar,stokes,  dzOnRadius,&photener, rndm_generator);
-      if (aux) 
+      temp = synrad_0_spin_flip( upsilonSingleP,eng,e1, e2, e3, polar,stokes,  dzOnRadius,&photener, rndm_generator);
+      if (temp) 
 	{
 	  photon.push_back(photener);
 	  dzOnRadius *= eng/(eng-photon[j]);
 	  if (photon[j]<=0.0) 
 	    {
-	      cerr << "warning PHYSTOOLS::synrad " << photon[j] << " " << eng << " " << j << " " << n << endl;
+	      std::cerr << "warning PHYSTOOLS::synrad " << photon[j] << " " << eng << " " << j << " " << n << std::endl;
 	    }
 	  
 	  eng -= photon[j];
@@ -61,7 +59,7 @@ float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
 	  // 
 	  if (j>=1000)
 	    {
-	      cerr << " PHYSTOOLS::synrad too many photons (>= 1000) produced by one particle, j= " << j << endl;
+	      std::cerr << " PHYSTOOLS::synrad too many photons (>= 1000) produced by one particle, j= " << j << std::endl;
 	      exit(-1);
 	    }
 	}
@@ -71,7 +69,7 @@ float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
 }
 
 // return final energy of the radiating particle
-float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOnRadius,vector<float>&  photon, RNDM& rndm_generator) 
+float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOnRadius,std::vector<float>&  photon, RNDM& rndm_generator) 
 {
   int n,i,j=0;
   float tmp;
@@ -84,18 +82,18 @@ float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOn
   photon.clear();
   for (i=0;i<n;i++)
     {
-      int aux;
+      int temp;
 
-      aux = synrad_0_no_spin_flip( upsilonSingleP,eng, dzOnRadius,&photener, rndm_generator);
+      temp = synrad_0_no_spin_flip( upsilonSingleP,eng, dzOnRadius,&photener, rndm_generator);
 	
 
-      if (aux) 
+      if (temp) 
 	{
 	  photon.push_back(photener);
 	  dzOnRadius *= eng/(eng-photon[j]);
 	  if (photon[j]<=0.0) 
 	    {
-	      cerr << "warning PHYSTOOLS::synrad " << photon[j] << " " << eng << " " << j << " " << n << endl;
+	      std::cerr << "warning PHYSTOOLS::synrad " << photon[j] << " " << eng << " " << j << " " << n << std::endl;
 	    }
 	  
 	  eng -= photon[j];
@@ -105,7 +103,7 @@ float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOn
 	  // 
 	  if (j>=1000)
 	    {
-	      cerr << " PHYSTOOLS::synrad too many photons (>= 1000) produced by one particle, j= " << j << endl;
+	      std::cerr << " PHYSTOOLS::synrad too many photons (>= 1000) produced by one particle, j= " << j << std::endl;
 	      exit(-1);
 	    }
 	}
@@ -130,7 +128,7 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
   double fK13, fKi13, fKi53, fK23;
   if (eng<=0.0)
     {
-      cerr << "Initial particle energy below zero : " << eng << endl;
+      std::cerr << "Initial particle energy below zero : " << eng << std::endl;
       return 1;
     }
   double upsilon = (double)upsilonSingleP;
@@ -169,10 +167,10 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
       
       //       //      if ( stokes.norm() > 0.9) 
       //       //	{
-      // 	  cout << " fK23 = " << fK23 << " s3= " << s3 << " x= " << x << endl;
-      // 	  cout << " norma of stokes " << stokes.norm() << endl;
+      // 	  std::cout << " fK23 = " << fK23 << " s3= " << s3 << " x= " << x << std::endl;
+      // 	  std::cout << " norma of stokes " << stokes.norm() << std::endl;
       // 	  stokes.print();
-      // 	  cout << " ----------------------------------- " << endl;
+      // 	  std::cout << " ----------------------------------- " << std::endl;
       // 	  //	}
 
       fKi13 = TOOLS::Ki13(z);
@@ -180,7 +178,7 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
 	{
 	  polar(k) = ( F00*polar(k) - x/(1.0-x) * fK13 * e2(k) - x*x/(1.0-x) * ( s3*e3(k)* fKi13 + (polar(k) - s3 * e3(k)  ) * fK23 ) ) / F00star;
 	}
-      //           cout << " norma of polar " << polar.norm() << endl;
+      //           std::cout << " norma of polar " << polar.norm() << std::endl;
       //	    polar.print();
       *photonEnergy = eng * x;
       return 1;
@@ -218,7 +216,7 @@ int PHYSTOOLS::synrad_0_no_spin_flip (float upsilonSingleP, float eng, float dzO
   //j=0;
   if (eng<=0.0)
     {
-      cerr << "Initial particle energy below zero : " << eng << endl;
+      std::cerr << "Initial particle energy below zero : " << eng << std::endl;
       return 1;
     }
 
@@ -231,7 +229,7 @@ int PHYSTOOLS::synrad_0_no_spin_flip (float upsilonSingleP, float eng, float dzO
   double gamma = eng/EMASS;
   double factor =  pow ( (1.0 + 0.5 * upsilon_bar ), 0.33333333333);
   p0 = CONST1 * dzOnRadius * gamma / factor ; 
-  //  cout << " p0 = " << p0 << " previously " << synrad_p0(eng,radius_i,dz) << endl;
+  //  std::cout << " p0 = " << p0 << " previously " << synrad_p0(eng,radius_i,dz) << std::endl;
   if (rndm_generator.rndm_synrad()>p0) return 0;
   p1=rndm_generator.rndm_synrad();
   while((v1=rndm_generator.rndm_synrad())==0.0) ; /* v1!= 0.0 */

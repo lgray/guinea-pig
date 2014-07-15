@@ -1,8 +1,6 @@
 #include "lumiCPP.h"
 
-using namespace std;
-
-int GENERAL_LUMI_HEAP::stack_vector(int nstore, vector<int>& selected_indices)
+int GENERAL_LUMI_HEAP::stack_vector(int nstore, std::vector<int>& selected_indices)
   {
      int k;
      float store,scal;
@@ -43,7 +41,7 @@ int  LUMI_HEAP::prepare_store(float weight)
   nstore = numberToStore(store);
   if(nstore + nb_pairs_ > nmax_ )
     {
-      vector<int> selected_indices;
+      std::vector<int> selected_indices;
       nstore = stack_vector(nstore, selected_indices);
       nb_pairs_ = 0;
       for (j=0; j<selected_indices.size(); j++)
@@ -68,7 +66,7 @@ int  LUMI_HEAP_EE::prepare_store(float weight)
   nstore = numberToStore(store);
   if(nstore + nb_pairs_ > nmax_ )
     {
-      vector<int> selected_indices;
+      std::vector<int> selected_indices;
       // recuperate the pair indices to store
       nstore = stack_vector(nstore, selected_indices);
       nb_pairs_ = 0;

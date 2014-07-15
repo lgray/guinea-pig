@@ -98,7 +98,7 @@ class COMPT : public ABSTRACT_IO_CLASS
       delete compton_phot_file_; 
     }
   
-  inline void connect_compt_phot_file(string name)
+  inline void connect_compt_phot_file(std::string name)
     {
       compton_phot_file_ = new FILE_IN_OUT();
       compton_phot_file_->open_file(name, "w");
@@ -106,14 +106,14 @@ class COMPT : public ABSTRACT_IO_CLASS
   
   void compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BEAM& secondaries, int index_of_process,float epart,float ephot,float q2,float vx,float vy,float wgt, int dir,SWITCHES& switches, RNDM& rndm_generator);
     
-  virtual inline string  output_flow() const 
+  virtual inline std::string  output_flow() const 
     {
-      ostringstream out;
-      out << title(string("compton parameters"));
-      out << "compt_sum = " << sum_ << endl;
-      out << "compt_sum2 = " << sum2_ << endl;
-      out << "compt_sum3 = " << sum3_ << " compt_sume3 = " << sume3_ << endl;
-      out << "compt_sum4 = " << sum4_ << " compt_sume4 = " << sume4_ << endl;
+      std::ostringstream out;
+      out << title(std::string("compton parameters"));
+      out << "compt_sum = " << sum_ << std::endl;
+      out << "compt_sum2 = " << sum2_ << std::endl;
+      out << "compt_sum3 = " << sum3_ << " compt_sume3 = " << sume3_ << std::endl;
+      out << "compt_sum4 = " << sum4_ << " compt_sume4 = " << sume4_ << std::endl;
       out << compt_results_.output_flow();
       return out.str();
     }
@@ -121,10 +121,10 @@ class COMPT : public ABSTRACT_IO_CLASS
   
   inline void compt_write()
     {
-      cout << "compt_sum= " << sum_ << endl;
-      cout << "compt_sum2= " << sum2_ << endl;
-      cout << "compt_sum3= " << sum3_ << " compt_sume3= " << sume3_ << endl;
-  cout << "compt_sum4= " << sum4_ << " compt_sume4= " << sume4_ << endl;
+      std::cout << "compt_sum= " << sum_ << std::endl;
+      std::cout << "compt_sum2= " << sum2_ << std::endl;
+      std::cout << "compt_sum3= " << sum3_ << " compt_sume3= " << sume3_ << std::endl;
+  std::cout << "compt_sum4= " << sum4_ << " compt_sume4= " << sume4_ << std::endl;
     }
 
 };
@@ -141,7 +141,7 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
   public :
     
     CROSS_DATA() {;}
-  CROSS_DATA(string crossIniFile)
+  CROSS_DATA(std::string crossIniFile)
     {
       load_cross(crossIniFile);
     }
@@ -173,7 +173,7 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
 	}
     }
   
-  inline int load_cross(string crossFileIni)
+  inline int load_cross(std::string crossFileIni)
     {
       FILE_IN_OUT filin;
       filin.open_file(crossFileIni,"r");
@@ -186,17 +186,17 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
   inline void print()
     {
       unsigned int k,j;
-      cout << " *******  CROSS_DATA *************** " << endl;
-      cout << " number of energies : " << number_of_energies_ << endl;
-      cout << " number of values per energy  : " << number_of_cross_sections_per_energy_ << endl;
+      std::cout << " *******  CROSS_DATA *************** " << std::endl;
+      std::cout << " number of energies : " << number_of_energies_ << std::endl;
+      std::cout << " number of values per energy  : " << number_of_cross_sections_per_energy_ << std::endl;
       for (k=0; k < energies_.size(); k++)
 	{
-	  cout << " en= " << energies_[k] << " values: ";
+	  std::cout << " en= " << energies_[k] << " values: ";
 	  for (j=0;j < cross_sections_[k].size(); j++)
 	    {
-	      cout << " " << cross_sections_[k][j];
+	      std::cout << " " << cross_sections_[k][j];
 	    } 
-	  cout << endl;
+	  std::cout << std::endl;
 	} 
     }
 };
@@ -229,7 +229,7 @@ class mCROSS  : public GENERAL_CROSS
   
   mCROSS() 
     {  
-      cout << " constructor mcross " << endl;
+      std::cout << " constructor mcross " << std::endl;
       ncross_per_ener_ = 0;
     }
   
@@ -250,7 +250,7 @@ class mCROSS  : public GENERAL_CROSS
  public: 
   ~mCROSS() {;}
   
-  mCROSS(string crossIniFile)
+  mCROSS(std::string crossIniFile)
     {
       int k,j;
       double* xx;
@@ -264,7 +264,7 @@ class mCROSS  : public GENERAL_CROSS
       nb_ener_ = (int) energ.size();
       if ( nb_ener_ <= 0)
 	{
-	  cerr << " mCROSS:: WARNING no cross data " << endl;
+	  std::cerr << " mCROSS:: WARNING no cross data " << std::endl;
 	  return;
 	}
       xx = new double[nb_ener_];
@@ -274,8 +274,8 @@ class mCROSS  : public GENERAL_CROSS
 	  xx[k] = energ[k];
 	  if ( ncross_per_ener_ != (int) cross_val[k].size())
 	    {
-	      cerr << " mCROSS : incoherent data size, energy = " << energ[k] << " nval= " << 
-		cross_val[k].size() << " supposed to be : " << ncross_per_ener_ << endl;
+	      std::cerr << " mCROSS : incoherent data size, energy = " << energ[k] << " nval= " << 
+		cross_val[k].size() << " supposed to be : " << ncross_per_ener_ << std::endl;
 	    }
 	  for (j=0; j< ncross_per_ener_; j++)
 	    {
@@ -306,26 +306,26 @@ class mCROSS  : public GENERAL_CROSS
       delete [] store;
     }
   
-  virtual string output_flow() const 
+  virtual std::string output_flow() const 
     {
-      ostringstream out;
+      std::ostringstream out;
       int k;
-      out << title(string("m-cross parameters"));
+      out << title(std::string("m-cross parameters"));
       out << " cross={ ";
       for (k=0; k < ncross_per_ener_; k++) out << "  " << sum_[k];
-      out << " } " << endl;;
-      out << " errors of the cross section calculation : cross_var= " << endl;
+      out << " } " << std::endl;;
+      out << " errors of the cross section calculation : cross_var= " << std::endl;
       out << " { ";
       for (k=0; k < ncross_per_ener_; k++)
 	{
 	  if (cross_call_ <= 1) out << " 0.0 " ;
 	  else 
 	    {
-	      out <<  "  " << sqrt(max(0.0,(sum2_[k]/(double)cross_call_ - sum_[k]*sum_[k]/((double)cross_call_*(double)cross_call_))*(double)cross_call_));
+	      out <<  "  " << sqrt(std::max(0.0,(sum2_[k]/(double)cross_call_ - sum_[k]*sum_[k]/((double)cross_call_*(double)cross_call_))*(double)cross_call_));
 	    }
 	}
-      out << "} " << endl;
-      out << " ncross_ncall= " << cross_call_ << endl;
+      out << "} " << std::endl;
+      out << " ncross_ncall= " << cross_call_ << std::endl;
       return out.str();
     }
 };
@@ -340,7 +340,7 @@ class maverCROSS : public mCROSS
     
   maverCROSS() {;}
   
-  maverCROSS(string crossIniFile) : mCROSS(crossIniFile)
+  maverCROSS(std::string crossIniFile) : mCROSS(crossIniFile)
     {
       int k;
       mspline_aver_ = mspline_;
@@ -376,18 +376,18 @@ class maverCROSS : public mCROSS
       cross_call_++;
     }
   
-  virtual string output_flow() const 
+  virtual std::string output_flow() const 
     {
-      ostringstream out;
+      std::ostringstream out;
       int j;
-      out << mCROSS::output_flow() << endl;
+      out << mCROSS::output_flow() << std::endl;
       
       out << "cross_aver={ ";
       for (j=0;j<ncross_per_ener_;j++)
 	{
 	  out << " " << cross_aver_[j]/sum_[j];
 	}
-      out << " }" <<  endl;
+      out << " }" <<  std::endl;
       return out.str();
     }
 };
@@ -402,7 +402,7 @@ class CROSS  : public GENERAL_CROSS
  public: 
   CROSS() {sum_ = 0.0; sum2_ = 0.0;}
   
- CROSS(string crossIniFile) : sum_(0.0),sum2_(0.0)       
+ CROSS(std::string crossIniFile) : sum_(0.0),sum2_(0.0)       
    {
      int k;
      double* xx;
@@ -415,7 +415,7 @@ class CROSS  : public GENERAL_CROSS
      nb_ener_ = energ.size();
      if ( nb_ener_ <= 0)
        {
-	 cerr << " mCROSS:: WARNING no cross data " << endl;
+	 std::cerr << " mCROSS:: WARNING no cross data " << std::endl;
 	 return;
        }
      int ncross_per_ener = cross_val[0].size();
@@ -426,8 +426,8 @@ class CROSS  : public GENERAL_CROSS
 	 xx[k] = energ[k];
 	 if ( ncross_per_ener != (int) cross_val[k].size())
 	   {
-	     cerr << " mCROSS : incoherent data size, energy = " << energ[k] << " nval= " << 
-	       cross_val[k].size() << " supposed to be : " << ncross_per_ener << endl;
+	     std::cerr << " mCROSS : incoherent data size, energy = " << energ[k] << " nval= " << 
+	       cross_val[k].size() << " supposed to be : " << ncross_per_ener << std::endl;
 	   }
 	 yy[k]=cross_val[k][0];
 	 
@@ -454,17 +454,17 @@ class CROSS  : public GENERAL_CROSS
      cross_call_++;
    }
  
- virtual string output_flow() const 
+ virtual std::string output_flow() const 
    {
-     ostringstream out;
-     out << title(string(" cross parameters ")); 
-     out << "cross= " << sum_ << endl;
-     if(cross_call_ <=1 )   out << "cross_var= 0.0 " << endl;
+     std::ostringstream out;
+     out << title(std::string(" cross parameters ")); 
+     out << "cross= " << sum_ << std::endl;
+     if(cross_call_ <=1 )   out << "cross_var= 0.0 " << std::endl;
      else
        {
-	 out << "cross_var= " << sqrt(max(0.0,(sum2_/(double)cross_call_ - sum_*sum_/((double)cross_call_*cross_call_))*(double)cross_call_)) << endl;
+	 out << "cross_var= " << sqrt(std::max(0.0,(sum2_/(double)cross_call_ - sum_*sum_/((double)cross_call_*cross_call_))*(double)cross_call_)) << std::endl;
        }
-     out << "cross_ncall=" << cross_call_ << endl;
+     out << "cross_ncall=" << cross_call_ << std::endl;
      return out.str(); 
    }
 };
@@ -479,7 +479,7 @@ class averCROSS : public CROSS
     
   averCROSS() {;}
   
-  averCROSS(string crossIniFile):CROSS(crossIniFile)
+  averCROSS(std::string crossIniFile):CROSS(crossIniFile)
    {
      spline_aver_ = spline_;
      cross_aver_ = 0.0;      
@@ -503,13 +503,13 @@ class averCROSS : public CROSS
     cross_call_++;
   }
 
- virtual string output_flow() const 
+ virtual std::string output_flow() const 
    {
-     ostringstream out;
+     std::ostringstream out;
      //int j;
-     out << CROSS::output_flow() << endl;
+     out << CROSS::output_flow() << std::endl;
 
-     out << "cross_aver= " << cross_aver_/sum_ << endl;
+     out << "cross_aver= " << cross_aver_/sum_ << std::endl;
    return out.str();
    } 
 };
