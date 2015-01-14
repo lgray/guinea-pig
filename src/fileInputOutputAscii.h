@@ -60,7 +60,8 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
  
   virtual bool read_line(std::string& line) 
   {
-    return getline(infile_, line);
+    getline(infile_, line);
+    return infile_.good();
   }
       
   virtual void write_line(std::string& line) 

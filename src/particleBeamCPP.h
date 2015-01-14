@@ -657,9 +657,9 @@ class  PHOTON_BEAM
     }
 
 
-  public :
+  public:
     
- PHOTON_BEAM() : n_slice_(0),end_(NULL) {;}
+ PHOTON_BEAM() : n_slice_(0), end_(NULL) {}
   
   PHOTON_BEAM(int n_sliceDATA);
   
