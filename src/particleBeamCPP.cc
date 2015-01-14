@@ -844,7 +844,7 @@ double PARTICLE_BEAM::meanLostEnergy(float ebeam) const
 
 
 
-PHOTON_BEAM::PHOTON_BEAM(int n_sliceDATA) : end_(NULL) 
+PHOTON_BEAM::PHOTON_BEAM(int n_sliceDATA) // AL: this seems useless : end_(NULL) 
 {
   n_slice_=n_sliceDATA;
   slice_photon_vector_ = std::vector< std::vector<PHOTON> > (n_slice_);

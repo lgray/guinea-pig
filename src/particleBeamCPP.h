@@ -626,7 +626,7 @@ class  PHOTON_BEAM
 
   int n_slice_;
   std::vector< std::vector<PHOTON> > slice_photon_vector_;
-  std::list<PHOTON>::iterator end_;
+  // AL: this seems useless std::list<PHOTON>::iterator end_;
   
   PHOTON_COUNTER photon_count_;
 
@@ -659,7 +659,7 @@ class  PHOTON_BEAM
 
   public:
     
- PHOTON_BEAM() : n_slice_(0), end_(NULL) {}
+ PHOTON_BEAM() : n_slice_(0) /* AL: this seems useless   , end_(NULL) */ {}
   
   PHOTON_BEAM(int n_sliceDATA);
   
