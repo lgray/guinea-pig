@@ -207,7 +207,7 @@ std::string BEAM_PARAMETERS::output_flow() const
   out << " waist_x : " << waist_x_*1.e-3 <<  " waist_y : " << waist_y_*1.e-3 << " (micrometers) " << std::endl;
   out << " angle_x : "  << x_angle_ << " angle_y : " << y_angle_ << " angle_phi : " << phi_angle_ << " (radians) " << std::endl;
   out << " type of distribution charge :  dist_x : " << dist_x_ <<  " dist_z : " << dist_z_ << std::endl;
-  out << " initial polarization (ONLY FOR bmt_precession = 1 and internally generated beam) : polar_x = " << polar_.getComponent(0) << " polar_y = " << polar_.getComponent(0) << " polar_z = " << polar_.getComponent(2) << std::endl;
+  out << " initial polarization (ONLY FOR bmt_precession = 1 and internally generated beam) : polar_x = " << polar_.getComponent(0) << " polar_y = " << polar_.getComponent(1) << " polar_z = " << polar_.getComponent(2) << std::endl;
   return out.str();
 }
 
