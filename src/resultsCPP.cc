@@ -184,7 +184,7 @@ std::string  RESULTS::output_flow() const
   out << title(std::string("general results"));
   out <<  "lumi_fine = " << lumi_fine << " m**(-2) (from charge densities) " << std::endl;
   out <<  "lumi_ee = " << lumi_ee << " m**(-2) (from beam particles collisions)" << std::endl;
-  out <<  "lumi_ee_high = " << lumi_ee_high << " 1/m2 (par bunch cross. above energy ecm_min)" << std::endl;
+  out <<  "lumi_ee_high = " << lumi_ee_high << " 1/m2 (per bunch cross. above energy ecm_min)" << std::endl;
   out <<  "lumi_pp = " << lumi_pp << " m**(-2) " << std::endl;
   out <<  "lumi_eg = " << lumi_eg << " m**(-2) (e - gamma) " << std::endl;
   out <<  "lumi_ge = " << lumi_ge << " m**(-2) ( gamma - e) " << std::endl;
@@ -218,13 +218,13 @@ std::string  RESULTS::output_flow() const
   out << "E_cm = " << temp1 << " E_cm_var = " << temp2 << std::endl;
   out << " ............................................... " << std::endl;
 
-  out << " average and RMS angles (x or y ) of the particles of each beam after the interaction (microradians) : " << std::endl;
+  out << " average and RMS angles (x or y) of the particles of each beam after the interaction (microradians) : " << std::endl;
 
   out << "bpm_vx.1=" << c_vx_1*1e6  <<  ";bpm_sig_vx.1=" << sig_vx_1*1e6 << ";" << std::endl;
   out << "bpm_vy.1=" << c_vy_1*1e6  <<  ";bpm_sig_vy.1=" << sig_vy_1*1e6 << ";" << std::endl;
   out << "bpm_vx.2=" << c_vx_2*1e6  <<  ";bpm_sig_vx.2=" << sig_vx_2*1e6 << ";" << std::endl;
   out << "bpm_vy.2=" << c_vy_2*1e6  <<  ";bpm_sig_vy.2=" << sig_vy_2*1e6 << ";" << std::endl;
-  out << " average and RMS angles (x or y ) including coherent particles of each beam after the interaction (microradians) : " << std::endl;
+  out << " average and RMS angles (x or y) including coherent particles of each beam after the interaction (microradians) : " << std::endl;
   out << "bpm_vx_coh.1=" << c_vx_1_coh*1e6 << ";" << std::endl; 
   out << "bpm_vy_coh.1=" << c_vy_1_coh*1e6 << ";" << std::endl;
   out << "bpm_vx_coh.2=" << c_vx_2_coh*1e6 << ";" << std::endl;
@@ -240,7 +240,7 @@ std::string  RESULTS::output_flow() const
   out << "hadrons_ge.1=" << hadrons_ge[0] << ";hadrons_ge.2=" << hadrons_ge[1] << ";hadrons_ge.3=" << hadrons_ge[2] << ";"<< std::endl;
   out << " ... due to gamma-gamma collisions : " << std::endl;
   out << "hadrons_gg.1=" << hadrons_gg[0] << ";hadrons_gg.2=" << hadrons_gg[1] << ";hadrons_gg.3=" << hadrons_gg[2] << ";"<< std::endl;
-  out << " ... due to all types of  collisions : " << std::endl;
+  out << " ... due to all types of collisions : " << std::endl;
   out << "hadrons_sum.1=" << hadrons_ee[0]+hadrons_eg[0]+hadrons_ge[0]+hadrons_gg[0] << ";hadrons_sum.2=" << hadrons_ee[1]+hadrons_eg[1]+hadrons_ge[1]+hadrons_gg[1] << ";hadrons_sum.3=" << hadrons_ee[2]+hadrons_eg[2]+hadrons_ge[2]+hadrons_gg[2] << ";" << std::endl;
   out << " ............................................... " << std::endl << std::endl;
    
@@ -420,7 +420,7 @@ std::string COHERENT_RESULTS::output_flow() const
       out << "coherent.sum=" <<sum_ << ";" << std::endl;
       out << "coherent.sumeng=" << sumeng_ << ";" << std::endl;
       out << "coherent.upsmax=" << upsmax_ << ";" << std::endl;
-      out <<  "coherent.probmax=" <<  probmax_ << ";" << std::endl;
+      out << "coherent.probmax=" <<  probmax_ << ";" << std::endl;
       out << "coherent.count=" << count_ << ";" << std::endl;
       out << "coherent.total_energy=" << total_energy_ << ";" << std::endl;
     }

@@ -132,7 +132,7 @@ de2=433.396;
              
 lumi_fine = 4.81155e+34 m**(-2) (from charge densities) 
 lumi_ee = 4.94054e+34 m**(-2) (from beam particles collisions)
-lumi_ee_high = 1.56593e+34 1/m2 (par bunch cross. above energy ecm_min)
+lumi_ee_high = 1.56593e+34 1/m2 (per bunch cross. above energy ecm_min)
 lumi_pp = 0 m**(-2) 
 lumi_eg = 0 m**(-2) (e - gamma) 
 lumi_ge = 0 m**(-2) ( gamma - e) 
@@ -150,12 +150,12 @@ lumi[2][2] = 0
 upsmax= 15.0418 (maximal value of the beamstrahlung paramater that occured) 
 E_cm = 2470.57 E_cm_var = 650.844
  ............................................... 
- average and RMS angles (x or y ) of the particles of each beam after the interaction (microradians) : 
+ average and RMS angles (x or y) of the particles of each beam after the interaction (microradians) : 
 bpm_vx.1=0.0867149;bpm_sig_vx.1=193.762;
 bpm_vy.1=-0.18932;bpm_sig_vy.1=43.6566;
 bpm_vx.2=1.1534;bpm_sig_vx.2=192.628;
 bpm_vy.2=-0.127764;bpm_sig_vy.2=43.3582;
- average and RMS angles (x or y ) including coherent particles of each beam after the interaction (microradians) : 
+ average and RMS angles (x or y) including coherent particles of each beam after the interaction (microradians) : 
 bpm_vx_coh.1=0.0867149;
 bpm_vy_coh.1=-0.18932;
 bpm_vx_coh.2=1.1534;
@@ -171,7 +171,7 @@ hadrons_eg.1=0;hadrons_eg.2=0;hadrons_eg.3=0;
 hadrons_ge.1=0;hadrons_ge.2=0;hadrons_ge.3=0;
  ... due to gamma-gamma collisions : 
 hadrons_gg.1=0;hadrons_gg.2=0;hadrons_gg.3=0;
- ... due to all types of  collisions : 
+ ... due to all types of collisions : 
 hadrons_sum.1=0;hadrons_sum.2=0;hadrons_sum.3=0;
  ............................................... 
 
