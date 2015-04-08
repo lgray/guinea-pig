@@ -126,11 +126,10 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
   double fu0, fusp;
   double p0,p1,v1,v3,g;
   double fK13, fKi13, fKi53, fK23;
-  if (eng<=0.0)
-    {
-      std::cerr << "Initial particle energy below zero : " << eng << std::endl;
-      return 1;
-    }
+  if (eng<=0.0){
+    std::cerr << "Initial particle energy below zero : " << eng << std::endl;
+    return 1;
+  }
   double upsilon = (double)upsilonSingleP;
 
   // upsilon_bar = h_bar. omegac / E
@@ -140,25 +139,41 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
   double gamma = eng/EMASS;
   double factor =  pow ( (1.0 + 0.5 * upsilon_bar ), 0.33333333333);
   p0 = CONST1 * dzOnRadius * gamma  / factor ; 
-  if (rndm_generator.rndm_synrad()>p0) return 0;
-  p1=rndm_generator.rndm_synrad();
-  while((v1=rndm_generator.rndm_synrad())==0.0) ; /* v1!= 0.0 */
-  v3 = v1*v1*v1;
-  double xden = 1.0 - v3 + 0.5 * upsilon_bar * ( 1.0 + v3 * v3 );
-  x = upsilon_bar * v3 / xden;
-  double x1 = 1.0 - x;
-  double z = x/(upsilon_bar * x1);
-  synradKi53andK23(z, fKi53, fK23);
-  double F00 = fKi53 + (x*x/x1) * fK23;
-  double F00star;
-  s2 = polar(0)*e2(0) + polar(1)*e2(1) + polar(2)*e2(2);
-  fK13 = synradK13(z);
-  F00star = F00 - s2 * x * fK13; 
-  double dxdy = 3.0 * v1 * v1 * (  upsilon_bar + x * (1.0 - upsilon_bar * v3 ) ) /xden;
-  g  = F00 * dxdy * factor /(CONST0  * upsilon );
-  //  stokes.clear();
-  if ( p1 < g) 
-    {
+
+  if (rndm_generator.rndm_synrad()>p0){
+    s2 = polar(0)*e2(0) + polar(1)*e2(1) + polar(2)*e2(2);
+    fu0 = 1.0 - CONST3 * gamma*dzOnRadius * fradu0(upsilon);
+    fusp = CONST3 * gamma* dzOnRadius * fradsp(upsilon);
+    double c0 = fu0 + fusp * s2;
+    for (k=0; k<3; k++){
+      polar(k) = ( polar(k) * fu0 + fusp * e2(k) ) / c0;
+    }
+    double sum = polar.norm2();
+    if (sum > 1.0){
+      sum = 1.0 / sqrt(sum);
+      polar *= sum;
+    }
+    *photonEnergy = 0.0;
+    return 0;
+  }
+  else{
+    p1=rndm_generator.rndm_synrad();
+    while((v1=rndm_generator.rndm_synrad())==0.0) ; /* v1!= 0.0 */
+    v3 = v1*v1*v1;
+    double xden = 1.0 - v3 + 0.5 * upsilon_bar * ( 1.0 + v3 * v3 );
+    x = upsilon_bar * v3 / xden;
+    double x1 = 1.0 - x;
+    double z = x/(upsilon_bar * x1);
+    synradKi53andK23(z, fKi53, fK23);
+    double F00 = fKi53 + (x*x/x1) * fK23;
+    double F00star;
+    s2 = polar(0)*e2(0) + polar(1)*e2(1) + polar(2)*e2(2);
+    fK13 = synradK13(z);
+    F00star = F00 - s2 * x * fK13; 
+    double dxdy = 3.0 * v1 * v1 * (  upsilon_bar + x * (1.0 - upsilon_bar * v3 ) ) /xden;
+    g  = F00star * dxdy * factor /(CONST0  * upsilon );
+    //  stokes.clear();
+    if( p1 < g){
       s3 = polar(0)*e3(0) + polar(1)*e3(1) + polar(2)*e3(2);
       //       s1 = polar(0)*e1(0) + polar(1)*e1(1) + polar(2)*e1(2);
       //       stokes(0) = x/(1.0-x) * fK13 * s1 / F00star;
@@ -172,7 +187,7 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
       // 	  stokes.print();
       // 	  std::cout << " ----------------------------------- " << std::endl;
       // 	  //	}
-
+      
       fKi13 = TOOLS::Ki13(z);
       for (k=0; k < 3; k++)
 	{
@@ -183,25 +198,24 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
       *photonEnergy = eng * x;
       return 1;
     }
-  else 
-    {
-      s2 = polar(0)*e2(0) + polar(1)*e2(1) + polar(2)*e2(2);
-      fu0 = 1.0 - CONST3 * gamma*dzOnRadius * fradu0(upsilon);
-      fusp = CONST3 * gamma* dzOnRadius * fradsp(upsilon);
-      double c0 = fu0 + fusp * s2;
-      for (k=0; k<3; k++)
-	{
-	  polar(k) = ( polar(k) * fu0 + fusp * e2(k) ) / c0;
-	}
-      double sum = polar.norm2();
-      if (sum > 1.0)
-	{
-	  sum = 1.0 / sqrt(sum);
-	  polar *= sum;
-	}
-      *photonEnergy = 0.0;
-      return 0;
+    else{
+	fu0 = 1.0 - CONST3 * gamma*dzOnRadius * fradu0(upsilon);
+	fusp = CONST3 * gamma* dzOnRadius * fradsp(upsilon);
+	double c0 = fu0 + fusp * s2;
+	for (k=0; k<3; k++)
+	  {
+	    polar(k) = ( polar(k) * fu0 + fusp * e2(k) ) / c0;
+	  }
+	double sum = polar.norm2();
+	if (sum > 1.0)
+	  {
+	    sum = 1.0 / sqrt(sum);
+	    polar *= sum;
+	  }
+	*photonEnergy = 0.0;
+	return 0;
     }
+  }
 }
 
 // adopt the variables change of CAIN (Yokoya, user's guide 235.1 p. 111))
