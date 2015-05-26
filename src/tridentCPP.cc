@@ -3,7 +3,7 @@
 #include <iostream>
 
 namespace {
-  const double CVELOCITY = 3e+17; /* nm/s */
+  const double CVELOCITY = 2.99792458e+17; /* nm/s */
   const double COMPTON = HBAR*CVELOCITY/EMASS;
 }
 
@@ -48,9 +48,9 @@ void TRIDENT::convertVirtualPhotons(float* Emother,std::vector<float> energies, 
     {
       kap=kappa(ups,energies[i],fabs(*Emother));    
       p=PHYSTOOLS::u(kap)*ALPHA_EM*EMASS*dz/(energies[i]*COMPTON);
-      if(p>1)
+      if(p>0.5)
 	{
-	  std::cout << "WARNING, TRIDENT::convertVirtualPhotons. Probability exceeding 1" << std::endl;
+	  std::cout << "WARNING, TRIDENT::convertVirtualPhotons. Probability exceeding 0.5" << std::endl;
 	}
       //      else{
       if(p<0.01)
@@ -58,28 +58,13 @@ void TRIDENT::convertVirtualPhotons(float* Emother,std::vector<float> energies, 
 	  if(p>rndm_generator_.rndm())
 	    {
 	      tridents->push_back(energies[i]);
-	      if (*Emother < 0.0)
-		{
-		  *Emother+=energies[i];
-		}
-	      else
-		{
-		  *Emother-=energies[i];
-		}  
+	      *Emother+=(*Emother<0.0) ? energies[i]: -energies[i];
 	    }
 	}
       else if(1-exp(-p)>rndm_generator_.rndm())
 	{
 	  tridents->push_back(energies[i]);
-	  if (*Emother < 0.0)
-	    {
-	      *Emother+=energies[i];
-	    }
-	  else
-	    {
-	      *Emother-=energies[i];
-	    }  
-	  //	}
+	  *Emother+=(*Emother<0.0) ? energies[i]: -energies[i];
 	}
     }
 } //jakob

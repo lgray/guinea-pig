@@ -121,7 +121,7 @@ void BEAM_FROM_FILE::beamZRms(float& zmean, float& sigmazRms) const
 
 
 
-void PARTICLE_BEAM::init_particles(unsigned long int nbpart, float sigma_x,float sigma_y, float sigma_z,int dist_x,int dist_z,float emx, float emy,float delta_z,float energy, int charge_symmetric)
+void PARTICLE_BEAM::init_particles(unsigned long int nbpart, float sigma_x,float sigma_y, float sigma_z,int dist_x,int dist_z,float emx, float emy,float delta_z,float energy, int charge_symmetric, int do_bds_spin_rotation)
 {
   //int k;
   float sigma_x_prime,sigma_y_prime;
@@ -139,11 +139,11 @@ void PARTICLE_BEAM::init_particles(unsigned long int nbpart, float sigma_x,float
   sigma_y_prime=emy*EMASSeV/(energy*sigma_y);
   if(charge_symmetric)
     {
-      fill_symmetric_beam(dist_x, dist_z,delta_z, sigma_x, sigma_y,sigma_z, sigma_x_prime,sigma_y_prime, energy);
+      fill_symmetric_beam(dist_x, dist_z,delta_z, sigma_x, sigma_y,sigma_z, sigma_x_prime,sigma_y_prime, energy, do_bds_spin_rotation);
     }
   else
     {
-      fill_beam(dist_x, dist_z,delta_z, sigma_x, sigma_y,sigma_z, sigma_x_prime,sigma_y_prime, energy);
+      fill_beam(dist_x, dist_z,delta_z, sigma_x, sigma_y,sigma_z, sigma_x_prime,sigma_y_prime, energy, do_bds_spin_rotation);
     }
   compute_gamma();
   sigmax_ = sigma_x;
@@ -152,12 +152,12 @@ void PARTICLE_BEAM::init_particles(unsigned long int nbpart, float sigma_x,float
 }
 
 
-void PARTICLE_BEAM::fill_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy)
+void PARTICLE_BEAM::fill_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation)
 {
   switch(dist_x)
     {
     case 0 :
-      assign_xyz_normal_distribution(dist_z, delta_z, sigma_x,sigma_y,sigma_z, sigma_x_prime,sigma_y_prime, energy);
+      assign_xyz_normal_distribution(dist_z, delta_z, sigma_x,sigma_y,sigma_z, sigma_x_prime,sigma_y_prime, energy, do_bds_spin_rotation);
       break;
     default:
       std::cerr << " PARTICLE_BEAM::fill_beam :: unknown x distribution dist_x = " << dist_x << std::endl;
@@ -165,12 +165,12 @@ void PARTICLE_BEAM::fill_beam(int dist_x, int dist_z, float delta_z, float sigma
     }
 }
 
-void PARTICLE_BEAM::fill_symmetric_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy)
+void PARTICLE_BEAM::fill_symmetric_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation)
 {
   switch(dist_x)
     {
     case 0 :
-      assign_symmetric_xyz_normal_distribution(dist_z, delta_z, sigma_x,sigma_y,sigma_z, sigma_x_prime,sigma_y_prime, energy);
+      assign_symmetric_xyz_normal_distribution(dist_z, delta_z, sigma_x,sigma_y,sigma_z, sigma_x_prime,sigma_y_prime, energy, do_bds_spin_rotation);
       break;
     default:
       std::cerr << " PARTICLE_BEAM::fill_symmetric_beam :: unknown x distribution dist_x = " << dist_x << std::endl;
@@ -180,7 +180,7 @@ void PARTICLE_BEAM::fill_symmetric_beam(int dist_x, int dist_z, float delta_z, f
 }
 
 
-void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy)
+void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation)
 {
   unsigned int k;
   float ztemp; //float xtemp, ytemp, ztemp, vxtemp, vytemp;
@@ -193,7 +193,7 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
       for (k=0;k< initial_number_of_particles_;k++)
 	{
 	  ztemp=rndm_generator_->gasdev()*sigma_z;
-	  dispatch_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
+	  dispatch_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices, do_bds_spin_rotation);
 	}
       break;
       // constant distribution in z 
@@ -203,7 +203,7 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
 	for (k=0;k< initial_number_of_particles_;k++)
 	  {
 	    ztemp =(2.0*rndm_generator_->rndm()-1.0)*bunchlength;
-	    dispatch_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
+	    dispatch_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices, do_bds_spin_rotation);
 	  }
       }
       break; 
@@ -213,7 +213,7 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
     }
 }
 
-void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float delta_z, float sigma_x,float sigma_y,float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy)
+void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float delta_z, float sigma_x,float sigma_y,float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation)
 {
   unsigned long int k;
   float ztemp;//float xtemp, ytemp,ztemp, vxtemp, vytemp;
@@ -226,7 +226,7 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
       for (k=0;k< initial_number_of_particles_/4;k++)
 	{
 	  ztemp=rndm_generator_->gasdev()*sigma_z;
-	  dispatch_symmetric_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
+	  dispatch_symmetric_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices, do_bds_spin_rotation);
 	}
       break;
       // constant distribution in z 
@@ -236,7 +236,7 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
 	for (k=0;k< initial_number_of_particles_;k++)
 	  {
 	    ztemp =(2.0*rndm_generator_->rndm()-1.0)*bunchlength;
-	    dispatch_symmetric_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices);
+	    dispatch_symmetric_random_particle_in_slices(ztemp, delta_z, sigma_x,sigma_y, sigma_z, sigma_x_prime, sigma_y_prime, energy, nSlices, do_bds_spin_rotation);
 	  }
       }
       break;

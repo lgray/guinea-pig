@@ -69,6 +69,7 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   int which_espread1,which_espread2;
   /// if force_symmetric is not equal to 0, the beams are assumed to be up-down and left-right symmetric
   int force_symmetric,charge_symmetric;
+  int do_bds_spin_rotation;
   int do_coherent,do_compt,do_compt_phot,do_trident;
   /// load and save random number generator state
   int rndm_load,rndm_save;
@@ -142,6 +143,7 @@ class SWITCHES : public ABSTRACT_IO_CLASS
   inline int get_bmt_precession() const {return bmt_precession_;}
   inline int get_ST_spin_flip() const {return ST_spin_flip_;}
   inline int get_charge_symmetric() const {return charge_symmetric;};
+  inline int get_do_bds_spin_rotation() const {return do_bds_spin_rotation;};
   //  inline int get_electron_distribution_scatter() const { return electron_distribution_scatter;};
   inline int get_adjust() const {return adjust;};
   inline int get_time_order() const {return time_order;};

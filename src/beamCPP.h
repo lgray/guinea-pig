@@ -207,7 +207,7 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
     }
   
   
-  inline void init_particles(int nbpart, float delta_z, int charge_symmetric)
+  inline void init_particles(int nbpart, float delta_z, int charge_symmetric, int do_bds_spin_rotation)
     {
       particle_beam_.init_particles (nbpart,  beam_parameters_->sigma_x(),
 				     beam_parameters_->sigma_y(), 
@@ -218,7 +218,8 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
 				     beam_parameters_->em_y(),
 				     delta_z,
 				     beam_parameters_->ebeam(),
-				     charge_symmetric);
+				     charge_symmetric,
+				     do_bds_spin_rotation);
     }
   
   inline float get_ebeam() const { return beam_parameters_->ebeam();};

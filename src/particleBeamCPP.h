@@ -255,9 +255,9 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
   
-  void fill_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy);
+  void fill_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation);
   
-  void fill_symmetric_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy);
+  void fill_symmetric_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation);
   
 
   inline void get_rndm_xy_particle(float sigmax, float sigmay, float sigxp, float sigyp, float& x, float& y, float& vx, float& vy) const
@@ -268,48 +268,161 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
       vy = rndm_generator_->gasdev()*sigyp;
     }
 
-  void assign_xyz_normal_distribution(int dist_z,float delta_z,float sigma_x,float sigma_y, float sigmaz, float sigma_x_prime,float sigma_y_prime, float energy);
+  void assign_xyz_normal_distribution(int dist_z,float delta_z,float sigma_x,float sigma_y, float sigmaz, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation);
   
-  void assign_symmetric_xyz_normal_distribution(int dist_z,float delta_z,float sigma_x,float sigma_y,float sigmaz, float sigma_x_prime,float sigma_y_prime, float energy);
+  void assign_symmetric_xyz_normal_distribution(int dist_z,float delta_z,float sigma_x,float sigma_y,float sigmaz, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation);
   
-  inline void dispatch_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
+  //  inline void dispatch_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
+  //    {
+  //      float xtemp, ytemp, vxtemp, vytemp;
+  //      int j=(int)floor(ztemp/delta_z+0.5* nSlices+1);
+  //      TRIDVECTOR polar;
+  //      if (typOfParticle_ == 3)
+  //	{
+  //	  polar = polarization_;
+  //	}
+  //      else polar = 0.;
+  //      if ((j>0)&&(j<= nSlices))
+  //	{
+  //	  get_rndm_xy_particle(sigma_x, sigma_y, sigma_x_prime, sigma_y_prime, xtemp, ytemp, vxtemp, vytemp);
+  //	  set_new_particle_in_slice(j-1,xtemp, ytemp,ztemp, vxtemp, vytemp,energy, polar);
+  //	}
+  //    }
+
+  //New method that approximately takes into account the spin rotation from the final focus system
+  inline void dispatch_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices, int do_bds_spin_rotation)
     {
       float xtemp, ytemp, vxtemp, vytemp;
       int j=(int)floor(ztemp/delta_z+0.5* nSlices+1);
       TRIDVECTOR polar;
-      if (typOfParticle_ == 3)
-	{
-	  polar = polarization_;
-	}
-      else polar = 0.;
       if ((j>0)&&(j<= nSlices))
 	{
 	  get_rndm_xy_particle(sigma_x, sigma_y, sigma_x_prime, sigma_y_prime, xtemp, ytemp, vxtemp, vytemp);
+	  
+	  if (typOfParticle_ == 3)
+	    {
+	      if(do_bds_spin_rotation)
+		{
+		  double polx, poly, polz, temp0, temp1, rotangle, theta,qi,qj,qr;
+		  rotangle=2.26938288523942*energy; //\gamma*alpha/(2*pi) in rad
+		  polarization_.getComponents(polx, poly, polz);
+
+		  temp0=sqrt(vxtemp*vxtemp+vytemp*vytemp); // here temp0 is for vector normalization
+		  theta=asin(temp0);
+		  theta*=rotangle;
+
+		  qi=-vytemp*sin(0.5*theta)/temp0;
+		  qj=vxtemp*sin(0.5*theta)/temp0;
+		  qr=cos(0.5*theta);
+
+		  temp0=(1.0-2.0*qj*qj)*polx+2.0*qi*qj*poly+2.0*qj*qr*polz; //re-using temp0 for new polx
+		  temp1=2.0*qi*qj*polx+(1.0-2.0*qi*qi)*poly-2.0*qi*qr*polz;
+		  polz=-2.0*qj*qr*polx+2.0*qi*qr*poly+(1.0-2.0*(qi*qi+qj*qj))*polz;
+		  polar.setComponents(temp0,temp1,polz);
+		  //		  double polx, poly, polz, temp, rotangle;
+		  //		  rotangle=2.26938288523942*energy; //\gamma*alpha/(2*pi) in rad
+		  //		  polarization_.getComponents(polx, poly, polz);
+		  //		  //Spin rotation in the small angle approximation
+		  //		  temp=polz-rotangle*(vxtemp*polx+vytemp*poly);
+		  //		  polx=polx+rotangle*vxtemp*polz;
+		  //		  poly=poly+rotangle*vytemp*polz;
+		  //		  polar.setComponents(polx,poly,temp);
+		}
+	      else polar = polarization_;
+	    }
+	  else polar = 0.;
 	  set_new_particle_in_slice(j-1,xtemp, ytemp,ztemp, vxtemp, vytemp,energy, polar);
 	}
     }
   
 
-  inline void dispatch_symmetric_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
+  //  inline void dispatch_symmetric_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
+  //    {
+  //      float xtemp, ytemp, vxtemp, vytemp;
+  //      double polx, poly, polz;
+  //      TRIDVECTOR polar;
+  //      if (typOfParticle_ == 3)
+  //	{
+  //	  polar = polarization_;
+  //	  polar.getComponents(polx, poly, polz);
+  //	}
+  //      else 
+  //	{
+  //	  polx = 0.0;
+  //	  poly = 0.0;
+  //	  polz = 0.0;
+  //	}
+  //      int j=(int)floor(ztemp/delta_z+0.5* nSlices+1);
+  //      if ((j>0)&&(j<= nSlices))
+  //	{
+  //	  get_rndm_xy_particle(sigma_x, sigma_y, sigma_x_prime, sigma_y_prime, xtemp, ytemp, vxtemp, vytemp);
+  //	  j--;
+  //	  polar.setComponents(polx, poly, polz);
+  //	  set_new_particle_in_slice(j, xtemp, ytemp, ztemp, vxtemp, vytemp, energy, polar);
+  //	  polar.setComponents(-polx, poly, polz);
+  //	  set_new_particle_in_slice(j, -xtemp, ytemp, ztemp, -vxtemp, vytemp, energy, polar);
+  //	  polar.setComponents(-polx, -poly, polz);
+  //	  set_new_particle_in_slice(j, -xtemp, -ytemp, ztemp, -vxtemp, -vytemp, energy, polar);
+  //	  polar.setComponents(polx, -poly, polz);
+  //	  set_new_particle_in_slice(j, xtemp, -ytemp, ztemp, vxtemp, -vytemp, energy, polar);	
+  //	  
+  //	}
+  //    }
+
+  //New method that approximately takes into account the spin rotation from the final focus system
+  inline void dispatch_symmetric_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices, int do_bds_spin_rotation)
     {
       float xtemp, ytemp, vxtemp, vytemp;
       double polx, poly, polz;
       TRIDVECTOR polar;
-      if (typOfParticle_ == 3)
-	{
-	  polar = polarization_;
-	  polar.getComponents(polx, poly, polz);
-	}
-      else 
-	{
-	  polx = 0.0;
-	  poly = 0.0;
-	  polz = 0.0;
-	}
+
       int j=(int)floor(ztemp/delta_z+0.5* nSlices+1);
       if ((j>0)&&(j<= nSlices))
 	{
 	  get_rndm_xy_particle(sigma_x, sigma_y, sigma_x_prime, sigma_y_prime, xtemp, ytemp, vxtemp, vytemp);
+	  if (typOfParticle_ == 3)
+	    {
+	      if(do_bds_spin_rotation)
+		{
+		  double temp0 ,temp1, rotangle, theta,qi,qj,qr;
+		  rotangle=2.26938288523942*energy; //\gamma*alpha/(2*pi) in rad
+		  polarization_.getComponents(polx, poly, polz);
+		  //Spin rotation in the small angle approximation
+		  if(vytemp==0.0){
+		    theta=vxtemp;
+		  }else if(vxtemp==0.0){
+		    theta=vytemp;
+		  }else{
+		    theta=asin(vxtemp/cos(atan(vxtemp/vytemp)));
+		  }
+		  theta*=rotangle;
+		  temp0=sqrt(vxtemp*vxtemp+vytemp*vytemp);
+		  qi=-vytemp*sin(0.5*theta)/temp0;
+		  qj=vxtemp*sin(0.5*theta)/temp0;
+		  qr=cos(0.5*theta);
+
+		  temp0=(1.0-2.0*qj*qj)*polx+2.0*qi*qj*poly+2.0*qj*qr*polz; //re-using temp0
+		  temp1=2.0*qi*qj*polx+(1.0-2.0*qi*qi)*poly-2.0*qi*qr*polz;
+		  polz=-2.0*qj*qr*polx+2.0*qi*qr*poly+(1.0-2.0*(qi*qi+qj*qj))*polz;
+		  polx=temp0;
+		  poly=temp1;
+		    //		  temp=polz-rotangle*(vxtemp*polx+vytemp*poly);
+		    //		  polx=polx+rotangle*vxtemp*polz;
+		    //		  poly=poly+rotangle*vytemp*polz;
+		    //		  polz=temp;
+		}
+	      else
+		{
+		  polar = polarization_;
+		  polar.getComponents(polx, poly, polz);
+		}
+	    }
+	  else 
+	    {
+	      polx = 0.0;
+	      poly = 0.0;
+	      polz = 0.0;
+	    }
 	  j--;
 	  polar.setComponents(polx, poly, polz);
 	  set_new_particle_in_slice(j, xtemp, ytemp, ztemp, vxtemp, vytemp, energy, polar);
@@ -319,7 +432,6 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	  set_new_particle_in_slice(j, -xtemp, -ytemp, ztemp, -vxtemp, -vytemp, energy, polar);
 	  polar.setComponents(polx, -poly, polz);
 	  set_new_particle_in_slice(j, xtemp, -ytemp, ztemp, vxtemp, -vytemp, energy, polar);	
-	  
 	}
     }
   
@@ -564,7 +676,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   // the pointer bff is invalidated
   unsigned int load_particles(BEAM_FROM_FILE*& bff, float emin, float zmin, float deltaz, float sigx, float sigy, float sigz);
 
-  void init_particles(unsigned long int nbpart, float sigma_x,float sigma_y, float sigma_z,int dist_x,int dist_z,float emx, float emy,float delta_z,float energy, int charge_symmetric);
+  void init_particles(unsigned long int nbpart, float sigma_x,float sigma_y, float sigma_z,int dist_x,int dist_z,float emx, float emy,float delta_z,float energy, int charge_symmetric, int do_bds_spin_rotation);
   
   virtual void beamXyRms(float& xmean, float& ymean, float& sigmaxRms, float& sigmayRms) const;
   virtual void beamZRms(float& zmean, float& sigmazRms) const;

@@ -1035,6 +1035,7 @@ void def_param(MEMORY_ACCOUNT* m_account)
   def_named_variable("integration_method",T_INT);
   def_named_variable("force_symmetric",T_INT);
   def_named_variable("charge_symmetric",T_INT);
+  def_named_variable("do_bds_spin_rotation",T_INT);
   def_named_variable("do_size_log",T_INT);
 
   def_named_variable("rndm_seed",T_INT);

@@ -421,8 +421,8 @@ void GUINEA::set_beams_and_grids()
 	}
       size_z = cut_z_from_data(switches.get_automatic_grid_sizing());
       float deltaz=2.0*size_z/((float)n_cell_z);
-      beam1_.init_particles(grid_.get_nb_macroparticles(1),deltaz, switches.get_charge_symmetric());
-      beam2_.init_particles(grid_.get_nb_macroparticles(2),deltaz, switches.get_charge_symmetric());
+      beam1_.init_particles(grid_.get_nb_macroparticles(1),deltaz, switches.get_charge_symmetric(), switches.get_do_bds_spin_rotation());
+      beam2_.init_particles(grid_.get_nb_macroparticles(2),deltaz, switches.get_charge_symmetric(), switches.get_do_bds_spin_rotation());
       beam_displacements_from_data(deltaz); 
 
 

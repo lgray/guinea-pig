@@ -76,6 +76,7 @@ SWITCHES::SWITCHES()
   bhabha_scal=1.e-29;
 
   charge_symmetric=0; // to be checked
+  do_bds_spin_rotation=0;
 
   do_compt=0;
   do_compt_phot=0;
@@ -340,6 +341,8 @@ void SWITCHES::read(const PARAMETERS& param)
 
   charge_symmetric=param.readIValue("charge_symmetric");
 
+  do_bds_spin_rotation=param.readIValue("do_bds_spin_rotation");
+
   // beam_vx_min=param.readFValue("beam_vx_min");
 
   // beam_vx_max=param.readFValue("beam_vx_max");
@@ -438,6 +441,7 @@ std::string SWITCHES::output_flow() const
   out << "charge_sign = " << charge_sign << std::endl;
   out << "bmt_precession = " << bmt_precession_ << std::endl;
   out << "ST_spin_flip = " << ST_spin_flip_ << std::endl;
+  out << "do_bds_spin_rotation = " << do_bds_spin_rotation << std::endl;
   out << "automatic_grid_sizing = " << automatic_grid_sizing << std::endl;
   out << "integration_method = " << integration_method << " force_symmetric = " << force_symmetric << std::endl;
   out <<  "rndm_load = " << rndm_load << "rndm_save = " << rndm_save << " rndm_seed = " << rndm_seed << std::endl;
