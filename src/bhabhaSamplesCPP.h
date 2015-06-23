@@ -131,15 +131,15 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
       e1 = bhabha_[number].p1.energy();
       
       bhabha_[number].p1.trivector(px, py, pz);
-      vx1=px/abs(e1);
-      vy1=py/abs(e1);
-      vz1=pz/abs(e1);
+      vx1=px/std::abs(e1);
+      vy1=py/std::abs(e1);
+      vz1=pz/std::abs(e1);
       
       e2=bhabha_[number].p2.energy();
       bhabha_[number].p2.trivector(px, py, pz);
-      vx2=px/abs(e2);
-      vy2=py/abs(e2);
-      vz2=pz/abs(e2); 
+      vx2=px/std::abs(e2);
+      vy2=py/std::abs(e2);
+      vz2=pz/std::abs(e2); 
       nbphot = bhabha_[number].nbphot;
     }
  
@@ -239,7 +239,7 @@ class BHABHA
 
 		double end_invar_mass = enout*enout - pxout*pxout - pyout*pyout - pzout*pzout;
 
-		if(fabs(check_invar_mass) > 1. || fabs(end_invar_mass) > 1. || fabs(check_invar_mass - end_invar_mass)>1.)
+		if(std::abs(check_invar_mass) > 1. || std::abs(end_invar_mass) > 1. || std::abs(check_invar_mass - end_invar_mass)>1.)
 		{
 			printf("Start invariant mass: %f\n", check_invar_mass);
 			printf("End invariant mass: %f\n", end_invar_mass);
@@ -277,7 +277,7 @@ class BHABHA
       py=e*partVy;
       
       theta=asin(sqrt(partVx*partVx+partVy*partVy));
-      if(abs(theta)<0.00001)
+      if(std::abs(theta)<0.00001)
 		{
 		  phi=0.;
 		}

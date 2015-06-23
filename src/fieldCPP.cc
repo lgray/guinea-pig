@@ -32,7 +32,7 @@ void FIELD::fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT
 #endif
   /* return no field */
   
-  if (fabs(charge_sign)<eps)
+  if (std::abs(charge_sign)<eps)
     {
       for (i=0;i<n_x*n_y;i++)
 	{
@@ -136,7 +136,7 @@ void FIELD::foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
   int i1,i2,i3,i4;
   float eps=1e-5;
 
-  if (fabs(charge_sign)<eps){
+  if (std::abs(charge_sign)<eps){
       for (i1=0;i1<n_x*n_y;i1++){
 	  phi[i1]=0.0;
       }
@@ -152,7 +152,7 @@ void FIELD::foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
 	  for (i4=0;i4<n_y;i4++)
 	    {
 	      s+=rho[i3*n_y+i4]
-		*dist[abs(i1-i3)*n_y+abs(i2-i4)];
+		*dist[std::abs(i1-i3)*n_y+std::abs(i2-i4)];
 	    }
 	}
       phi[i1*n_y+i2]=s;
@@ -166,7 +166,7 @@ void FIELD::foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
 	  for (i4=0;i4<n_y;i4++)
 	    {
 	      s+=rho[i3*n_y+i4]
-		*dist[abs(i1-i3)*n_y+abs(i2-i4)];
+		*dist[std::abs(i1-i3)*n_y+std::abs(i2-i4)];
 	    }
 	}
       phi[i1*n_y+i2]=s;
@@ -180,7 +180,7 @@ void FIELD::foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
 	  for (i4=0;i4<n_y;i4++)
 	    {
 	      s+=rho[i3*n_y+i4]
-		*dist[abs(i1-i3)*n_y+abs(i2-i4)];
+		*dist[std::abs(i1-i3)*n_y+std::abs(i2-i4)];
 	    }
 	}
       phi[i1*n_y+i2]=s;
@@ -194,7 +194,7 @@ void FIELD::foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
 	  for (i4=0;i4<n_y;i4++)
 	    {
 	      s+=rho[i3*n_y+i4]
-		*dist[abs(i1-i3)*n_y+abs(i2-i4)];
+		*dist[std::abs(i1-i3)*n_y+std::abs(i2-i4)];
 	    }
 	}
       phi[i1*n_y+i2]=s;
@@ -213,7 +213,7 @@ void FIELD::sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT 
   PHI_FLOAT a,b,c,d,e,rjac;
   float small=1e-5;
 
-  if (fabs(charge_sign)<small){
+  if (std::abs(charge_sign)<small){
       return;
   }
 
@@ -227,7 +227,7 @@ void FIELD::sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT 
     {
       for (i2=1;i2<n_y-1;i2++)
 	{
-	  anormf += fabs((double)rho[i1*n_y+i2]);
+	  anormf += std::abs((double)rho[i1*n_y+i2]);
 	}
     }
   omega=1.0;
@@ -244,7 +244,7 @@ void FIELD::sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT 
 		  j=i1*n_y+i2;
 		  resid=a*phi[j+n_y]+b*phi[j-n_y]+c*phi[j+1]
 		    +d*phi[j-1]+e*phi[j]-rho[j];
-		  anorm += fabs((double)resid);
+		  anorm += std::abs((double)resid);
 		  phi[j] -= omega*resid*e_inv;
 		}
 	    }
@@ -305,7 +305,7 @@ void FIELD::foldfields (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
   //int field_typ=1;
   float eps=1e-5;
 
-  if (fabs(charge_sign)<eps){
+  if (std::abs(charge_sign)<eps){
       for (i1=0;i1<n_x*n_y;i1++){
 	  phi[i1]=0.0;
       }
@@ -322,7 +322,7 @@ void FIELD::foldfields (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
 	      for (i4=0;i4<n_y;i4++)
 		{
 		  s+=rho[i3*n_y+i4]
-		      *dist[abs(i1-i3)*n_y+abs(i2-i4)];
+		      *dist[std::abs(i1-i3)*n_y+std::abs(i2-i4)];
 		}
 	    }
 	  phi[i1*n_y+i2]=s;

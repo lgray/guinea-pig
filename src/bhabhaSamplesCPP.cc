@@ -45,8 +45,8 @@ bool BHABHASAMPLES::pick_next_bhabha(float e1, float e2, float ecmratio, float e
   pz2 *= ecmratio;
   en2 *= ecmratio;
 
-  bhabha_[next_].mother1 = fabs(e1);
-  bhabha_[next_].mother2 = fabs(e2);
+  bhabha_[next_].mother1 = std::abs(e1);
+  bhabha_[next_].mother2 = std::abs(e2);
   bhabha_[next_].eCM = eCM;
   number_bhabha = bhabha_[next_].evtIndex;
   next_++;
@@ -106,7 +106,7 @@ void BHABHA::boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float par
 
 // Angles of the collision axis in the CM frame
   theta=asin(prelrho/prel);
-  if(abs(theta)<0.00001){
+  if(std::abs(theta)<0.00001){
     phi=0.;
   }
   else{
@@ -149,7 +149,7 @@ void BHABHA::boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float par
 				  std::cout << "Error in photon storage.\n";
 				  std::cout << "Bhabha event index: " << bhabha_event_index << std::endl;
 				  std::cout << "Photon event index: " << photon_event_index << std::endl;
-				  if(abs(bhabha_event_index-photon_event_index)>10) exit(1);
+				  if(std::abs(bhabha_event_index-photon_event_index)>10) exit(1);
 			  }
 			  bhabha_rotation(theta,phi,px,py,pz);
 			  if(fourboost(en, px, py, pz, -beta_x, -beta_y, -beta_z))

@@ -395,7 +395,7 @@ void PAIR_BEAM::compute_pairs_calls(long int& n1, double& e1, long int& n2, doub
 	pt=sqrt(vx*vx+vy*vy)*abs_energy;
 	pz=vz*energy;
 	r0=3.3333e3*pt/b;
-	phi=z/r0*pt/abs(pz);
+	phi=z/r0*pt/std::abs(pz);
 	if (sqrt(2.0*(1.0-cos(phi)))*r0>r){
 	  if (vz>0.0) {
 	    e1+=abs_energy;

@@ -7,7 +7,8 @@
 
 class JET_PARAMETER
 {
-  double ebeam_,ptmin_,lns4_,pstar2_,q2_1_,q2_2_;
+  //double ebeam_;
+  double ptmin_,lns4_,pstar2_,q2_1_,q2_2_;
   double lambda3_2_,lambda4_2_,lambda5_2_;
   //   int select_x_;
   int d_spectrum_, r_spectrum_,iparam_;
@@ -15,7 +16,7 @@ class JET_PARAMETER
 
  public:
 
- JET_PARAMETER(): ebeam_(0.0),ptmin_(0.0),lns4_(0.0),pstar2_(0.0),q2_1_(0.0),
+ JET_PARAMETER(): ptmin_(0.0),lns4_(0.0),pstar2_(0.0),q2_1_(0.0),
 		  q2_2_(0.0),lambda3_2_(0.0),lambda4_2_(0.0),lambda5_2_(0.0),
 		  d_spectrum_(0),r_spectrum_(0),iparam_(0){;}
 
