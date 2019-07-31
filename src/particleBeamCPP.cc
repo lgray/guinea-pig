@@ -949,9 +949,10 @@ void PHOTON_BEAM::dump_photons(std::string name,int istep,int every_particle, in
 	    {
 	      if(getPhotonVector(k)[j].no()%every_particle==0)
 		{
-		  const PHOTON &phot = getPhotonVector(k)[j];
-		  phot.set_z_for_dump(istep,dz0,max_z,sign_label); 
+		  PHOTON* phot = new PHOTON(getPhotonVector(k)[j]);
+		  phot->set_z_for_dump(istep,dz0,max_z,sign_label); 
 		  file.save_object_on_persistent_file( phot); 
+		  delete phot;
 		}
 	    }
 	}
