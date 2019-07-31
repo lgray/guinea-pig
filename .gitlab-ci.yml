@@ -1,0 +1,4 @@
+build-all:
+  script:
+  - source /cvmfs/sft.cern.ch/lcg/views/LCG_94/x86_64-centos7-gcc62-opt/setup.sh
+  - mkdir build; cd build; cmake ..; make -j `getconf _NPROCESSORS_ONLN` 
