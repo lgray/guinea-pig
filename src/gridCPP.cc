@@ -853,7 +853,7 @@ void GRID::assignTridentBeamSliceCIC(SLICE_ON_GRID& sog, int i_slice, DISTRIBUTE
 /*! This routine calculates the luminosity from the collision of the two
 slices i1 and i2 of grid. The dimensions of the grids have to be the same. */
 
-void GRID::step_lumi(float min_z, PAIR_BEAM& secondaries,int time_counter, SWITCHES& switches)
+void GRID::step_lumi(float min_z, PAIR_BEAM& secondaries,int time_counter, SWITCHES& switches, int beamslice1=-1, int beamslice2=-1)
 {
   float sum=0.0;
   int i1,i2,j;
@@ -871,7 +871,7 @@ void GRID::step_lumi(float min_z, PAIR_BEAM& secondaries,int time_counter, SWITC
 	    {
 	      for( pointer2 = part_pointer2_[j].begin(); pointer2 != part_pointer2_[j].end(); pointer2++)
 		{
-		  collide_ee(i1, i2, min_z, *pointer1, *pointer2,switches, secondaries,time_counter);
+		  collide_ee(i1, i2, min_z, *pointer1, *pointer2,switches, secondaries,time_counter, beamslice1, beamslice2 ) ;
 		}
 	    }
 	}
@@ -880,7 +880,7 @@ void GRID::step_lumi(float min_z, PAIR_BEAM& secondaries,int time_counter, SWITC
   results_.add_lumi_fine( sum*1e18/(mesh_.get_delta_x()*mesh_.get_delta_y()*timestep_) );	    
 }
 
-void GRID::collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& pointer1, const BEAM_PARTICLE_POINTER& pointer2, SWITCHES& switches,PAIR_BEAM& secondaries, int time_counter)
+void GRID::collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& pointer1, const BEAM_PARTICLE_POINTER& pointer2, SWITCHES& switches,PAIR_BEAM& secondaries, int time_counter, int beamslice1=-1, int beamslice2=-1)
 {
   //  JET_FLOAT bhabhan;
   float help,ecm,e1,e2;
@@ -964,9 +964,10 @@ void GRID::collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POIN
       pointer1.velocities(part1Vx, part1Vy);
       pointer2.velocities(part2Vx, part2Vy);
       // The following line changed by SL to use signed energies (needed in boost_bhabha())
-      bhabhas_.make_bhabha(secondaries, part1Vx, part1Vy, part2Vx, part2Vy, e1, e2, ecm, weight, mesh_, cellx, celly,min_z, switches, *rndm_generator_);
+	bhabhas_.make_bhabha(secondaries, part1Vx, part1Vy, part2Vx, part2Vy, e1, e2, ecm, weight, mesh_, cellx, celly,min_z, switches, *rndm_generator_, beamslice1, beamslice2 );
+
 // The following alternative tested whether it matters which beam moves in which direction
-//      bhabhas_.make_bhabha(secondaries, part1Vx, part1Vy, part2Vx, part2Vy, -e1, e2, ecm, weight, mesh_, cellx, celly,min_z, switches, *rndm_generator_);
+//      bhabhas_.make_bhabha(secondaries, part1Vx, part1Vy, part2Vx, part2Vy, -e1, e2, ecm, weight, mesh_, cellx, celly,min_z, switches, *rndm_generator_, beamslice1, beamslice2);
     }
 
   if (switches.get_do_jets())

@@ -789,7 +789,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
     return energy;
   }
   
-  void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& pointer1, const BEAM_PARTICLE_POINTER& pointer2, SWITCHES& switches,PAIR_BEAM& secondaries,int time_counter);
+void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& pointer1, const BEAM_PARTICLE_POINTER& pointer2, SWITCHES& switches,PAIR_BEAM& secondaries,int time_counter, int beamslice1, int beamslice2) ;
   
   void collide_ge(int cellx, int celly,float min_z, const BEAM_PHOTON_POINTER& photon_pointer, const BEAM_PARTICLE_POINTER& particle_pointer, PAIR_BEAM& secondaries, SWITCHES& switches, const PAIR_PARAMETER& pair_parameter, RNDM& rndm_generator);
   
@@ -1148,7 +1148,8 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
   /*!
     for each grid cell, call collide_ee(), computing all collisions between a particle from beam1 and a particle from beam2. The summed luminosity is added in 'results' (lumi_fine)
   */
-  void step_lumi(float min_z,PAIR_BEAM& secondaries, int time_counter, SWITCHES& switches);
+
+  void step_lumi(float min_z,PAIR_BEAM& secondaries, int time_counter, SWITCHES& switches, int beamslice1, int beamslice2) ;
 
   inline void update_slice_charge(int slice1, int slice2)
   {

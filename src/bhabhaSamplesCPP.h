@@ -317,7 +317,7 @@ class BHABHA
 		}
     }
   
-  inline void make_bhabha(PAIR_BEAM& bhabhas, float part1Vx, float part1Vy, float part2Vx, float part2Vy, float e1, float e2,float ecm, float weight, MESH& mesh, int cellx, int celly,float min_z, const SWITCHES& switches, RNDM& rndm_generator)
+    inline void make_bhabha(PAIR_BEAM& bhabhas, float part1Vx, float part1Vy, float part2Vx, float part2Vy, float e1, float e2,float ecm, float weight, MESH& mesh, int cellx, int celly,float min_z, const SWITCHES& switches, RNDM& rndm_generator, int beamslice1, int beamslice2)
     {
       float px1, py1, pz1, en1, px2, py2, pz2, en2;
       int nbphot;
@@ -325,14 +325,15 @@ class BHABHA
       float ecmratio = ecm/switches.get_bhabha_ecmload();
       double bhabhan = switches.get_bhabha_scal()*weight*std::pow(float(ecmratio*ecmratio),float(-.9891));
       if (rndm_generator.rndm()< bhabhan)
-	{
-	  if (	bhabhaReserve_.pick_next_bhabha(e1, e2, ecmratio, ecm, px1, py1, pz1, en1, px2, py2, pz2, en2, nbphot, evtIndex) )
-	    {
-	      boost_bhabha(part1Vx, part1Vy, part2Vx, part2Vy, e1, e2, px1, py1, pz1, en1, px2, py2, pz2, en2, nbphot, ecmratio, switches.get_do_bhabhas(), evtIndex);
-	      bhabhas.new_pair(evtIndex, mesh, cellx, celly, min_z, -1, en1, px1, py1,pz1, switches.get_bhabha_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator );
-	      bhabhas.new_pair(evtIndex, mesh, cellx, celly, min_z, -1, en2, px2, py2,pz2, switches.get_bhabha_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator );
-	    }
-	}
+        {
+          if (bhabhaReserve_.pick_next_bhabha(e1, e2, ecmratio, ecm, px1, py1, pz1, en1, px2, py2, pz2, en2, nbphot, evtIndex) )
+            {
+              boost_bhabha(part1Vx, part1Vy, part2Vx, part2Vy, e1, e2, px1, py1, pz1, en1, px2, py2, pz2, en2, nbphot, ecmratio, switches.get_do_bhabhas(), evtIndex);
+              bhabhas.new_pair(evtIndex, mesh, cellx, celly, min_z, -1, en1, px1, py1,pz1, switches.get_bhabha_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator, beamslice1, beamslice2 );
+              bhabhas.new_pair(evtIndex, mesh, cellx, celly, min_z, -1, en2, px2, py2,pz2, switches.get_bhabha_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator, beamslice1, beamslice2  );
+
+            }
+        }
     }
   
 
