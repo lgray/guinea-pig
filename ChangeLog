@@ -1,4 +1,8 @@
-02-09-2013 Jochem Snuverink <Jochem.Snuverink@cern.ch>
+18-01-2022 Andrea Latina <andrea.latina@cern.ch>
+	* Merged merge request "Bugfix for bhabha_rotations" by Valentin Volkl
+	* Merged merge request "Add beamslice variables for timing I/O" by Valentin Volkl
+	* configure package version set to 1.2.2
+ 02-09-2013 Jochem Snuverink <Jochem.Snuverink@cern.ch>
 	* fix intialisation of members
 	* remove using namespace std in headers
 	* add Doxygen file

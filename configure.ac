@@ -1,8 +1,8 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.59)
-AC_INIT([guinea-pig], [1.2.1], [barbara.dalena@cern.ch])
+AC_PREREQ([2.71])
+AC_INIT([guinea-pig],[1.2.2],[barbara.dalena@cern.ch])
 
 EXTERNAL_CFLAGS="$CFLAGS"
 EXTERNAL_CXXFLAGS="$CXXFLAGS"
@@ -10,11 +10,11 @@ EXTERNAL_CXXFLAGS="$CXXFLAGS"
 DEFAULT_CFLAGS="-O3"
 DEFAULT_CXXFLAGS=""
 
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
 
 AC_CONFIG_SRCDIR([src/guineapigCPP.h])
-AC_CONFIG_HEADER([src/config.h])
+AC_CONFIG_HEADERS([src/config.h])
 
 if test "$prefix" = "NONE" ; then
   prefix="/usr/local"
@@ -26,13 +26,13 @@ USE_FFTW2=false
 USE_FFTW3=false
 USE_ROOT=false
 
-AC_ARG_ENABLE([fftw2], [AC_HELP_STRING([--enable-fftw2],[enable the fftw2 libraries for field computation (default is no)])], [USE_FFTW2=true], [USE_FFTW2=false])
-AC_ARG_ENABLE([fftw3], [AC_HELP_STRING([--enable-fftw3],[enable the fftw3 libraries for field computation (default is no)])], [USE_FFTW3=true], [USE_FFTW3=false])
-AC_ARG_ENABLE([root], [AC_HELP_STRING([--enable-root],[enable the ROOT libraries for outputs (default is no)])], [USE_ROOT=true], [USE_ROOT=false])
+AC_ARG_ENABLE([fftw2], [AS_HELP_STRING([--enable-fftw2],[enable the fftw2 libraries for field computation (default is no)])], [USE_FFTW2=true], [USE_FFTW2=false])
+AC_ARG_ENABLE([fftw3], [AS_HELP_STRING([--enable-fftw3],[enable the fftw3 libraries for field computation (default is no)])], [USE_FFTW3=true], [USE_FFTW3=false])
+AC_ARG_ENABLE([root], [AS_HELP_STRING([--enable-root],[enable the ROOT libraries for outputs (default is no)])], [USE_ROOT=true], [USE_ROOT=false])
 
 
-AC_ARG_WITH([fftwdir], [AC_HELP_STRING([--with-fftwdir=DIR],[FFTW home directory (such that `$DIR/lib' and  `$DIR/include' exist)])], [FFTW_HOME="$with_fftwdir"])
-AC_ARG_WITH([rootdir], [AC_HELP_STRING([--with-rootdir=DIR],[ROOT home directory (such that `$DIR/lib' and  `$DIR/include' exist)])], [ROOTSYS="$with_rootdir"])
+AC_ARG_WITH([fftwdir], [AS_HELP_STRING([--with-fftwdir=DIR],[FFTW home directory (such that `$DIR/lib' and  `$DIR/include' exist)])], [FFTW_HOME="$with_fftwdir"])
+AC_ARG_WITH([rootdir], [AS_HELP_STRING([--with-rootdir=DIR],[ROOT home directory (such that `$DIR/lib' and  `$DIR/include' exist)])], [ROOTSYS="$with_rootdir"])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -117,7 +117,15 @@ if test "$USE_ROOT" = "true" ; then
 fi
 
 # Checks for header files.
-AC_HEADER_STDC
+m4_warn([obsolete],
+[The preprocessor macro `STDC_HEADERS' is obsolete.
+  Except in unusual embedded environments, you can safely include all
+  ISO C90 headers unconditionally.])dnl
+# Autoupdate added the next two lines to ensure that your configure
+# script's behavior did not change.  They are probably safe to remove.
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+
 AC_CHECK_HEADERS([stdlib.h])
 
 
