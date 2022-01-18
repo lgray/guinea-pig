@@ -344,6 +344,11 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
   int icharge_;
   float e_inv_;
   bool last_rescaling_ok_;
+
+  // MANU, to retrieve the time :
+   int slice1_ ;
+   int slice2_ ;
+
  public:
   
   PAIR_PARTICLE() : ABSTRACT_PARTICLE ()
@@ -354,6 +359,11 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
       process_ = -99;
       label_ = -99;
       last_rescaling_ok_ = true;
+
+      // -- MANU :
+	slice1_ = -1 ;
+	slice2_ =-1 ;
+      // ----
     }
   
   PAIR_PARTICLE(int label, int index_of_process, float x,float y,float z, float vx,float vy,float vz, float energy) : ABSTRACT_PARTICLE (x,y,z,vx,vy,energy)
@@ -397,8 +407,7 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
     if ( icharge_) ener = -energy_;
     else ener = energy_;
 
-    //out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << process_ << " " << label_;
-    out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << xpos_ << " " << ypos_ << " " << zpos_ << " " << process_;
+    out <<  ener << " " <<  vx_ << " " << vy_ << " " << velocityz_ << " " << xpos_ << " " << ypos_ << " " << zpos_ << " " << process_ << " " <<  slice1_ <<" " << slice2_  ;
     return out.str();
   }
 
@@ -415,6 +424,19 @@ class PAIR_PARTICLE :  public ABSTRACT_PARTICLE, public ABSTRACT_IO_CLASS
       else ener = energy_;
       return ener;
     }
+
+  inline void set_slices12( int i1, int i2 ){ 
+	slice1_ = i1 ;
+	slice2_ = i2;
+	return ;
+  }
+
+  inline void get_slices12( int &i1,  int &i2 ) {
+	i1 = slice1_ ;
+	i2 = slice2_ ;
+	return;
+  }
+
 
 
   inline float Zvelocity() const 

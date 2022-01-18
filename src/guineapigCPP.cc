@@ -584,7 +584,7 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
     gridsPtr_[i_grid]->distribute_particles(i1, i2, switches.get_electron_distribution_rho(), switches.get_force_symmetric());
   
   time_.add_timer(1);
-  grid_.step_lumi(min_z, secondaries_, time_counter_, switches);
+  grid_.step_lumi(min_z, secondaries_, time_counter_, switches, i1, i2 ) ;
   time_counter_++;
 
   time_.add_timer(2); 

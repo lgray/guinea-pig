@@ -88,7 +88,7 @@ void FIELD::fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT
 	}
     }
 #ifdef SHORTCUT_FFT
-  if (flag1*flag2) 
+  if (flag1 && flag2) 
     {
 #endif
       i1=2;
