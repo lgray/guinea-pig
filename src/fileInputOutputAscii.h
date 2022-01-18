@@ -202,7 +202,8 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
     for (k=0; k < bhabhaPhot->nb_samples(); k++)
       {
 	bhabhaPhot->get_parameters_for_output(k,evtIndex, en, vx, vy, vz);
-	outfile_ << std::setw(8) << k+1 << " " << std::setw(8) << evtIndex << " " << std::setw(10) << std::fixed << std::setprecision(4) << en << " "  << std::setw(10) << vx << " "  << std::setw(10) << vy << " "  << std::setw(10) << vz << std::endl;
+	//outfile_ << std::setw(8) << k+1 << " " << std::setw(8) << evtIndex << " " << std::setw(10) << std::fixed << std::setprecision(4) << en << " "  << std::setw(10) << vx << " "  << std::setw(10) << vy << " "  << std::setw(10) << vz << std::endl;
+	outfile_ << std::setw(8) << k+1 << " " << std::setw(8) << evtIndex << " " << std::setw(10) << std::fixed << std::setprecision(12) << en << " "  << std::setw(10) << vx << " "  << std::setw(10) << vy << " "  << std::setw(10) << vz << std::endl;
       }
   }
       
