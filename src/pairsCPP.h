@@ -248,7 +248,6 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
       pairs_results_.storep_(index_of_process, e,wgt, lucky);
       if (lucky)
 	{
-	  /*       new_pair(mesh, cellx, celly, min_z,index_of_process, (float)(e),0.0,0.0,(float)(e), switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), rndm_generator); */
 	  new_pair(mesh, cellx, celly, min_z,index_of_process, (float)(e),0.0,0.0,(float)(e), switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
 	}
     }
@@ -258,7 +257,8 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   void  make_muon(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float eph1,float q2_1,float eph2,float q2_2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& rndm_generator);
   
   void new_pair(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator );
-  void new_pair(const unsigned index, const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator);
+
+ void new_pair(const unsigned index, const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator, int beamslice1, int beamslice2);
  
   inline void save_pairs_on_file(std::string nameOfOutputFile) const
     {

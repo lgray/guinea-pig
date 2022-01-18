@@ -89,8 +89,9 @@ void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int
     }
 }
 
-void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator )
+void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator, int beamslice1=-1, int beamslice2=-1 )
 {
+
   // test if particle energy is above the required minumum
   if (fabs(energy) < pair_parameter_.get_ecut() )
     {
@@ -110,12 +111,17 @@ void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cell
   
   mesh.pair_guess_position_in_cell(cellx, celly, min_z, xx, yy, zz,rndm_generator);
   
+
   vxx=px/fabs(energy);
   vyy=py/fabs(energy);
   vzz=pz/fabs(energy);
   
   count_pairs_++;
   PAIR_PARTICLE pair_temp = PAIR_PARTICLE(evtIndex, index_of_process,xx,yy,zz,vxx,vyy,vzz, energy);
+
+  // for retrieval of timing
+  pair_temp.set_slices12( beamslice1 , beamslice2 );
+
   // if (store_pairs>1) store particles at production time for comparison 
   if (saving > 1)
     {
@@ -126,6 +132,8 @@ void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cell
     {
       reserve_.push_back(pair_temp);
     }
+//std::cout << " manu :  end of in pairsCPP:new_pair with evtIndex " << std::endl;
+
 }
 
 // incoherent pair creation : Breit-Wheeler processes
