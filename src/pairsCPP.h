@@ -50,7 +50,7 @@ class PAIR_PARAMETER
   
  PAIR_PARAMETER():d_eps_1_(0.0),d_eps_2_(0.0),mass_(0.0),s4(0.0),lns4(0.0),ecut(0.0) {;}
   
-  void  init(BEAM& beam1, BEAM& beam2, int massflag, float pair_ecut, float pair_step, float step, int timestep);
+  void  init(BEAM& beam1, BEAM& beam2, int massflag, double pair_ecut, double pair_step, double step, int timestep);
   
   inline double get_s4() const {return s4;}
   inline double get_lns4() const {return lns4;}
@@ -64,11 +64,11 @@ class PAIR_PARAMETER
   
   inline double get_mass() const {return mass_;}
 
-  void jet_equiv (float xmin,float e,int iflag,float& eph,float& q2,float& wgt, RNDM& rndm_generator) const;
+  void jet_equiv (double xmin,double e,int iflag,double& eph,double& q2,double& wgt, RNDM& rndm_generator) const;
   
-  inline float jet_requiv(float xmin,int iflag) const
+  inline double jet_requiv(double xmin,int iflag) const
     {
-      float help;
+      double help;
       
       if (xmin>=1.0) return 0.0;
       switch (iflag)
@@ -106,7 +106,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   
   void compute_pairs_calls(long int& n1, double& e1, long int& n2, double& e2) const;
   
-  inline void new_event(float e,float x,float y,float z,float vx,float vy,float vz, float ratio, int tracking, RNDM& rndm_generator)
+  inline void new_event(double e,double x,double y,double z,double vx,double vy,double vz, double ratio, int tracking, RNDM& rndm_generator)
     {
       int index_of_process = -99;
       // test if particle energy is above the required minumum 
@@ -143,7 +143,7 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
       pair_track_.addStep(n_pair_steps);
     }
     inline void set_name(std::string name){pairs_results_.set_name((std::string)name);}
-  inline void set_pair_parameters(BEAM& beam1, BEAM& beam2, int massflag,float pair_ecut, float pair_step, float step, int timestep)
+  inline void set_pair_parameters(BEAM& beam1, BEAM& beam2, int massflag,double pair_ecut, double pair_step, double step, int timestep)
     {
       /* massflag: 0 for electrons, 1 for muons */
       pair_parameter_.init(beam1, beam2, massflag, pair_ecut, pair_step, step, timestep);
@@ -208,57 +208,57 @@ class  PAIR_BEAM : public ABSTRACT_IO_CLASS
   
   void init(int n_cell_z);
   
-  void distribute_pairs(float delta_z,unsigned int n);
-  void move_unactive_pairs(float step);
+  void distribute_pairs(double delta_z,unsigned int n);
+  void move_unactive_pairs(double step);
   
-  void load_events(int time_counter,float ratio, int tracking, RNDM& rndm_generator);
+  void load_events(int time_counter,double ratio, int tracking, RNDM& rndm_generator);
   
   std::string output_flow() const ;
   
-  void book_keeping(const MESH& mesh, int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& rndm_generator )
+  void book_keeping(const MESH& mesh, int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,int cellx, int celly,double min_z,SWITCHES& switches,RNDM& rndm_generator )
     {
       bool lucky = true;
       if (wgt<rndm_generator.rndm()) lucky = false;
       pairs_results_.store_full_pair(index_of_process,e1,px1,py1,pz1,e2,px2,py2,pz2,wgt,lucky );
       if (lucky)
 	{
-	  /*       new_pair(mesh, cellx, celly,min_z,index_of_process, (float)e1,(float)px1,(float)py1,(float)pz1, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), rndm_generator); */
-	  /*       new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), rndm_generator); */
-	  new_pair(mesh, cellx, celly,min_z,index_of_process, (float)e1,(float)px1,(float)py1,(float)pz1, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
-	  new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
+	  /*       new_pair(mesh, cellx, celly,min_z,index_of_process, (double)e1,(double)px1,(double)py1,(double)pz1, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), rndm_generator); */
+	  /*       new_pair(mesh, cellx, celly,min_z, index_of_process, (double)e2,(double)px2,(double)py2,(double)pz2, switches.get_pair_ratio(), switches.get_track_secondaries(), switches.get_store_secondaries(), rndm_generator); */
+	  new_pair(mesh, cellx, celly,min_z,index_of_process, (double)e1,(double)px1,(double)py1,(double)pz1, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
+	  new_pair(mesh, cellx, celly,min_z, index_of_process, (double)e2,(double)px2,(double)py2,(double)pz2, switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
 	}
     }
 
-  void book_keeping_muon(const MESH& mesh, int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& rndm_generator )
+  void book_keeping_muon(const MESH& mesh, int index_of_process, double e1,double px1,double py1,double pz1,double e2,double px2,double py2,double pz2, double wgt,int cellx, int celly,double min_z,SWITCHES& switches,RNDM& rndm_generator )
     {
       bool lucky = true;
       if (wgt<rndm_generator.rndm()) lucky = false;
       pairs_results_.store_full_pair(index_of_process,e1,px1,py1,pz1,e2,px2,py2,pz2,wgt/switches.get_muon_scale(),lucky );
       if (lucky)
 	{
-	  new_pair(mesh, cellx, celly,min_z,index_of_process, (float)e1,(float)px1,(float)py1,(float)pz1, switches.get_muon_ratio(), switches.get_track_muons(), switches.get_store_muons(), rndm_generator);
-	  new_pair(mesh, cellx, celly,min_z, index_of_process, (float)e2,(float)px2,(float)py2,(float)pz2, switches.get_muon_ratio(), switches.get_track_muons(), switches.get_store_muons(), rndm_generator);
+	  new_pair(mesh, cellx, celly,min_z,index_of_process, (double)e1,(double)px1,(double)py1,(double)pz1, switches.get_muon_ratio(), switches.get_track_muons(), switches.get_store_muons(), rndm_generator);
+	  new_pair(mesh, cellx, celly,min_z, index_of_process, (double)e2,(double)px2,(double)py2,(double)pz2, switches.get_muon_ratio(), switches.get_track_muons(), switches.get_store_muons(), rndm_generator);
 	}
     }
   
-  void book_keeping_p(const MESH& mesh,int index_of_process, double e,double wgt,int cellx, int celly,float min_z,SWITCHES& switches,RNDM& rndm_generator )
+  void book_keeping_p(const MESH& mesh,int index_of_process, double e,double wgt,int cellx, int celly,double min_z,SWITCHES& switches,RNDM& rndm_generator )
     {
       bool lucky = true;
       if (wgt<rndm_generator.rndm()) lucky = false;
       pairs_results_.storep_(index_of_process, e,wgt, lucky);
       if (lucky)
 	{
-	  new_pair(mesh, cellx, celly, min_z,index_of_process, (float)(e),0.0,0.0,(float)(e), switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
+	  new_pair(mesh, cellx, celly, min_z,index_of_process, (double)(e),0.0,0.0,(double)(e), switches.get_pair_ratio(), switches.get_track_pairs(), switches.get_store_pairs(), rndm_generator);
 	}
     }
   
-  void make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,int index_of_process, float eph1,float q2_1,float eorg1, float eph2,float q2_2,float eorg2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& rndm_generator);
+  void make_pair_bw(const MESH& mesh, int cellx, int celly,double min_z,int index_of_process, double eph1,double q2_1,double eorg1, double eph2,double q2_2,double eorg2, double flum,double beta_x,double beta_y, SWITCHES& switches,RNDM& rndm_generator);
   
-  void  make_muon(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float eph1,float q2_1,float eph2,float q2_2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& rndm_generator);
+  void  make_muon(const MESH& mesh, int cellx, int celly,double min_z, int index_of_process, double eph1,double q2_1,double eph2,double q2_2, double flum,double beta_x,double beta_y, SWITCHES& switches,RNDM& rndm_generator);
   
-  void new_pair(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator );
+  void new_pair(const MESH& mesh, int cellx, int celly,double min_z, int index_of_process, double energy,double px,double py,double pz, double ratio, int tracking, int saving, RNDM& rndm_generator );
 
- void new_pair(const unsigned index, const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator, int beamslice1, int beamslice2);
+ void new_pair(const unsigned index, const MESH& mesh, int cellx, int celly,double min_z, int index_of_process, double energy,double px,double py,double pz, double ratio, int tracking, int saving, RNDM& rndm_generator, int beamslice1, int beamslice2);
  
   inline void save_pairs_on_file(std::string nameOfOutputFile) const
     {

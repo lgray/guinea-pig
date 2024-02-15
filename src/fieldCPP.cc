@@ -10,7 +10,7 @@
 /*! This routine calculates the potentials with the help of the fast fourier
    transform */
 
-void FIELD::fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT *dist,PHI_FLOAT *phi1, PHI_FLOAT *phi2,int n_x,int n_y, float charge_sign, ABSTRACT_FOURIER* fourier_forward, ABSTRACT_FOURIER* fourier_backward)
+void FIELD::fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT *dist,PHI_FLOAT *phi1, PHI_FLOAT *phi2,int n_x,int n_y, double charge_sign, ABSTRACT_FOURIER* fourier_forward, ABSTRACT_FOURIER* fourier_backward)
 {
   // fourier_forward and fourier_backward are predefined fourier operators
   // the first one operates on data file : fourier_forward->data_vector() 
@@ -26,7 +26,7 @@ void FIELD::fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT
 
   int i1,i2,i,j,j0,m,m2;
   //  int nn[2];
-  float eps=1e-5;
+  double eps=1e-5;
 #ifdef SHORTCUT_FFT
   int flag1=0,flag2=0;
 #endif
@@ -129,12 +129,12 @@ void FIELD::fold_fft(const PHI_FLOAT *rho1,const PHI_FLOAT *rho2,const PHI_FLOAT
 /*! This routine calculates the potentials on the outer boundary of the grid
    by direct calculation. */
 
-void FIELD::foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *phi,int n_x,int n_y, float charge_sign)
+void FIELD::foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *phi,int n_x,int n_y, double charge_sign)
 {
   double s;
   //  int i1,i2,i3,i4,j;
   int i1,i2,i3,i4;
-  float eps=1e-5;
+  double eps=1e-5;
 
   if (std::abs(charge_sign)<eps){
       for (i1=0;i1<n_x*n_y;i1++){
@@ -203,7 +203,7 @@ void FIELD::foldfronts (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
 
 /*! Routine to calculate the potentials with an iterative method */
 
-void FIELD::sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT *parameter, float charge_sign)
+void FIELD::sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT *parameter, double charge_sign)
 {
   const int MAXIT=1000;
   const PHI_FLOAT eps=1e-5;
@@ -211,7 +211,7 @@ void FIELD::sor2 (const PHI_FLOAT *rho,PHI_FLOAT *phi,int n_x,int n_y,PHI_FLOAT 
   PHI_FLOAT omega,resid,e_inv;
   int i1,i2,n,j;
   PHI_FLOAT a,b,c,d,e,rjac;
-  float small=1e-5;
+  double small=1e-5;
 
   if (std::abs(charge_sign)<small){
       return;
@@ -297,13 +297,13 @@ double FIELD::f_potential_2(double x0,double y0,double dx,double dy)
 /*! This routine folds the charge distribution and the greensfunction of
 a grid to get the potentials. */
 
-void FIELD::foldfields (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *phi,int n_x,int n_y, float charge_sign)
+void FIELD::foldfields (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *phi,int n_x,int n_y, double charge_sign)
 {
   double s;
   //  int i1,i2,i3,i4,j;
   int i1,i2,i3,i4;
   //int field_typ=1;
-  float eps=1e-5;
+  double eps=1e-5;
 
   if (std::abs(charge_sign)<eps){
       for (i1=0;i1<n_x*n_y;i1++){
@@ -361,7 +361,7 @@ void FIELD::foldfields (const PHI_FLOAT *rho,const PHI_FLOAT *dist,PHI_FLOAT *ph
   // For the moment, I don't understand well what happens with the factor 1/2 (GLM)
   // hold length units, the potential looks calculated in GigaVolts
 
-void FIELD::dist_init(PHI_FLOAT factor, float deltax, float deltay,   FFT_SERVER* fourier)
+void FIELD::dist_init(PHI_FLOAT factor, double deltax, double deltay,   FFT_SERVER* fourier)
 {
   int k,i1, i2,j, j0;
   int nn[2];

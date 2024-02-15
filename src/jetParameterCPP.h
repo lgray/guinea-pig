@@ -20,7 +20,7 @@ class JET_PARAMETER
 		  q2_2_(0.0),lambda3_2_(0.0),lambda4_2_(0.0),lambda5_2_(0.0),
 		  d_spectrum_(0),r_spectrum_(0),iparam_(0){;}
 
-  void init(float s,float ptmin,int iparam);
+  void init(double s,double ptmin,int iparam);
 
   inline double get_pstar2() const {return pstar2_;};
   inline int get_d_spectrum() const {return d_spectrum_;};

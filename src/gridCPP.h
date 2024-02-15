@@ -35,8 +35,8 @@
 class SLICE_ON_GRID
 {
 
-  float nb_part_per_macro_;
-  float scal_step_;
+  double nb_part_per_macro_;
+  double scal_step_;
   int nb_macroparticles_;
   BEAM* beam_;
   PHI_FLOAT *rho_;
@@ -162,38 +162,38 @@ class SLICE_ON_GRID
       return beam_;
     }
   
-  inline void set_scal_step(float s)
+  inline void set_scal_step(double s)
     {
       scal_step_ = s;
     }
   
-  inline float get_scal_step() const 
+  inline double get_scal_step() const 
     {
       return scal_step_;
     }
   
-  inline void update_nb_part_per_macro(float nb_macro_part)
+  inline void update_nb_part_per_macro(double nb_macro_part)
     {
       if (nb_macroparticles_ > 0)
 	{
-	  nb_part_per_macro_ = nb_macro_part/(float)nb_macroparticles_;
+	  nb_part_per_macro_ = nb_macro_part/(double)nb_macroparticles_;
 	}
       else nb_part_per_macro_ = 0.0;
     }
   
-  inline float get_nb_part_per_macro() const 
+  inline double get_nb_part_per_macro() const 
     {
       return nb_part_per_macro_;
     }
   
   inline const PHI_FLOAT* get_rho() const { return rho_;}
   
-  inline void assignChargeToNGP(int i1,int i2, float chgSgn) 
+  inline void assignChargeToNGP(int i1,int i2, double chgSgn) 
     {  
       rho_[i1*nb_cells_y_+i2] +=  nb_part_per_macro_*chgSgn;
     }
   
-  inline void assignChargeToCIC(int i1,int i2, float h_x, float h_y,  float chgSgn) 
+  inline void assignChargeToCIC(int i1,int i2, double h_x, double h_y,  double chgSgn) 
     { 
       int j;
       PHI_FLOAT charge = nb_part_per_macro_*chgSgn;
@@ -253,14 +253,14 @@ class GENERAL_GRID
   int n_cell_x_,n_cell_y_,n_cell_z_; 
   int timestep_;
   MESH mesh_;
-  float min_x_,max_x_,min_y_,max_y_,min_z_,max_z_;
-  float cut_x_,cut_y_,cut_z_;
-  //  float nb_part_per_macro_[2];
-  float step_;
-  //    float scal_step[2];
-  float rho_x_1_,rho_y_1_,rho_sum_1_,rho_x_2_,rho_y_2_,rho_sum_2_;
+  double min_x_,max_x_,min_y_,max_y_,min_z_,max_z_;
+  double cut_x_,cut_y_,cut_z_;
+  //  double nb_part_per_macro_[2];
+  double step_;
+  //    double scal_step[2];
+  double rho_x_1_,rho_y_1_,rho_sum_1_,rho_x_2_,rho_y_2_,rho_sum_2_;
 
-  float delta_x_inverse_,delta_y_inverse_;
+  double delta_x_inverse_,delta_y_inverse_;
   
   PHI_FLOAT rho_factor_;
   
@@ -311,33 +311,33 @@ class GENERAL_GRID
   
   inline int get_timestep() const {return timestep_;};
   
-  inline float get_min_x() const {return min_x_;};
-  inline float get_max_x() const {return max_x_;};
-  inline float get_min_y() const {return min_y_;};
-  inline float get_max_y() const {return max_y_;};
-  inline float get_min_z() const {return min_z_;};
-  inline float get_max_z() const {return max_z_;};
-  inline float get_delta_x() const {return mesh_.get_delta_x();};
-  inline float get_delta_y() const {return mesh_.get_delta_y();};
-  inline float get_delta_z() const {return mesh_.get_delta_z();};
-  inline float get_scal_step(int index) const
+  inline double get_min_x() const {return min_x_;};
+  inline double get_max_x() const {return max_x_;};
+  inline double get_min_y() const {return min_y_;};
+  inline double get_max_y() const {return max_y_;};
+  inline double get_min_z() const {return min_z_;};
+  inline double get_max_z() const {return max_z_;};
+  inline double get_delta_x() const {return mesh_.get_delta_x();};
+  inline double get_delta_y() const {return mesh_.get_delta_y();};
+  inline double get_delta_z() const {return mesh_.get_delta_z();};
+  inline double get_scal_step(int index) const
     {
       return slice_of_beam_[index].get_scal_step();
       //return scal_step[index];
     }
-  //  inline float get_cut_z() const {return cut_z_;};
-  inline float get_step() const {return step_;};
-  inline float get_offset_x() const {return mesh_.get_offset_x();};
-  inline float get_offset_y() const {return mesh_.get_offset_y();};
+  //  inline double get_cut_z() const {return cut_z_;};
+  inline double get_step() const {return step_;};
+  inline double get_offset_x() const {return mesh_.get_offset_x();};
+  inline double get_offset_y() const {return mesh_.get_offset_y();};
   
   inline const MESH* get_mesh() const {return &mesh_;}
   
-  inline float get_rho_x_1() const {return rho_x_1_;};
-  inline float get_rho_y_1() const {return rho_y_1_;};
-  inline float get_rho_sum_1() const {return rho_sum_1_;};
-  inline float get_rho_sum_2() const {return rho_sum_2_;};
-  inline float get_rho_x_2() const {return rho_x_2_;};
-  inline float get_rho_y_2() const {return rho_y_2_;};
+  inline double get_rho_x_1() const {return rho_x_1_;};
+  inline double get_rho_y_1() const {return rho_y_1_;};
+  inline double get_rho_sum_1() const {return rho_sum_1_;};
+  inline double get_rho_sum_2() const {return rho_sum_2_;};
+  inline double get_rho_x_2() const {return rho_x_2_;};
+  inline double get_rho_y_2() const {return rho_y_2_;};
   
   
   inline PHI_FLOAT get_rho_factor() const {return rho_factor_;};
@@ -345,7 +345,7 @@ class GENERAL_GRID
   inline const PHI_FLOAT* get_phi1() const {return champ_.get_phi(1);};
   inline const PHI_FLOAT* get_phi2() const {return champ_.get_phi(2);};
 
-  //  void get_cuts(float& x,float& y,float&z) const {x = cut_x_; y = cut_y_; z = cut_z_;};
+  //  void get_cuts(double& x,double& y,double&z) const {x = cut_x_; y = cut_y_; z = cut_z_;};
 
   // nobeam = 1,2
   inline void set_nb_macroparticles(int nobeam, int npart)
@@ -354,12 +354,12 @@ class GENERAL_GRID
       //nb_macroparticles_[nobeam-1] = npart;
     }
   
-  /* inline void update_nb_part_per_macro(int nobeam, float n_particles) */
+  /* inline void update_nb_part_per_macro(int nobeam, double n_particles) */
   /* { */
   /*   int index = nobeam -1; */
   /*   if (nb_macroparticles_[index] > 0) */
   /*     { */
-  /*       nb_part_per_macro_[index] = n_particles/(float)nb_macroparticles_[index]; */
+  /*       nb_part_per_macro_[index] = n_particles/(double)nb_macroparticles_[index]; */
   /*     } */
   /* } */
   /* inline void razRhos() */
@@ -376,7 +376,7 @@ class GENERAL_GRID
   /*     } */
   /* }; */
   
-  inline void absoluteCoordinates(float x, float y, PHI_FLOAT& h_x, PHI_FLOAT& h_y) const
+  inline void absoluteCoordinates(double x, double y, PHI_FLOAT& h_x, PHI_FLOAT& h_y) const
     {
       h_x=x*delta_x_inverse_ + mesh_.get_offset_x();
       h_y=y*delta_y_inverse_ + mesh_.get_offset_y();
@@ -386,7 +386,7 @@ class GENERAL_GRID
   // given coordinates x,y : return the cell coordinates i1,i2 of the cell
   // containing (x,y) ; ai is the biggest integer that is lower than x
   // bi is the biggest integer lower than y-1/2; weight = y -1/2 -i2
-  inline void cellLocalization(float x, float y, int& ai, int& bi, float& weight) const
+  inline void cellLocalization(double x, double y, int& ai, int& bi, double& weight) const
     {
       ai=(int)floor(x);
       weight = y-0.5;
@@ -394,23 +394,15 @@ class GENERAL_GRID
       weight -= bi;
     };
   
-  inline void cellLocalization(PHI_FLOAT x, PHI_FLOAT y, int& ai, int& bi, PHI_FLOAT& weight) const
+  inline int slice_from_z(double z)
     {
-      ai=(int)floor(x);
-      weight = y-0.5;
-      bi=(int)floor(weight);
-      weight -= bi;
-    };
-  
-  inline int slice_from_z(float z)
-    {
-      return (int)floor(z/get_delta_z()+0.5*(float)n_cell_z_);
+      return (int)floor(z/get_delta_z()+0.5*(double)n_cell_z_);
     }
   
-  inline void phiValuesX(int i1, int i2,register float h, const PHI_FLOAT * phi, PHI_FLOAT& phi1_x, PHI_FLOAT& phi2_x, PHI_FLOAT& phi3_x) const
+  inline void phiValuesX(int i1, int i2,register double h, const PHI_FLOAT * phi, PHI_FLOAT& phi1_x, PHI_FLOAT& phi2_x, PHI_FLOAT& phi3_x) const
     {
       int j;
-      register float h_p;
+      register double h_p;
       // 
       //
       h_p=1.0-h;
@@ -420,10 +412,10 @@ class GENERAL_GRID
       phi3_x=h*phi[j+n_cell_y_-1] + h_p*phi[j-1];
     }
 
-  inline void phiValuesY(int i1, int i2,register float h, const PHI_FLOAT * phi, PHI_FLOAT& phi1_y, PHI_FLOAT& phi2_y, PHI_FLOAT& phi3_y) const
+  inline void phiValuesY(int i1, int i2,register double h, const PHI_FLOAT * phi, PHI_FLOAT& phi1_y, PHI_FLOAT& phi2_y, PHI_FLOAT& phi3_y) const
     {
       int j;
-      register float h_p;
+      register double h_p;
       
       h_p=1.0-h;
       j=i1*n_cell_y_+i2;
@@ -432,19 +424,19 @@ class GENERAL_GRID
       phi3_y=h*phi[j-n_cell_y_+1] + h_p*phi[j-n_cell_y_];
     }
   
-  inline bool particleInGrid(float xpart, float ypart, float& h_x,float& h_y, int& i1, int& i2)
+  inline bool particleInGrid(double xpart, double ypart, double& h_x,double& h_y, int& i1, int& i2)
     { 
       h_x=(xpart*delta_x_inverse_ + mesh_.get_offset_x()-0.5);
       i1=(int)floor(h_x);
-      h_x -= (float)i1;
+      h_x -= (double)i1;
       h_y=(ypart*delta_y_inverse_ +  mesh_.get_offset_y()-0.5);
       i2=(int)floor(h_y);
-      h_y -= (float)i2;
+      h_y -= (double)i2;
       if ((i1>=0)&&(i1<n_cell_x_-1)&&(i2>=0)&&(i2<n_cell_y_-1)) return true;
       else return false;
     }
   
-  inline bool particleInGrid(float xpart, float ypart, int& i1, int& i2)
+  inline bool particleInGrid(double xpart, double ypart, int& i1, int& i2)
     { 
       i1=(int)floor(xpart*delta_x_inverse_+ mesh_.get_offset_x());
       i2=(int)floor(ypart*delta_y_inverse_+ mesh_.get_offset_y());
@@ -454,7 +446,7 @@ class GENERAL_GRID
   
   inline void assignChargeToNGP(PHI_FLOAT* rho, int i1,int i2, PHI_FLOAT charge) {  rho[i1*n_cell_y_+i2] += charge;};
   
-  inline void assignChargeToCIC(PHI_FLOAT* rho, int i1,int i2, float h_x, float h_y, PHI_FLOAT charge) 
+  inline void assignChargeToCIC(PHI_FLOAT* rho, int i1,int i2, double h_x, double h_y, PHI_FLOAT charge) 
     { 
       int j;
       j=i1*n_cell_y_+i2;
@@ -493,17 +485,17 @@ class GENERAL_GRID
   /*       } */
   /* }; */
   
-  inline bool coordinatesInGridRange(float xpart, float ypart) const
+  inline bool coordinatesInGridRange(double xpart, double ypart) const
     { 
       if ((xpart>min_x_)&&(xpart<max_x_)&&(ypart>min_y_)&&(ypart<max_y_)) return true;
       else return false;
     };
   
-  void interpolePotential(float xpart,float ypart, PHI_FLOAT& h_x, PHI_FLOAT& h_y, PHI_FLOAT& phi1_x, PHI_FLOAT& phi2_x, PHI_FLOAT& phi3_x, PHI_FLOAT& phi1_y,PHI_FLOAT& phi2_y, PHI_FLOAT& phi3_y, const PHI_FLOAT *phi) const;
+  void interpolePotential(double xpart,double ypart, PHI_FLOAT& h_x, PHI_FLOAT& h_y, PHI_FLOAT& phi1_x, PHI_FLOAT& phi2_x, PHI_FLOAT& phi3_x, PHI_FLOAT& phi1_y,PHI_FLOAT& phi2_y, PHI_FLOAT& phi3_y, const PHI_FLOAT *phi) const;
   
-  TRIVECTOR ElectricFieldCIC(float xpart,float ypart,const PHI_FLOAT *phi) const;
+  TRIVECTOR ElectricFieldCIC(double xpart,double ypart,const PHI_FLOAT *phi) const;
   
-  void computeFields(int integrationMethod, float charge_sign, PHI_FLOAT *sor_parameter); 
+  void computeFields(int integrationMethod, double charge_sign, PHI_FLOAT *sor_parameter); 
   
   virtual void distribute_particles(int i_slice1,
 				    int i_slice2,
@@ -511,7 +503,7 @@ class GENERAL_GRID
 				    int force_symmetric) = 0;
   
   
-  void  init_grid_phys (float n_particles1, float n_particles2,float cut_x,float cut_y,float cut_z, float charge_sign,   FFT_SERVER* fourier);
+  void  init_grid_phys (double n_particles1, double n_particles2,double cut_x,double cut_y,double cut_z, double charge_sign,   FFT_SERVER* fourier);
   
 };
 
@@ -524,7 +516,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
   struct DISTRIBUTE
   {
     long int in, out;
-    float delta;
+    double delta;
     long int tot;
     DISTRIBUTE():in(0),out(0),delta(0.0),tot(0){}
   };
@@ -535,21 +527,21 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
   {
     
   protected :
-    float weight_;
+    double weight_;
     
   public :
 
     PARTICLE_POINTER() {;}
-    PARTICLE_POINTER(float weight) {weight_ = weight;}
+    PARTICLE_POINTER(double weight) {weight_ = weight;}
 
 
     virtual  ~PARTICLE_POINTER() {;}
-    inline float weight() const {return weight_;}; 
-    virtual   void velocities(float& vx, float& vy) const = 0;
+    inline double weight() const {return weight_;}; 
+    virtual   void velocities(double& vx, double& vy) const = 0;
     virtual   const TRIDVECTOR& getSpin() const = 0;
-    virtual    float energy() const = 0;
-    //   virtual  float q2() const = 0;
-    //   virtual  float eorg() const = 0;
+    virtual    double energy() const = 0;
+    //   virtual  double q2() const = 0;
+    //   virtual  double eorg() const = 0;
   };
 
   
@@ -564,7 +556,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
   
     BEAM_PARTICLE_POINTER() {;}
   
-    BEAM_PARTICLE_POINTER(const ABSTRACT_PARTICLE* partic, float weight) : PARTICLE_POINTER(weight)
+    BEAM_PARTICLE_POINTER(const ABSTRACT_PARTICLE* partic, double weight) : PARTICLE_POINTER(weight)
     {
       partic_ =partic;
       //	weight_ = weight;
@@ -572,20 +564,20 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
     
     ~BEAM_PARTICLE_POINTER() {;}
   
-    virtual  inline  void velocities(float& vx, float& vy) const {partic_->velocities(vx, vy);}
+    virtual  inline  void velocities(double& vx, double& vy) const {partic_->velocities(vx, vy);}
   
     virtual inline const TRIDVECTOR& getSpin() const 
     { 
       return  partic_->getSpin();
     }
  
-    virtual   inline   float energy() const { return partic_->energy();}
+    virtual   inline   double energy() const { return partic_->energy();}
     
-    //  virtual inline float q2() const { return 0.0;};
-    //   virtual inline float eorg() const { return 0.0;};
+    //  virtual inline double q2() const { return 0.0;};
+    //   virtual inline double eorg() const { return 0.0;};
     
     
-    /*  inline float get_spin(int nc) const   */
+    /*  inline double get_spin(int nc) const   */
     /*  {  */
     /*    //  std::cout << " BEAM_PARTICLE_POINTER:: get_spin() " << std::endl; */
     /*    return partic_->get_spin()(nc-1); */
@@ -602,11 +594,11 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
   public : 
     
     PHOTON_POINTER() {;}
-    PHOTON_POINTER(float weight) : PARTICLE_POINTER(weight) {;}
+    PHOTON_POINTER(double weight) : PARTICLE_POINTER(weight) {;}
     virtual ~PHOTON_POINTER() {;}
  
-    virtual  float q2() const = 0;
-    virtual  float eorg() const = 0;
+    virtual  double q2() const = 0;
+    virtual  double eorg() const = 0;
 
   };
 
@@ -621,14 +613,14 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
     
     BEAM_PHOTON_POINTER() {;}
     
-    BEAM_PHOTON_POINTER(const PHOTON* partic, float weight) : PHOTON_POINTER(weight)
+    BEAM_PHOTON_POINTER(const PHOTON* partic, double weight) : PHOTON_POINTER(weight)
     {
       partic_ =partic;
     }
     
     virtual ~BEAM_PHOTON_POINTER() {;}
     
-    virtual inline void velocities(float& vx, float& vy) const {partic_->velocities(vx, vy);}
+    virtual inline void velocities(double& vx, double& vy) const {partic_->velocities(vx, vy);}
     
     virtual inline const TRIDVECTOR& getSpin() const 
     { 
@@ -638,12 +630,12 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
       /*       return tv; */
     }
     
-    virtual inline float energy() const { return partic_->energy();}
+    virtual inline double energy() const { return partic_->energy();}
   
-    virtual inline float q2() const { return 0.0;};
-    virtual inline float eorg() const { return -1.0;};
+    virtual inline double q2() const { return 0.0;};
+    virtual inline double eorg() const { return -1.0;};
     
-    inline float spin(int nc) const  { return partic_->getSpin()(nc-1);}
+    inline double spin(int nc) const  { return partic_->getSpin()(nc-1);}
     
   };
   //////////////////
@@ -668,7 +660,7 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
 	// call base class assignment operator
 	PHOTON_POINTER::operator=(pt);
 	
-	float energy,vx,vy, q2, eorg;
+	double energy,vx,vy, q2, eorg;
 	pt.extra_phot_->get_parameters(energy,vx,vy,q2,eorg);
 	EXTRA* tmp = new EXTRA(energy, vx, vy, q2, eorg);
 	delete extra_phot_;
@@ -679,19 +671,19 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
 
     EXTRA_PHOTON_POINTER(const EXTRA_PHOTON_POINTER& pt) : PHOTON_POINTER(pt)
     {
-      float energy,vx,vy, q2, eorg;
+      double energy,vx,vy, q2, eorg;
       pt.extra_phot_->get_parameters(energy,vx,vy,q2,eorg);
       extra_phot_ = new EXTRA(energy, vx, vy,q2,eorg);
     }
     
-    EXTRA_PHOTON_POINTER(float energy,float vx,float vy,float q2,float eorg,float weight) : PHOTON_POINTER(weight)
+    EXTRA_PHOTON_POINTER(double energy,double vx,double vy,double q2,double eorg,double weight) : PHOTON_POINTER(weight)
     {
       extra_phot_ = new EXTRA(energy, vx, vy,q2,eorg);
     }
-    virtual inline float energy() const {return extra_phot_->energy();}
-    virtual inline float q2() const {return extra_phot_->q2();}
-    virtual inline float eorg() const {return extra_phot_->eorg();}
-    virtual inline void velocities(float& vx, float& vy) const { extra_phot_->velocities(vx, vy);}
+    virtual inline double energy() const {return extra_phot_->energy();}
+    virtual inline double q2() const {return extra_phot_->q2();}
+    virtual inline double eorg() const {return extra_phot_->eorg();}
+    virtual inline void velocities(double& vx, double& vy) const { extra_phot_->velocities(vx, vy);}
     virtual inline const TRIDVECTOR& getSpin() const 
     { 
       std::cerr << " no spin for extra photon " << std::endl;
@@ -759,12 +751,12 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
   
   void  lumi_init( const SWITCHES& switches);
   
-  //void deltaVelocityFromFieldCIC(float xpart,float ypart, float energy,   PHI_FLOAT *phi, float distance,float& ax, float& ay);
+  //void deltaVelocityFromFieldCIC(double xpart,double ypart, double energy,   PHI_FLOAT *phi, double distance,double& ax, double& ay);
   
-  inline float spread_energy(float ener, int which_spread, float spread, RNDM& rndm_generator) const 
+  inline double spread_energy(double ener, int which_spread, double spread, RNDM& rndm_generator) const 
   {
     JET_FLOAT dx=3.4,xmin=-1.7;
-    float energy = ener;
+    double energy = ener;
     switch(which_spread)
       {
       case 0:
@@ -789,13 +781,13 @@ class GRID : public GENERAL_GRID , public ABSTRACT_IO_CLASS
     return energy;
   }
   
-void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& pointer1, const BEAM_PARTICLE_POINTER& pointer2, SWITCHES& switches,PAIR_BEAM& secondaries,int time_counter, int beamslice1, int beamslice2) ;
+void collide_ee(int cellx, int celly,double min_z, const BEAM_PARTICLE_POINTER& pointer1, const BEAM_PARTICLE_POINTER& pointer2, SWITCHES& switches,PAIR_BEAM& secondaries,int time_counter, int beamslice1, int beamslice2) ;
   
-  void collide_ge(int cellx, int celly,float min_z, const BEAM_PHOTON_POINTER& photon_pointer, const BEAM_PARTICLE_POINTER& particle_pointer, PAIR_BEAM& secondaries, SWITCHES& switches, const PAIR_PARAMETER& pair_parameter, RNDM& rndm_generator);
+  void collide_ge(int cellx, int celly,double min_z, const BEAM_PHOTON_POINTER& photon_pointer, const BEAM_PARTICLE_POINTER& particle_pointer, PAIR_BEAM& secondaries, SWITCHES& switches, const PAIR_PARAMETER& pair_parameter, RNDM& rndm_generator);
   
-  void collide_eg(int cellx, int celly,float min_z,const BEAM_PARTICLE_POINTER& particle_pointer, const BEAM_PHOTON_POINTER& photon_pointer, PAIR_BEAM& secondaries, SWITCHES& switches, const PAIR_PARAMETER& pair_parameter, RNDM& rndm_generator);
+  void collide_eg(int cellx, int celly,double min_z,const BEAM_PARTICLE_POINTER& particle_pointer, const BEAM_PHOTON_POINTER& photon_pointer, PAIR_BEAM& secondaries, SWITCHES& switches, const PAIR_PARAMETER& pair_parameter, RNDM& rndm_generator);
 
-  void collide_gg(int cellx, int celly, float min_z, const BEAM_PHOTON_POINTER& photon_pointer1, const BEAM_PHOTON_POINTER& photon_pointer2, PAIR_BEAM& secondaries, PAIR_BEAM& muons, SWITCHES& switches, RNDM& rndm_generator, double *returnCrossSectionToAdd);
+  void collide_gg(int cellx, int celly, double min_z, const BEAM_PHOTON_POINTER& photon_pointer1, const BEAM_PHOTON_POINTER& photon_pointer2, PAIR_BEAM& secondaries, PAIR_BEAM& muons, SWITCHES& switches, RNDM& rndm_generator, double *returnCrossSectionToAdd);
 
   // with dir = 1 and photon_q2=0., it is the old collide_ge_2
   // with dir = 2 and photon_q2=0., it is the old collide_eg_2
@@ -807,49 +799,49 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
   // 1 : Bethe-Heitler
   // 2 : Landau-Lifschitz
 
-  inline void collide_compton(int index_of_process, int cellx, int celly,float min_z, const PHOTON_POINTER& extr_phot, const BEAM_PARTICLE_POINTER& particle,PAIR_BEAM& secondaries,SWITCHES& switches, RNDM& rndm_generator, int dir)
+  inline void collide_compton(int index_of_process, int cellx, int celly,double min_z, const PHOTON_POINTER& extr_phot, const BEAM_PARTICLE_POINTER& particle,PAIR_BEAM& secondaries,SWITCHES& switches, RNDM& rndm_generator, int dir)
   {
     if (switches.get_do_compt())
       {
-	float particleEnergy = particle.energy();
-	float particleVx,particleVy;
+	double particleEnergy = particle.energy();
+	double particleVx,particleVy;
 	particle.velocities(particleVx, particleVy);
 
-	float photonEnergy = extr_phot.energy();
-	float photon_q2 =  extr_phot.q2(); 
+	double photonEnergy = extr_phot.energy();
+	double photon_q2 =  extr_phot.q2(); 
 
-	float weight = extr_phot.weight()*particle.weight();
+	double weight = extr_phot.weight()*particle.weight();
 
 	compt_.compt_do(mesh_, cellx, celly,min_z, secondaries,index_of_process,particleEnergy,photonEnergy,photon_q2,particleVx, particleVy,weight,dir,switches, rndm_generator);
       }
   }
 
-  void collide_gg_XX(int index_of_process, int cellx, int celly,float min_z, const PHOTON_POINTER& photon1, const PHOTON_POINTER& photon2, SWITCHES& switches, PAIR_BEAM& secondaries, PAIR_BEAM& muons, RNDM& rndm_generator, double *returnCrossSectionToAdd);
+  void collide_gg_XX(int index_of_process, int cellx, int celly,double min_z, const PHOTON_POINTER& photon1, const PHOTON_POINTER& photon2, SWITCHES& switches, PAIR_BEAM& secondaries, PAIR_BEAM& muons, RNDM& rndm_generator, double *returnCrossSectionToAdd);
 
-  void make_hadrons_gg2(float min_z, float energy1,float q2_1,float energy2,float q2_2,float lumi, SWITCHES& switches,double *returnCrossSectionToAdd, RNDM& rndm_generator);
+  void make_hadrons_gg2(double min_z, double energy1,double q2_1,double energy2,double q2_2,double lumi, SWITCHES& switches,double *returnCrossSectionToAdd, RNDM& rndm_generator);
 
-  void isr2(float e1,float e2,float *e1p,float *e2p, RNDM& rndm_generator);
+  void isr2(double e1,double e2,double *e1p,double *e2p, RNDM& rndm_generator);
 
-  //void interpolePotential(float xpart,float ypart, PHI_FLOAT& h_x, PHI_FLOAT& h_y, PHI_FLOAT& phi1_x, PHI_FLOAT& phi2_x, PHI_FLOAT& phi3_x, PHI_FLOAT& phi1_y,PHI_FLOAT& phi2_y, PHI_FLOAT& phi3_y, PHI_FLOAT *phi);
+  //void interpolePotential(double xpart,double ypart, PHI_FLOAT& h_x, PHI_FLOAT& h_y, PHI_FLOAT& phi1_x, PHI_FLOAT& phi2_x, PHI_FLOAT& phi3_x, PHI_FLOAT& phi1_y,PHI_FLOAT& phi2_y, PHI_FLOAT& phi3_y, PHI_FLOAT *phi);
 
-  inline void store_coherent_particle(BEAM& beam,float energy,float vx,float vy, float x,float y,int slice)
+  inline void store_coherent_particle(BEAM& beam,double energy,double vx,double vy, double x,double y,int slice)
   {
     beam.newCoherent(slice, x,y,vx,vy,energy);
     coherent_results_.addCountEnergy(energy);
   }
 
-  inline void store_trident_particle(BEAM& beam,float energy,float vx,float vy, float x,float y,int slice)
+  inline void store_trident_particle(BEAM& beam,double energy,double vx,double vy, double x,double y,int slice)
   {
     beam.newTrident(slice, x,y,vx,vy,energy);
     //  std::cout << "GRID::create trident : vel "<< energy << " "  << x << " " << y << " " << vx << " " << vy << std::endl;	    
     trident_results_.addCountEnergy(energy);
   }
 
-  int coherent_generate(BEAM& beam,int i_slice, float upsilon,PHOTON& phot, RNDM& rndm_generator);
+  int coherent_generate(BEAM& beam,int i_slice, double upsilon,PHOTON& phot, RNDM& rndm_generator);
 
-  bool pick_coherent_energy(float ups,float& energy, RNDM& rndm_generator);
+  bool pick_coherent_energy(double ups,double& energy, RNDM& rndm_generator);
 
-  void apply_electric_field_on_pair(float step_2, float ex, float ey, float& vx,float& vy,float e_inv) const
+  void apply_electric_field_on_pair(double step_2, double ex, double ey, double& vx,double& vy,double e_inv) const
   {
     // apply electric field in one step : step_2
     // e_inv : inverse of energy
@@ -859,10 +851,10 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
   }
 
   /*
-    void scale_pair(float vold2, float& vx, float& vy, float& vz, float& vx0, float& vy0, float& vz0,float& eng, float& e_inv, float& e_inv2 ) const
+    void scale_pair(double vold2, double& vx, double& vy, double& vz, double& vx0, double& vy0, double& vz0,double& eng, double& e_inv, double& e_inv2 ) const
     {
     #ifdef SCALE_ENERGY
-    float scal;
+    double scal;
     scal=sqrt((vold2*eng*eng + EMASS2)/((vx*vx+vy*vy+vz*vz)*eng*eng + EMASS2));
     vx*=scal;
     vy*=scal;
@@ -879,28 +871,28 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
     }
   */
 
-  void apply_magnetic_field_on_pair(float fac_theta,float step_q, float e_inv2, float bx, float by, float& vx,float& vy, float& vz,float& theta) const;
+  void apply_magnetic_field_on_pair(double fac_theta,double step_q, double e_inv2, double bx, double by, double& vx,double& vy, double& vz,double& theta) const;
 
-  int field_pair(const PAIR_PARTICLE& pair, const std::vector<GENERAL_GRID*>& grids,float& ex,float& ey, float& bx,float& by, int extra_grids, float charge_sign_0);
+  int field_pair(const PAIR_PARTICLE& pair, const std::vector<GENERAL_GRID*>& grids,double& ex,double& ey, double& bx,double& by, int extra_grids, double charge_sign_0);
 
-  //void step_pair_1X(const std::vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair,float step,int n, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
-  void step_pair_1(const std::vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair,double mass,float step,int n, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
-  void step_pair_1_tertphot(const std::vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair,double mass,float step,int n, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
-  // float  doElossParticle(PARTICLE& particle, int sokolov, TRIDVECTOR Efiekd, TRIDVECTOR Bfield, BEAM& beam, float initialEnergyForLoss, int i_slice,float radius_i, float dz, float emin, int do_prod, float charg_sign);
+  //void step_pair_1X(const std::vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair,double step,int n, int extra_grids, double charge_sign_0, RNDM& rndm_generator);
+  void step_pair_1(const std::vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair,double mass,double step,int n, int extra_grids, double charge_sign_0, RNDM& rndm_generator);
+  void step_pair_1_tertphot(const std::vector<GENERAL_GRID*>& grids, PAIR_PARTICLE& pair,double mass,double step,int n, int extra_grids, double charge_sign_0, RNDM& rndm_generator);
+  // double  doElossParticle(PARTICLE& particle, int sokolov, TRIDVECTOR Efiekd, TRIDVECTOR Bfield, BEAM& beam, double initialEnergyForLoss, int i_slice,double radius_i, double dz, double emin, int do_prod, double charg_sign);
 
-  //void computePhotonEnergies(std::vector<float>& photonEnergies, PARTICLE& particle, float  upsilon, int sokolov, TRIDVECTOR Efield, TRIDVECTOR Bfield,  float energy, float radius_i,  float dz, float charge_sign);
+  //void computePhotonEnergies(std::vector<double>& photonEnergies, PARTICLE& particle, double  upsilon, int sokolov, TRIDVECTOR Efield, TRIDVECTOR Bfield,  double energy, double radius_i,  double dz, double charge_sign);
 
-  void registerPhotons(const std::vector<float>& photonEnergies, PARTICLE& particle, int i_beam, int i_slice);
-  // void referenceSpin(PARTICLE& part, TRIDVECTOR& e1, TRIDVECTOR& e2, TRIDVECTOR& e3, TRIDVECTOR Efield, TRIDVECTOR Bfield, float charge_sign);
-  // void distributeElectronScatter1(int i_beam, int i_slice,float ratio, float ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
-  void distributeScatter1(const std::vector<PARTICLE*>& theParticles,float ratio, float ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
-  //void distributeElectronScatter2(int i_beam, int i_slice,float ratio, float ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
-  void distributeScatter2(const std::vector<PARTICLE*>& theParticles,float ratio, float ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
+  void registerPhotons(const std::vector<double>& photonEnergies, PARTICLE& particle, int i_beam, int i_slice);
+  // void referenceSpin(PARTICLE& part, TRIDVECTOR& e1, TRIDVECTOR& e2, TRIDVECTOR& e3, TRIDVECTOR Efield, TRIDVECTOR Bfield, double charge_sign);
+  // void distributeElectronScatter1(int i_beam, int i_slice,double ratio, double ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
+  void distributeScatter1(const std::vector<PARTICLE*>& theParticles,double ratio, double ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
+  //void distributeElectronScatter2(int i_beam, int i_slice,double ratio, double ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
+  void distributeScatter2(const std::vector<PARTICLE*>& theParticles,double ratio, double ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
 
-  void electronScatter( std::vector< std::list<EXTRA_PHOTON_POINTER> >& extra_phot_ptr, int i_beam, int i_slice, float xmin, double s4,double lns4, float ratio, int ext_field, int geom, float ratio_i, float r_scal);
+  void electronScatter( std::vector< std::list<EXTRA_PHOTON_POINTER> >& extra_phot_ptr, int i_beam, int i_slice, double xmin, double s4,double lns4, double ratio, int ext_field, int geom, double ratio_i, double r_scal);
 
-  //void distributePhotonInBeam(   std::vector< std::list<BEAM_PARTICLE_POINTER> >& grid_photon, BEAM* beam, int slice,float ratio, float ratio_i, RNDM& rndm_generator);
-  void distributePhotonInBeam(   std::vector< std::list<BEAM_PHOTON_POINTER> >& grid_photon, int i_beam, int slice,float ratio, float ratio_i, RNDM& rndm_generator);
+  //void distributePhotonInBeam(   std::vector< std::list<BEAM_PARTICLE_POINTER> >& grid_photon, BEAM* beam, int slice,double ratio, double ratio_i, RNDM& rndm_generator);
+  void distributePhotonInBeam(   std::vector< std::list<BEAM_PHOTON_POINTER> >& grid_photon, int i_beam, int slice,double ratio, double ratio_i, RNDM& rndm_generator);
 
   //! Distributes the virtual photons 
   void distribute_virtual_photons(int i_slice1,
@@ -916,50 +908,50 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
 					    int i_slice2,
 					    int electron_distribution_rho);
   //! Distributes the particles for background calculation 
-  //void distributeCoherentScatterInBeam1(int i_beam, int i_slice, float ratio, float ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
-  // void distributeCoherentScatterInBeam2(int i_beam, int i_slice, float ratio, float ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
+  //void distributeCoherentScatterInBeam1(int i_beam, int i_slice, double ratio, double ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
+  // void distributeCoherentScatterInBeam2(int i_beam, int i_slice, double ratio, double ratio_i, std::vector< std::list<BEAM_PARTICLE_POINTER> >& part_pointer);
   void distribute_particles_for_background(int i_slice1,
 					   int i_slice2,  
-					   float electron_ratio);
+					   double electron_ratio);
 
   //!  Distributes the particles from coherent pair creation for the background calculation
 
   void distribute_coherent_particles_for_background(int i_slice1,
 						    int i_slice2, 
-						    float electron_ratio);
+						    double electron_ratio);
 
   void distribute_trident_particles_for_background(int i_slice1,
 						   int i_slice2, 
-						   float electron_ratio);
+						   double electron_ratio);
 
   TRIVECTOR electric_field_out_of_main_grid(const std::vector<GENERAL_GRID*>& grids,int beam,PHI_FLOAT x,PHI_FLOAT y, int extra_grids) const;
 
-  //int field_coherent(const std::vector<GENERAL_GRID*>& grids,int beam,PHI_FLOAT x,PHI_FLOAT y,float ener, float distance, float& deltaVx,float& deltaVy, int extra_grids);
-  //void assignBeamSliceNGP(BEAM *beam, int i_slice, PHI_FLOAT *rho, float n_macro, DISTRIBUTE& distribute);
+  //int field_coherent(const std::vector<GENERAL_GRID*>& grids,int beam,PHI_FLOAT x,PHI_FLOAT y,double ener, double distance, double& deltaVx,double& deltaVy, int extra_grids);
+  //void assignBeamSliceNGP(BEAM *beam, int i_slice, PHI_FLOAT *rho, double n_macro, DISTRIBUTE& distribute);
   void assignBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice, DISTRIBUTE& distribute);
 
-  //void assignBeamSliceCIC(BEAM *beam, int i_slice, PHI_FLOAT *rho, float n_macro, DISTRIBUTE& distribute);
+  //void assignBeamSliceCIC(BEAM *beam, int i_slice, PHI_FLOAT *rho, double n_macro, DISTRIBUTE& distribute);
   void assignBeamSliceCIC(SLICE_ON_GRID& sog, int i_slice, DISTRIBUTE& distribute);
 
-  //void assignCoherentBeamSliceNGP(BEAM *beam, int i_slice, PHI_FLOAT *rho, float n_macro, DISTRIBUTE& distribute);
+  //void assignCoherentBeamSliceNGP(BEAM *beam, int i_slice, PHI_FLOAT *rho, double n_macro, DISTRIBUTE& distribute);
   void assignCoherentBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice, DISTRIBUTE& distribute);
 
-  //void assignCoherentBeamSliceCIC(BEAM *beam, int i_slice, PHI_FLOAT *rho, float n_macro, DISTRIBUTE& distribute);
+  //void assignCoherentBeamSliceCIC(BEAM *beam, int i_slice, PHI_FLOAT *rho, double n_macro, DISTRIBUTE& distribute);
   void assignCoherentBeamSliceCIC(SLICE_ON_GRID& sog, int i_slice, DISTRIBUTE& distribute);
 
   void assignTridentBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice, DISTRIBUTE& distribute);
 
   void assignTridentBeamSliceCIC(SLICE_ON_GRID& sog, int i_slice, DISTRIBUTE& distribute);
 
-  void move_particles(const std::vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, int interpolation,int do_beamstrahlung,int do_trident, int sokolov, float emin, int do_prod, int extra_grids, float charge_sign,  int bmt_rotate);
+  void move_particles(const std::vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, int interpolation,int do_beamstrahlung,int do_trident, int sokolov, double emin, int do_prod, int extra_grids, double charge_sign,  int bmt_rotate);
 
-  void move_coherent_particles(const std::vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, int interpolation, int do_beamstrahlung,float emin, int do_prod,int extra_grids, float charge_sign);
+  void move_coherent_particles(const std::vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, int interpolation, int do_beamstrahlung,double emin, int do_prod,int extra_grids, double charge_sign);
 
-  void move_trident_particles(const std::vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, int interpolation, int do_beamstrahlung,float emin, int do_prod,int extra_grids, float charge_sign);
+  void move_trident_particles(const std::vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, int interpolation, int do_beamstrahlung,double emin, int do_prod,int extra_grids, double charge_sign);
 
   inline TRIVECTOR EBfieldOnParticle(const PARTICLE* particle, const std::vector<GENERAL_GRID*>& grids, const PHI_FLOAT *phi, int i_beam, int extra_grids) const
   {
-    float xpart, ypart;
+    double xpart, ypart;
     TRIVECTOR EBfield;
     particle->XYposition(xpart, ypart);
     if ( coordinatesInGridRange(xpart, ypart) )
@@ -974,19 +966,19 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
     return EBfield;
   }
 
-  //float moveSingleParticle(PARTICLE* particle, TRIVECTOR EBfield, float dzOnRadius,bool rotateSpin, const std::vector<GENERAL_GRID*>& grids, BEAM& beam, int i_beam, int i_slice, PHI_FLOAT *phi, float distance, int do_beamstrahlung, int sokolov, float emin,int do_prod, int extra_grids, float charge_sign);
+  //double moveSingleParticle(PARTICLE* particle, TRIVECTOR EBfield, double dzOnRadius,bool rotateSpin, const std::vector<GENERAL_GRID*>& grids, BEAM& beam, int i_beam, int i_slice, PHI_FLOAT *phi, double distance, int do_beamstrahlung, int sokolov, double emin,int do_prod, int extra_grids, double charge_sign);
 
-  //void particleBeamstrahlung(PARTICLE* particle, TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius,  float emin, std::vector<float>& photonEnergies);
-  //void particleBeamstrahlungSokolov(PARTICLE_WITH_SPIN* particle, TRIDVECTOR Efield, TRIDVECTOR Bfield, float dzOnRadius, float emin, float charge_sign, std::vector<float>& photonEnergies);
+  //void particleBeamstrahlung(PARTICLE* particle, TRIDVECTOR Efield, TRIDVECTOR Bfield, double dzOnRadius,  double emin, std::vector<double>& photonEnergies);
+  //void particleBeamstrahlungSokolov(PARTICLE_WITH_SPIN* particle, TRIDVECTOR Efield, TRIDVECTOR Bfield, double dzOnRadius, double emin, double charge_sign, std::vector<double>& photonEnergies);
 
-  void beamstrahlungSingleCoherentParticle(PARTICLE* particle, TRIVECTOR EBfield, float dzOnRadius, const std::vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, const PHI_FLOAT *phi, float /*distance*/, float emin,int do_prod, int extra_grids, float charge_sign);
+  void beamstrahlungSingleCoherentParticle(PARTICLE* particle, TRIVECTOR EBfield, double dzOnRadius, const std::vector<GENERAL_GRID*>& grids, int i_beam, int i_slice, const PHI_FLOAT *phi, double /*distance*/, double emin,int do_prod, int extra_grids, double charge_sign);
 
   //void advanceCoherentParticlesNGP();
-  //void advanceCoherentParticlesCIC(PARTICLE& particle, const std::vector<GENERAL_GRID*>& grids, PHI_FLOAT *phi, int i_beam, float emin, int do_prod, int extra_grids, float scal_step, RNDM& rndm_generator);
-  //float requiv(double lns4, float xmin,int iflag);
-  //void mequiv (double s4, double lns4, float xmin,float e,int iflag,float *eph,float *q2,float *one_m_x, RNDM& rndm_generator);
+  //void advanceCoherentParticlesCIC(PARTICLE& particle, const std::vector<GENERAL_GRID*>& grids, PHI_FLOAT *phi, int i_beam, double emin, int do_prod, int extra_grids, double scal_step, RNDM& rndm_generator);
+  //double requiv(double lns4, double xmin,int iflag);
+  //void mequiv (double s4, double lns4, double xmin,double e,int iflag,double *eph,double *q2,double *one_m_x, RNDM& rndm_generator);
 
-  inline   void saveOnHadronFile(int num, float energy1, float energy2, float min_z, RNDM& rndm_generator )
+  inline   void saveOnHadronFile(int num, double energy1, double energy2, double min_z, RNDM& rndm_generator )
   {
     int i;
     for (i=0;i<num;i++)
@@ -1033,7 +1025,7 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
   /*   distr2 = distribute2_; */
   /* } */
 
-  inline void get_miss(float& miss1, long& out1, float& miss2, long& out2) const 
+  inline void get_miss(double& miss1, long& out1, double& miss2, long& out2) const 
   {
     miss1 = distribute1_.delta;
     out1 = distribute1_.tot;
@@ -1076,7 +1068,7 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
     if (switches.get_do_bhabhas()) bhabhas_.load_samples(switches.get_do_bhabhas(), bhabha_samples_file, bhabha_photon_samples_file);
   }
 
-  void get_cuts(float& cx,float& cy,float& cz) const;
+  void get_cuts(double& cx,double& cy,double& cz) const;
   //void init_grid_comp (int n_cell_x, int n_cell_y, int integration_method);
   void init_grid_comp (int n_cell_x, int n_cell_y, int integration_method,   FFT_SERVER* fourier = NULL);
 
@@ -1098,7 +1090,7 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
     /*      extra_photons2_.clear_extra_photons(); */
   }
 
-  inline void init_jet(float s,float ptmin,int iparam,int jet_pythia, int jet_select, std::string jetfileName)
+  inline void init_jet(double s,double ptmin,int iparam,int jet_pythia, int jet_select, std::string jetfileName)
   {
     if (!jet_pythia)
       {
@@ -1129,7 +1121,7 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
 				    int electron_distribution_rho, 
 				    int force_symmetric);
 
-  void distribute_photons(int slice_1,int slice_2, float photon_ratio, RNDM& rndm_generator);
+  void distribute_photons(int slice_1,int slice_2, double photon_ratio, RNDM& rndm_generator);
 
   void check_distribute(int what);
 
@@ -1149,7 +1141,7 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
     for each grid cell, call collide_ee(), computing all collisions between a particle from beam1 and a particle from beam2. The summed luminosity is added in 'results' (lumi_fine)
   */
 
-  void step_lumi(float min_z,PAIR_BEAM& secondaries, int time_counter, SWITCHES& switches, int beamslice1, int beamslice2) ;
+  void step_lumi(double min_z,PAIR_BEAM& secondaries, int time_counter, SWITCHES& switches, int beamslice1, int beamslice2) ;
 
   inline void update_slice_charge(int slice1, int slice2)
   {
@@ -1157,13 +1149,13 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
     /*  beam2_->meanPositionOfSlice(slice2, rho_x_2_, rho_y_2_); */
     slice_of_beam_[0].get_beam()->meanPositionOfSlice(slice1, rho_x_1_, rho_y_1_);
     slice_of_beam_[1].get_beam()->meanPositionOfSlice(slice2, rho_x_2_, rho_y_2_);
-    float  rho_sum = slice_of_beam_[0].get_beam()->numberOfParticlesOfSlice(slice1);
+    double  rho_sum = slice_of_beam_[0].get_beam()->numberOfParticlesOfSlice(slice1);
     rho_sum_1_ = rho_sum*slice_of_beam_[0].get_nb_part_per_macro(); 
     rho_sum = slice_of_beam_[1].get_beam()->numberOfParticlesOfSlice(slice2); 
     rho_sum_2_ = rho_sum*slice_of_beam_[1].get_nb_part_per_macro();    
   }
 
-  inline void moveAllParticles(const std::vector<GENERAL_GRID*>& grids,  int i_slice1, int i_slice2 , int interpolation,int do_beamstrahlung, int sokolov, float emin, int do_prod, int extra_grids, float charge_sign,int bmt_rotate,int do_trident)
+  inline void moveAllParticles(const std::vector<GENERAL_GRID*>& grids,  int i_slice1, int i_slice2 , int interpolation,int do_beamstrahlung, int sokolov, double emin, int do_prod, int extra_grids, double charge_sign,int bmt_rotate,int do_trident)
   {
     move_particles(grids, 1, i_slice1,interpolation, do_beamstrahlung,do_trident,sokolov,  emin, do_prod, extra_grids, charge_sign,bmt_rotate);
     move_coherent_particles(grids, 1, i_slice1, interpolation, do_beamstrahlung, emin, do_prod, extra_grids, charge_sign);
@@ -1180,22 +1172,22 @@ void collide_ee(int cellx, int celly,float min_z, const BEAM_PARTICLE_POINTER& p
 
   inline void move_photons(BEAM& beam,int i_beam,int i_slice)
   {
-    float delta;
+    double delta;
     delta=step_*    slice_of_beam_[i_beam-1].get_scal_step();
     beam.move_photon_beam(i_slice, delta);
   }
 
   void move_photons2(BEAM& beam,int ibeam,int i_slice,RNDM& rndm_generator);
 
-  void move_pairs(const std::vector<GENERAL_GRID*>& grids, PAIR_BEAM& pairs, int i_slice, double d_eps_1, double d_eps_2, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
+  void move_pairs(const std::vector<GENERAL_GRID*>& grids, PAIR_BEAM& pairs, int i_slice, double d_eps_1, double d_eps_2, int extra_grids, double charge_sign_0, RNDM& rndm_generator);
 
-  void move_pairs_tertphot(const std::vector<GENERAL_GRID*>& grids, PAIR_BEAM& pairs, int i_slice, double d_eps_1, double d_eps_2, int extra_grids, float charge_sign_0, RNDM& rndm_generator);
+  void move_pairs_tertphot(const std::vector<GENERAL_GRID*>& grids, PAIR_BEAM& pairs, int i_slice, double d_eps_1, double d_eps_2, int extra_grids, double charge_sign_0, RNDM& rndm_generator);
 
-  void photon_lumi(float min_z,SWITCHES& switches, PAIR_BEAM& secondaries, PAIR_BEAM& muons, RNDM& rndm_generator);
+  void photon_lumi(double min_z,SWITCHES& switches, PAIR_BEAM& secondaries, PAIR_BEAM& muons, RNDM& rndm_generator);
 
-  void photon_lumi_2(float min_z,SWITCHES& switches,PAIR_BEAM& secondaries, PAIR_BEAM& muons, RNDM& rndm_generator);
+  void photon_lumi_2(double min_z,SWITCHES& switches,PAIR_BEAM& secondaries, PAIR_BEAM& muons, RNDM& rndm_generator);
 
-  void photon_lumi_3(float min_z,SWITCHES& switches, PAIR_BEAM& secondaries,RNDM& rndm_generator);
+  void photon_lumi_3(double min_z,SWITCHES& switches, PAIR_BEAM& secondaries,RNDM& rndm_generator);
 
   inline void set_bpm_signals() 
   {
@@ -1225,16 +1217,16 @@ class EXTRA_GRID : public GENERAL_GRID
 					    int i_slice2,
 					    int electron_distribution_rho);
   
-  //void assignCoherentBeamSliceNGP(BEAM *beam, int i_slice, PHI_FLOAT *rho, float n_macro);
+  //void assignCoherentBeamSliceNGP(BEAM *beam, int i_slice, PHI_FLOAT *rho, double n_macro);
   void assignCoherentBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice);
   
-  // void assignBeamSliceNGP(BEAM *beam, int i_slice, PHI_FLOAT *rho, float n_macro);
+  // void assignBeamSliceNGP(BEAM *beam, int i_slice, PHI_FLOAT *rho, double n_macro);
   void assignBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice);
   
-  // void assignBeamSliceCIC(BEAM *beam, int i_slice, PHI_FLOAT *rho, float n_macro);
+  // void assignBeamSliceCIC(BEAM *beam, int i_slice, PHI_FLOAT *rho, double n_macro);
   void assignBeamSliceCIC(SLICE_ON_GRID& sog, int i_slice);
   
-  // void assignCoherentBeamSliceCIC(BEAM *beam, int i_slice, PHI_FLOAT *rho, float n_macro);
+  // void assignCoherentBeamSliceCIC(BEAM *beam, int i_slice, PHI_FLOAT *rho, double n_macro);
   void assignCoherentBeamSliceCIC(SLICE_ON_GRID& sog, int i_slice);
   
   void assignTridentBeamSliceNGP(SLICE_ON_GRID& sog, int i_slice);

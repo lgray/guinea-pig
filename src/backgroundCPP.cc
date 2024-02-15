@@ -5,7 +5,7 @@
 double COMPT::x_compt_ = 0.0;
 
 /* px and py are beta_x and beta_y at input */
-void COMPT::compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BEAM& secondaries, int index_of_process, float epart,float ephot,float q2,float vx,float vy,float wgt, int dir, SWITCHES& switches, RNDM& rndm_generator)
+void COMPT::compt_do(const MESH& mesh, int cellx, int celly,double min_z, PAIR_BEAM& secondaries, int index_of_process, double epart,double ephot,double q2,double vx,double vy,double wgt, int dir, SWITCHES& switches, RNDM& rndm_generator)
 {
   double tmp,y,scal,theta_g,theta_e,x,e,pz,pt,phi_e,s,px,py;
   int n,i;

@@ -12,32 +12,32 @@
 class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
 {
 
-  float ebeam_,n_particles_;
-  float gamma_beam_;
+  double ebeam_,n_particles_;
+  double gamma_beam_;
   
   // emittances in m.rad
-  float em_x_,em_y_;
+  double em_x_,em_y_;
   
-  float sigma_x_,sigma_y_,sigma_z_;
+  double sigma_x_,sigma_y_,sigma_z_;
   int dist_x_, dist_z_;
   
   // in mm
-  float beta_x_,beta_y_;
+  double beta_x_,beta_y_;
   
   // initial polarization direction 
   // if this vector is not normed (the norme must be <= 1)
   // polarization represents a mixed state
   TRIDVECTOR polar_;
   
-  float offset_x_,offset_y_,offset_z_;
-  float waist_x_,waist_y_;
-  // float couple_xy_;
-  float phi_angle_;
-  float x_angle_,y_angle_;
-  float L_0_,L_;
+  double offset_x_,offset_y_,offset_z_;
+  double waist_x_,waist_y_;
+  // double couple_xy_;
+  double phi_angle_;
+  double x_angle_,y_angle_;
+  double L_0_,L_;
   //  int   what_distribution_;
   int bunches_per_train_;
-  float frep_;
+  double frep_;
   int trav_focus_;
   char extension_[3];
 
@@ -51,7 +51,7 @@ class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
     }
   
   
-  bool acc_test(float& emitt,float& beta,float& sigma);
+  bool acc_test(double& emitt,double& beta,double& sigma);
   
  public:
   
@@ -72,43 +72,43 @@ class BEAM_PARAMETERS : public ABSTRACT_IO_CLASS
   
   void setLabel(char label);
   
-  inline float ebeam() const {return ebeam_;}
-  inline float gamma_beam() const {return gamma_beam_;}
+  inline double ebeam() const {return ebeam_;}
+  inline double gamma_beam() const {return gamma_beam_;}
   
   // betas in mm
-  inline float beta_x() const { return beta_x_;}
-  inline float beta_y() const { return beta_y_;}
+  inline double beta_x() const { return beta_x_;}
+  inline double beta_y() const { return beta_y_;}
   
-  inline float n_particles()  const  {return   n_particles_;}     
+  inline double n_particles()  const  {return   n_particles_;}     
   // emittances in m.rad
-  inline float em_x() const {return em_x_;};
-  inline float em_y() const {return em_y_;};
+  inline double em_x() const {return em_x_;};
+  inline double em_y() const {return em_y_;};
   
-  inline float sigma_x() const { return sigma_x_;}
-  inline float sigma_y() const { return sigma_y_;}
+  inline double sigma_x() const { return sigma_x_;}
+  inline double sigma_y() const { return sigma_y_;}
   
-  inline float sigma_z() const 
+  inline double sigma_z() const 
     {
       return sigma_z_;
     }
   
   inline int dist_x() const {return dist_x_;}
   inline int dist_z() const {return dist_z_;}
-  inline float offset_x() const {return offset_x_;}
-  inline float offset_y() const {return offset_y_;}
-  inline float offset_z() const {return offset_z_;}
-  inline float waist_x() const {return waist_x_;}
-  inline float waist_y() const {return waist_y_;}
-  inline float phi_angle() const {return phi_angle_;}
-  inline float x_angle() const {return x_angle_;}
-  inline float y_angle() const {return y_angle_;}
-  inline float L_0() const {return L_0_;}
-  inline float L() const {return L_;}
+  inline double offset_x() const {return offset_x_;}
+  inline double offset_y() const {return offset_y_;}
+  inline double offset_z() const {return offset_z_;}
+  inline double waist_x() const {return waist_x_;}
+  inline double waist_y() const {return waist_y_;}
+  inline double phi_angle() const {return phi_angle_;}
+  inline double x_angle() const {return x_angle_;}
+  inline double y_angle() const {return y_angle_;}
+  inline double L_0() const {return L_0_;}
+  inline double L() const {return L_;}
   inline int bunches_per_train() const {return bunches_per_train_;}
-  inline float frep() const {return frep_;}
+  inline double frep() const {return frep_;}
   inline int trav_focus() const  {return trav_focus_;}
   inline TRIDVECTOR get_polar() const { return polar_;}
-  // inline float get_polar_rate() const {return polar_rate_;}
+  // inline double get_polar_rate() const {return polar_rate_;}
 };
 
 #endif

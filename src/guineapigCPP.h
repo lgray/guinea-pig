@@ -143,9 +143,9 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   
   void fprint_beam_parameters(FILE *file);
 
-  inline  float sigma_for_cut_from_data(char dir) const
+  inline  double sigma_for_cut_from_data(char dir) const
     {
-      float sig, sig2;
+      double sig, sig2;
       sig  = beam1_.sigma_xyz_from_data(dir);
       sig2 = beam2_.sigma_xyz_from_data(dir);
       if (sig < sig2) sig = sig2;
@@ -153,14 +153,14 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     }
 
   
-  inline void transfer_loaded_particles_in_beam(BEAM& beam, const BEAM_PARAMETERS& bp, BEAM_FROM_FILE*& bff, float size_z)
+  inline void transfer_loaded_particles_in_beam(BEAM& beam, const BEAM_PARAMETERS& bp, BEAM_FROM_FILE*& bff, double size_z)
     {
       unsigned int k;
       unsigned int nb_particles_read;
-      float deltaz, sigx, sigy, sigz;
-      float sigxTest, sigyTest, sigzTest;
-      float dummy; 
-      deltaz=2.0*size_z/((float)grid_.get_n_cell_z());
+      double deltaz, sigx, sigy, sigz;
+      double sigxTest, sigyTest, sigzTest;
+      double dummy; 
+      deltaz=2.0*size_z/((double)grid_.get_n_cell_z());
       sigx = bp.sigma_x();
       sigy = bp.sigma_y();
       sigz = bp.sigma_z();
@@ -179,7 +179,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 	}
     }
   
-  inline  void init_grid_phys(float n_particles1, float n_particles2, const std::vector<float>& size_x, const std::vector<float>& size_y, float size_z, int n_cell_x, int n_cell_y)
+  inline  void init_grid_phys(double n_particles1, double n_particles2, const std::vector<double>& size_x, const std::vector<double>& size_y, double size_z, int n_cell_x, int n_cell_y)
     {
       int extra_grids;
       unsigned int i1;
@@ -203,22 +203,22 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 	}
     }
   
-  inline int adjust_nb_cells_from_cut(float cut, float sigma) const
+  inline int adjust_nb_cells_from_cut(double cut, double sigma) const
     {
-      float rapp = cut/sigma;
+      double rapp = cut/sigma;
       // for every sigma, 8 cells of grid...
       return TOOLS::nearest_power_of_2(8.0*rapp);
     }
   
-  void xycuts_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 , int nbgrids, std::vector<float>& size_x, std::vector<float>& size_y, int& updated_n_cell_x, int& updated_n_cell_y ) const;
-  float zcut_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2) const;
+  void xycuts_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 , int nbgrids, std::vector<double>& size_x, std::vector<double>& size_y, int& updated_n_cell_x, int& updated_n_cell_y ) const;
+  double zcut_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2) const;
   
-  void main_grid_xycuts_from_loaded_beam(const BEAM_FROM_FILE& bff1,const BEAM_FROM_FILE& bff2, float& size_x, float& size_y ) const;
+  void main_grid_xycuts_from_loaded_beam(const BEAM_FROM_FILE& bff1,const BEAM_FROM_FILE& bff2, double& size_x, double& size_y ) const;
   
-  float main_grid_zcut_from_loaded_beam(const BEAM_FROM_FILE& bff1,const BEAM_FROM_FILE& bff2) const;
+  double main_grid_zcut_from_loaded_beam(const BEAM_FROM_FILE& bff1,const BEAM_FROM_FILE& bff2) const;
   
   
-  inline void main_grid_xycuts_from_user(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ,float& size_x, float& size_y ) const
+  inline void main_grid_xycuts_from_user(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ,double& size_x, double& size_y ) const
     {
       if ( switches.get_load_beam() && switches.get_cuts_from_loaded_beam() ) 
 	{
@@ -232,9 +232,9 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 	  size_y = transverse_cut_from_data('y');   
 	}  
     }
-  inline float main_grid_zcut_from_user(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ) const
+  inline double main_grid_zcut_from_user(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ) const
     {
-      float size_z;
+      double size_z;
       if ( switches.get_load_beam() && switches.get_cuts_from_loaded_beam() ) 
 	{
 	  // cuts computed as cut_factor*sigma; cut_factor given in input data (defaut : 3) ; sigma computed from read beam
@@ -248,21 +248,21 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     }
   
   
-  void main_grid_automatic_xycuts(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ,float& size_x, float& size_y, int& new_n_cell_x, int& new_n_cell_y) const;
+  void main_grid_automatic_xycuts(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ,double& size_x, double& size_y, int& new_n_cell_x, int& new_n_cell_y) const;
   
-  float default_zcut_from_beams(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ) const;
+  double default_zcut_from_beams(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ) const;
   
-  inline void test_size_due_to_cdm(float gamma, float sigmax, float sigmay, float sigmaz, float betax, float betay) const
+  inline void test_size_due_to_cdm(double gamma, double sigmax, double sigmay, double sigmaz, double betax, double betay) const
     {
       // DELTA = f*sigmaz*THETA
       // THETA = 0.5*DD*(sigma/sigmaz)*f_form
       // DELTA = f*0.5*DD*sigma*f_form
       // on choisit A = 1, c-a-d beta = 10^-6 sigmaz
       std::ofstream out1, out2;
-      float delta, AA, DD, formfct, factor,  decalage;
-      //float sigma, 
-      float theta0;
-      float npart = beam_parameters1_.n_particles();
+      double delta, AA, DD, formfct, factor,  decalage;
+      //double sigma, 
+      double theta0;
+      double npart = beam_parameters1_.n_particles();
       // the sigmas are in nanometres
       theta0 = 2.*npart*RE/(gamma*(sigmax+sigmay)*1.0e-9);
       DD = theta0*sigmaz/sigmax;
@@ -293,13 +293,13 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       out2.close();
     }
   
-  inline float form_function(float AA,float DD, float delta) const
+  inline double form_function(double AA,double DD, double delta) const
     {
       // formulas of the Yokoya, Chen's paper (p. 16)
       
-      float C1, C2;
-      float sqdy = sqrt(DD);
-      float formfct;
+      double C1, C2;
+      double sqdy = sqrt(DD);
+      double formfct;
       C1= 0.6+(sqdy-2.5)*(sqdy-2.5);
       C1 = 1 + 0.5/C1;
       C1 = (1+AA*AA)*C1*C1;
@@ -309,7 +309,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
 
       //   delta = 2.*dxx/sigmaxx;
       formfct = C1 + C2*delta*delta + delta*delta*delta*delta/(PI*PI);
-      formfct = pow(formfct, (float)0.25);
+      formfct = pow(formfct, (double)0.25);
       formfct = delta/formfct;
       return formfct;
     }
@@ -317,13 +317,13 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   // compute a special factor to determine an automatic grid size 
   // (see method automatic_transverse_cuts() )
   // the limits are chosen in a totally empirical way. May be refined
-  inline float offset_factor(float hh) const
+  inline double offset_factor(double hh) const
     {
-      //	float test = dxx/sigmaxx;
-      float factor;
-      float x1 = 0.75;
-      float x2 = 1.25;
-      float x3 = 2.;
+      //	double test = dxx/sigmaxx;
+      double factor;
+      double x1 = 0.75;
+      double x2 = 1.25;
+      double x3 = 2.;
       if (hh > x3) 
 	{
 	  factor = 3. - (hh - x3)/(x3-x2) ;
@@ -349,11 +349,11 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     }
   
   // for method automatic_transverse_cuts()
-  inline float size_due_to_cdm_deflection(float theta0, float sigmaz, float sigma, float beta, float DD, float dxx) const 
+  inline double size_due_to_cdm_deflection(double theta0, double sigmaz, double sigma, double beta, double DD, double dxx) const 
     {
-      float AA;
-      float factor, formfct;
-      float decalage, hh;
+      double AA;
+      double factor, formfct;
+      double decalage, hh;
       // beta is in mm, sigma in nanometres
       AA = sigmaz/(beta*1.0e6);
       //  std::cout << " A= " << AA << " beta = " << beta << std::endl;
@@ -366,9 +366,9 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     }
   
 
-  inline float transverse_cut_from_data(char dir) const
+  inline double transverse_cut_from_data(char dir) const
     {
-      float cut;
+      double cut;
       std::string cut_dir("cut_");
       cut_dir += dir;
       cut = params_.readFValue(cut_dir);
@@ -386,9 +386,9 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     }
   
   
-  inline float cut_z_from_data(int automatic) const
+  inline double cut_z_from_data(int automatic) const
     {
-      float cutz;
+      double cutz;
       if (automatic == 1)
 	{
 	  cutz =  default_zcut(sigma_for_cut_from_data('z'));
@@ -411,7 +411,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
       return cutz;
     }
   
-  inline float default_zcut(float sigmaz ) const
+  inline double default_zcut(double sigmaz ) const
     {
       
       // the sigmas are in nanometres
@@ -420,7 +420,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
     }
   
   
-  inline void beam_displacements_from_data(float delta_z) 
+  inline void beam_displacements_from_data(double delta_z) 
     {
       if ( switches.get_adjust() )
 	{
@@ -445,7 +445,7 @@ class GUINEA :  public ABSTRACT_IO_CLASS
   //void  lumi_init();
   void lumi_exit();
 
-  //  void store_photon2(PHOTON_BEAM *photon1,PHOTON_BEAM *photon2, float energy,float hel,float vx,float vy,float vz,float x, float y,float z);
+  //  void store_photon2(PHOTON_BEAM *photon1,PHOTON_BEAM *photon2, double energy,double hel,double vx,double vy,double vz,double x, double y,double z);
   void  load_photon(PHOTON_BEAM *photon1,PHOTON_BEAM *photon2);
   void make_step(int i1,int i2,PHI_FLOAT *sor_parameter);
   

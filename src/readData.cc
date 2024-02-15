@@ -1390,7 +1390,7 @@ int string_get_int(char *line,char *word,int *n)
   return 1;
 }
 
-int string_get_float(char *line,char *word,float *x)
+int string_get_double(char *line,char *word,double *x)
 {
   char *pointer;
 
@@ -1404,7 +1404,7 @@ int string_get_float(char *line,char *word,float *x)
   return 1;
 }
 
-int string_get_list(char *line,char *word,float *x,int *n)
+int string_get_list(char *line,char *word,double *x,int *n)
 {
   char *pointer;
   int i=0;

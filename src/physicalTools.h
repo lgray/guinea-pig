@@ -20,7 +20,7 @@ class PHYSTOOLS
        pz in the center of mass frame of the two photons e1 and e2 and boosts the
        momentum to the laborytory frame. */
     
-    inline static void lorent_pair(float e1,float e2,double& e,double& pz)
+    inline static void lorent_pair(double e1,double e2,double& e,double& pz)
     {
       double beta, eold, gam;
       
@@ -29,15 +29,6 @@ class PHYSTOOLS
       eold = e;
       e = gam * (e - beta * pz);
       pz = gam * (pz - beta * eold);
-    }
-  
-  inline static void lorent_pair(float e1,float e2, float& e, float& pz)
-    {
-      double ed = (double)e;
-      double pzd = (double)pz;
-      lorent_pair(e1, e2, ed, pzd);
-      e = (float)ed;
-      pz = (float)pzd;
     }
   
   inline static  void lorent(double& e,double& pl,double beta)
@@ -50,28 +41,18 @@ class PHYSTOOLS
       pl = gamma*(pl + beta * eold);
     }
   
-  inline static  void lorent(float& e, float& pl, float beta)
-    {
-      double ed = (double)e;
-      double pld = (double)pl;
-      lorent(ed, pld, (double)beta);
-      e = (float)ed;
-      pl = (float)pld;
-    }
-  
-  
   /* Differential probability for producing a pair * sqrt(3)*PI */
   
-  inline static float fcp(float ups,float x)
+  inline static double fcp(double ups,double x)
     {
-      float eta;
+      double eta;
       eta=2.0/(3.0*ups*x*(1.0-x));
       return bessel_.ki13(eta)+(x/(1.0-x)+(1.0-x)/x)*bessel_.k23(eta);
     }
   
   /* total probability of producing a pair */
   
-  inline static float u(float ups)
+  inline static double u(double ups)
     {
       return 0.23*ups*exp(-8.0/(3.0*ups))*pow(1.0+0.22*ups,-1.0/3.0);
     }
@@ -230,7 +211,7 @@ class PHYSTOOLS
   
   static void mkit(double gam2i,double& c, RNDM& rndm_generator);
   
-  inline static float synrad_p0(float eng,float dzOnRadius) 
+  inline static double synrad_p0(double eng,double dzOnRadius) 
     {
       // 4**(1/3)*(1/137)/(Gamma(4/3)*emass) 
       // cf p21 daniel's thesis and ref 21
@@ -249,18 +230,18 @@ class PHYSTOOLS
   static double fradu0(double ups);
   static double fradsp(double ups);
   
-  static float synrad_spin_flip (float upsilonSingleP, float eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3,TRIDVECTOR& polar, float dzOnRadius,std::vector<float>& photon, RNDM& rndm_generator);
-  static float synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius, std::vector<float>&  photon, RNDM& rndm_generator); 
-  static float synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOnRadius,std::vector<float>& photon, RNDM& rndm_generator);
+  static double synrad_spin_flip (double upsilonSingleP, double eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3,TRIDVECTOR& polar, double dzOnRadius,std::vector<double>& photon, RNDM& rndm_generator);
+  static double synrad_spin_flip (double upsilonSingleP,double eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, double dzOnRadius, std::vector<double>&  photon, RNDM& rndm_generator); 
+  static double synrad_no_spin_flip (double upsilonSingleP,double eng, double dzOnRadius,std::vector<double>& photon, RNDM& rndm_generator);
   
-  static int synrad_0_no_spin_flip (float upsilonSingleP,float eng,float dzOnRadius,float* x, RNDM& rndm_generator);
-  static int synrad_0_spin_flip (float upsilonSingleP,float eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius,float* x, RNDM& rndm_generator);
-  static int synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& stokes, float dzOnRadius,float* photonEnergy, RNDM& rndm_generator);
+  static int synrad_0_no_spin_flip (double upsilonSingleP,double eng,double dzOnRadius,double* x, RNDM& rndm_generator);
+  static int synrad_0_spin_flip (double upsilonSingleP,double eng,const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, double dzOnRadius,double* x, RNDM& rndm_generator);
+  static int synrad_0_spin_flip (double upsilonSingleP,double eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& stokes, double dzOnRadius,double* photonEnergy, RNDM& rndm_generator);
   
   
   static double BformFunction(double ups);
   
-  static void referenceSpin(double vxd, double vyd, TRIDVECTOR& e1, TRIDVECTOR& e2, TRIDVECTOR& e3, TRIDVECTOR Efield, TRIDVECTOR Bfield, float charge_sign);
+  static void referenceSpin(double vxd, double vyd, TRIDVECTOR& e1, TRIDVECTOR& e2, TRIDVECTOR& e3, TRIDVECTOR Efield, TRIDVECTOR Bfield, double charge_sign);
   
   static TRIDVECTOR transverse_Lorentz_force(double vxd, double vyd, TRIDVECTOR E, TRIDVECTOR B);
   
@@ -272,9 +253,9 @@ class PHYSTOOLS
    with energy e above an energy fraction xmin according to spectrum number
    iflag */
 
-inline static float requiv(double lns4, float xmin,int iflag)
+inline static double requiv(double lns4, double xmin,int iflag)
 {
-  float help,lnxmin;
+  double help,lnxmin;
 
   if (xmin>=1.0) return 0.0;
   switch (iflag)
@@ -317,10 +298,10 @@ inline static float requiv(double lns4, float xmin,int iflag)
 
 /*! New version of equiv */
 
-inline static void mequiv (double s4, double lns4, float xmin,float e,int iflag,float *eph,float *q2,float *one_m_x, RNDM& rndm_generator)
+inline static void mequiv (double s4, double lns4, double xmin,double e,int iflag,double *eph,double *q2,double *one_m_x, RNDM& rndm_generator)
 {
-  const float emass2=EMASS*EMASS,eps=1e-5;
-  float help,q2max,q2min,lnx,x,lnxmin,z;
+  const double emass2=EMASS*EMASS,eps=1e-5;
+  double help,q2max,q2min,lnx,x,lnxmin,z;
   switch (iflag)
     {
     case 1:
@@ -528,11 +509,11 @@ class QUADRIVECTOR
 {
   protected :
 
-  float v1_,v2_,v3_;
-  float v4_;
+  double v1_,v2_,v3_;
+  double v4_;
 
 
- inline void multByFloat(const float& fac)
+ inline void multByFloat(const double& fac)
    {
      v1_ *= fac; 
      v2_ *= fac; 
@@ -545,12 +526,12 @@ class QUADRIVECTOR
 
  QUADRIVECTOR() : v1_(0.0),v2_(0.0),v3_(0.0),v4_(0.0)  {;}
 
-QUADRIVECTOR(float vx,float vy,float vz, float energy) 
+QUADRIVECTOR(double vx,double vy,double vz, double energy) 
     {
       set(vx, vy, vz, energy);
     }
 
-inline void set (float vx,float vy,float vz, float energy)
+inline void set (double vx,double vy,double vz, double energy)
   {
     v1_     = vx;
     v2_     = vy;
@@ -558,14 +539,14 @@ inline void set (float vx,float vy,float vz, float energy)
     v4_ = energy;         
   }
 
-inline void trivector(float& vx,float& vy,float& vz) const
+inline void trivector(double& vx,double& vy,double& vz) const
   {
     vx     =  v1_;
     vy     =  v2_;
     vz     =  v3_;
   }
 
-inline void quadrivector(float& vx,float& vy,float& vz, float& energy) const
+inline void quadrivector(double& vx,double& vy,double& vz, double& energy) const
   {
     vx     =  v1_;
     vy     =  v2_;
@@ -573,15 +554,15 @@ inline void quadrivector(float& vx,float& vy,float& vz, float& energy) const
     energy =  v4_;
   }
 
- inline float energy() const {return v4_;}
+ inline double energy() const {return v4_;}
 
- inline QUADRIVECTOR& operator *= (const float& fac)
+ inline QUADRIVECTOR& operator *= (const double& fac)
    {
      multByFloat(fac);
      return *this;
    }
 
-inline void boost_cecile(float e1, float e2, float beta_x, float beta_y)
+inline void boost_cecile(double e1, double e2, double beta_x, double beta_y)
   {
     PHYSTOOLS::lorent_pair(e1,e2,v4_, v3_);
     PHYSTOOLS::lorent(v4_ ,v1_ ,beta_x);
@@ -595,7 +576,7 @@ inline void boost_cecile(float e1, float e2, float beta_x, float beta_y)
 	 std::cout << " mathematicalEntities::momentumToVelocity : null energy! " << std::endl;
 	 return;
        }
-     float factor = 1.0/fabs(v4_);
+     double factor = 1.0/fabs(v4_);
      v1_ *= factor;
      v2_ *= factor;
      v3_ *= factor;

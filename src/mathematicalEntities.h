@@ -12,7 +12,7 @@
 
 class TRIVECTOR
 {
-  float vec_[3];
+  double vec_[3];
   
   public :
     
@@ -26,15 +26,15 @@ class TRIVECTOR
     {
       setComponents( triv.vec_[0],triv.vec_[1], triv.vec_[2]);
     }
-  TRIVECTOR(float x,float y,float z)
+  TRIVECTOR(double x,double y,double z)
     {
       vec_[0] = x;
       vec_[1] = y;
       vec_[2] = z;
     }
 
-  inline float& operator() (int index) { return vec_[index]; }
-  inline const float& operator() (int index) const { return vec_[index]; }
+  inline double& operator() (int index) { return vec_[index]; }
+  inline const double& operator() (int index) const { return vec_[index]; }
   
   inline TRIVECTOR& operator = (const TRIVECTOR& triv)
     {
@@ -42,31 +42,31 @@ class TRIVECTOR
       return *this;
     }
   
-  inline TRIVECTOR& operator = (float value)
+  inline TRIVECTOR& operator = (double value)
     {
       setComponents( value,value, value);
       return *this;
     }
   
-  inline TRIVECTOR& operator *= (const float& factor)
+  inline TRIVECTOR& operator *= (const double& factor)
     {
       int k;
       for (k=0; k < 3; k++) vec_[k] *= factor;
       return *this;
     }
   
-  inline float getComponent(int index ) const {return vec_[index];}
+  inline double getComponent(int index ) const {return vec_[index];}
   
-  inline void setComponent(int index, float value )  {vec_[index] = value;}
+  inline void setComponent(int index, double value )  {vec_[index] = value;}
   
-  inline void getComponents(float& x,float& y,float& z) const
+  inline void getComponents(double& x,double& y,double& z) const
     {
       x = vec_[0];
       y = vec_[1];
       z = vec_[2];
     }
   
-  inline void setComponents(float x,float y,float z)
+  inline void setComponents(double x,double y,double z)
     {
       vec_[0] = x;
       vec_[1] = y;
@@ -74,11 +74,11 @@ class TRIVECTOR
     }
   
   
-  inline float norm2() const
+  inline double norm2() const
     {
       return vec_[0]*vec_[0] + vec_[1]*vec_[1] + vec_[2]*vec_[2];
     }
-  inline float norm() const
+  inline double norm() const
     {
       return std::sqrt(std::abs(norm2()));
     }
@@ -86,7 +86,7 @@ class TRIVECTOR
   inline void renormalize()
     {
       int k;
-      float normeInv = 1.0/norm();
+      double normeInv = 1.0/norm();
       for (k=0; k< 3 ; k++) vec_[k] *= normeInv;
     }
   

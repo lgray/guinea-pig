@@ -16,13 +16,13 @@ class LUMI_PAIR : public ABSTRACT_IO_CLASS
 {
  protected:
   
-  float e1_,e2_,x_,y_,z_;
+  double e1_,e2_,x_,y_,z_;
   
  public :
     
  LUMI_PAIR() : e1_(0.0),e2_(0.0),x_(0.0),y_(0.0),z_(0.0) {;}
   
- LUMI_PAIR(float energy1, float energy2) : x_(0.0),y_(0.0),z_(0.0)
+ LUMI_PAIR(double energy1, double energy2) : x_(0.0),y_(0.0),z_(0.0)
     {
       e1_ = energy1; 
       e2_ = energy2; 
@@ -30,7 +30,7 @@ class LUMI_PAIR : public ABSTRACT_IO_CLASS
   
   ~LUMI_PAIR() {;}
   
-  inline void random_position(const MESH& mesh, int cellx, int celly,float min_z, RNDM& rndm_generator)
+  inline void random_position(const MESH& mesh, int cellx, int celly,double min_z, RNDM& rndm_generator)
     {
       mesh.guess_position_in_cell(cellx, celly,min_z, x_, y_, z_, rndm_generator);
     }
@@ -49,7 +49,7 @@ class LUMI_PAIR : public ABSTRACT_IO_CLASS
     return out.str();
   }
   
-  inline void get_parameters_for_output(float& e1,float& e2,float& x,float& y,float& z) const
+  inline void get_parameters_for_output(double& e1,double& e2,double& x,double& y,double& z) const
     {
       e1 = e1_;
       e2 = e2_;
@@ -59,7 +59,7 @@ class LUMI_PAIR : public ABSTRACT_IO_CLASS
     }
   
   
-  inline void get_impulsion_parameters(float& /*vx1*/,float& /*vy1*/,float& /*vx2*/,float& /*vy2*/, int& /*t*/) const {;}
+  inline void get_impulsion_parameters(double& /*vx1*/,double& /*vy1*/,double& /*vx2*/,double& /*vy2*/, int& /*t*/) const {;}
   
 };
 
@@ -69,7 +69,7 @@ class LUMI_PAIR_EE  : public LUMI_PAIR
 
 protected :
 
-  float vx1_,vy1_,vx2_,vy2_;
+  double vx1_,vy1_,vx2_,vy2_;
   TRIDVECTOR spin1_, spin2_;
   int t_;
   
@@ -79,7 +79,7 @@ protected :
   
  LUMI_PAIR_EE() : vx1_(0.0),vy1_(0.0),vx2_(0.0),vy2_(0.0),t_(0) {;}
   
-  LUMI_PAIR_EE(float energy1, float energy2, float p1Vx, float p1Vy, float p2Vx, float p2Vy,int time_counter) : LUMI_PAIR(energy1, energy2)
+  LUMI_PAIR_EE(double energy1, double energy2, double p1Vx, double p1Vy, double p2Vx, double p2Vy,int time_counter) : LUMI_PAIR(energy1, energy2)
     {
      vx1_ = p1Vx;
      vx2_ = p2Vx;
@@ -96,7 +96,7 @@ protected :
       spin2_ = s2;
     }
 
-  void get_spins(float& sx1, float& sy1, float& sz1,float& sx2, float& sy2, float& sz2 ) const
+  void get_spins(double& sx1, double& sy1, double& sz1,double& sx2, double& sy2, double& sz2 ) const
     {
       sx1 = spin1_(0);
       sy1 =  spin1_(1);
@@ -108,7 +108,7 @@ protected :
     }
   
 
-  inline void get_impulsion_parameters(float& vx1,float& vy1,float& vx2,float& vy2, int& t) const
+  inline void get_impulsion_parameters(double& vx1,double& vy1,double& vx2,double& vy2, int& t) const
     {
       vx1 = vx1_;
       vy1 = vy1_;
@@ -136,13 +136,13 @@ class GENERAL_LUMI_HEAP : public ABSTRACT_LUMI_HEAP
   
   int nmax_;
   int nb_pairs_;
-  float p_;
+  double p_;
   
   public : 
  GENERAL_LUMI_HEAP() : nmax_(0),nb_pairs_(0),p_(0.0) { rndm_generator_ = NULL;}
   
   
-  GENERAL_LUMI_HEAP(int nmax, float p, RNDM* rndm_generator)
+  GENERAL_LUMI_HEAP(int nmax, double p, RNDM* rndm_generator)
     {
       rndm_generator_ = rndm_generator;
       nmax_ = nmax;
@@ -159,7 +159,7 @@ class GENERAL_LUMI_HEAP : public ABSTRACT_LUMI_HEAP
   virtual inline int nb_pairs() const {return nb_pairs_;}
   
   
-  inline int numberToStore(float store) const
+  inline int numberToStore(double store) const
     {
       int nstore;
       nstore=(int)store;
@@ -183,23 +183,23 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
   
   LUMI_HEAP(): GENERAL_LUMI_HEAP() {;};
   
-  LUMI_HEAP( int nmax, float p, RNDM* rndm_generator) : GENERAL_LUMI_HEAP( nmax,p, rndm_generator)
+  LUMI_HEAP( int nmax, double p, RNDM* rndm_generator) : GENERAL_LUMI_HEAP( nmax,p, rndm_generator)
     {
       data_.reserve(nmax_);
     }
   
   virtual ~LUMI_HEAP() {;}
 
-  void lumi_store(const MESH& mesh, int cellx, int celly,float min_z, float energy1, float energy2, float weight);
+  void lumi_store(const MESH& mesh, int cellx, int celly,double min_z, double energy1, double energy2, double weight);
   
   
   
-  virtual inline void get_parameters_for_output(unsigned int number, float& e1,float& e2,float& x,float& y,float& z) const
+  virtual inline void get_parameters_for_output(unsigned int number, double& e1,double& e2,double& x,double& y,double& z) const
    {
      data_[number].get_parameters_for_output(e1,e2,x,y,z);
    }
   
-  virtual inline void get_parameters_for_output(unsigned int /*number*/, float& /*e1*/,float& /*e2*/,float& /*x*/,float& /*y*/,float& /*z*/, float& /*vx1*/,float& /*vy1*/,float& /*vx2*/,float& /*vy2*/, float& /*sx1*/, float& /*sy1*/, float& /*sz1*/, float& /*sx2*/, float& /*sy2*/, float& /*sz2*/, int& /*t*/) const {;}
+  virtual inline void get_parameters_for_output(unsigned int /*number*/, double& /*e1*/,double& /*e2*/,double& /*x*/,double& /*y*/,double& /*z*/, double& /*vx1*/,double& /*vy1*/,double& /*vx2*/,double& /*vy2*/, double& /*sx1*/, double& /*sy1*/, double& /*sz1*/, double& /*sx2*/, double& /*sy2*/, double& /*sz2*/, int& /*t*/) const {;}
   
   virtual std::string persistent_flow() const
     {
@@ -234,7 +234,7 @@ class LUMI_HEAP : public GENERAL_LUMI_HEAP
       filout.close();
     }
   
-  int  prepare_store(float weight);
+  int  prepare_store(double weight);
   
   
 };
@@ -249,15 +249,15 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
     
     LUMI_HEAP_EE() : GENERAL_LUMI_HEAP() {;}
   
-  LUMI_HEAP_EE( int nmax, float p, RNDM* rndm_generator) : GENERAL_LUMI_HEAP( nmax,p, rndm_generator)
+  LUMI_HEAP_EE( int nmax, double p, RNDM* rndm_generator) : GENERAL_LUMI_HEAP( nmax,p, rndm_generator)
     {
       data_.reserve(nmax_);
     }
   
   
-  virtual inline void get_parameters_for_output(unsigned int /*number*/, float& /*e1*/,float& /*e2*/,float& /*x*/,float& /*y*/,float& /*z*/) const {;}
+  virtual inline void get_parameters_for_output(unsigned int /*number*/, double& /*e1*/,double& /*e2*/,double& /*x*/,double& /*y*/,double& /*z*/) const {;}
   
-  virtual inline void get_parameters_for_output(unsigned int number, float& e1,float& e2,float& x,float& y,float& z, float& vx1,float& vy1,float& vx2,float& vy2, float& sx1, float& sy1, float& sz1, float& sx2, float& sy2, float& sz2,int& t) const
+  virtual inline void get_parameters_for_output(unsigned int number, double& e1,double& e2,double& x,double& y,double& z, double& vx1,double& vy1,double& vx2,double& vy2, double& sx1, double& sy1, double& sz1, double& sx2, double& sy2, double& sz2,int& t) const
     {
       data_[number].get_parameters_for_output(e1,e2,x,y,z);
       data_[number].get_impulsion_parameters(vx1,vy1,vx2,vy2,t);
@@ -300,11 +300,11 @@ class LUMI_HEAP_EE : public GENERAL_LUMI_HEAP
       filout.close();
     }
   
-  void lumi_store_ee(const MESH& mesh, int cellx, int celly,float min_z, float energy1, float p1Vx, float p1Vy, float energy2, float p2Vx, float p2Vy,float weight,int time_counter);
+  void lumi_store_ee(const MESH& mesh, int cellx, int celly,double min_z, double energy1, double p1Vx, double p1Vy, double energy2, double p2Vx, double p2Vy,double weight,int time_counter);
   
-  void lumi_store_ee(const MESH& mesh, int cellx, int celly,float min_z, float energy1, float p1Vx, float p1Vy, float energy2, float p2Vx, float p2Vy,float weight, const TRIDVECTOR& s1, const TRIDVECTOR& s2, int time_counter); 
+  void lumi_store_ee(const MESH& mesh, int cellx, int celly,double min_z, double energy1, double p1Vx, double p1Vy, double energy2, double p2Vx, double p2Vy,double weight, const TRIDVECTOR& s1, const TRIDVECTOR& s2, int time_counter); 
 
-  int  prepare_store(float weight);
+  int  prepare_store(double weight);
   
   
 };

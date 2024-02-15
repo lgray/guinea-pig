@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void PARTICLE_WITH_SPIN::rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float charge_sign, float dt) 
+void PARTICLE_WITH_SPIN::rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, double charge_sign, double dt) 
 {
   // Efield : electric field (lab. frame) : GV/nm
   // Bfield : magnetic field X c (lab. frame) : GV/nm
@@ -34,14 +34,14 @@ void PARTICLE_WITH_SPIN::rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float c
   betaE(1) = Efield(0) - vitx*Efield(2);
   betaE(2) = vitx*Efield(1) - vity*Efield(0);
 
-  //  double anom = (float)anomalousMoment(Efield,Bfield);
-  double anom = (float)PHYSTOOLS::BformFunction(ups_);
+  //  double anom = (double)anomalousMoment(Efield,Bfield);
+  double anom = (double)PHYSTOOLS::BformFunction(ups_);
   double a1 = 1 + anom;
   double ga1 = 1 + gamma*anom;
   double ce1 = anom + 1./(1.0 + gamma);
   //  std::cout << " a= " << anom << " ce1= " << ce1 << std::endl;
 
-  //  float ang = 0.0; // alternative 1
+  //  double ang = 0.0; // alternative 1
   for (k = 0; k< 3; k++)
     {
       omega(k) = -(double)charge_sign*(ga1*Btrans(k) + a1*Blong(k) - ce1*gamma*betaE(k));
@@ -102,7 +102,7 @@ void PARTICLE_WITH_SPIN::rotateBMT(TRIDVECTOR Efield, TRIDVECTOR Bfield, float c
   //  spin_.renormalize();
 }
 
-void PAIR_PARTICLE::apply_electric_field_on_pair(float step_2, float ex, float ey) 
+void PAIR_PARTICLE::apply_electric_field_on_pair(double step_2, double ex, double ey) 
 {
   // apply electric field : step_2
   // e_inv : inverse of energy
@@ -114,11 +114,11 @@ void PAIR_PARTICLE::apply_electric_field_on_pair(float step_2, float ex, float e
   advanceVelocities(ex, ey, step_2);
 }
 
-float PAIR_PARTICLE::apply_magnetic_field_on_pair(float fac_theta, float step_q, float bx, float by) 
+double PAIR_PARTICLE::apply_magnetic_field_on_pair(double fac_theta, double step_q, double bx, double by) 
 {
-  const float eps=1e-35;
-  float theta;
-  float b_norm, b_norm_i,a1,a2,a3,vb;
+  const double eps=1e-35;
+  double theta;
+  double b_norm, b_norm_i,a1,a2,a3,vb;
   if (icharge_)
     {
       bx = -bx;
@@ -154,10 +154,10 @@ float PAIR_PARTICLE::apply_magnetic_field_on_pair(float fac_theta, float step_q,
   return theta;
 }
 
-float  PAIR_PARTICLE::scale_pair(float vold2, double mass)
+double  PAIR_PARTICLE::scale_pair(double vold2, double mass)
 {
 #ifdef SCALE_ENERGY
-  float scal;
+  double scal;
   scal=sqrt( (vold2*energy_*energy_ + mass*mass)/(velocity_q()*energy_*energy_ + mass*mass)   );
   vx_ *= scal;
   vy_ *= scal;
@@ -168,18 +168,18 @@ float  PAIR_PARTICLE::scale_pair(float vold2, double mass)
 #endif
 }
 
-void PAIR_PARTICLE::synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, std::vector<float>* photon_e, RNDM& rndm_generator) 
+void PAIR_PARTICLE::synchrotron_radiation(double step, double mass, double step_fraction, double vx0, double vy0, double vz0, std::vector<double>* photon_e, RNDM& rndm_generator) 
 {
 #ifdef PAIR_SYN
   unsigned int j;
-  float eng0, scal;
-  std::vector<float> ph;
-  float dz = step*1e-9;
-  float dzOnRadiusFrac = sqrt((vx_-vx0)*(vx_-vx0)+(vy_-vy0)*(vy_-vy0)+(velocityz_-vz0)*(velocityz_-vz0))/step_fraction;
-  float radius_i = dzOnRadiusFrac/dz;
+  double eng0, scal;
+  std::vector<double> ph;
+  double dz = step*1e-9;
+  double dzOnRadiusFrac = sqrt((vx_-vx0)*(vx_-vx0)+(vy_-vy0)*(vy_-vy0)+(velocityz_-vz0)*(velocityz_-vz0))/step_fraction;
+  double radius_i = dzOnRadiusFrac/dz;
 
   TRIDVECTOR vdummy;   
-      float upsilon=LAMBDA_BAR*EMASS/(mass*mass*mass)*energy_*energy_*radius_i;
+      double upsilon=LAMBDA_BAR*EMASS/(mass*mass*mass)*energy_*energy_*radius_i;
       dzOnRadiusFrac*=EMASS/mass;
       PHYSTOOLS::synrad_no_spin_flip(upsilon,energy_, dzOnRadiusFrac,ph, rndm_generator);
       if ((int)ph.size() > 0) 
@@ -197,18 +197,18 @@ void PAIR_PARTICLE::synchrotron_radiation(float step, double mass, float step_fr
 	}
 #endif
 }
-void PAIR_PARTICLE::synchrotron_radiation(float step, double mass, float step_fraction, float vx0, float vy0, float vz0, RNDM& rndm_generator) 
+void PAIR_PARTICLE::synchrotron_radiation(double step, double mass, double step_fraction, double vx0, double vy0, double vz0, RNDM& rndm_generator) 
 {
 #ifdef PAIR_SYN
   unsigned int j;
-  float eng0, scal;
-  std::vector<float> ph;
-  float dz = step*1e-9;
-  float dzOnRadiusFrac = sqrt((vx_-vx0)*(vx_-vx0)+(vy_-vy0)*(vy_-vy0)+(velocityz_-vz0)*(velocityz_-vz0))/step_fraction;
-  float radius_i = dzOnRadiusFrac/dz;
+  double eng0, scal;
+  std::vector<double> ph;
+  double dz = step*1e-9;
+  double dzOnRadiusFrac = sqrt((vx_-vx0)*(vx_-vx0)+(vy_-vy0)*(vy_-vy0)+(velocityz_-vz0)*(velocityz_-vz0))/step_fraction;
+  double radius_i = dzOnRadiusFrac/dz;
 
   TRIDVECTOR vdummy;   
-      float upsilon=LAMBDA_BAR*EMASS/(mass*mass*mass)*energy_*energy_*radius_i;
+      double upsilon=LAMBDA_BAR*EMASS/(mass*mass*mass)*energy_*energy_*radius_i;
       dzOnRadiusFrac*=EMASS/mass;
       PHYSTOOLS::synrad_no_spin_flip(upsilon,energy_, dzOnRadiusFrac,ph, rndm_generator);
       if ((int)ph.size() > 0) 
@@ -226,10 +226,10 @@ void PAIR_PARTICLE::synchrotron_radiation(float step, double mass, float step_fr
 #endif
 }
 
-float PAIR_PARTICLE::apply_final_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, float /*thetamx*/, RNDM& /*rndm_generator*/)
+double PAIR_PARTICLE::apply_final_half_step_fields(double step, double mass, double ex,double ey, double bx, double by, double /*thetamx*/, RNDM& /*rndm_generator*/)
 {
-  float vold2;
-  float theta;
+  double vold2;
+  double theta;
   vold2 = velocity_q();
   apply_electric_field_on_pair(0.5*step, ex, ey); 
   scale_pair(vold2, mass);   
@@ -238,11 +238,11 @@ float PAIR_PARTICLE::apply_final_half_step_fields(float step, double mass, float
   return theta;
 }
 
-float PAIR_PARTICLE::apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, std::vector<float>* photon_e, RNDM& rndm_generator)
+double PAIR_PARTICLE::apply_initial_half_step_fields(double step, double mass, double ex,double ey, double bx, double by, std::vector<double>* photon_e, RNDM& rndm_generator)
 {
-  float vx0,vy0,vz0, vold2;
-  float step_2, step_q, scal;
-  float theta;
+  double vx0,vy0,vz0, vold2;
+  double step_2, step_q, scal;
+  double theta;
   step_2=0.5*step;
   step_q=step*step;
 #ifdef PAIR_SYN
@@ -264,11 +264,11 @@ float PAIR_PARTICLE::apply_initial_half_step_fields(float step, double mass, flo
   synchrotron_radiation(step, mass, 0.5, vx0, vy0, vz0, photon_e, rndm_generator);
   return theta;
 }
-float PAIR_PARTICLE::apply_initial_half_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& rndm_generator)
+double PAIR_PARTICLE::apply_initial_half_step_fields(double step, double mass, double ex,double ey, double bx, double by, RNDM& rndm_generator)
 {
-  float vx0,vy0,vz0, vold2;
-  float step_2, step_q, scal;
-  float theta;
+  double vx0,vy0,vz0, vold2;
+  double step_2, step_q, scal;
+  double theta;
   step_2=0.5*step;
   step_q=step*step;
 #ifdef PAIR_SYN
@@ -290,11 +290,11 @@ float PAIR_PARTICLE::apply_initial_half_step_fields(float step, double mass, flo
   synchrotron_radiation(step, mass, 0.5, vx0, vy0, vz0, rndm_generator);
   return theta;
 }
-float PAIR_PARTICLE::apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, std::vector<float>* photon_e, RNDM& rndm_generator) 
+double PAIR_PARTICLE::apply_full_step_fields(double step, double mass, double ex,double ey, double bx, double by, std::vector<double>* photon_e, RNDM& rndm_generator) 
 {
-  float vx0,vy0,vz0, vold2;
-  float step_2, step_q, scal;
-  float theta;
+  double vx0,vy0,vz0, vold2;
+  double step_2, step_q, scal;
+  double theta;
   step_2=0.5*step;
   step_q=step*step;
 
@@ -323,11 +323,11 @@ float PAIR_PARTICLE::apply_full_step_fields(float step, double mass, float ex,fl
   return theta;
 }
 
-float PAIR_PARTICLE::apply_full_step_fields(float step, double mass, float ex,float ey, float bx, float by, RNDM& rndm_generator) 
+double PAIR_PARTICLE::apply_full_step_fields(double step, double mass, double ex,double ey, double bx, double by, RNDM& rndm_generator) 
 {
-  float vx0,vy0,vz0, vold2;
-  float step_2, step_q, scal;
-  float theta;
+  double vx0,vy0,vz0, vold2;
+  double step_2, step_q, scal;
+  double theta;
   step_2=0.5*step;
   step_q=step*step;
 
@@ -359,7 +359,7 @@ float PAIR_PARTICLE::apply_full_step_fields(float step, double mass, float ex,fl
 
 void PAIR_PARTICLE::update_energy(double mass)
 {
-  float scal;
+  double scal;
   last_rescaling_ok_ = true;
 #ifdef SCALE_ENERGY
   scal=sqrt( (energy_*energy_-mass*mass)/(  (energy_*energy_)* velocity_q()   ));

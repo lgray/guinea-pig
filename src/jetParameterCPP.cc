@@ -3,7 +3,7 @@
 #include <cmath>
 
 // this method is part of the old init_jet
-void JET_PARAMETER::init(float s,float ptmin,int iparam)
+void JET_PARAMETER::init(double s,double ptmin,int iparam)
 {
     d_spectrum_=5;
     r_spectrum_=2;

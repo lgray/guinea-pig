@@ -7,9 +7,9 @@
 #include "physconst.h"
 
 
-void PAIR_BEAM::distribute_pairs(float delta_z,unsigned int n)
+void PAIR_BEAM::distribute_pairs(double delta_z,unsigned int n)
 {
-  float startLocal,delta_i;
+  double startLocal,delta_i;
   unsigned int k;
   startLocal = 0.5*delta_z*n;
   delta_i=1.0/delta_z;
@@ -39,7 +39,7 @@ void PAIR_BEAM::distribute_pairs(float delta_z,unsigned int n)
     }
 }
 
-void PAIR_BEAM::move_unactive_pairs(float step)
+void PAIR_BEAM::move_unactive_pairs(double step)
 {
   std::list<PAIR_PARTICLE>::iterator itr = reserve_.begin();
   while(itr != reserve_.end())
@@ -50,7 +50,7 @@ void PAIR_BEAM::move_unactive_pairs(float step)
 }
 
 
-void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator )
+void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,double min_z, int index_of_process, double energy,double px,double py,double pz, double ratio, int tracking, int saving, RNDM& rndm_generator )
 {
   // test if particle energy is above the required minumum 
   if (fabs(energy) < pair_parameter_.get_ecut() )   
@@ -67,7 +67,7 @@ void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int
   // store particles for tracking?
   if (!tracking  && !saving  ) return;
 
-  float xx,yy,zz,vxx,vyy,vzz;
+  double xx,yy,zz,vxx,vyy,vzz;
 
   mesh.pair_guess_position_in_cell(cellx, celly, min_z, xx, yy, zz,rndm_generator);
 
@@ -89,7 +89,7 @@ void PAIR_BEAM::new_pair(const MESH& mesh, int cellx, int celly,float min_z, int
     }
 }
 
-void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float energy,float px,float py,float pz, float ratio, int tracking, int saving, RNDM& rndm_generator, int beamslice1=-1, int beamslice2=-1 )
+void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cellx, int celly,double min_z, int index_of_process, double energy,double px,double py,double pz, double ratio, int tracking, int saving, RNDM& rndm_generator, int beamslice1=-1, int beamslice2=-1 )
 {
 
   // test if particle energy is above the required minumum
@@ -107,7 +107,7 @@ void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cell
   // store particles for tracking? 
   if (!tracking  && !saving  ) return;
   
-  float xx,yy,zz,vxx,vyy,vzz;
+  double xx,yy,zz,vxx,vyy,vzz;
   
   mesh.pair_guess_position_in_cell(cellx, celly, min_z, xx, yy, zz,rndm_generator);
   
@@ -137,7 +137,7 @@ void PAIR_BEAM::new_pair(const unsigned int evtIndex, const MESH& mesh, int cell
 }
 
 // incoherent pair creation : Breit-Wheeler processes
-void PAIR_BEAM::make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,int index_of_process, float eph1,float q2_1,float eorg1, float eph2,float q2_2,float eorg2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& rndm_generator)
+void PAIR_BEAM::make_pair_bw(const MESH& mesh, int cellx, int celly,double min_z,int index_of_process, double eph1,double q2_1,double eorg1, double eph2,double q2_2,double eorg2, double flum,double beta_x,double beta_y, SWITCHES& switches,RNDM& rndm_generator)
 {
   const double emass_2=EMASS*EMASS,one=1.0;
   double beta,phi;
@@ -236,7 +236,7 @@ void PAIR_BEAM::make_pair_bw(const MESH& mesh, int cellx, int celly,float min_z,
 } /* pair_bw */
 
 
-void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, int index_of_process, float eph1,float q2_1,float eph2,float q2_2, float flum,float beta_x,float beta_y, SWITCHES& switches,RNDM& rndm_generator)
+void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,double min_z, int index_of_process, double eph1,double q2_1,double eph2,double q2_2, double flum,double beta_x,double beta_y, SWITCHES& switches,RNDM& rndm_generator)
 {
   const double mumass_2=MUMASS*MUMASS,one=1.0;
   double beta,phi;
@@ -316,9 +316,9 @@ void  PAIR_BEAM::make_muon(const MESH& mesh, int cellx, int celly,float min_z, i
 
 
 
-void PAIR_BEAM::load_events(int time_counter,float ratio, int tracking, RNDM& rndm_generator)
+void PAIR_BEAM::load_events(int time_counter,double ratio, int tracking, RNDM& rndm_generator)
 {
-  float e,x,y,z,vx,vy,vz;
+  double e,x,y,z,vx,vy,vz;
   std::string line;
   int  t;
   if (file_of_events_ == NULL) return;
@@ -374,16 +374,16 @@ std::string PAIR_BEAM::output_flow() const
   compute_pairs_calls(n1, e1, n2, e2); 
   out << "pairs_ncal.1 = " << n1 << " energy (GeV) : pairs_cal.1 = " << e1 << std::endl;
   out << "pairs_ncal.2 = " << n2 << " energy (GeV) : pairs_cal.2 = " << e2 << std::endl;
-  out << "mstp: " << count_pairs_ << " " << pair_track_.call() << " " <<  (float)pair_track_.step()/ std::max( (float)pair_track_.call(),float(1.0)) << std::endl;
+  out << "mstp: " << count_pairs_ << " " << pair_track_.call() << " " <<  (double)pair_track_.step()/ std::max( (double)pair_track_.call(),double(1.0)) << std::endl;
   return out.str();
 }
 
 void PAIR_BEAM::compute_pairs_calls(long int& n1, double& e1, long int& n2, double& e2) const
 {
   std::list<PAIR_PARTICLE>::const_iterator point;
-  float vx, vy,vz, energy, abs_energy;
-  float z,r,b;
-  float pt,pz,r0,phi;
+  double vx, vy,vz, energy, abs_energy;
+  double z,r,b;
+  double pt,pz,r0,phi;
  
   z=2300.0;
   r=18.0;
@@ -418,11 +418,11 @@ void PAIR_BEAM::compute_pairs_calls(long int& n1, double& e1, long int& n2, doub
     }
 }
 
-void  PAIR_PARAMETER::init(BEAM& beam1, BEAM& beam2, int massflag, float pair_ecut, float pair_step, float step, int timestep)
+void  PAIR_PARAMETER::init(BEAM& beam1, BEAM& beam2, int massflag, double pair_ecut, double pair_step, double step, int timestep)
 {
 
-  float sigma_x1, sigma_y1;
-  float sigma_x2, sigma_y2;
+  double sigma_x1, sigma_y1;
+  double sigma_x2, sigma_y2;
 
 
   beam1.transverse_sigmas(sigma_x1, sigma_y1);
@@ -442,10 +442,10 @@ void  PAIR_PARAMETER::init(BEAM& beam1, BEAM& beam2, int massflag, float pair_ec
   }
 }
 
-void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q2,float& wgt, RNDM& rndm_generator) const
+void PAIR_PARAMETER::jet_equiv (double xmin,double e,int iflag,double& eph,double& q2,double& wgt, RNDM& rndm_generator) const
 {
-  const float emass2=EMASS*EMASS,eps=1e-30;
-  float help,q2max,q2min,lnx,x,qxmin;
+  const double emass2=EMASS*EMASS,eps=1e-30;
+  double help,q2max,q2min,lnx,x,qxmin;
   wgt=1.0;
   switch (iflag)
     {
@@ -464,7 +464,7 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
       wgt=-0.5*(1.0+(help*help)) / (eph*log(xmin))
 	   *log(q2max/q2min)
 	   /lns4*(1.0-xmin);
-      wgt=std::max(float(0.0),wgt);
+      wgt=std::max(double(0.0),wgt);
       q2= q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
       eph *= e;
       return;
@@ -473,7 +473,7 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
       help=1.0 - eph;
       q2min=emass2;
       wgt=-0.5*(1.0+(help*help)) / (eph*log(xmin))*(1.0-xmin);
-      wgt=std::max(float(0.0),wgt);
+      wgt=std::max(double(0.0),wgt);
       q2= q2min*pow(e*e/q2min,rndm_generator.rndm_equiv());
       eph *= e;
       return;
@@ -492,7 +492,7 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
       wgt=-0.5*(1.0+(help*help)) / (eph*log(xmin))
 	   *log(q2max/q2min)
 	   /lns4*(1.0-xmin);
-      wgt=std::max(float(0.0),wgt);
+      wgt=std::max(double(0.0),wgt);
       q2= q2min*pow(q2max/q2min,rndm_generator.rndm_equiv());
       eph *= e;
       return;
@@ -510,7 +510,7 @@ void PAIR_PARAMETER::jet_equiv (float xmin,float e,int iflag,float& eph,float& q
       wgt=-0.5*(1.0+(help*help)) / (eph*log(xmin))
 	   *(lns4-log(qxmin))
 	   /lns4*(1.0-xmin);
-      wgt=std::max(float(0.0),wgt);
+      wgt=std::max(double(0.0),wgt);
       q2= q2min*pow(e*e/q2min,rndm_generator.rndm_equiv());
       eph*=e;
       return;

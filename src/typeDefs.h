@@ -4,7 +4,7 @@
 
 typedef double PHI_FLOAT;
 typedef double JET_FLOAT;
-typedef float PAIR_FLOAT;
+typedef double PAIR_FLOAT;
 
 
 

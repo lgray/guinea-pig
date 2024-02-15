@@ -21,7 +21,7 @@ class ABSTRACT_PARTICLE_BEAM
   
  protected :
 
-   float gamma_;
+   double gamma_;
 
  public : 
    
@@ -31,13 +31,13 @@ class ABSTRACT_PARTICLE_BEAM
    }
  virtual ~ABSTRACT_PARTICLE_BEAM() {;}
  
- inline float gamma() const { return gamma_;}
+ inline double gamma() const { return gamma_;}
  
- virtual void beamXyRms(float& xmean, float& ymean, float& sigmaxRms, float& sigmayRms) const = 0;
- virtual void beamZRms(float& zmean, float& sigmazRms) const = 0;
+ virtual void beamXyRms(double& xmean, double& ymean, double& sigmaxRms, double& sigmayRms) const = 0;
+ virtual void beamZRms(double& zmean, double& sigmazRms) const = 0;
  
  // emittances in mm.mrad
- virtual  void emittances(float& emittx, float& emitty) const =0;
+ virtual  void emittances(double& emittx, double& emitty) const =0;
  
 };
 
@@ -82,7 +82,7 @@ class BEAM_FROM_FILE : public ABSTRACT_PARTICLE_BEAM
   {
     return particles_.back();
   }
-  inline void pick_last_particle(float& ener, float& x, float& y, float& z, float& vx, float& vy, TRIDVECTOR& polar)
+  inline void pick_last_particle(double& ener, double& x, double& y, double& z, double& vx, double& vy, TRIDVECTOR& polar)
   {
     particles_.back().get_parameters(ener, x, y, z, vx, vy);
     polar = particles_.back().getSpin();
@@ -98,10 +98,10 @@ class BEAM_FROM_FILE : public ABSTRACT_PARTICLE_BEAM
       return (int) particles_.size();
     }
   
-  virtual void emittances(float& emittx, float& emitty) const;
+  virtual void emittances(double& emittx, double& emitty) const;
   
-  virtual  void beamXyRms(float& x0, float& y0,float& sigmax, float& sigmay) const;
-  virtual  void beamZRms(float& z0,float& sigmaz) const;
+  virtual  void beamXyRms(double& x0, double& y0,double& sigmax, double& sigmay) const;
+  virtual  void beamZRms(double& z0,double& sigmaz) const;
   
 
 
@@ -130,7 +130,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   unsigned long int number_of_particles_dispatched_in_slices_;
   RNDM* rndm_generator_;
   unsigned int typOfParticle_;
-  float sigmax_, sigmay_, sigmaz_;
+  double sigmax_, sigmay_, sigmaz_;
   TRIDVECTOR polarization_;
 
   inline void set(int bmt_rotate,TRIDVECTOR polar)
@@ -178,10 +178,10 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
       gamma_ /= EMASS*number_of_particles_dispatched_in_slices_;
     }
   
-  inline void backParticlesBefore(float max_z)
+  inline void backParticlesBefore(double max_z)
     {
       unsigned long int j,k;
-      float dist=0.5*(max_z-SQRT3*sigmaz_);
+      double dist=0.5*(max_z-SQRT3*sigmaz_);
       
       for (j = 0; j < particle_.size(); j++)
 	{
@@ -192,10 +192,10 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
     
-  inline void backSlicesWithZ(float max_z)
+  inline void backSlicesWithZ(double max_z)
     {
       unsigned long int j,k;
-      float z, dist;
+      double z, dist;
       // int n_slice = particle_.size();
       for (k=0;k<particle_.size();k++)
 	{
@@ -207,10 +207,10 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	    }
 	}
     }
-  inline void backSlicesWithZ2(float max_z)
+  inline void backSlicesWithZ2(double max_z)
     {
       unsigned long int j,k;
-      float z, dist;
+      double z, dist;
       //int n_slice = particle_.size();
       for (k=0;k<particle_.size();k++)
 	{
@@ -223,11 +223,11 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
   
-  inline void backSlices(int beam, float step,  int timestep, float scalStep[2])
+  inline void backSlices(int beam, double step,  int timestep, double scalStep[2])
     {
       unsigned long int k, j;
       int n_slice = (int) particle_.size();
-      float dist=step*timestep*0.5 *(scalStep[beam-1] - scalStep[2-beam])*(n_slice-1);
+      double dist=step*timestep*0.5 *(scalStep[beam-1] - scalStep[2-beam])*(n_slice-1);
       dist+=0.5*(1.0-1.0/timestep)*step*timestep;
       for (k=0;k<particle_.size();k++)
 	{
@@ -239,11 +239,11 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
     
-  inline void backSlices2(int nbeam, float step,  int timestep, float scalStep[2])
+  inline void backSlices2(int nbeam, double step,  int timestep, double scalStep[2])
     {
       unsigned long int k, j;
       int n_slice = (int) particle_.size();
-      float dist=step*timestep*0.5*((n_slice+1)*scalStep[nbeam-1] + (n_slice-1)*scalStep[2-nbeam]);
+      double dist=step*timestep*0.5*((n_slice+1)*scalStep[nbeam-1] + (n_slice-1)*scalStep[2-nbeam]);
       for (k=0;k<particle_.size();k++)
 	{
 	  for (j=0;j<particle_[k].size();j++)
@@ -254,12 +254,12 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
   
-  void fill_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation);
+  void fill_beam(int dist_x, int dist_z, double delta_z, double sigma_x,double sigma_y, double sigma_z, double sigma_x_prime,double sigma_y_prime, double energy, int do_bds_spin_rotation);
   
-  void fill_symmetric_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation);
+  void fill_symmetric_beam(int dist_x, int dist_z, double delta_z, double sigma_x,double sigma_y, double sigma_z, double sigma_x_prime,double sigma_y_prime, double energy, int do_bds_spin_rotation);
   
 
-  inline void get_rndm_xy_particle(float sigmax, float sigmay, float sigxp, float sigyp, float& x, float& y, float& vx, float& vy) const
+  inline void get_rndm_xy_particle(double sigmax, double sigmay, double sigxp, double sigyp, double& x, double& y, double& vx, double& vy) const
     {
       x = rndm_generator_->gasdev()*sigmax;
       y = rndm_generator_->gasdev()*sigmay;
@@ -267,13 +267,13 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
       vy = rndm_generator_->gasdev()*sigyp;
     }
 
-  void assign_xyz_normal_distribution(int dist_z,float delta_z,float sigma_x,float sigma_y, float sigmaz, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation);
+  void assign_xyz_normal_distribution(int dist_z,double delta_z,double sigma_x,double sigma_y, double sigmaz, double sigma_x_prime,double sigma_y_prime, double energy, int do_bds_spin_rotation);
   
-  void assign_symmetric_xyz_normal_distribution(int dist_z,float delta_z,float sigma_x,float sigma_y,float sigmaz, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation);
+  void assign_symmetric_xyz_normal_distribution(int dist_z,double delta_z,double sigma_x,double sigma_y,double sigmaz, double sigma_x_prime,double sigma_y_prime, double energy, int do_bds_spin_rotation);
   
-  //  inline void dispatch_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
+  //  inline void dispatch_random_particle_in_slices(double ztemp, double delta_z, double sigma_x,double sigma_y, double /*sigma_z*/, double sigma_x_prime,double sigma_y_prime, double energy, int nSlices)
   //    {
-  //      float xtemp, ytemp, vxtemp, vytemp;
+  //      double xtemp, ytemp, vxtemp, vytemp;
   //      int j=(int)floor(ztemp/delta_z+0.5* nSlices+1);
   //      TRIDVECTOR polar;
   //      if (typOfParticle_ == 3)
@@ -289,9 +289,9 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   //    }
 
   //New method that approximately takes into account the spin rotation from the final focus system
-  inline void dispatch_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices, int do_bds_spin_rotation)
+  inline void dispatch_random_particle_in_slices(double ztemp, double delta_z, double sigma_x,double sigma_y, double /*sigma_z*/, double sigma_x_prime,double sigma_y_prime, double energy, int nSlices, int do_bds_spin_rotation)
     {
-      float xtemp, ytemp, vxtemp, vytemp;
+      double xtemp, ytemp, vxtemp, vytemp;
       int j=(int)floor(ztemp/delta_z+0.5* nSlices+1);
       TRIDVECTOR polar;
       if ((j>0)&&(j<= nSlices))
@@ -335,9 +335,9 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
     }
   
 
-  //  inline void dispatch_symmetric_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices)
+  //  inline void dispatch_symmetric_random_particle_in_slices(double ztemp, double delta_z, double sigma_x,double sigma_y, double /*sigma_z*/, double sigma_x_prime,double sigma_y_prime, double energy, int nSlices)
   //    {
-  //      float xtemp, ytemp, vxtemp, vytemp;
+  //      double xtemp, ytemp, vxtemp, vytemp;
   //      double polx, poly, polz;
   //      TRIDVECTOR polar;
   //      if (typOfParticle_ == 3)
@@ -369,9 +369,9 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   //    }
 
   //New method that approximately takes into account the spin rotation from the final focus system
-  inline void dispatch_symmetric_random_particle_in_slices(float ztemp, float delta_z, float sigma_x,float sigma_y, float /*sigma_z*/, float sigma_x_prime,float sigma_y_prime, float energy, int nSlices, int do_bds_spin_rotation)
+  inline void dispatch_symmetric_random_particle_in_slices(double ztemp, double delta_z, double sigma_x,double sigma_y, double /*sigma_z*/, double sigma_x_prime,double sigma_y_prime, double energy, int nSlices, int do_bds_spin_rotation)
     {
-      float xtemp, ytemp, vxtemp, vytemp;
+      double xtemp, ytemp, vxtemp, vytemp;
       double polx, poly, polz;
       TRIDVECTOR polar;
 
@@ -434,9 +434,9 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
   
-  void  set_particles_offset(int slice, float offset_x,float offset_y,float waist_x,float waist_y);
+  void  set_particles_offset(int slice, double offset_x,double offset_y,double waist_x,double waist_y);
 
-  inline void set_new_particle_in_slice(int slice, float x,float y,float z,float vx,float vy,float energy, TRIDVECTOR polar)
+  inline void set_new_particle_in_slice(int slice, double x,double y,double z,double vx,double vy,double energy, TRIDVECTOR polar)
     {
       push_back_empty_particle(slice,1);
       int index = (int) particle_[slice].size() - 1;
@@ -517,10 +517,10 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
 
-  inline PARTICLE* generic_particle_for_dump(PARTICLE& part,int istep,float dz0, float max_z, int sign_label ) const
+  inline PARTICLE* generic_particle_for_dump(PARTICLE& part,int istep,double dz0, double max_z, int sign_label ) const
     {
-      float z,dz;
-      float sign = 1e-3*(float)sign_label;
+      double z,dz;
+      double sign = 1e-3*(double)sign_label;
       
       z = part.z();
       dz = max_z-istep*dz0;
@@ -530,10 +530,10 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
       return &part;  //BD 17/06/2010
     }
   
-  inline  PARTICLE* generic_velocity_corrected_particle_for_dump(PARTICLE& part,int slice, int istep,int complement, float dz0, float max_z, int sign_label ) const
+  inline  PARTICLE* generic_velocity_corrected_particle_for_dump(PARTICLE& part,int slice, int istep,int complement, double dz0, double max_z, int sign_label ) const
     {
-      float dz;
-      float vx, vy;
+      double dz;
+      double vx, vy;
       PARTICLE* newp = generic_particle_for_dump(part, istep, dz0, max_z, sign_label);
       part.velocities(vx, vy);
       dz=(slice-istep + complement -1)*dz0;
@@ -605,7 +605,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 
   inline const std::vector<PARTICLE*>& getTridentVector(int slice) const {return trident_[slice];}
     
-  inline void newCoherent(int slice,float x,float y, float vx,float vy, float energy)
+  inline void newCoherent(int slice,double x,double y, double vx,double vy, double energy)
     {
       switch(typOfParticle_)
 	{
@@ -626,7 +626,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
       coherent_[slice][0]->setParticle(x,y,0.0,vx,vy,energy);  
     }
 
-  inline void newTrident(int slice,float x,float y, float vx,float vy, float energy)
+  inline void newTrident(int slice,double x,double y, double vx,double vy, double energy)
     {
       switch(typOfParticle_)
 	{
@@ -644,10 +644,10 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
       trident_[slice][0]->setParticle(x,y,0.0,vx,vy,energy);  
     }
 
-  void rotate_particles(float angle);
-  void set_angle_particles(float x_angle, float y_angle,float delta_z);
+  void rotate_particles(double angle);
+  void set_angle_particles(double x_angle, double y_angle,double delta_z);
 
-  inline   void  set_particles_offset(float offset_x,float offset_y,float waist_x, float waist_y)
+  inline   void  set_particles_offset(double offset_x,double offset_y,double waist_x, double waist_y)
     {
       int j;
       for (j = 0; j < (int) particle_.size(); j++)
@@ -659,7 +659,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   inline void adjustToMeanPosition()
     {
       int k;
-      float xpart, ypart;
+      double xpart, ypart;
       for (k = 0; k < (int) particle_.size(); k++)
 	{
 	  meanPositionOfSlice(k,xpart, ypart);
@@ -667,26 +667,26 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
 	}
     }
   
-  void backstep (int beam,int trav_focus, float max_z, float step,  int timestep, float scal_step[2]);
+  void backstep (int beam,int trav_focus, double max_z, double step,  int timestep, double scal_step[2]);
 
-  void backstep2 (int nbeam, float max_z, float step,  int timestep, float scal_step[2]);
+  void backstep2 (int nbeam, double max_z, double step,  int timestep, double scal_step[2]);
 
   // after loading, the object pointed by bff is empty and 
   // the pointer bff is invalidated
-  unsigned int load_particles(BEAM_FROM_FILE*& bff, float emin, float zmin, float deltaz, float sigx, float sigy, float sigz);
+  unsigned int load_particles(BEAM_FROM_FILE*& bff, double emin, double zmin, double deltaz, double sigx, double sigy, double sigz);
 
-  void init_particles(unsigned long int nbpart, float sigma_x,float sigma_y, float sigma_z,int dist_x,int dist_z,float emx, float emy,float delta_z,float energy, int charge_symmetric, int do_bds_spin_rotation);
+  void init_particles(unsigned long int nbpart, double sigma_x,double sigma_y, double sigma_z,int dist_x,int dist_z,double emx, double emy,double delta_z,double energy, int charge_symmetric, int do_bds_spin_rotation);
   
-  virtual void beamXyRms(float& xmean, float& ymean, float& sigmaxRms, float& sigmayRms) const;
-  virtual void beamZRms(float& zmean, float& sigmazRms) const;
+  virtual void beamXyRms(double& xmean, double& ymean, double& sigmaxRms, double& sigmayRms) const;
+  virtual void beamZRms(double& zmean, double& sigmazRms) const;
 
   // emittances in mm.mrad
-  virtual  void emittances(float& emittx, float& emitty) const;
+  virtual  void emittances(double& emittx, double& emitty) const;
   
-  double meanLostEnergy(float ebeam) const;
+  double meanLostEnergy(double ebeam) const;
 
-  inline float  sigmaz() const { return sigmaz_;}
-  inline void transverse_sigmas(float& sigx, float& sigy) const
+  inline double  sigmaz() const { return sigmaz_;}
+  inline void transverse_sigmas(double& sigx, double& sigy) const
     {
       sigx = sigmax_;
       sigy = sigmay_;
@@ -704,7 +704,7 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
     index = number + (int) particle_[slice].size();
   }
 
-  void meanPositionOfSlice(int slice, float& x,float& y) const;
+  void meanPositionOfSlice(int slice, double& x,double& y) const;
   
   inline int number_of_coherent_vectors() const {return (int) coherent_.size();}
   
@@ -719,11 +719,11 @@ class PARTICLE_BEAM : public ABSTRACT_IO_CLASS, public ABSTRACT_PARTICLE_BEAM
   
   void transverseRms(int slice,double& xmin,double& xmax,double& xmean,double&  ymin,double& ymax,double& ymean,double&  sigmaxRms,double& sigmayRms) const; 
 
-  void ang_dis(unsigned int n_bin, std::vector< std::vector<float> >& bin ) const;
+  void ang_dis(unsigned int n_bin, std::vector< std::vector<double> >& bin ) const;
   
   virtual std::string output_flow() const; 
   int store_beam(std::string name) const;
-  void dump_beam(std::string name, int istep, int every_particle, int timestep, float step, float max_z, int  sign_label);
+  void dump_beam(std::string name, int istep, int every_particle, int timestep, double step, double max_z, int  sign_label);
   void store_coherent_beam(std::string name) const;
   void store_trident_beam(std::string name) const;
 
@@ -759,7 +759,7 @@ class  PHOTON_BEAM
       n = number;
     }
   
-  inline void new_loaded_photon(int sliceDATA, float energy, float hel, float xt, float yt, float vx,float vy)
+  inline void new_loaded_photon(int sliceDATA, double energy, double hel, double xt, double yt, double vx,double vy)
     {
       if( sliceDATA < 0 || sliceDATA >= n_slice_) return;
       // guineapig original, don't attribute a value to z for a photon
@@ -783,13 +783,13 @@ class  PHOTON_BEAM
   
   inline const PHOTON_COUNTER& get_photon_counter() const { return photon_count_;}
   
-  void load_photons(std::string filename, int type_of_beam, float delta_z, float max_z, int n_cell_z);
+  void load_photons(std::string filename, int type_of_beam, double delta_z, double max_z, int n_cell_z);
   
   inline int sizeOfSlice(int slice) const  {return (int) slice_photon_vector_[slice].size();}
   
   //int store_photon(std::string name) const;
 
-  inline const PHOTON& new_photon(float energy, PARTICLE& particle,  int slice)
+  inline const PHOTON& new_photon(double energy, PARTICLE& particle,  int slice)
     {
       photon_count_.addPhoton(energy);
       slice_photon_vector_[slice].push_back(PHOTON(energy, particle, 0.0, photon_count_.getNumber()));
@@ -810,7 +810,7 @@ class  PHOTON_BEAM
 	}
     }
   
-  inline void move_photons(int i_slice, float delta)
+  inline void move_photons(int i_slice, double delta)
     {
       unsigned int k;
       for (k=0; k < slice_photon_vector_[i_slice].size(); k++)
@@ -819,7 +819,7 @@ class  PHOTON_BEAM
 	}
     }
   
-  void dump_photons(std::string name,int istep, int every_particle,int timestep, float step, float max_z, int  sign_label);
+  void dump_photons(std::string name,int istep, int every_particle,int timestep, double step, double max_z, int  sign_label);
   
 };
 

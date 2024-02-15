@@ -1,6 +1,6 @@
 #include "bhabhaSamplesCPP.h"
 
-bool BHABHA_PHOTON_SAMPLES::pick_next(float ecmratio, float& en,float& px,float& py,float& pz, int& eventIndex)
+bool BHABHA_PHOTON_SAMPLES::pick_next(double ecmratio, double& en,double& px,double& py,double& pz, int& eventIndex)
 {
   if (next_ >= bhabha_photons_.size() ) 
     {
@@ -18,7 +18,7 @@ bool BHABHA_PHOTON_SAMPLES::pick_next(float ecmratio, float& en,float& px,float&
   return true;
 }
 
-bool BHABHASAMPLES::pick_next_bhabha(float e1, float e2, float ecmratio, float eCM, float& px1,float& py1,float& pz1, float& en1,float& px2,float& py2,float& pz2,float& en2, int& nbphot, unsigned int& number_bhabha)
+bool BHABHASAMPLES::pick_next_bhabha(double e1, double e2, double ecmratio, double eCM, double& px1,double& py1,double& pz1, double& en1,double& px2,double& py2,double& pz2,double& en2, int& nbphot, unsigned int& number_bhabha)
 {
   if (next_ >= bhabha_.size() ) 
     {
@@ -54,18 +54,18 @@ bool BHABHASAMPLES::pick_next_bhabha(float e1, float e2, float ecmratio, float e
   return true;
 }
 
-void BHABHA::boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float part2Vy,float e1, float e2, float& px1in,float& py1in,float& pz1in,float& e1in,float& px2in,float& py2in,float& pz2in,float& e2in, int nphot, float ecmratio,  int do_bhabha, int bhabha_event_index)
+void BHABHA::boost_bhabha(double part1Vx, double part1Vy, double part2Vx, double part2Vy,double e1, double e2, double& px1in,double& py1in,double& pz1in,double& e1in,double& px2in,double& py2in,double& pz2in,double& e2in, int nphot, double ecmratio,  int do_bhabha, int bhabha_event_index)
 {
   // Modified by Strahinja Lukic, Nov 2011
   // Modified by Mogens Dam, May 2018
   // - Fix rotation from collision frame to lab frame
   int k;
-  float px1,py1,pz1;
-  float px2,py2,pz2;
+  double px1,py1,pz1;
+  double px2,py2,pz2;
   double beta_x,beta_y,beta_z; // Velocity of the CM frame
-  float prelx, prely, prelz, prelrho, prel;
-  //  float theta, phi;  // dam [020518]: Not needed.
-  float px,py,pz,en;
+  double prelx, prely, prelz, prelrho, prel;
+  //  double theta, phi;  // dam [020518]: Not needed.
+  double px,py,pz,en;
   int photon_event_index;
 
 /*

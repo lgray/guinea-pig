@@ -3,8 +3,8 @@
 int GENERAL_LUMI_HEAP::stack_vector(int nstore, std::vector<int>& selected_indices)
   {
      int k;
-     float store,scal;
-     scal=1.0/(float)((int)((nstore+nb_pairs_)/(nmax_))+1);
+     double store,scal;
+     scal=1.0/(double)((int)((nstore+nb_pairs_)/(nmax_))+1);
      p_ *= scal;      
      for (k = 0; k< nb_pairs_; k++)
 	{
@@ -19,7 +19,7 @@ int GENERAL_LUMI_HEAP::stack_vector(int nstore, std::vector<int>& selected_indic
 }
 
  
-void LUMI_HEAP::lumi_store(const MESH& mesh, int cellx, int celly,float min_z, float energy1, float energy2, float weight) 
+void LUMI_HEAP::lumi_store(const MESH& mesh, int cellx, int celly,double min_z, double energy1, double energy2, double weight) 
 {
   int k;
   int nstore = prepare_store(weight);
@@ -31,12 +31,12 @@ void LUMI_HEAP::lumi_store(const MESH& mesh, int cellx, int celly,float min_z, f
     }
 }
 
-int  LUMI_HEAP::prepare_store(float weight)
+int  LUMI_HEAP::prepare_store(double weight)
 {
   unsigned int j;
   int nstore;
-  float store;
-  //float scal;
+  double store;
+  //double scal;
   store=weight*p_;
   nstore = numberToStore(store);
   if(nstore + nb_pairs_ > nmax_ )
@@ -56,12 +56,12 @@ int  LUMI_HEAP::prepare_store(float weight)
   return nstore;
 }
 
-int  LUMI_HEAP_EE::prepare_store(float weight)
+int  LUMI_HEAP_EE::prepare_store(double weight)
 {
   unsigned int j;
   int nstore;
-  float store;
-  //float scal;
+  double store;
+  //double scal;
   store=weight*p_;
   nstore = numberToStore(store);
   if(nstore + nb_pairs_ > nmax_ )
@@ -83,7 +83,7 @@ int  LUMI_HEAP_EE::prepare_store(float weight)
 }
 
 
-void LUMI_HEAP_EE::lumi_store_ee(const MESH& mesh, int cellx, int celly,float min_z, float energy1, float p1Vx, float p1Vy, float energy2, float p2Vx, float p2Vy,float weight,int time_counter) 
+void LUMI_HEAP_EE::lumi_store_ee(const MESH& mesh, int cellx, int celly,double min_z, double energy1, double p1Vx, double p1Vy, double energy2, double p2Vx, double p2Vy,double weight,int time_counter) 
 {
   int k;
   int nstore = prepare_store(weight);
@@ -95,7 +95,7 @@ void LUMI_HEAP_EE::lumi_store_ee(const MESH& mesh, int cellx, int celly,float mi
     }
 }
 
-void LUMI_HEAP_EE::lumi_store_ee(const MESH& mesh, int cellx, int celly,float min_z, float energy1, float p1Vx, float p1Vy, float energy2, float p2Vx, float p2Vy,float weight, const TRIDVECTOR& s1, const TRIDVECTOR& s2, int time_counter) 
+void LUMI_HEAP_EE::lumi_store_ee(const MESH& mesh, int cellx, int celly,double min_z, double energy1, double p1Vx, double p1Vy, double energy2, double p2Vx, double p2Vy,double weight, const TRIDVECTOR& s1, const TRIDVECTOR& s2, int time_counter) 
 {
   int k;
   int nstore = prepare_store(weight);

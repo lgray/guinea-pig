@@ -18,13 +18,13 @@ class IFILE_IN_OUT
   virtual  void set_header(std::string head) =0;
   virtual  void close() = 0;
 
-  virtual void set_jet_header(float ptmin, float sqrt_s) = 0;
-  virtual void  save_jet(float energy1, float energy2, int process) = 0;
-  virtual void  save_jet(float energy1, float energy2, float pz1, float pz2, float pt, int process) = 0;
+  virtual void set_jet_header(double ptmin, double sqrt_s) = 0;
+  virtual void  save_jet(double energy1, double energy2, int process) = 0;
+  virtual void  save_jet(double energy1, double energy2, double pz1, double pz2, double pt, int process) = 0;
 
-  virtual void  save_hadron(float energy1, float energy2, float z) = 0;
+  virtual void  save_hadron(double energy1, double energy2, double z) = 0;
   //  virtual void  save_photon(const ABSTRACT_PARTICLE& part, int no_beam) = 0;
-  virtual void save_compton_photon(float y, float px, float py) = 0;
+  virtual void save_compton_photon(double y, double px, double py) = 0;
 
   //  virtual  void  save_particle(const ABSTRACT_PARTICLE& part)  = 0;
   virtual bool  read_particle(PARTICLE_INTERFACE& part)  = 0;
@@ -46,9 +46,9 @@ class IFILE_IN_OUT
   virtual bool read_cross(ABSTRACT_CROSS_DATA* const crossIni) = 0;
   virtual void save_lumi_heap(const ABSTRACT_LUMI_HEAP* const lumi_heap)  =0;
   //  virtual void save_lumi_heap_full(const ABSTRACT_LUMI_HEAP* const lumi_heap)  =0;
-  // virtual void dump_photons(const ABSTRACT_BEAM& beam,int istep, int timestep, float step, float max_z) = 0;
+  // virtual void dump_photons(const ABSTRACT_BEAM& beam,int istep, int timestep, double step, double max_z) = 0;
 
-  //  virtual void dump_beam(const ABSTRACT_BEAM& beam, int istep, int every_particle, int timestep, float step, float max_z) = 0;
+  //  virtual void dump_beam(const ABSTRACT_BEAM& beam, int istep, int every_particle, int timestep, double step, double max_z) = 0;
 
   /*   virtual void save_beam_parameters(const ABSTRACT_BEAM_PARAMETERS* const beam_par1, const ABSTRACT_BEAM_PARAMETERS* const beam_par2) = 0; */
 

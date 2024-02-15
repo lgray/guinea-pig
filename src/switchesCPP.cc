@@ -152,7 +152,7 @@ void SWITCHES::read(const PARAMETERS& param)
 
   ecm_min = param.readFValue("ecm_min"); 
 
-  float temp = param.readFValue("ecm_min_gg");
+  double temp = param.readFValue("ecm_min_gg");
   gg_smin=4*temp*temp;
 
   do_hadrons = param.readIValue("do_hadrons");

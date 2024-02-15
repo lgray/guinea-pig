@@ -68,41 +68,41 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
   {
     outfile_ << line << std::endl;
   }
-  virtual void set_jet_header(float ptmin, float sqrt_s)
+  virtual void set_jet_header(double ptmin, double sqrt_s)
   {
     outfile_ << ptmin << " " << sqrt_s << std::endl;
   }
       
-  virtual void  save_jet(float energy1, float energy2, int process) 
+  virtual void  save_jet(double energy1, double energy2, int process) 
   {   
     outfile_ << energy1 << " "  << energy2 << " "  << process << std::endl;
   }
-  virtual void  save_jet(float energy1, float energy2, float pz1, float pz2, float pt, int process) 
+  virtual void  save_jet(double energy1, double energy2, double pz1, double pz2, double pt, int process) 
   {   
     outfile_ << energy1 << " "  << energy2 << " "  << pz1 << " " << pz2 << " " << pt << " " << process << std::endl;
   }
       
-  virtual void  save_hadron(float energy1, float energy2, float z) 
+  virtual void  save_hadron(double energy1, double energy2, double z) 
   {   
     outfile_ << energy1 << " "  << energy2 << " "  << z << std::endl;
   }
 
   /*  virtual void  save_photon(const ABSTRACT_PARTICLE& part, int no_beam)  */
   /*   {    */
-  /*     float  energy, xpos, ypos, zpos, vx,vy, dummy; */
+  /*     double  energy, xpos, ypos, zpos, vx,vy, dummy; */
   /*     part.get_parameters_for_output(energy, xpos, ypos, zpos, vx,vy, dummy, dummy, dummy); */
   /*     if (no_beam != 1) energy = -energy; */
   /*     outfile_ << energy << " "  << vx << " "  << vy << std::endl; */
   /*   } */
 
-  virtual void save_compton_photon(float y, float px, float py)
+  virtual void save_compton_photon(double y, double px, double py)
   {
     outfile_ << y << " " << px << " " << py << std::endl;
   }
       
   /* virtual void  save_particle(const ABSTRACT_PARTICLE& part)  */
   /*   {    */
-  /*     float  energy, xpos, ypos, zpos, vx,vy, spinx, spiny, spinz ; */
+  /*     double  energy, xpos, ypos, zpos, vx,vy, spinx, spiny, spinz ; */
       
   /*     part.get_parameters_for_output(energy, xpos, ypos, zpos, vx,vy,spinx, spiny, spinz ); */
   /*     outfile_ << energy << " "  << xpos << " "  << ypos <<" "  <<  zpos << " "  << vx << " "  << vy << " "  << spinx << " "  << spiny << " "  << spinz << std::endl; */
@@ -111,8 +111,8 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
   virtual bool  read_particle(PARTICLE_INTERFACE& part) 
   {   
     int k;
-    // float  energy, xpos, ypos, zpos, vx,vy ;
-    float readValue[9];
+    // double  energy, xpos, ypos, zpos, vx,vy ;
+    double readValue[9];
     for ( k =0; k < 9; k++) readValue[k] = 0.0;
     bool test = false;
     std::string slu;
@@ -121,7 +121,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
       {
 	bool goodline = false;
 	std::istringstream ss(slu);
-	float temp;
+	double temp;
 	while ( ss >> temp && number < 9) 
 	  {
 	    goodline = true;
@@ -137,9 +137,9 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
       
   virtual bool  read_photon(PARTICLE_INTERFACE& part) 
   {   
-    float  energy, xpos, ypos, zpos, vx,vy, hel ;
-    float dumy = 0.0;
-    float dumz = 0.0;
+    double  energy, xpos, ypos, zpos, vx,vy, hel ;
+    double dumy = 0.0;
+    double dumz = 0.0;
     bool test;
     if ( infile_ >> energy >> xpos >> ypos >> zpos >> vx >> vy >> hel) 
       {
@@ -152,7 +152,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
       
   /* virtual void save_pair_particle(const ABSTRACT_PAIR_PARTICLE& pair_part)  */
   /*   { */
-  /*     float x,y,z,vx,vy,vz, energy; */
+  /*     double x,y,z,vx,vy,vz, energy; */
   /*     pair_part.get_parametersX(x,y,z,vx,vy,vz,energy); */
   /*     //   outfile_ << energy << " "  << vx << " "  << vy << " "  << vz << " "  << x << " "  << y << " "  << z << " "  << pair_part.get_process() <<  " "  << pair_part.get_label() << std::endl; */
   /*        outfile_ << energy << " "  << vx << " "  << vy << " "  << vz <<  " "  << pair_part.get_process() <<  " "  << pair_part.get_label() << std::endl; */
@@ -162,7 +162,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
   {
 	  
     unsigned int k, evtIndex;
-    float eCM, mother1_en, e1, vx1, vy1, vz1, mother2_en, e2, vx2, vy2, vz2;
+    double eCM, mother1_en, e1, vx1, vy1, vz1, mother2_en, e2, vx2, vy2, vz2;
     int nbphot;
     for (k=0; k < bhabhas->nb_samples(); k++)
       {
@@ -177,7 +177,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
       
   virtual bool read_bhabhasamples(ABSTRACT_BHABHASAMPLES* const bhabhas)
   {
-    float px1, py1, pz1, e1, px2, py2, pz2, e2;
+    double px1, py1, pz1, e1, px2, py2, pz2, e2;
     unsigned int evtIdx, nbphot;
     int i=0;
     while (  infile_ >> evtIdx >> px1 >> py1 >> pz1 >> e1 >> px2 >> py2 >> pz2 >> e2 >> nbphot)
@@ -197,7 +197,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
   {
 	  
     unsigned int k;
-    float en, vx, vy, vz;
+    double en, vx, vy, vz;
     int evtIndex;
     for (k=0; k < bhabhaPhot->nb_samples(); k++)
       {
@@ -210,7 +210,7 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
   virtual bool read_bhabhaPhotonsamples(ABSTRACT_BHABHA_PHOTON_SAMPLES* const bhabhasPhoton)
   {
     int evtIdx;
-    float px, py, pz, en;
+    double px, py, pz, en;
     //int nbphot;
     while (infile_ >> evtIdx >> px >> py >> pz >> en)
       {
@@ -251,13 +251,13 @@ class FILE_IN_OUT_ASCII : public IFILE_IN_OUT
   {
     int k;
     int n, nval, dummy1, dummy2;
-    float energy;
-    float* values = NULL;
+    double energy;
+    double* values = NULL;
     bool test = false;
     if (infile_ >> n >> nval >> dummy1 >> dummy2)
       {
 	crossIni->resize(n, nval);
-	values = new float[nval];
+	values = new double[nval];
 	while (  infile_ >> energy )
 	  {
 	    for (k=0; k< nval; k++)

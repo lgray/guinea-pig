@@ -27,7 +27,7 @@ class TOOLS
       return ntest;
     }
   
-  inline static int nearest_power_of_2(float x)
+  inline static int nearest_power_of_2(double x)
     {
       int value = (int)x;
       int index = 2;

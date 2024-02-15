@@ -36,14 +36,14 @@ class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
     }
   
   
-  virtual inline void get_parameters_for_output(unsigned int number, int& number_bhabha, float& en,float& vx,float& vy, float& vz) const
+  virtual inline void get_parameters_for_output(unsigned int number, int& number_bhabha, double& en,double& vx,double& vy, double& vz) const
     {
       bhabha_photons_[number].trivector(vx, vy, vz);
       en = bhabha_photons_[number].energy();
       number_bhabha = number_bhabha_[number];
     }
   
-  virtual inline void add_bhabha_photon(int nbhabha, float px, float py, float pz, float en)
+  virtual inline void add_bhabha_photon(int nbhabha, double px, double py, double pz, double en)
     {
       QUADRIVECTOR bhab_phot = QUADRIVECTOR(px,py,pz,en);
       number_bhabha_.push_back(nbhabha);
@@ -53,7 +53,7 @@ class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
   
   inline void set_label(int label)  {label_ = label;}
   
-/*  inline void create_bhabha_photon(int number_bhabha, float px, float py, float pz, float en)
+/*  inline void create_bhabha_photon(int number_bhabha, double px, double py, double pz, double en)
     {
       QUADRIVECTOR bhab_phot = QUADRIVECTOR(px,py,pz,en);
       bhabha_photons_.push_back(bhab_phot);
@@ -75,9 +75,9 @@ class BHABHA_PHOTON_SAMPLES : public ABSTRACT_BHABHA_PHOTON_SAMPLES
       return bhabha_photons_.size();
     }
   
-  bool pick_next(float ecmratio, float& en,float& px,float& py,float& pz, int& found)  ; 
+  bool pick_next(double ecmratio, double& en,double& px,double& py,double& pz, int& found)  ; 
   
-/*  inline  void set(int index, float en,float px,float py,float pz, int number_bhabha)
+/*  inline  void set(int index, double en,double px,double py,double pz, int number_bhabha)
     {
       bhabha_photons_[index].set(px, py, pz, en);
       number_bhabha_[index] = number_bhabha;
@@ -98,7 +98,7 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
   typedef struct
   {
     QUADRIVECTOR p1, p2;
-    float mother1,mother2,eCM;
+    double mother1,mother2,eCM;
     unsigned int evtIndex;
     int nbphot;
   } BHABHA_INI;
@@ -114,9 +114,9 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
   virtual  ~BHABHASAMPLES() {;}
   
   
-  virtual inline void get_parameters_for_output(unsigned int number, unsigned int& evtIdx, float& eCM, float& mother1_en,float&e1,float&vx1,float& vy1, float&vz1, float& mother2_en, float& e2, float& vx2, float&vy2, float&vz2, int& nbphot) const
+  virtual inline void get_parameters_for_output(unsigned int number, unsigned int& evtIdx, double& eCM, double& mother1_en,double&e1,double&vx1,double& vy1, double&vz1, double& mother2_en, double& e2, double& vx2, double&vy2, double&vz2, int& nbphot) const
     {
-      float px, py, pz;
+      double px, py, pz;
       
       if (number >= next_)
 		{
@@ -146,7 +146,7 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
   virtual inline unsigned int nb_samples() const {return next_;}
   
 
-  bool pick_next_bhabha(float e1, float e2, float ecmratio, float eCM, float& px1,float& py1,float& pz1, float& en1,float& px2,float& py2,float& pz2,float& en2, int& nbphot, unsigned int& number_bhabha);
+  bool pick_next_bhabha(double e1, double e2, double ecmratio, double eCM, double& px1,double& py1,double& pz1, double& en1,double& px2,double& py2,double& pz2,double& en2, int& nbphot, unsigned int& number_bhabha);
   
   
   inline void save_on_file(std::string nameOfOutputFile) const 
@@ -157,7 +157,7 @@ class BHABHASAMPLES : public ABSTRACT_BHABHASAMPLES
       filout.close();
     }
   
-  virtual inline void add_bhabha(unsigned int evtIdx, float px1, float py1, float pz1, float e1, float px2, float py2, float pz2, float e2, int nbphot)
+  virtual inline void add_bhabha(unsigned int evtIdx, double px1, double py1, double pz1, double e1, double px2, double py2, double pz2, double e2, int nbphot)
     {
       BHABHA_INI bhab;
       bhab.p1 = QUADRIVECTOR(px1,py1,pz1,e1);
@@ -191,7 +191,7 @@ class BHABHA
   /********************************************************/
   /*!boost bhabha from CM frame of e+e- (P1P2) to lab frame*/
   /********************************************************/
-  void bhabha_rotation(float theta, float phi, float& px, float& py, float& pz)
+  void bhabha_rotation(double theta, double phi, double& px, double& py, double& pz)
     {
       double pxin=px;
       double pyin=py;
@@ -205,7 +205,7 @@ class BHABHA
       pz = -sinth*pxin+costh*pzin;
     }
   
-  int fourboost(float &en, float &px, float &py, float &pz, double beta_x, double beta_y, double beta_z)
+  int fourboost(double &en, double &px, double &py, double &pz, double beta_x, double beta_y, double beta_z)
   {
 		double ein = en;
 		double pxin = px;
@@ -250,9 +250,9 @@ class BHABHA
   }
 
 /*
-  void lorent_bhabha(float e1,float e2,float pz1,float pz2,float& e,float& pz)
+  void lorent_bhabha(double e1,double e2,double pz1,double pz2,double& e,double& pz)
     {
-      float beta, eold, gam;
+      double beta, eold, gam;
       
       beta = -(pz1 + pz2) / (e1 + e2);
       gam = 1.0 / sqrt(1.0 - beta * beta);
@@ -261,18 +261,18 @@ class BHABHA
       pz = gam * (pz - beta * eold);
     }
   
-  void lorent_bhabha_back(float& e,float& pl,float beta)
+  void lorent_bhabha_back(double& e,double& pl,double beta)
     {
-      float gamma,eold;
+      double gamma,eold;
       gamma=1.0/sqrt(1.0-beta*beta);
       eold=e;
       e=gamma*(eold + beta * pl);
       pl=gamma*(pl + beta * eold);
     }
   
-  void frame_change_part_of_bhabha(float partVx, float partVy, float e, float& px, float& py,float& theta, float& phi)
+  void frame_change_part_of_bhabha(double partVx, double partVy, double e, double& px, double& py,double& theta, double& phi)
     {
-      float cosphi,sinphi;
+      double cosphi,sinphi;
       px=e*partVx;
       py=e*partVy;
       
@@ -290,7 +290,7 @@ class BHABHA
 		}
     }
   
-  void lorent_bhabha_transformation(float e1, float e2, float pz1, float pz2,float beta_x, float beta_y, float theta, float phi, float& pxin,float& pyin,float& pzin,float& ein)
+  void lorent_bhabha_transformation(double e1, double e2, double pz1, double pz2,double beta_x, double beta_y, double theta, double phi, double& pxin,double& pyin,double& pzin,double& ein)
     {
       
       lorent_bhabha(e1,e2,pz1,pz2, ein,pzin);
@@ -299,7 +299,7 @@ class BHABHA
       bhabha_rotation(theta,phi,pxin,pyin,pzin);
     }
 */
-  void boost_bhabha(float part1Vx, float part1Vy, float part2Vx, float part2Vy,float e1, float e2, float& px1in,float& py1in,float& pz1in,float& e1in,float& px2in,float& py2in,float& pz2in,float& e2in, int nphot, float ecmratio,  int do_bhabha, int number_bhabha);
+  void boost_bhabha(double part1Vx, double part1Vy, double part2Vx, double part2Vy,double e1, double e2, double& px1in,double& py1in,double& pz1in,double& e1in,double& px2in,double& py2in,double& pz2in,double& e2in, int nphot, double ecmratio,  int do_bhabha, int number_bhabha);
   
  public:
   
@@ -317,13 +317,13 @@ class BHABHA
 		}
     }
   
-    inline void make_bhabha(PAIR_BEAM& bhabhas, float part1Vx, float part1Vy, float part2Vx, float part2Vy, float e1, float e2,float ecm, float weight, MESH& mesh, int cellx, int celly,float min_z, const SWITCHES& switches, RNDM& rndm_generator, int beamslice1, int beamslice2)
+    inline void make_bhabha(PAIR_BEAM& bhabhas, double part1Vx, double part1Vy, double part2Vx, double part2Vy, double e1, double e2,double ecm, double weight, MESH& mesh, int cellx, int celly,double min_z, const SWITCHES& switches, RNDM& rndm_generator, int beamslice1, int beamslice2)
     {
-      float px1, py1, pz1, en1, px2, py2, pz2, en2;
+      double px1, py1, pz1, en1, px2, py2, pz2, en2;
       int nbphot;
       unsigned int evtIndex;
-      float ecmratio = ecm/switches.get_bhabha_ecmload();
-      double bhabhan = switches.get_bhabha_scal()*weight*std::pow(float(ecmratio*ecmratio),float(-.9891));
+      double ecmratio = ecm/switches.get_bhabha_ecmload();
+      double bhabhan = switches.get_bhabha_scal()*weight*std::pow(double(ecmratio*ecmratio),double(-.9891));
       if (rndm_generator.rndm()< bhabhan)
         {
           if (bhabhaReserve_.pick_next_bhabha(e1, e2, ecmratio, ecm, px1, py1, pz1, en1, px2, py2, pz2, en2, nbphot, evtIndex) )

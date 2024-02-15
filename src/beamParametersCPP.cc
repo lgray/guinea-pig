@@ -27,7 +27,7 @@ BEAM_PARAMETERS::BEAM_PARAMETERS():ebeam_(0.0),n_particles_(0.0),gamma_beam_(0.0
   setLabel('0');
 }
 
-bool BEAM_PARAMETERS::acc_test(float& emitt,float& beta,float& sigma)
+bool BEAM_PARAMETERS::acc_test(double& emitt,double& beta,double& sigma)
 {
 
   // if beta has been given :
@@ -87,7 +87,7 @@ void BEAM_PARAMETERS::create_name(std::string& name, std::string param)
 void BEAM_PARAMETERS::read(const PARAMETERS& param)
 {
   std::string name;
-  float compx, compy, compz;
+  double compx, compy, compz;
 
   create_name(name, "energy");
   ebeam_ = param.readFValue(name);

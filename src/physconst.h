@@ -77,9 +77,9 @@ const double FACT_OF_h0 = 6.428172329600001e-36;
 const double FACT_OF_h1 = 4.403298045776e-34;
 const double FACT_OF_h2 = 5.871064061034666e-34;
 
-const float ECONST0[3] = {0.666666,1.2592593,1.2962963};
+const double ECONST0[3] = {0.666666,1.2592593,1.2962963};
 
-const float ECONST1[3] = { .666666,1.111111,1.22222222 };
+const double ECONST1[3] = { .666666,1.111111,1.22222222 };
 
   const double ANS1[4]={2.285,-0.01526,1.330e3,4.219};
   const double BNS1[4]={6.073,-0.8132,-41.31,3.165};

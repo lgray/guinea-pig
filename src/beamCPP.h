@@ -99,12 +99,12 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
 	}
     }
 
-  inline void transverse_sigmas(float& sigX, float& sigY) const 
+  inline void transverse_sigmas(double& sigX, double& sigY) const 
     {
       particle_beam_.transverse_sigmas(sigX, sigY);
     }
   
-  inline float sigma_xyz_from_data(char dir) const
+  inline double sigma_xyz_from_data(char dir) const
     {
       if (dir == 'x') return beam_parameters_->sigma_x();
       else if (dir == 'y') return beam_parameters_->sigma_y();
@@ -151,12 +151,12 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
     }
   
   
-  inline void newCoherent(int slice,float x,float y, float vx,float vy, float energy)
+  inline void newCoherent(int slice,double x,double y, double vx,double vy, double energy)
     {
       particle_beam_.newCoherent(slice, x, y, vx, vy, energy);
     }
   
-  inline void newTrident(int slice,float x,float y, float vx,float vy, float energy)
+  inline void newTrident(int slice,double x,double y, double vx,double vy, double energy)
     {
       particle_beam_.newTrident(slice, x, y, vx, vy, energy);
     }
@@ -166,7 +166,7 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
       particle_beam_.rotate_particles(beam_parameters_->phi_angle());
     }
   
-  inline void set_angle_particles(float delta_z)
+  inline void set_angle_particles(double delta_z)
     {
       particle_beam_.set_angle_particles(beam_parameters_->x_angle(), beam_parameters_->y_angle(), delta_z);
     }
@@ -185,29 +185,29 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
       particle_beam_.adjustToMeanPosition();
     }
   
-  inline void backstep (int beam, float max_z, float step,  int timestep, float scal_step[2])
+  inline void backstep (int beam, double max_z, double step,  int timestep, double scal_step[2])
     {
       particle_beam_.backstep(beam, beam_parameters_->trav_focus(), max_z, step,  timestep, scal_step);
     }
   
-  inline void backstep2 (int nbeam, float max_z, float step,  int timestep, float scal_step[2])
+  inline void backstep2 (int nbeam, double max_z, double step,  int timestep, double scal_step[2])
     {
       particle_beam_.backstep2(nbeam, max_z, step, timestep, scal_step);
     }
   
-  inline unsigned int load_particles(BEAM_FROM_FILE*& bff, float emin, float zmin, float deltaz, float sigx, float sigy, float sigz) 
+  inline unsigned int load_particles(BEAM_FROM_FILE*& bff, double emin, double zmin, double deltaz, double sigx, double sigy, double sigz) 
     {
       return particle_beam_.load_particles(bff, emin, zmin, deltaz, sigx, sigy, sigz);
     }
   
   
-  inline void load_photons(std::string filename, int type_of_beam, float delta_z, float max_z, int n_cell_z)
+  inline void load_photons(std::string filename, int type_of_beam, double delta_z, double max_z, int n_cell_z)
     {
       photon_beam_.load_photons(filename, type_of_beam, delta_z, max_z, n_cell_z);
     }
   
   
-  inline void init_particles(int nbpart, float delta_z, int charge_symmetric, int do_bds_spin_rotation)
+  inline void init_particles(int nbpart, double delta_z, int charge_symmetric, int do_bds_spin_rotation)
     {
       particle_beam_.init_particles (nbpart,  beam_parameters_->sigma_x(),
 				     beam_parameters_->sigma_y(), 
@@ -222,39 +222,39 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
 				     do_bds_spin_rotation);
     }
   
-  inline float get_ebeam() const { return beam_parameters_->ebeam();};
+  inline double get_ebeam() const { return beam_parameters_->ebeam();};
   
-  inline void dump_beam(std::string name, int istep, int every_particle, int timestep, float step, float max_z)
+  inline void dump_beam(std::string name, int istep, int every_particle, int timestep, double step, double max_z)
     {
       particle_beam_.dump_beam(name, istep, every_particle, timestep, step, max_z,  sign_label_);
     }
   
-  inline void dump_photons(std::string name,int istep, int every_particle,int timestep, float step, float max_z)
+  inline void dump_photons(std::string name,int istep, int every_particle,int timestep, double step, double max_z)
   {
     photon_beam_.dump_photons(name, istep,every_particle, timestep, step, max_z,sign_label_);
   }
  
   
-  inline void meanPositionOfSlice(int slice, float& x,float& y) const
+  inline void meanPositionOfSlice(int slice, double& x,double& y) const
     {
       particle_beam_.meanPositionOfSlice(slice,x, y);
     }
-  inline void beamXyRms(float& x0, float& y0,  float& sigmax, float& sigmay) const
+  inline void beamXyRms(double& x0, double& y0,  double& sigmax, double& sigmay) const
     {
       particle_beam_.beamXyRms(x0, y0, sigmax, sigmay);
     }
   
-  inline void beamZRms(float& z0,  float& sigmaz) const
+  inline void beamZRms(double& z0,  double& sigmaz) const
     {
       particle_beam_.beamZRms(z0, sigmaz);
     }
   
-  inline void emittances(float& emittx, float& emitty) const
+  inline void emittances(double& emittx, double& emitty) const
     {
       particle_beam_.emittances(emittx, emitty);
     }
   
-  inline float gamma() const { return particle_beam_.gamma();}
+  inline double gamma() const { return particle_beam_.gamma();}
   
   virtual inline int numberOfParticlesOfSlice(int slice) const {return particle_beam_.numberOfParticlesOfSlice(slice);};
 
@@ -304,18 +304,18 @@ class  BEAM : public ABSTRACT_BEAM, public ABSTRACT_IO_CLASS
     }
 
 
-  inline void ang_dis(unsigned int n_bin, std::vector< std::vector<float> >& bin ) const {particle_beam_.ang_dis(n_bin, bin);} 
+  inline void ang_dis(unsigned int n_bin, std::vector< std::vector<double> >& bin ) const {particle_beam_.ang_dis(n_bin, bin);} 
   
   inline const PARTICLE_BEAM& particle_beam() { return particle_beam_;}
   
-  inline const PHOTON& new_photon(float energy, PARTICLE& particle, int slice) 
+  inline const PHOTON& new_photon(double energy, PARTICLE& particle, int slice) 
     {
       
       return photon_beam_.new_photon(energy, particle, slice);
       
     }
 
-  inline void move_photon_beam(int i_slice, float delta)
+  inline void move_photon_beam(int i_slice, double delta)
     {
       photon_beam_.move_photons(i_slice, delta);
     }

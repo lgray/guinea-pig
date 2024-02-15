@@ -43,27 +43,27 @@ class FILE_IN_OUT
   
   virtual inline void close() { out_to_file_->close();}
   
-  virtual inline void set_jet_header(float ptmin, float sqrt_s)
+  virtual inline void set_jet_header(double ptmin, double sqrt_s)
     {
       out_to_file_->set_jet_header(ptmin, sqrt_s);
     }
   
-  virtual inline void  save_jet(float energy1, float energy2, int process) 
+  virtual inline void  save_jet(double energy1, double energy2, int process) 
     {   
       out_to_file_->save_jet(energy1, energy2, process); 
     }
   
-  virtual inline void  save_jet(float energy1, float energy2, float pz1, float pz2, float pt, int process) 
+  virtual inline void  save_jet(double energy1, double energy2, double pz1, double pz2, double pt, int process) 
     {
       out_to_file_-> save_jet(energy1, energy2, pz1, pz2, pt, process);
     }
 
-  virtual inline void  save_hadron(float energy1, float energy2, float z) 
+  virtual inline void  save_hadron(double energy1, double energy2, double z) 
     {   
       out_to_file_->save_hadron(energy1, energy2, z);
     }
 
-  virtual inline void save_compton_photon(float y, float px, float py)
+  virtual inline void save_compton_photon(double y, double px, double py)
     {
       out_to_file_->save_compton_photon(y, px, py);
     }

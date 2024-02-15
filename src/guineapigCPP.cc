@@ -57,10 +57,10 @@ void GUINEA::save_results_on_files()
   if(switches.get_do_tertphot())  grid_.save_tertphot_on_file(tertphot_file_);
   if (switches.get_store_beam()) 
     {
-      float gridMaxZ = grid_.get_max_z();
-      float gridStep = grid_.get_step();
+      double gridMaxZ = grid_.get_max_z();
+      double gridStep = grid_.get_step();
       int gridTimestep = grid_.get_timestep();
-      float gridScalStep[2];
+      double gridScalStep[2];
       gridScalStep[0] = grid_.get_scal_step(0);
       gridScalStep[1] = grid_.get_scal_step(1);
       beam1_.backstep2(1, gridMaxZ, gridStep,  gridTimestep, gridScalStep);
@@ -91,7 +91,7 @@ void GUINEA::save_results_on_files()
 		}
 	      std::vector<PHOTON>& thePhotons2 =  beam2_.getPhotonVector(h);
 	      for(unsigned int k=0;k<thePhotons2.size();k++){
-		float ene = thePhotons2[k].energy();
+		double ene = thePhotons2[k].energy();
 		if (thePhotons2[k].energy()>0.0)
 		  {
 		    thePhotons2[k].setEnergy(-ene);
@@ -122,7 +122,7 @@ void GUINEA::save_results_on_files()
 
 void GUINEA::outputs(std::string nameOfProtokoll)
 {
-  float miss1, miss2;
+  double miss1, miss2;
   long out1, out2;
   grid_.get_miss(miss1, out1, miss2, out2);
   if (miss1 > 0.1 ||   miss2 > 0.1)
@@ -192,7 +192,7 @@ bool GUINEA::check_parameters() const
     }
 
   const BEAM_PARAMETERS* bpPtr[2]  = {&beam_parameters1_, &beam_parameters2_};  
-  float cutz = params_.readFValue("cut_z");
+  double cutz = params_.readFValue("cut_z");
   if ( !switches.get_load_beam() )
     {
       // program generated beam
@@ -369,8 +369,8 @@ void GUINEA::set_simulation()
 
 void GUINEA::set_beams_and_grids()
 {
-  std::vector<float> size_x, size_y;
-  float size_z;
+  std::vector<double> size_x, size_y;
+  double size_z;
   int updated_n_cell_x = grid_.get_n_cell_x();
   int updated_n_cell_y = grid_.get_n_cell_y();
   int load_beam = switches.get_load_beam();
@@ -420,7 +420,7 @@ void GUINEA::set_beams_and_grids()
 	  exit(0);
 	}
       size_z = cut_z_from_data(switches.get_automatic_grid_sizing());
-      float deltaz=2.0*size_z/((float)n_cell_z);
+      double deltaz=2.0*size_z/((double)n_cell_z);
       beam1_.init_particles(grid_.get_nb_macroparticles(1),deltaz, switches.get_charge_symmetric(), switches.get_do_bds_spin_rotation());
       beam2_.init_particles(grid_.get_nb_macroparticles(2),deltaz, switches.get_charge_symmetric(), switches.get_do_bds_spin_rotation());
       beam_displacements_from_data(deltaz); 
@@ -440,9 +440,9 @@ void GUINEA::set_beams_and_grids()
 
 void GUINEA::printInitialBeam(const BEAM& beam)
 {
-  float bidonx, bidony, bidz, bidsigz;
-  float bidsigx, bidsigy;
-  float bidbetax, bidbetay;
+  double bidonx, bidony, bidz, bidsigz;
+  double bidsigx, bidsigy;
+  double bidbetax, bidbetay;
   std::cout << " ******* initial beam characteristics : " << beam.label() << " ************** " << std::endl;
   beam.transverse_sigmas(bidsigx, bidsigy);
   beam.emittances(bidonx, bidony);
@@ -473,7 +473,7 @@ void GUINEA::simulate()
 {
   //int i1;
   int gridTimestep;
-  float gridScalStep[2], gridMaxZ, gridStep;  
+  double gridScalStep[2], gridMaxZ, gridStep;  
   PHI_FLOAT sor_parameter[6];
   set_simulation();
   set_beams_and_grids();
@@ -571,7 +571,7 @@ void GUINEA::make_step(int i1,int i2,PHI_FLOAT *sor_parameter)
   int i_grid;
   int i_offset;
 
-  float min_z = 0.5*(i2-i1-1);
+  double min_z = 0.5*(i2-i1-1);
 
   const PAIR_PARAMETER& ppar = secondaries_.get_pair_parameters();
   const PAIR_PARAMETER& mpar = muons_.get_pair_parameters();
@@ -844,11 +844,11 @@ void GUINEA::print_program_outputs(std::string nameOfProtokoll)
   filout.close();
 }
 
-void GUINEA::xycuts_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 , int nbgrids, std::vector<float>& size_x, std::vector<float>& size_y, int& updated_n_cell_x, int& updated_n_cell_y ) const
+void GUINEA::xycuts_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 , int nbgrids, std::vector<double>& size_x, std::vector<double>& size_y, int& updated_n_cell_x, int& updated_n_cell_y ) const
 {
   int counter;
-  float tmp;
-   //float cutx, cuty;
+  double tmp;
+   //double cutx, cuty;
   if (nbgrids > 7) 
     {
       std::cerr << " GUINEA::cuts_from_sigmas : ERROR the number of grids is limited to 6 , nbgrids = " << nbgrids << std::endl;
@@ -900,10 +900,10 @@ void GUINEA::xycuts_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_
   size_y[counter]=size_x[1]*6.0;
 }
 
-float GUINEA::zcut_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ) const
+double GUINEA::zcut_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ) const
 {
-  //float  cutz, 
-  float size_z;
+  //double  cutz, 
+  double size_z;
   if (switches.get_automatic_grid_sizing() ) 
     {
       // automatic generation of cuts
@@ -918,11 +918,11 @@ float GUINEA::zcut_for_grids(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_P
 }
 
 
-void GUINEA::main_grid_xycuts_from_loaded_beam(const BEAM_FROM_FILE& bff1,const BEAM_FROM_FILE& bff2, float& size_x, float& size_y ) const
+void GUINEA::main_grid_xycuts_from_loaded_beam(const BEAM_FROM_FILE& bff1,const BEAM_FROM_FILE& bff2, double& size_x, double& size_y ) const
 {
-  float cutx, cuty;
-      float dumx, dumy;
-      float sigx, sigy, sigx2, sigy2; 
+  double cutx, cuty;
+      double dumx, dumy;
+      double sigx, sigy, sigx2, sigy2; 
       cutx = params_.readFValue("cut_x_factor");
       cuty = params_.readFValue("cut_y_factor");
       bff1.beamXyRms(dumx, dumy, sigx, sigy);
@@ -934,11 +934,11 @@ void GUINEA::main_grid_xycuts_from_loaded_beam(const BEAM_FROM_FILE& bff1,const 
       if(cuty>0.0) size_y = cuty*sigy;
       else size_y = 3.0*sigy;  
 }
-float GUINEA::main_grid_zcut_from_loaded_beam(const BEAM_FROM_FILE& bff1,const BEAM_FROM_FILE& bff2) const
+double GUINEA::main_grid_zcut_from_loaded_beam(const BEAM_FROM_FILE& bff1,const BEAM_FROM_FILE& bff2) const
 {
-  float  cutz;
-  float dumz, size_z;
-      float sigz, sigz2; 
+  double  cutz;
+  double dumz, size_z;
+      double sigz, sigz2; 
       cutz = params_.readFValue("cut_z_factor");
       bff1.beamZRms(dumz, sigz);
       bff2.beamZRms( dumz,sigz2);
@@ -950,20 +950,20 @@ float GUINEA::main_grid_zcut_from_loaded_beam(const BEAM_FROM_FILE& bff1,const B
 
 
 
-void GUINEA::main_grid_automatic_xycuts(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ,float& size_x, float& size_y, int& new_n_cell_x, int& new_n_cell_y) const
+void GUINEA::main_grid_automatic_xycuts(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ,double& size_x, double& size_y, int& new_n_cell_x, int& new_n_cell_y) const
 {
-  float x01, y01, sigmax1, sigmay1;
-  float x02, y02, sigmax2, sigmay2;
-  float dx, dy, xmoy, ymoy, sigmax, sigmay;
-  float theta0, gam1, gam2, gamma;
-  float npart1, npart2, nbpart;
-  float Dx, Dy;
-  float betax, betay;
-  float offset;
-  float emittx1, emitty1, emittx2, emitty2;
-  float z01, sigmaz1;
-  float z02, sigmaz2;
-  float sigmaz;
+  double x01, y01, sigmax1, sigmay1;
+  double x02, y02, sigmax2, sigmay2;
+  double dx, dy, xmoy, ymoy, sigmax, sigmay;
+  double theta0, gam1, gam2, gamma;
+  double npart1, npart2, nbpart;
+  double Dx, Dy;
+  double betax, betay;
+  double offset;
+  double emittx1, emitty1, emittx2, emitty2;
+  double z01, sigmaz1;
+  double z02, sigmaz2;
+  double sigmaz;
 
   bff1.beamXyRms(x01, y01, sigmax1, sigmay1);
   bff2.beamXyRms(x02,y02, sigmax2, sigmay2);
@@ -1020,11 +1020,11 @@ void GUINEA::main_grid_automatic_xycuts(const ABSTRACT_PARTICLE_BEAM& bff1,const
   new_n_cell_x = adjust_nb_cells_from_cut(size_x, sigmax);
   new_n_cell_y = adjust_nb_cells_from_cut(size_y, sigmay);
 }
-float GUINEA::default_zcut_from_beams(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ) const
+double GUINEA::default_zcut_from_beams(const ABSTRACT_PARTICLE_BEAM& bff1,const ABSTRACT_PARTICLE_BEAM& bff2 ) const
 {
-  float z01, sigmaz1;
-  float z02, sigmaz2;
-  float sigmaz;
+  double z01, sigmaz1;
+  double z02, sigmaz2;
+  double sigmaz;
   bff1.beamZRms(z01, sigmaz1);
   bff2.beamZRms(z02, sigmaz2);
 

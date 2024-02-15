@@ -189,8 +189,8 @@ std::string  RESULTS::output_flow() const
   out <<  "lumi_eg = " << lumi_eg << " m**(-2) (e - gamma) " << std::endl;
   out <<  "lumi_ge = " << lumi_ge << " m**(-2) ( gamma - e) " << std::endl;
   out <<  "lumi_gg = " << lumi_gg << " m**(-2) (gamma - gamma) " << std::endl;
-  float f_rep = switches_->get_f_rep();
-  float n_b = switches_->get_n_b();
+  double f_rep = switches_->get_f_rep();
+  double n_b = switches_->get_n_b();
   //out <<  "lumi_gg_high = " << lumi_gg_high*f_rep*n_b << " 1/m2 (gamma - gamma, with c.o.m energy more than gg_cut) " << std::endl;
   out <<  "lumi_gg_high = " << lumi_gg_high << " 1/m2 (gamma - gamma, with c.o.m energy more than gg_cut) " << std::endl;
   
@@ -204,7 +204,7 @@ std::string  RESULTS::output_flow() const
   out <<  "upsmax= " << upsmax << " (maximal value of the beamstrahlung paramater that occured) " << std::endl;
 
   double temp1, temp2;
-  const float eps=1e-6;
+  const double eps=1e-6;
   if (lumi_ee > eps)
     {
       temp1=lumi_ecm/lumi_ee;

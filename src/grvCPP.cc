@@ -229,9 +229,9 @@ double GRVPAR::grvuh(double x,double q2)
     pi = atan(1.) * 4.;
     eq = .66666666666666663;
 /* Computing 2nd power */
-    bgamma = (((float)1. - x * (float)2. + x * x * (float)2.) * log(((
-	    float)1. - x) / x) - (float)1. + x * (float)8. * ((float)1. - 
-	    x)) * (float)4.;
+    bgamma = (((double)1. - x * (double)2. + x * x * (double)2.) * log(((
+	    double)1. - x) / x) - (double)1. + x * (double)8. * ((double)1. - 
+	    x)) * (double)4.;
 /* Computing 2nd power */
     ret_val -= 3.0*eq*eq/(8.0*pi) * bgamma;
     return ret_val;
@@ -270,9 +270,9 @@ double GRVPAR::grvdh(double x,double q2)
     eq = .33333333333333331;
 /* Computing 2nd power */
     d__1 = x;
-    bgamma = (((float)1. - x * (float)2. + d__1 * d__1 * (float)2.) * log(((
-	    float)1. - x) / x) - (float)1. + x * (float)8. * ((float)1. - 
-	    x)) * (float)4.;
+    bgamma = (((double)1. - x * (double)2. + d__1 * d__1 * (double)2.) * log(((
+	    double)1. - x) / x) - (double)1. + x * (double)8. * ((double)1. - 
+	    x)) * (double)4.;
 /* Computing 2nd power */
     d__1 = eq;
     ret_val -= d__1 * d__1 * 3. / (pi * 8.) * bgamma;
@@ -344,9 +344,9 @@ double GRVPAR::grvsh(double x,double q2)
     eq = .33333333333333331;
 /* Computing 2nd power */
     d__1 = x;
-    bgamma = (((float)1. - x * (float)2. + d__1 * d__1 * (float)2.) * log(((
-	    float)1. - x) / x) - (float)1. + x * (float)8. * ((float)1. - 
-	    x)) * (float)4.;
+    bgamma = (((double)1. - x * (double)2. + d__1 * d__1 * (double)2.) * log(((
+	    double)1. - x) / x) - (double)1. + x * (double)8. * ((double)1. - 
+	    x)) * (double)4.;
 /* Computing 2nd power */
     d__1 = eq;
     ret_val -= d__1 * d__1 * 3. / (pi * 8.) * bgamma;
@@ -386,9 +386,9 @@ double GRVPAR::grvch(double x,double q2)
     eq = .66666666666666663;
 /* Computing 2nd power */
     d__1 = x;
-    bgamma = (((float)1. - x * (float)2. + d__1 * d__1 * (float)2.) * log(((
-	    float)1. - x) / x) - (float)1. + x * (float)8. * ((float)1. - 
-	    x)) * (float)4.;
+    bgamma = (((double)1. - x * (double)2. + d__1 * d__1 * (double)2.) * log(((
+	    double)1. - x) / x) - (double)1. + x * (double)8. * ((double)1. - 
+	    x)) * (double)4.;
 /* Computing 2nd power */
     d__1 = eq;
     ret_val -= d__1 * d__1 * 3. / (pi * 8.) * bgamma;
@@ -427,9 +427,9 @@ double GRVPAR::grvbh(double x,double q2)
     eq = .33333333333333331;
 /* Computing 2nd power */
     d__1 = x;
-    bgamma = (((float)1. - x * (float)2. + d__1 * d__1 * (float)2.) * log(((
-	    float)1. - x) / x) - (float)1. + x * (float)8. * ((float)1. - 
-	    x)) * (float)4.;
+    bgamma = (((double)1. - x * (double)2. + d__1 * d__1 * (double)2.) * log(((
+	    double)1. - x) / x) - (double)1. + x * (double)8. * ((double)1. - 
+	    x)) * (double)4.;
 /* Computing 2nd power */
     d__1 = eq;
     ret_val -= d__1 * d__1 * 3. / (pi * 8.) * bgamma;

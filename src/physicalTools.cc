@@ -25,11 +25,11 @@ void PHYSTOOLS::mkit(double gam2i,double& c, RNDM& rndm_generator)
     c= x/beta;
 }
 
-float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, float dzOnRadius, std::vector<float>&  photon, RNDM& rndm_generator) 
+double PHYSTOOLS::synrad_spin_flip (double upsilonSingleP,double eng, const TRIDVECTOR& e1, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, double dzOnRadius, std::vector<double>&  photon, RNDM& rndm_generator) 
 {
   int n,i,j=0;
-  float tmp;
-  float photener = 0.0;
+  double tmp;
+  double photener = 0.0;
   // corresponds to A const p.21 in DS's thesis
   tmp=synrad_p0(eng,dzOnRadius);
   n=(int)(tmp*10.0)+1;
@@ -69,11 +69,11 @@ float PHYSTOOLS::synrad_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
 }
 
 // return final energy of the radiating particle
-float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOnRadius,std::vector<float>&  photon, RNDM& rndm_generator) 
+double PHYSTOOLS::synrad_no_spin_flip (double upsilonSingleP,double eng, double dzOnRadius,std::vector<double>&  photon, RNDM& rndm_generator) 
 {
   int n,i,j=0;
-  float tmp;
-  float photener = 0.0;
+  double tmp;
+  double photener = 0.0;
   // corresponds to A const p.21 in DS's thesis
   tmp=synrad_p0(eng,dzOnRadius);
   n=(int)(tmp*10.0)+1;
@@ -119,7 +119,7 @@ float PHYSTOOLS::synrad_no_spin_flip (float upsilonSingleP,float eng, float dzOn
 // return the photon energy in 'photonEnergy'
 // update the vector 'polar' :final polarization vector of the particle
 // fill the vector of the stokes parameters of the emitted photon
-int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVECTOR& /*e1*/, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& /*stokes*/, float dzOnRadius,float* photonEnergy, RNDM& rndm_generator)
+int PHYSTOOLS::synrad_0_spin_flip (double upsilonSingleP,double eng, const TRIDVECTOR& /*e1*/, const TRIDVECTOR& e2, const TRIDVECTOR& e3, TRIDVECTOR& polar, TRIDVECTOR& /*stokes*/, double dzOnRadius,double* photonEnergy, RNDM& rndm_generator)
 {
   int k;
   double x, s2, s3;
@@ -222,7 +222,7 @@ int PHYSTOOLS::synrad_0_spin_flip (float upsilonSingleP,float eng, const TRIDVEC
 // eng : energy in GeV
 // dz : metres 
 // without spin flip
-int PHYSTOOLS::synrad_0_no_spin_flip (float upsilonSingleP, float eng, float dzOnRadius,float* photonEnergy, RNDM& rndm_generator)
+int PHYSTOOLS::synrad_0_no_spin_flip (double upsilonSingleP, double eng, double dzOnRadius,double* photonEnergy, RNDM& rndm_generator)
 {
   double x;
   double p0,p1,v1,v3,g;
@@ -405,7 +405,7 @@ double PHYSTOOLS::fradsp(double ups)
 
 
 // electromagnetic fields in GV/nm
-void PHYSTOOLS::referenceSpin(double vxd, double vyd, TRIDVECTOR& e1, TRIDVECTOR& e2, TRIDVECTOR& e3, TRIDVECTOR Efield, TRIDVECTOR Bfield, float charge_sign)
+void PHYSTOOLS::referenceSpin(double vxd, double vyd, TRIDVECTOR& e1, TRIDVECTOR& e2, TRIDVECTOR& e3, TRIDVECTOR Efield, TRIDVECTOR Bfield, double charge_sign)
 {
   e1 = transverse_Lorentz_force(vxd, vyd, Efield, Bfield);
   if ( charge_sign > 0.0)

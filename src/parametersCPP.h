@@ -21,11 +21,11 @@ class PARAMETERS
     get_named_variable( const_cast<char*>(name.c_str()), &value);
     return (int)CONTENTS(value);
   }
-  inline float readFloatValue(std::string name) const
+  inline double readFloatValue(std::string name) const
   {
     VALUE value;
     get_named_variable( const_cast<char*>(name.c_str()), &value);
-    return (float)CONTENTS(value);
+    return (double)CONTENTS(value);
   }
 
   inline double readDoubleValue(std::string name) const
@@ -136,7 +136,7 @@ class PARAMETERS
     return readDoubleValue(name);
   }
 
-  inline float readFValue(std::string name) const
+  inline double readFValue(std::string name) const
   {
     return readFloatValue(name);
   }

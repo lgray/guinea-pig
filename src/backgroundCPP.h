@@ -46,7 +46,7 @@ class COMPT : public ABSTRACT_IO_CLASS
       return sigc;
     }
 
-  double compt_select(float sp, RNDM& rndm_generator)
+  double compt_select(double sp, RNDM& rndm_generator)
     {
       double cmin,cmax,c,y,ym,x;
       x=sp/(EMASS*EMASS);
@@ -104,7 +104,7 @@ class COMPT : public ABSTRACT_IO_CLASS
       compton_phot_file_->open_file(name, "w");
     }
   
-  void compt_do(const MESH& mesh, int cellx, int celly,float min_z, PAIR_BEAM& secondaries, int index_of_process,float epart,float ephot,float q2,float vx,float vy,float wgt, int dir,SWITCHES& switches, RNDM& rndm_generator);
+  void compt_do(const MESH& mesh, int cellx, int celly,double min_z, PAIR_BEAM& secondaries, int index_of_process,double epart,double ephot,double q2,double vx,double vy,double wgt, int dir,SWITCHES& switches, RNDM& rndm_generator);
     
   virtual inline std::string  output_flow() const 
     {
@@ -135,8 +135,8 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
   
   int number_of_energies_;
   int number_of_cross_sections_per_energy_;
-  std::vector<float> energies_;
-  std::vector< std::vector<float> > cross_sections_;
+  std::vector<double> energies_;
+  std::vector< std::vector<double> > cross_sections_;
   
   public :
     
@@ -149,8 +149,8 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
   virtual  ~CROSS_DATA() {;}
   
   
-  inline const std::vector<float>& energies() { return energies_;}
-  inline const std::vector< std::vector<float> >& cross_sections() { return cross_sections_;}
+  inline const std::vector<double>& energies() { return energies_;}
+  inline const std::vector< std::vector<double> >& cross_sections() { return cross_sections_;}
   
   virtual inline void resize(int n, int nval)
     {
@@ -161,12 +161,12 @@ class CROSS_DATA : public ABSTRACT_CROSS_DATA
       number_of_cross_sections_per_energy_ = nval;
     }
 
-  virtual inline void add_data(float ener, const float* data)
+  virtual inline void add_data(double ener, const double* data)
     {
       
       int k;
       energies_.push_back(ener);
-      cross_sections_.push_back(std::vector<float>(number_of_cross_sections_per_energy_));
+      cross_sections_.push_back(std::vector<double>(number_of_cross_sections_per_energy_));
       for (k=0; k< number_of_cross_sections_per_energy_; k++) 
 	{
 	  cross_sections_.back()[k] = data[k];
@@ -213,7 +213,7 @@ class GENERAL_CROSS : public ABSTRACT_IO_CLASS
    
  GENERAL_CROSS() : nb_ener_(0), cross_call_(0) {;}
   virtual  ~GENERAL_CROSS() {;}
-  virtual  void cross_add(float e1,float e2,float flum) = 0;
+  virtual  void cross_add(double e1,double e2,double flum) = 0;
   
 };
 
@@ -233,7 +233,7 @@ class mCROSS  : public GENERAL_CROSS
       ncross_per_ener_ = 0;
     }
   
-  inline  void cumulate_sum(float flum, double* store)
+  inline  void cumulate_sum(double flum, double* store)
     {
       int j;
       double tmp;
@@ -258,8 +258,8 @@ class mCROSS  : public GENERAL_CROSS
       int logx = 0;
       int logy = 0;
       CROSS_DATA cr_data(crossIniFile);
-      const std::vector<float>& energ = cr_data.energies();
-      const std::vector< std::vector<float> >& cross_val = cr_data.cross_sections();
+      const std::vector<double>& energ = cr_data.energies();
+      const std::vector< std::vector<double> >& cross_val = cr_data.cross_sections();
       ncross_per_ener_ = cross_val[0].size();
       nb_ener_ = (int) energ.size();
       if ( nb_ener_ <= 0)
@@ -295,7 +295,7 @@ class mCROSS  : public GENERAL_CROSS
       delete[] yy;
     } 
   
-  virtual void cross_add(float e1,float e2,float flum)
+  virtual void cross_add(double e1,double e2,double flum)
     {
       double ecm;
       double* store = new double[ncross_per_ener_];
@@ -354,7 +354,7 @@ class maverCROSS : public mCROSS
   ~maverCROSS() {;}
   
   
-  virtual  void cross_add(float e1,float e2,float flum)
+  virtual  void cross_add(double e1,double e2,double flum)
     {
       double* store = new double [ncross_per_ener_];
       int j;
@@ -410,8 +410,8 @@ class CROSS  : public GENERAL_CROSS
      int logx = 0;
      int logy = 0;
      CROSS_DATA cr_data(crossIniFile);
-     const std::vector<float>& energ = cr_data.energies();
-     const std::vector< std::vector<float> >& cross_val = cr_data.cross_sections();
+     const std::vector<double>& energ = cr_data.energies();
+     const std::vector< std::vector<double> >& cross_val = cr_data.cross_sections();
      nb_ener_ = energ.size();
      if ( nb_ener_ <= 0)
        {
@@ -441,7 +441,7 @@ class CROSS  : public GENERAL_CROSS
 ~CROSS() {;}
  
 
- virtual  void cross_add(float e1,float e2,float flum)
+ virtual  void cross_add(double e1,double e2,double flum)
    {
      double ecm, tmp;
      ecm=2.0*sqrt(e1*e2);
@@ -488,7 +488,7 @@ class averCROSS : public CROSS
   ~averCROSS() {;}
   
 
-  virtual  void cross_add(float e1,float e2,float flum)
+  virtual  void cross_add(double e1,double e2,double flum)
   {
     double ecm, tmp;
     ecm=2.0*sqrt(e1*e2);

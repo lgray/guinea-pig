@@ -24,10 +24,10 @@ void  RNDM::rndmst0(int i)
   rndm0_store.i=i;
 }
 
-float RNDM::rndm0()
+double RNDM::rndm0()
 {
   const int m=2147483647,a=16807,q=127773,r=2836;
-  const float m_inv=(1.0-RNDM_EPS)/(float)m;
+  const double m_inv=(1.0-RNDM_EPS)/(double)m;
   int k;
 
   k=rndm0_store.i/q;
@@ -39,7 +39,7 @@ float RNDM::rndm0()
 void RNDM::rndmst1(int i)
 {
   //    const long m=2147483647,m1=m-1,a=16807,q=127773,r=2836,n=32,nd=1+m1/n;
-  //   const float m_inv=(1.0-RNDM_EPS)/(float)m;
+  //   const double m_inv=(1.0-RNDM_EPS)/(double)m;
   const long m=2147483647, a=16807,q=127773,r=2836,n=32;
   int k,j;
 
@@ -53,10 +53,10 @@ void RNDM::rndmst1(int i)
   rndm1_store.p=rndm1_store.is[0];
 }
 
-float RNDM::rndm1()
+double RNDM::rndm1()
 {
   const long m=2147483647,m1=m-1,a=16807,q=127773,r=2836,n=32,nd=1+m1/n;
-  const float m_inv=(1.0-RNDM_EPS)/(float)m;
+  const double m_inv=(1.0-RNDM_EPS)/(double)m;
   int k,j;
 
   k=rndm1_store.i/q;
@@ -75,7 +75,7 @@ void RNDM::rndmst2(int i)
   //    const int a1=40014,a2=40692,q1=53668,q2=52774,r1=12211,r2=3791,n=32, nd=1+m1_1/n;
   const int m1=2147483563;
   const int a1=40014,q1=53668,r1=12211,n=32;
-/*  const float m1_inv=(1.0-RNDM_EPS)/(float)m1,m2_inv=(1.0-RNDM_EPS)/(float)m2;*/
+/*  const double m1_inv=(1.0-RNDM_EPS)/(double)m1,m2_inv=(1.0-RNDM_EPS)/(double)m2;*/
   int k,j;
 
   for (j=n+7;j>=0;j--)
@@ -89,12 +89,12 @@ void RNDM::rndmst2(int i)
   rndm2_store.p=rndm2_store.is[0];
 }
 
-float RNDM::rndm2()
+double RNDM::rndm2()
 {
   const int m1=2147483563,m2=2147483399,m1_1=m1-1;
   const int a1=40014,a2=40692,q1=53668,q2=52774,r1=12211,r2=3791,n=32,
             nd=1+m1_1/n;
-  const float m_inv=(1.0-RNDM_EPS)/(float)m1;
+  const double m_inv=(1.0-RNDM_EPS)/(double)m1;
   int k,j;
 
   k=rndm2_store.i1/q1;
@@ -112,7 +112,7 @@ float RNDM::rndm2()
 void RNDM::rndmst5(int na1,int na2,int na3, int nb1)
 {
   int i,j,nat;
-  float s,t;
+  double s,t;
   rndm5_store.i=96;
   rndm5_store.j=32;
   for (i=0;i<97;i++)
@@ -139,9 +139,9 @@ void RNDM::rndmst5(int na1,int na2,int na3, int nb1)
   rndm5_store.cm= 16777213.0/16777216.0;
 }
 
-float RNDM::rndm5()
+double RNDM::rndm5()
 {
-  float temp;
+  double temp;
 
 /* for (;;){*/
   temp=rndm5_store.u[rndm5_store.i]-rndm5_store.u[rndm5_store.j];
@@ -176,7 +176,7 @@ void RNDM::rndmst6(int i)
   rndm6_store.i=i;
 }
 
-float RNDM::rndm6()
+double RNDM::rndm6()
 {
 
   if((rndm6_store.i*=48828125)<0)
@@ -184,7 +184,7 @@ float RNDM::rndm6()
       rndm6_store.i-=2147483647;
       rndm6_store.i--;
     }
-  return (float)rndm6_store.i*0.46566129e-9*(1.0-RNDM_EPS);
+  return (double)rndm6_store.i*0.46566129e-9*(1.0-RNDM_EPS);
 }
 
 
@@ -277,12 +277,12 @@ bool RNDM::rndm_test7(unsigned long a_coeff, unsigned long c_coeff, const unsign
   return test;
 }
 
-float RNDM::rndm7()
+double RNDM::rndm7()
 {
   counterRndm7_++;
   rndm7_store.i=rndm7_a_coeff_*rndm7_store.i+rndm7_c_coeff_;
-/* additional factor to ensure rndm7!=1.0 if float */
-  return  (float)rndm7_store.i*rndm7_modulo_dividing_factor_*(1.0-RNDM_EPS);
+/* additional factor to ensure rndm7!=1.0 if double */
+  return  (double)rndm7_store.i*rndm7_modulo_dividing_factor_*(1.0-RNDM_EPS);
 }
 
 
@@ -322,32 +322,32 @@ void RNDM::rndmst8(int idummy)
   rndm8_store.ix3=ix3_;
 }
 
-float RNDM::rndm8()
+double RNDM::rndm8()
 {
-  float help;
+  double help;
 
   rndm8_store.ix1=(ia1_*rndm8_store.ix1+ic1_) % m1_;
   rndm8_store.ix2=(ia2_*rndm8_store.ix2+ic2_) % m2_;
   rndm8_store.ix3=(ia3_*rndm8_store.ix3+ic3_) % m3_;
-  int k =(int)((float)(97*rndm8_store.ix3)*rm3_);
+  int k =(int)((double)(97*rndm8_store.ix3)*rm3_);
   help=rndm8_store.r[k];
   rndm8_store.r[k]=(rndm8_store.ix1+rndm8_store.ix2*rm2_)*rm1_;
   return help;
 }
 
-float RNDM::expdev()
+double RNDM::expdev()
 {
   return -log(1.0-rndm());
 }
 
-float RNDM::exp_dev()
+double RNDM::exp_dev()
 {
     return -log(1.0-rndm2());
 }
 
-float RNDM::gasdev()
+double RNDM::gasdev()
 {
-  float r;
+  double r;
   if (iset_ == 0)
     {
       for (;;)
@@ -374,10 +374,10 @@ float RNDM::gasdev()
     }
 }
 
-float RNDM::rndm_sincos(float *c)
+double RNDM::rndm_sincos(double *c)
 {
-    const float twopi=2.0*PI;
-    float tmp;
+    const double twopi=2.0*PI;
+    double tmp;
     tmp=rndm();
     *c=cos(twopi*tmp);
     if (tmp>0.5)
@@ -392,7 +392,7 @@ void RNDM::getShuffledIntegerSequence(int maxInt, std::vector<unsigned long int>
 {
   int k, j;
   unsigned long int itemp;
-  float u;
+  double u;
   vec.clear();
   vec.resize(maxInt);
   for (k = 0; k < maxInt; k++) vec[k] = k + 1;

@@ -150,7 +150,7 @@ class  RESULTS : public ABSTRACT_IO_CLASS
   double get_step_lumi_ee_high() { return step_lumi[1]; }
   
   
-  inline void updateUpsmax(float x) { upsmax=std::max(upsmax,(double)x);};
+  inline void updateUpsmax(double x) { upsmax=std::max(upsmax,(double)x);};
   
   // this method isn't great, see how useful it is and how to avoid
   inline void cumulate_hadrons_ee(double temp[3])
@@ -342,7 +342,7 @@ class JET_RESULTS : public ABSTRACT_IO_CLASS
 /*     number_[0]=0; */
 /*     number_[1]=0; */
 /*   }; */
-/*  inline void addPhoton(int nbeam, float energy) */
+/*  inline void addPhoton(int nbeam, double energy) */
 /*       { */
 /* 	number_[nbeam-1]++; */
 /* 	energy_[nbeam-1]+=energy; */
@@ -386,17 +386,17 @@ class COHERENT_RESULTS : public ABSTRACT_IO_CLASS
     {
       probmax_ = std::max(probmax_,tmp);
     }
-  inline void updateSumeng(float ener)
+  inline void updateSumeng(double ener)
     {
       sumeng_ += ener;
     }
-  inline void addCountEnergy(float ener)
+  inline void addCountEnergy(double ener)
     {
       count_++;
       total_energy_ += fabs(ener);
     }
   
-  inline void updateSums(float wt, float ener, float ups)
+  inline void updateSums(double wt, double ener, double ups)
     {
       sum_ += wt;
       sum2_ += wt*wt;
@@ -435,7 +435,7 @@ class TRIDENT_RESULTS : public ABSTRACT_IO_CLASS
 
   inline void init() { do_trident_ = 1;}
 
-  inline void addCountEnergy(float ener)
+  inline void addCountEnergy(double ener)
     {
       count_++;
       total_energy_ += fabs(ener);

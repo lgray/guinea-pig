@@ -3,15 +3,15 @@
 #include "particleBeamCPP.h"
 
 // emittances in mm.mrad
-void BEAM_FROM_FILE::emittances(float& emittx, float& emitty) const
+void BEAM_FROM_FILE::emittances(double& emittx, double& emitty) const
 {
   unsigned int k;
   int n_particles = particles_.size();
-  float xpos, ypos;
-  float x2, y2;
-  float vx, vy;
-  float beta_x2,beta_y2;
-  float x_beta_x, y_beta_y;
+  double xpos, ypos;
+  double x2, y2;
+  double vx, vy;
+  double beta_x2,beta_y2;
+  double x_beta_x, y_beta_y;
   emittx = 0.0;
   emitty = 0.0;
   if (n_particles<=0) return;
@@ -27,8 +27,8 @@ void BEAM_FROM_FILE::emittances(float& emittx, float& emitty) const
 	  particles_[k].XYposition(xpos, ypos);
 	  particles_[k].velocities(vx,vy);
 	  // the positions are in nm, the "speed" is in radians.
-	  // in fact, only betax, betay (betaz is supposed 
-	  // practically equal to 1)
+	  // in fact, only betax, betay (betaz is supposed
+          // practically equal to 1)
 	  // the energy is in GeV
 
 	  // x, y in mm
@@ -63,12 +63,12 @@ void BEAM_FROM_FILE::emittances(float& emittx, float& emitty) const
   emitty = sqrt(y2*beta_y2 - y_beta_y*y_beta_y)*gamma_;
 }
 
-void BEAM_FROM_FILE::beamXyRms(float& xmean, float& ymean,float& sigmaxRms, float& sigmayRms) const
+void BEAM_FROM_FILE::beamXyRms(double& xmean, double& ymean,double& sigmaxRms, double& sigmayRms) const
 {
   int j;
-  float xpos, ypos;
-  float x0, y0;
-  float sigmax, sigmay;
+  double xpos, ypos;
+  double x0, y0;
+  double sigmax, sigmay;
 
   x0 = 0.;
   y0 =0.;
@@ -85,22 +85,22 @@ void BEAM_FROM_FILE::beamXyRms(float& xmean, float& ymean,float& sigmaxRms, floa
       sigmax += xpos*xpos;
       sigmay += ypos*ypos;
     }
-  x0 /= (float)n_particles;
-  y0 /= (float)n_particles;
-  sigmax /= (float)n_particles;
-  sigmay /= (float)n_particles;
+  x0 /= (double)n_particles;
+  y0 /= (double)n_particles;
+  sigmax /= (double)n_particles;
+  sigmay /= (double)n_particles;
   sigmaxRms = sqrt(sigmax-x0*x0);
   sigmayRms = sqrt(sigmay-y0*y0);
   xmean = x0;
   ymean = y0;
 }
 
-void BEAM_FROM_FILE::beamZRms(float& zmean, float& sigmazRms) const
+void BEAM_FROM_FILE::beamZRms(double& zmean, double& sigmazRms) const
 {
   unsigned int j;
-  float zpos;
-  float z0;
-  float sigmaz;
+  double zpos;
+  double z0;
+  double sigmaz;
 
   z0 = 0.;
   sigmaz = 0.;
@@ -113,18 +113,18 @@ void BEAM_FROM_FILE::beamZRms(float& zmean, float& sigmazRms) const
       z0 += zpos;
       sigmaz += zpos*zpos;
     }
-  z0 /= (float)n_particles;
-  sigmaz /= (float)n_particles;
+  z0 /= (double)n_particles;
+  sigmaz /= (double)n_particles;
   sigmazRms = sqrt(sigmaz-z0*z0);
   zmean = z0;
 }
 
 
 
-void PARTICLE_BEAM::init_particles(unsigned long int nbpart, float sigma_x,float sigma_y, float sigma_z,int dist_x,int dist_z,float emx, float emy,float delta_z,float energy, int charge_symmetric, int do_bds_spin_rotation)
+void PARTICLE_BEAM::init_particles(unsigned long int nbpart, double sigma_x,double sigma_y, double sigma_z,int dist_x,int dist_z,double emx, double emy,double delta_z,double energy, int charge_symmetric, int do_bds_spin_rotation)
 {
   //int k;
-  float sigma_x_prime,sigma_y_prime;
+  double sigma_x_prime,sigma_y_prime;
   //  polarization_ = polar;
 
   initial_number_of_particles_ = nbpart;
@@ -152,7 +152,7 @@ void PARTICLE_BEAM::init_particles(unsigned long int nbpart, float sigma_x,float
 }
 
 
-void PARTICLE_BEAM::fill_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation)
+void PARTICLE_BEAM::fill_beam(int dist_x, int dist_z, double delta_z, double sigma_x,double sigma_y, double sigma_z, double sigma_x_prime,double sigma_y_prime, double energy, int do_bds_spin_rotation)
 {
   switch(dist_x)
     {
@@ -165,7 +165,7 @@ void PARTICLE_BEAM::fill_beam(int dist_x, int dist_z, float delta_z, float sigma
     }
 }
 
-void PARTICLE_BEAM::fill_symmetric_beam(int dist_x, int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation)
+void PARTICLE_BEAM::fill_symmetric_beam(int dist_x, int dist_z, double delta_z, double sigma_x,double sigma_y, double sigma_z, double sigma_x_prime,double sigma_y_prime, double energy, int do_bds_spin_rotation)
 {
   switch(dist_x)
     {
@@ -180,10 +180,10 @@ void PARTICLE_BEAM::fill_symmetric_beam(int dist_x, int dist_z, float delta_z, f
 }
 
 
-void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, float sigma_x,float sigma_y, float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation)
+void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, double delta_z, double sigma_x,double sigma_y, double sigma_z, double sigma_x_prime,double sigma_y_prime, double energy, int do_bds_spin_rotation)
 {
   unsigned int k;
-  float ztemp; //float xtemp, ytemp, ztemp, vxtemp, vytemp;
+  double ztemp; //double xtemp, ytemp, ztemp, vxtemp, vytemp;
   number_of_particles_dispatched_in_slices_ = 0;
   int nSlices = (int) particle_.size();
   switch(dist_z)
@@ -199,7 +199,7 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
       // constant distribution in z 
     case 1: 
       {
-	float bunchlength=SQRT3*sigma_z;
+	double bunchlength=SQRT3*sigma_z;
 	for (k=0;k< initial_number_of_particles_;k++)
 	  {
 	    ztemp =(2.0*rndm_generator_->rndm()-1.0)*bunchlength;
@@ -213,10 +213,10 @@ void PARTICLE_BEAM::assign_xyz_normal_distribution(int dist_z, float delta_z, fl
     }
 }
 
-void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float delta_z, float sigma_x,float sigma_y,float sigma_z, float sigma_x_prime,float sigma_y_prime, float energy, int do_bds_spin_rotation)
+void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, double delta_z, double sigma_x,double sigma_y,double sigma_z, double sigma_x_prime,double sigma_y_prime, double energy, int do_bds_spin_rotation)
 {
   unsigned long int k;
-  float ztemp;//float xtemp, ytemp,ztemp, vxtemp, vytemp;
+  double ztemp;//double xtemp, ytemp,ztemp, vxtemp, vytemp;
   number_of_particles_dispatched_in_slices_ = 0;
   unsigned int nSlices = particle_.size();
   switch(dist_z)
@@ -232,7 +232,7 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
       // constant distribution in z 
     case 1: 
       {
-	float bunchlength=SQRT3*sigma_z;
+	double bunchlength=SQRT3*sigma_z;
 	for (k=0;k< initial_number_of_particles_;k++)
 	  {
 	    ztemp =(2.0*rndm_generator_->rndm()-1.0)*bunchlength;
@@ -248,10 +248,10 @@ void PARTICLE_BEAM::assign_symmetric_xyz_normal_distribution(int dist_z, float d
 
 // after loading, the object pointed by bff is empty and 
 // the pointer bff is invalidated
-unsigned int PARTICLE_BEAM::load_particles(BEAM_FROM_FILE*& bff, float /*emin*/, float zmin, float deltaz, float sigx, float sigy, float sigz)
+unsigned int PARTICLE_BEAM::load_particles(BEAM_FROM_FILE*& bff, double /*emin*/, double zmin, double deltaz, double sigx, double sigy, double sigz)
 {
   int k;
-  float ztest;
+  double ztest;
   int nSlices = particle_.size();
   unsigned int count=0;
   //TRIDVECTOR polar;
@@ -278,10 +278,10 @@ unsigned int PARTICLE_BEAM::load_particles(BEAM_FROM_FILE*& bff, float /*emin*/,
   sigmaz_ = sigz;
   return count;
 }
-void PARTICLE_BEAM::meanPositionOfSlice(int slice, float& x,float& y) const
+void PARTICLE_BEAM::meanPositionOfSlice(int slice, double& x,double& y) const
 {
   int i,n_particles;
-  float xpart, ypart;
+  double xpart, ypart;
   double sum_x=0.0,sum_y=0.0;
   n_particles= particle_[slice].size();
   if (n_particles==0)
@@ -305,15 +305,15 @@ void PARTICLE_BEAM::meanPositionOfSlice(int slice, float& x,float& y) const
 }
 
 // emittances in mm.mrad
-void PARTICLE_BEAM::emittances(float& emittx, float& emitty) const
+void PARTICLE_BEAM::emittances(double& emittx, double& emitty) const
 {
   unsigned int k,j;
   int n_particles = number_of_particles_dispatched_in_slices_;
-  float xpos, ypos;
-  float x2, y2;
-  float vx, vy;//, gamma;
-  float beta_x2,beta_y2;
-  float x_beta_x, y_beta_y;
+  double xpos, ypos;
+  double x2, y2;
+  double vx, vy;//, gamma;
+  double beta_x2,beta_y2;
+  double x_beta_x, y_beta_y;
   emittx = 0.0;
   emitty = 0.0;
   if (n_particles==0) return;
@@ -334,7 +334,7 @@ void PARTICLE_BEAM::emittances(float& emittx, float& emitty) const
 	  //	  energy = particle_[j][k].energy();
 	  // the positions are in nm, the "speed" is in radians.
 	  // in fact, only betax, betay (betaz is supposed 
-	  // practically equal to 1)
+	  // practically equal to?1)
 	  // the energy is in GeV
 
 	  // x, y in mm
@@ -372,12 +372,12 @@ void PARTICLE_BEAM::emittances(float& emittx, float& emitty) const
   emitty = sqrt(y2*beta_y2 - y_beta_y*y_beta_y)*gamma_;
 }
 
-void PARTICLE_BEAM::beamXyRms(float& xmean, float& ymean,  float& sigmaxRms, float& sigmayRms) const
+void PARTICLE_BEAM::beamXyRms(double& xmean, double& ymean,  double& sigmaxRms, double& sigmayRms) const
 {
   unsigned int k,j;
-  float xpos, ypos;
-  float x0, y0;
-  float sigmax, sigmay;
+  double xpos, ypos;
+  double x0, y0;
+  double sigmax, sigmay;
   x0 = 0.;
   y0 =0.;
   sigmax = 0.;
@@ -396,21 +396,21 @@ void PARTICLE_BEAM::beamXyRms(float& xmean, float& ymean,  float& sigmaxRms, flo
 	  sigmay += ypos*ypos;
 	}
     }
-  x0 /= (float)n_particles;
-  y0 /= (float)n_particles;
-  sigmax /= (float)n_particles;
-  sigmay /= (float)n_particles;
+  x0 /= (double)n_particles;
+  y0 /= (double)n_particles;
+  sigmax /= (double)n_particles;
+  sigmay /= (double)n_particles;
   sigmaxRms = sqrt(sigmax-x0*x0);
   sigmayRms = sqrt(sigmay-y0*y0);
   xmean = x0;
   ymean = y0;
 }
-void PARTICLE_BEAM::beamZRms(float& zmean,  float& sigmazRms) const
+void PARTICLE_BEAM::beamZRms(double& zmean,  double& sigmazRms) const
 {
   unsigned int k,j;
-  float  zpos;
-  float z0;
-  float  sigmaz;
+  double  zpos;
+  double z0;
+  double  sigmaz;
   z0 = 0.;
   sigmaz = 0.;
   int n_particles = number_of_particles_dispatched_in_slices_;
@@ -425,8 +425,8 @@ void PARTICLE_BEAM::beamZRms(float& zmean,  float& sigmazRms) const
 	  sigmaz += zpos*zpos;
 	}
     }
-  z0 /= (float)n_particles;
-  sigmaz /= (float)n_particles;
+  z0 /= (double)n_particles;
+  sigmaz /= (double)n_particles;
   sigmazRms = sqrt(sigmaz-z0*z0);
   zmean = z0;
 }
@@ -434,7 +434,7 @@ void PARTICLE_BEAM::beamZRms(float& zmean,  float& sigmazRms) const
 void PARTICLE_BEAM::transverseRms(int slice,double& xmin,double& xmax,double& xmean,double&  ymin,double& ymax,double& ymean,double&  sigmaxRms,double& sigmayRms) const 
 {
   unsigned int k;
-  float xpos, ypos;
+  double xpos, ypos;
   double x0, y0, xmn, ymn, xmx, ymx;
   double sigmax, sigmay;
   double dx, dy;
@@ -477,11 +477,11 @@ void PARTICLE_BEAM::transverseRms(int slice,double& xmin,double& xmax,double& xm
 // Routines to manipulate the initial particle distribution           
 // *********************************************************************
 
-void PARTICLE_BEAM::rotate_particles(float angle)
+void PARTICLE_BEAM::rotate_particles(double angle)
 {
   unsigned int j,k;
-  float c,s;//,x,y;
-  //float vx, vy;
+  double c,s;//,x,y;
+  //double vx, vy;
   c=cos(angle);
   s=sin(angle);
 
@@ -495,9 +495,9 @@ void PARTICLE_BEAM::rotate_particles(float angle)
     }
 }
 
-void PARTICLE_BEAM::set_angle_particles(float x_angle, float y_angle,float delta_z)
+void PARTICLE_BEAM::set_angle_particles(double x_angle, double y_angle,double delta_z)
 {
-    float x_step,y_step,x_offset,y_offset;
+    double x_step,y_step,x_offset,y_offset;
     unsigned int i,j;
     int n_slice = (int) particle_.size();
     x_step=x_angle*delta_z;
@@ -515,10 +515,10 @@ void PARTICLE_BEAM::set_angle_particles(float x_angle, float y_angle,float delta
     }
 }
 
-void  PARTICLE_BEAM::set_particles_offset(int slice, float offset_x,float offset_y,float waist_x, float waist_y)
+void  PARTICLE_BEAM::set_particles_offset(int slice, double offset_x,double offset_y,double waist_x, double waist_y)
 {
   unsigned int k;
-  float vx, vy;
+  double vx, vy;
   for (k = 0; k < particle_[slice].size(); k++)
     {
       particle_[slice][k]->apply_position_offset(offset_x, offset_y);
@@ -529,7 +529,7 @@ void  PARTICLE_BEAM::set_particles_offset(int slice, float offset_x,float offset
 
 // ici dessus
 
-void PARTICLE_BEAM::backstep (int beam,int trav_focus, float max_z, float step,  int timestep, float scal_step[2])
+void PARTICLE_BEAM::backstep (int beam,int trav_focus, double max_z, double step,  int timestep, double scal_step[2])
 {
 // note: the particles are tracked only if they reached the head of the other bunch, thus the backstepping distance has to be halfed     
   if (trav_focus) 
@@ -549,7 +549,7 @@ void PARTICLE_BEAM::backstep (int beam,int trav_focus, float max_z, float step, 
     }  
 }
 
-void PARTICLE_BEAM::backstep2 (int nbeam, float max_z, float step,  int timestep, float scal_step[2])
+void PARTICLE_BEAM::backstep2 (int nbeam, double max_z, double step,  int timestep, double scal_step[2])
 {
   
 // note: the particles are tracked only if they reached the head of the other bunch, thus the backstepping distance has to be halfed     
@@ -638,13 +638,13 @@ void PARTICLE_BEAM::store_trident_beam(std::string name) const
     filout.close();
 }
 
-void PARTICLE_BEAM::dump_beam(std::string name, int istep, int every_particle, int timestep, float step, float max_z, int  sign_label)
+void PARTICLE_BEAM::dump_beam(std::string name, int istep, int every_particle, int timestep, double step, double max_z, int  sign_label)
 {
   FILE_IN_OUT file;
   file.open_file(name,"w");
   int nopart_in_slice, slice;
   int j,k;
-  float dz0;
+  double dz0;
   dz0 = timestep*step;
   int coupure;
   int jini, jincrement;
@@ -739,14 +739,14 @@ void PARTICLE_BEAM::dump_beam(std::string name, int istep, int every_particle, i
 }     
   
 
-void PARTICLE_BEAM::ang_dis(unsigned int n_bin, std::vector< std::vector<float> >& bin ) const
+void PARTICLE_BEAM::ang_dis(unsigned int n_bin, std::vector< std::vector<double> >& bin ) const
  {
    //FILE *datei;
    //   unsigned int n_bin=200;
-   //   float bin[3][200];
+   //   double bin[3][200];
    int j1,j2,j3;
    unsigned int i,k;
-   float vx, vy;
+   double vx, vy;
    //   return;
 
    for (k=0; k < bin.size() ; k++)
@@ -822,7 +822,7 @@ std::string PARTICLE_BEAM::output_flow() const
   return out.str();
 }
 
-double PARTICLE_BEAM::meanLostEnergy(float ebeam) const
+double PARTICLE_BEAM::meanLostEnergy(double ebeam) const
   {
     unsigned int k,j;
     if (number_of_particles_dispatched_in_slices_ == 0) return 0.0;
@@ -855,10 +855,10 @@ PHOTON_BEAM::~PHOTON_BEAM()
 
 }
 // This routine stores a photon into a photon beam. 
-void PHOTON_BEAM::load_photons(std::string filename, int type_of_beam, float delta_z, float max_z, int n_cell_z)
+void PHOTON_BEAM::load_photons(std::string filename, int type_of_beam, double delta_z, double max_z, int n_cell_z)
 {
-  float ener,vx,vy,x,y,z,hel;//, dummy;
-  float xt, yt;
+  double ener,vx,vy,x,y,z,hel;//, dummy;
+  double xt, yt;
   int slice;
   FILE_IN_OUT filin;
   filin.open_file(filename, "r");
@@ -868,7 +868,7 @@ void PHOTON_BEAM::load_photons(std::string filename, int type_of_beam, float del
       particle.get_parameters(ener,x ,y , z,vx ,vy);
       hel = particle.get_helicity();
       z *= 1.0e3;
-      slice=(int)floor(z/delta_z+0.5*(float)n_cell_z);
+      slice=(int)floor(z/delta_z+0.5*(double)n_cell_z);
       xt= x-0.5*vx*(max_z+z);
       yt = y-0.5*vy*(max_z+z);
       
@@ -892,12 +892,12 @@ void PHOTON_BEAM::load_photons(std::string filename, int type_of_beam, float del
 }
 
 
-void PHOTON_BEAM::dump_photons(std::string name,int istep,int every_particle, int timestep, float step, float max_z, int  sign_label)
+void PHOTON_BEAM::dump_photons(std::string name,int istep,int every_particle, int timestep, double step, double max_z, int  sign_label)
 {
   FILE_IN_OUT file;
   file.open_file(name,"w");
   int j,k;
-  float dz0;
+  double dz0;
   dz0 = timestep*step;
   if( istep < n_slice_ )
     {

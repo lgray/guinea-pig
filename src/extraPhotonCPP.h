@@ -3,14 +3,14 @@
 
 class  EXTRA
 {
-  float energy_,vx_,vy_,q2_, eorg_;
-  //  float weight_;
+  double energy_,vx_,vy_,q2_, eorg_;
+  //  double weight_;
 
  public:
 
   EXTRA() {;}
 
-  EXTRA(float energy,float vx,float vy,float q2,float eorg) 
+  EXTRA(double energy,double vx,double vy,double q2,double eorg) 
     {
       energy_ = energy;
       vx_     = vx;
@@ -21,7 +21,7 @@ class  EXTRA
     }
 
   ~EXTRA() {;}
-  inline void get_parameters(float& energy,float& vx,float& vy,float& q2,float& eorg) const
+  inline void get_parameters(double& energy,double& vx,double& vy,double& q2,double& eorg) const
   {
       energy = energy_;
       vx     = vx_;
@@ -30,11 +30,11 @@ class  EXTRA
       eorg    = eorg_;
       //         weight  = weight_;
   }
-    inline float energy() const {return energy_;}
-    //       inline float weight() const {return weight_;}
-    inline float q2() const {return q2_;}
-    inline float eorg() const { return eorg_;}
-    inline  void velocities(float& vx, float& vy) const
+    inline double energy() const {return energy_;}
+    //       inline double weight() const {return weight_;}
+    inline double q2() const {return q2_;}
+    inline double eorg() const { return eorg_;}
+    inline  void velocities(double& vx, double& vy) const
     {
       vx = vx_;
       vy = vy_;
